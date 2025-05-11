@@ -53,9 +53,9 @@ int main(){
     system_init();
 
     /* --- POST on-chip ------------------------------------------- */
-    // fails here suggest error with
+    // fail here suggest error with chip, maybe you toasted it; go replace it
     // trust me bro
-    FATAL_ASSERT(System::CPU_FREQ == configCPU_CLOCK_HZ);
+    FATAL_ASSERT(System::CPU_FREQ == configCPU_CLOCK_HZ);   // clock should not have failed being set
 
     /* --- Initialize off-chip ------------------------------------ */
 
@@ -86,7 +86,7 @@ int main(){
         // init uart
         UARTConfigSetExpClk(UART0_BASE,
                 16e6,
-                System::UART::UI_BAUD,
+                System::UART::BAUD_UI,
                 (UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE | UART_CONFIG_WLEN_8)
             );
 
@@ -97,9 +97,10 @@ int main(){
         }
 
     }
+    for(;;)
+        // go crazy
+        System::FailHard("reached end of main");
 
-    // go crazy
-    System::ShutdownHard("reached end of main");
 }
 
 /*-----------------------------------------------------------*/

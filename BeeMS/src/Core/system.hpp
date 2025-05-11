@@ -37,7 +37,7 @@
 #define TOSTRING(X) STRINGIFY(X)
 
 /* if fails BMS will immediately trigger a shutdown */
-#define FATAL_ASSERT(X) if(!(X)) System::ShutdownHard("line " TOSTRING(__LINE__) " in " __FILE__);
+#define FATAL_ASSERT(X) if(!(X)) System::FailHard("line " TOSTRING(__LINE__) " in " __FILE__);
 
 /*--- configuration ------------------------------------*/
 
@@ -46,15 +46,66 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "utils custom/is_base_of_custom.hpp"
+
 namespace System {
     /** CPU clock speed (Hz) */
     uint32_t CPU_FREQ;
 
     /* bring system to immediate stop . requires chip reset to escape this */
-    void ShutdownHard(char const * str = nullptr);
+    void FailHard(char const * str = nullptr);
 
     namespace UART {
-        constexpr uint32_t UI_BAUD = 115200;
+        constexpr uint32_t BAUD_UI = 115200;
+
+        struct UART_REG {
+            /* e.g: GPIO_PA0_U0RX */
+            uint32_t GPIO_PIN_CONFIG_UnRX;
+
+            /* e.g: GPIO_PIN_0 */
+            uint32_t GPIO_PIN_nrx;
+
+            /* e.g: GPIO_PIN_1 */
+            uint32_t GPIO_PIN_ntx;
+
+            /* e.g: GPIO_PA0_U0TX */
+            uint32_t GPIO_PIN_CONFIG_UnTX;
+
+            /* e.g: SYSCTL_PERIPH_UART0 */
+            uint32_t SYSCTL_PERIPH_UARTn;
+
+            /* e.g: UART0_BASE */
+            uint32_t UARTn_BASE;
+
+            /* e.g: UART_CLOCK_PIOSC */
+            uint32_t UART_CLOCK_src;
+
+            /* e.g: GPIO_PORTA_BASE */
+            uint32_t GPIO_PORTn_BASE;
+        };
+
+        /* modem flow control */
+        struct UART_REG_MFC : UART_REG {
+            // TODO
+        };
+
+        /* modem flow control and modem status */
+        struct UART_REG_MFC_MS : UART_REG_MFC {
+            // TODO
+        };
+
+        template <typename UART_TYPE>
+        struct UART {
+            static_assert(is_base_of_custom<UART_TYPE, UART_REG>::value, "womp");
+
+            UART_TYPE regs;
+
+            UART(UART_TYPE reg) : regs(reg) {}
+        };
+
+        UART<UART_REG_MFC_MS> const uart0(UART_REG_MFC_MS{
+            .UARTn_BASE = 0
+        });
     }
 }
 

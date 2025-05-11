@@ -7,7 +7,7 @@
 
 #include <Core/system.hpp>
 
-void System::ShutdownHard(char const * error_description) {
+void System::FailHard(char const * error_description) {
     // its over, the BeeMS has fallen
 
     (void) error_description;
