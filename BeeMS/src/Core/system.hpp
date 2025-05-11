@@ -50,7 +50,7 @@
 
 namespace System {
     /** CPU clock speed (Hz) */
-    uint32_t CPU_FREQ;
+    extern uint32_t CPU_FREQ;
 
     /* bring system to immediate stop . requires chip reset to escape this */
     void FailHard(char const * str = nullptr);
@@ -96,15 +96,21 @@ namespace System {
 
         template <typename UART_TYPE>
         struct UART {
-            static_assert(is_base_of_custom<UART_TYPE, UART_REG>::value, "womp");
+            static_assert(is_base_of_custom<UART_TYPE, UART_REG>::value, "must inherit from UART_REG");
 
             UART_TYPE regs;
 
-            UART(UART_TYPE reg) : regs(reg) {}
+            UART(UART_TYPE reg) : regs(reg) {
+                UART_REG_MFC_MS a;
+                a.UART_CLOCK_src = 0;
+
+            }
         };
 
         UART<UART_REG_MFC_MS> const uart0(UART_REG_MFC_MS{
-            .UARTn_BASE = 0
+            UART_REG{
+                .UART_CLOCK_src = 0
+            }
         });
     }
 }

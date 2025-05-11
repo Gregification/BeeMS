@@ -7,6 +7,8 @@
 
 #include <Core/system.hpp>
 
+uint32_t System::CPU_FREQ = 0;
+
 void System::FailHard(char const * error_description) {
     // its over, the BeeMS has fallen
 
