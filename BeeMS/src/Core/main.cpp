@@ -54,49 +54,25 @@ int main(){
 
     /* --- POST on-chip ------------------------------------------- */
     // fail here suggest error with chip, maybe you toasted it; go replace it
-    // trust me bro
+    // patented trust me bro testing
     FATAL_ASSERT(System::CPU_FREQ == configCPU_CLOCK_HZ);   // clock should not have failed being set
+
+    /* --- display software information --------------------------- */
+    {
+        char str[] = PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE;
+        System::uart0.nputs(str, sizeof(str));
+    }
 
     /* --- Initialize off-chip ------------------------------------ */
 
     /* --- POST off-chip ------------------------------------------ */
 
-    // trust me bro
+    // looks good to me
 
     /* --- Start -------------------------------------------------- */
 
 //    vTaskStartScheduler();
 
-
-    // uart testing
-    {
-        // configure pin muxing
-        GPIOPinConfigure(GPIO_PA0_U0RX);
-        GPIOPinConfigure(GPIO_PA1_U0TX);
-
-        // enable UART0
-        SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-
-        // use internal 16MHz oscillator as UART control source
-        UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
-
-        // select alternative pin function
-        GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
-
-        // init uart
-        UARTConfigSetExpClk(UART0_BASE,
-                16e6,
-                System::UART::BAUD_UI,
-                (UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE | UART_CONFIG_WLEN_8)
-            );
-
-        {
-            char str[] = PROJECT_NAME " " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE TOSTRING(__COUNTER__) NEWLINE;
-            for(int i = 0; i < sizeof(str); i++)
-                UARTCharPut(UART0_BASE, str[i]);
-        }
-
-    }
     for(;;)
         // go crazy
         System::FailHard("reached end of main");

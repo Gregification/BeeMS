@@ -25,6 +25,9 @@
  *      port it, TI has a massive document going over migration but I couldn't get it to work; compiled
  *      fine but got a warning about a assembly section being empty. Couldn't track it down. DL didn't
  *      work in that instance.
+ *  - i love cpp 14 (not). i love making stupidly bloated code to do the smallest things! i love ti for
+ *      not updating their own library of their flagship chip for the last decade! i love burning time
+ *      and time and time trying to patch what they pay their critters big bucks for! i just want a bms
  */
 
 #ifndef SRC_CORE_SYSTEM_HPP_
@@ -50,8 +53,6 @@
 
 /*--- meta ---------------------------------------------*/
 
-#define NEWLINE "\n\r"
-
 #define PROJECT_NAME            "BeeMS"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
 #define PROJECT_VERSION         "0.0.0"
@@ -66,7 +67,15 @@
 /* if fails BMS will immediately trigger a shutdown */
 #define FATAL_ASSERT(X) if(!(X)) System::FailHard("line " TOSTRING(__LINE__) " in " __FILE__);
 
-/*--- configuration ------------------------------------*/
+
+/*--- constants ----------------------------------------*/
+
+#define NEWLINE "\n\r"
+#define MAX_COMMON_STRING_LEN 255   // assumed max length of a string if not specified. to minimize the damage of overruns.
+#define MAX_ERROR_MSG_LEN MAX_COMMON_STRING_LEN
+
+
+/*--- hardware configuration ---------------------------*/
 
 // OCCUPY macro defines a static const variable with a unique name per PIN
 // If the same PIN is used again in the same translation unit, it will cause redefinition error
@@ -82,6 +91,8 @@
 //#define PROJECT_ENABLE_UART6
 //#define PROJECT_ENABLE_UART7
 
+#define SYSTEM_UART_PRIM_UI uart0       // uart responsible for the primary UI
+
 /*------------------------------------------------------*/
 
 namespace System {
@@ -90,7 +101,8 @@ namespace System {
     };
 
     /** CPU clock speed (Hz) */
-    extern uint32_t CPU_FREQ;
+    uint32_t CPU_FREQ;
+    constexpr uint32_t PIOSC_FREQ = 16e6;
 
     /* bring system to immediate stop . requires chip reset to escape this */
     void FailHard(char const * str = nullptr);
@@ -101,15 +113,13 @@ namespace System {
         struct UART_REG {
             /* e.g: GPIO_PA0_U0RX */
             uint32_t GPIO_PIN_CONFIG_UnRX;
-
             /* e.g: GPIO_PIN_0 */
             uint32_t GPIO_PIN_nrx;
 
-            /* e.g: GPIO_PIN_1 */
-            uint32_t GPIO_PIN_ntx;
-
             /* e.g: GPIO_PA0_U0TX */
             uint32_t GPIO_PIN_CONFIG_UnTX;
+            /* e.g: GPIO_PIN_1 */
+            uint32_t GPIO_PIN_ntx;
 
             /* e.g: SYSCTL_PERIPH_UART0 */
             uint32_t SYSCTL_PERIPH_UARTn;
@@ -166,14 +176,30 @@ namespace System {
             constexpr UART(UART_TYPE const r) : regs(r) {}
 
             /* a partial init */
-            void preinit();
+            void preinit() const {
+                // configure pin muxing
+                GPIOPinConfigure(regs.GPIO_PIN_CONFIG_UnRX);
+                GPIOPinConfigure(regs.GPIO_PIN_CONFIG_UnTX);
+                // enable UARTn
+                SysCtlPeripheralEnable(regs.SYSCTL_PERIPH_UARTn);
+                // set clock
+                UARTClockSourceSet(regs.UARTn_BASE, regs.UART_CLOCK_src);
+                // set alternative pin function
+                GPIOPinTypeUART(regs.GPIO_PORTn_BASE, regs.GPIO_PIN_nrx | regs.GPIO_PIN_ntx);
+            }
+
+            /* transmits the string of max size n */
+            void nputs(char const * str, uint16_t n) const {
+                for(uint16_t i = 0; (i < n) && (str[i] != '\0'); i++)
+                    UARTCharPut(regs.UARTn_BASE, str[i]);
+            }
         };
     }
 
     #ifdef PROJECT_ENABLE_UART0
         OCCUPY(PA0);
         OCCUPY(PA1);
-        constexpr UART::UART<UART::UART_REG_MFC_MS> uart0(
+        constexpr const UART::UART<UART::UART_REG_MFC_MS> uart0(
                 UART::UART_REG_MFC_MS(
                     UART::UART_REG_MFC(
                         UART::UART_REG(
@@ -190,7 +216,13 @@ namespace System {
                 )
             );
     #endif
-    // TODO add the other 7 uarts
+    #if defined PROJECT_ENABLE_UART1 || defined PROJECT_ENABLE_UART2 \
+        || defined PROJECT_ENABLE_UART3 || defined PROJECT_ENABLE_UART4 \
+        || defined PROJECT_ENABLE_UART5 || defined PROJECT_ENABLE_UART6 \
+        || defined PROJECT_ENABLE_UART7
+        #error "that specific UART isn't implemented. you found this, your responsible for implementing it."
+        // TODO add all the UARTs'
+    #endif
 }
 
 #undef OCCUPY

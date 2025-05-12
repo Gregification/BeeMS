@@ -13,10 +13,12 @@
 #include <FreeRTOS.h>
 
 void system_init(){
+    // set system clock to the FreeRTOS settings
     System::CPU_FREQ = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
         SYSCTL_OSC_MAIN | SYSCTL_USE_PLL |
         SYSCTL_CFG_VCO_240), configCPU_CLOCK_HZ);
 
+    // power up all ports
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
@@ -32,4 +34,13 @@ void system_init(){
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOQ);
+
+    // init uart
+    System::uart0.preinit();
+    static_assert(System::uart0.regs.UART_CLOCK_src == UART_CLOCK_PIOSC, "unknown reference clock");
+    UARTConfigSetExpClk(UART0_BASE,
+            System::PIOSC_FREQ,
+            System::UART::BAUD_UI,
+            (UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE | UART_CONFIG_WLEN_8)
+        );
 }
