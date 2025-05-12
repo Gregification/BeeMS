@@ -13,6 +13,10 @@
  *  - don't care about on chip power consumption
  *
  * side notes
+ *  - when adding a new peripheral that uses a pin or limited resource define a macro to indicate that
+ *      resource is inuse, so other parts of the code wont try to use it. e.g: for things that need a
+ *      physical pin on the chip, define "PROJECT_OCCUPY_PIN_n __COUNTER__" where n is the pins package
+ *       number. using the counter macro makes it throw a error if its redefined anywhere else.
  *  - driverLib is linked to a pre-compiled CSS project, consider min-maxxing the optimizations on that.
  *  - some of the variables can be macros but they're const-expression variables instead so its
  *      easier for people to discover them. no one reads the documentation.
@@ -26,6 +30,24 @@
 #ifndef SRC_CORE_SYSTEM_HPP_
 #define SRC_CORE_SYSTEM_HPP_
 
+#include <stdint.h>
+#include <stdbool.h>
+
+#include <inc/hw_sysctl.h>
+#include <inc/hw_memmap.h>
+#include <inc/hw_sysctl.h>
+#include <driverlib/gpio.h>
+#include <driverlib/interrupt.h>
+#include <driverlib/pin_map.h>
+#include <driverlib/rom.h>
+#include <driverlib/rom_map.h>
+#include <driverlib/sysctl.h>
+#include <driverlib/uart.h>
+#include <FreeRTOS.h>
+
+#include "utils custom/is_base_of_custom.hpp"
+
+
 /*--- meta ---------------------------------------------*/
 
 #define NEWLINE "\n\r"
@@ -35,7 +57,7 @@
 #define PROJECT_VERSION         "0.0.0"
 
 
-/*--- handy shortcuts ----------------------------------*/
+/*--- shorthand ----------------------------------------*/
 
 #define BV(X) (1 << (X))
 #define STRINGIFY(X) #X
@@ -46,12 +68,21 @@
 
 /*--- configuration ------------------------------------*/
 
+// OCCUPY macro defines a static const variable with a unique name per PIN
+// If the same PIN is used again in the same translation unit, it will cause redefinition error
+// IMPORTANT: this macro will only work with things in the same scope!
+#define OCCUPY(ID) constexpr int const __PROJECT_USE_##ID = 0;
+
+#define PROJECT_ENABLE_UART0
+//#define PROJECT_ENABLE_UART1
+//#define PROJECT_ENABLE_UART2
+//#define PROJECT_ENABLE_UART3
+//#define PROJECT_ENABLE_UART4
+//#define PROJECT_ENABLE_UART5
+//#define PROJECT_ENABLE_UART6
+//#define PROJECT_ENABLE_UART7
+
 /*------------------------------------------------------*/
-
-#include <stdint.h>
-#include <stdbool.h>
-
-#include "utils custom/is_base_of_custom.hpp"
 
 namespace System {
     struct LOCKABLE {
@@ -93,14 +124,14 @@ namespace System {
             uint32_t GPIO_PORTn_BASE;
 
             constexpr UART_REG(
-                    uint32_t GPIO_PIN_CONFIG_UnRX,
-                    uint32_t GPIO_PIN_nrx,
-                    uint32_t GPIO_PIN_ntx,
-                    uint32_t GPIO_PIN_CONFIG_UnTX,
                     uint32_t SYSCTL_PERIPH_UARTn,
                     uint32_t UARTn_BASE,
+                    uint32_t GPIO_PORTn_BASE,
                     uint32_t UART_CLOCK_src,
-                    uint32_t GPIO_PORTn_BASE)
+                    uint32_t GPIO_PIN_CONFIG_UnRX,
+                    uint32_t GPIO_PIN_nrx,
+                    uint32_t GPIO_PIN_CONFIG_UnTX,
+                    uint32_t GPIO_PIN_ntx)
                     : GPIO_PIN_CONFIG_UnRX(GPIO_PIN_CONFIG_UnRX),
                       GPIO_PIN_nrx(GPIO_PIN_nrx),
                       GPIO_PIN_ntx(GPIO_PIN_ntx),
@@ -133,26 +164,35 @@ namespace System {
             UART_TYPE regs;
 
             constexpr UART(UART_TYPE const r) : regs(r) {}
-        };
 
-        constexpr UART<UART_REG_MFC_MS> uart0(
-                UART_REG_MFC_MS(
-                    UART_REG_MFC(
-                        UART_REG(
-                            0,  // GPIO_PIN_CONFIG_UnRX,
-                            0,  // GPIO_PIN_nrx,
-                            0,  // GPIO_PIN_ntx,
-                            0,  // GPIO_PIN_CONFIG_UnTX,
-                            0,  // SYSCTL_PERIPH_UARTn,
-                            0,  // UARTn_BASE,
-                            0,  // UART_CLOCK_src,
-                            0   // GPIO_PORTn_BASE
+            /* a partial init */
+            void preinit();
+        };
+    }
+
+    #ifdef PROJECT_ENABLE_UART0
+        OCCUPY(PA0);
+        OCCUPY(PA1);
+        constexpr UART::UART<UART::UART_REG_MFC_MS> uart0(
+                UART::UART_REG_MFC_MS(
+                    UART::UART_REG_MFC(
+                        UART::UART_REG(
+                            SYSCTL_PERIPH_UART0,    // SYSCTL_PERIPH_UARTn
+                            UART0_BASE,             // UARTn_BASE
+                            GPIO_PORTA_BASE,        // GPIO_PORTn_BASE
+                            UART_CLOCK_PIOSC,       // UART_CLOCK_src
+                            GPIO_PA0_U0RX,          // GPIO_PIN_CONFIG_UnRX
+                            GPIO_PIN_0,             // GPIO_PIN_nrx
+                            GPIO_PA1_U0TX,          // GPIO_PIN_CONFIG_UnTX
+                            GPIO_PIN_1              // GPIO_PIN_ntx
                         )
                     )
                 )
             );
-
-    }
+    #endif
+    // TODO add the other 7 uarts
 }
+
+#undef OCCUPY
 
 #endif

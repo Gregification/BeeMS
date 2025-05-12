@@ -91,7 +91,7 @@ int main(){
             );
 
         {
-            char str[] = PROJECT_NAME " " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE;
+            char str[] = PROJECT_NAME " " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE TOSTRING(__COUNTER__) NEWLINE;
             for(int i = 0; i < sizeof(str); i++)
                 UARTCharPut(UART0_BASE, str[i]);
         }

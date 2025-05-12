@@ -7,6 +7,11 @@
 
 #include <Core/system.hpp>
 
+#include <driverlib/gpio.h>
+#include <driverlib/pin_map.h>
+#include <driverlib/sysctl.h>
+#include <driverlib/uart.h>
+
 uint32_t System::CPU_FREQ = 0;
 
 void System::FailHard(char const * error_description) {
@@ -17,3 +22,6 @@ void System::FailHard(char const * error_description) {
 
     for(;;);
 }
+
+/*--- peripheral collision checking --------------------------------------------------*/
+
