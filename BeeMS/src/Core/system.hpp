@@ -77,8 +77,8 @@
 
 /*--- hardware configuration ---------------------------*/
 
-// OCCUPY macro defines a static const variable with a unique name per PIN
-// If the same PIN is used again in the same translation unit, it will cause redefinition error
+// OCCUPY macro defines a static const variable with a unique name per ID
+// If the same ID is used again in the same translation unit, it will cause redefinition error
 // IMPORTANT: this macro will only work with things in the same scope!
 #define OCCUPY(ID) constexpr int const __PROJECT_USE_##ID = 0;
 
@@ -110,6 +110,8 @@ namespace System {
     namespace UART {
         constexpr uint32_t BAUD_UI = 115200;
 
+        /* core control registers
+         * for UART0,1,2,3,4,5,6,7 */
         struct UART_REG {
             /* e.g: GPIO_PA0_U0RX */
             uint32_t GPIO_PIN_CONFIG_UnRX;
@@ -153,14 +155,16 @@ namespace System {
                 {}
         };
 
-        /* modem flow control */
+        /* modem flow control registers
+         * for UART0,1,2,3,4 */
         struct UART_REG_MFC : UART_REG {
             // TODO
 
             constexpr UART_REG_MFC(UART_REG const reg) : UART_REG(reg) {}
         };
 
-        /* modem flow control and modem status */
+        /* modem flow control and modem status registers
+         * for UART0,1 */
         struct UART_REG_MFC_MS : UART_REG_MFC {
             // TODO
 
@@ -221,7 +225,9 @@ namespace System {
         || defined PROJECT_ENABLE_UART5 || defined PROJECT_ENABLE_UART6 \
         || defined PROJECT_ENABLE_UART7
         #error "that specific UART isn't implemented. you found this, your responsible for implementing it."
-        // TODO add all the UARTs'
+        // TODO add the UARTs'
+        // just copy and paste from the one before, its not yet done because its tedious
+        //  to track down all the pins from the data sheet
     #endif
 }
 

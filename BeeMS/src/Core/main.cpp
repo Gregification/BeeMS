@@ -54,7 +54,8 @@ int main(){
 
     /* --- POST on-chip ------------------------------------------- */
     // fail here suggest error with chip, maybe you toasted it; go replace it
-    // patented trust me bro testing
+    // TODO make actual tests, e.g: loop back on the UARTS, confirm tx rx. that sort of thing
+    // patented trust me bro testing technology
     FATAL_ASSERT(System::CPU_FREQ == configCPU_CLOCK_HZ);   // clock should not have failed being set
 
     /* --- display software information --------------------------- */

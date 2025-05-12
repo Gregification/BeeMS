@@ -18,6 +18,7 @@
 #define configUSE_MUTEXES                                           1
 #define configUSE_RECURSIVE_MUTEXES                                 1
 #define configCHECK_FOR_STACK_OVERFLOW                              2
+#define configCOMMAND_INT_MAX_OUTPUT_SIZE                           1024        // FreeRTOS plus CLI
 
 //#define configMAX_PRIORITIES                ( ( unsigned portBASE_TYPE ) 16 )
 #define configMAX_PRIORITIES ( 16 )
