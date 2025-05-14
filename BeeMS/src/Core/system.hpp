@@ -65,8 +65,10 @@
 #define TOSTRING(X) STRINGIFY(X)
 
 /* if fails BMS will immediately trigger a shutdown */
-#define FATAL_ASSERT(X) if(!(X)) System::FailHard("line " TOSTRING(__LINE__) " in " __FILE__);
+#define FATAL_ASSERT(X, STR) if(!(X)) System::FailHard(STR " @assert:line" TOSTRING(__LINE__) "," __FILE__);
 
+/* for the uart nputs(char*,num len) command */
+#define STRANDN(STR) STR,sizeof(STR)
 
 /*--- constants ----------------------------------------*/
 
@@ -193,8 +195,8 @@ namespace System {
             }
 
             /* transmits the string of max size n */
-            void nputs(char const * str, uint16_t n) const {
-                for(uint16_t i = 0; (i < n) && (str[i] != '\0'); i++)
+            void nputs(char const * str, uint32_t n) const {
+                for(uint32_t i = 0; (i < n) && (str[i] != '\0'); i++)
                     UARTCharPut(regs.UARTn_BASE, str[i]);
             }
         };
@@ -229,6 +231,8 @@ namespace System {
         // just copy and paste from the one before, its not yet done because its tedious
         //  to track down all the pins from the data sheet
     #endif
+
+   void notifyUART(char const * str, uint32_t n);
 }
 
 #undef OCCUPY

@@ -52,32 +52,48 @@ int main(){
 
     system_init();
 
+
     /* --- POST on-chip ------------------------------------------- */
     // fail here suggest error with chip, maybe you toasted it; go replace it
     // TODO make actual tests, e.g: loop back on the UARTS, confirm tx rx. that sort of thing
     // patented trust me bro testing technology
-    FATAL_ASSERT(System::CPU_FREQ == configCPU_CLOCK_HZ);   // clock should not have failed being set
+    FATAL_ASSERT(System::CPU_FREQ == configCPU_CLOCK_HZ, "failed to set MOSC");
+
 
     /* --- display software information --------------------------- */
     {
-        char str[] = PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE;
-        System::uart0.nputs(str, sizeof(str));
+        constexpr char logo[] =
+            "  ____             __   __ ______  " NEWLINE
+            " |  _ \\           |  \\ /  |\\  ___) " NEWLINE
+            " | |_) ) ___  ___ |   v   | \\ \\    " NEWLINE
+            " |  _ ( / __)/ __)| |\\_/| |  > >   " NEWLINE
+            " | |_) )> _) > _) | |   | | / /__  " NEWLINE
+            " |____/ \\___)\\___)|_|   |_|/_____) " NEWLINE;
+
+        System::notifyUART(logo, sizeof(logo));
     }
+    System::notifyUART(STRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
-    /* --- Initialize off-chip ------------------------------------ */
 
-    /* --- POST off-chip ------------------------------------------ */
+    /* --- Initialize off-mcu ------------------------------------ */
+    System::notifyUART(STRANDN("Initializing off mcu ..." NEWLINE));
 
-    // looks good to me
+
+    /* --- POST off-mcu ------------------------------------------ */
+    System::notifyUART(STRANDN("POST-ing off mcu ..." NEWLINE));
+
+    // looks good to me (lie)
+
 
     /* --- Start -------------------------------------------------- */
+    System::notifyUART(STRANDN("Starting FreeRTOS scheduler ..." NEWLINE));
 
-//    vTaskStartScheduler();
+    vTaskStartScheduler();
+
 
     for(;;)
         // go crazy
         System::FailHard("reached end of main");
-
 }
 
 /*-----------------------------------------------------------*/

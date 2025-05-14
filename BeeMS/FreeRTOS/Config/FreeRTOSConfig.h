@@ -36,6 +36,7 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil             1
 #define INCLUDE_vTaskDelay                  1
 #define INCLUDE_uxTaskGetStackHighWaterMark 1
+#define INCLUDE_xTaskGetSchedulerState      1
 
 /* Cortex-M3/4 interrupt priority configuration follows...................... */
 

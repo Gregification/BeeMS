@@ -37,8 +37,9 @@ void System::FailHard(char const * error_description) {
 
     // trigger fault line
 
-    // kill all processes
-    vTaskEndScheduler();
+    // stop the scheduler if its running
+    if(xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
+        vTaskEndScheduler();
 
     // yap yap, idk, we'll put something better here one day
     for(;;){
@@ -49,4 +50,9 @@ void System::FailHard(char const * error_description) {
 
         SysCtlDelay(System::CPU_FREQ / 2);
     }
+}
+
+void System::notifyUART(const char *str, uint32_t n)
+{
+    System::SYSTEM_UART_PRIM_UI.nputs(str, n);
 }
