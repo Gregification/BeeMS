@@ -12,7 +12,7 @@
 #include <driverlib/sysctl.h>
 #include <FreeRTOS.h>
 
-void system_init(){
+void system_init_onchip(){
     // set system clock to the FreeRTOS settings
     System::CPU_FREQ = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
         SYSCTL_OSC_MAIN | SYSCTL_USE_PLL |
@@ -36,11 +36,14 @@ void system_init(){
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOQ);
 
     // init uart
-    System::uart0.preinit();
-    static_assert(System::uart0.regs.UART_CLOCK_src == UART_CLOCK_PIOSC, "unknown reference clock");
-    UARTConfigSetExpClk(UART0_BASE,
-            System::PIOSC_FREQ,
-            System::UART::BAUD_UI,
-            (UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE | UART_CONFIG_WLEN_8)
-        );
+
+    #ifdef PROJECT_ENABLE_UART0
+        System::uart0.preinit();
+        static_assert(System::uart0_regs.UART_CLOCK_src == UART_CLOCK_PIOSC, "unknown reference clock");
+        UARTConfigSetExpClk(UART0_BASE,
+                System::PIOSC_FREQ, // asserted
+                System::UART::BAUD_UI,
+                (UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE | UART_CONFIG_WLEN_8)
+            );
+    #endif
 }

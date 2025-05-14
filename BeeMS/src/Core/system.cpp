@@ -15,6 +15,14 @@
 #include <driverlib/uart.h>
 #include <task.h>
 
+/*--- definitions ----------------------------------------------------------------------------*/
+
+namespace System {
+    #ifdef PROJECT_ENABLE_UART0
+        UART::UART<UART::UART_REG_MFC_MS> uart0(uart0_regs);
+    #endif
+}
+
 /*--- miscellaneous asserts ------------------------------------------------------------------*/
 
 #if (!defined PROJECT_ENABLE_UART0) || (!defined SYSTEM_UART_PRIM_UI) \
@@ -52,7 +60,7 @@ void System::FailHard(char const * error_description) {
     }
 }
 
-void System::notifyUART(const char *str, uint32_t n)
+void System::nputsUIUART(const char *str, uint32_t n)
 {
     System::SYSTEM_UART_PRIM_UI.nputs(str, n);
 }

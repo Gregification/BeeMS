@@ -13,6 +13,8 @@
 
 #include "system.hpp"
 
-void system_init();
+void system_init_offchip();
+
+void system_init_onchip();
 
 #endif /* SRC_CORE_SYSTEM_INIT_HPP_ */

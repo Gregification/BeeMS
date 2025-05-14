@@ -50,13 +50,14 @@ int main(){
 
     /* --- Initialize on-chip ------------------------------------- */
 
-    system_init();
+    system_init_onchip();
 
 
     /* --- POST on-chip ------------------------------------------- */
     // fail here suggest error with chip, maybe you toasted it; go replace it
     // TODO make actual tests, e.g: loop back on the UARTS, confirm tx rx. that sort of thing
     // patented trust me bro testing technology
+
     FATAL_ASSERT(System::CPU_FREQ == configCPU_CLOCK_HZ, "failed to set MOSC");
 
 
@@ -70,31 +71,35 @@ int main(){
             " | |_) )> _) > _) | |   | | / /__  " NEWLINE
             " |____/ \\___)\\___)|_|   |_|/_____) " NEWLINE;
 
-        System::notifyUART(logo, sizeof(logo));
+        System::nputsUIUART(logo, sizeof(logo));
     }
-    System::notifyUART(STRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
+    System::nputsUIUART(STRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
 
-    /* --- Initialize off-mcu ------------------------------------ */
-    System::notifyUART(STRANDN("Initializing off mcu ..." NEWLINE));
+    /* --- Initialize off-chip ------------------------------------ */
+    System::nputsUIUART(STRANDN("Initializing off chip ..." NEWLINE));
+
+    system_init_offchip();
 
 
-    /* --- POST off-mcu ------------------------------------------ */
-    System::notifyUART(STRANDN("POST-ing off mcu ..." NEWLINE));
-
-    // looks good to me (lie)
+    /* --- POST off-chip ------------------------------------------ */
+//    System::nputsUIUART(STRANDN("POST-ing off chips ..." NEWLINE));
+    // TODO
 
 
     /* --- Start -------------------------------------------------- */
-    System::notifyUART(STRANDN("Starting FreeRTOS scheduler ..." NEWLINE));
+    System::nputsUIUART(STRANDN("Starting FreeRTOS ..." NEWLINE));
+
+//    xTaskCreate(pxTaskCode, pcName, uxStackDepth, pvParameters, uxPriority, pxCreatedTask)
 
     vTaskStartScheduler();
 
 
     for(;;)
         // go crazy
-        System::FailHard("reached end of main");
+        System::FailHard("FreeRTOS scheduler crashed");
 }
+
 
 /*-----------------------------------------------------------*/
 
@@ -113,6 +118,8 @@ void vApplicationMallocFailedHook( void )
     IntMasterDisable();
     for( ;; );
 }
+
+
 /*-----------------------------------------------------------*/
 
 void vApplicationIdleHook( void )
@@ -127,6 +134,8 @@ void vApplicationIdleHook( void )
     function, because it is the responsibility of the idle task to clean up
     memory allocated by the kernel to any task that has since been deleted. */
 }
+
+
 /*-----------------------------------------------------------*/
 
 void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
@@ -140,6 +149,8 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
     IntMasterDisable();
     for( ;; );
 }
+
+
 /*-----------------------------------------------------------*/
 
 void *malloc( size_t xSize )
@@ -149,6 +160,6 @@ void *malloc( size_t xSize )
     IntMasterDisable();
     for( ;; );
 }
+
+
 /*-----------------------------------------------------------*/
-
-
