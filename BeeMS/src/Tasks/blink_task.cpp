@@ -12,11 +12,12 @@
 #include <driverlib/sysctl.h>
 #include <driverlib/gpio.h>
 
+// default
+uint16_t Task::Blink::period_ms = Task::Blink::PERIOD_NORMAL;
+
 void Task::Blink::main(void*)
 {
     LED.defaultInitAsOutput();
-
-    period_ms = 1000 / portTICK_PERIOD_MS;
 
     for(;;){
         LED.setValue(0);

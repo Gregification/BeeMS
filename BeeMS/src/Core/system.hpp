@@ -99,6 +99,7 @@
 //#define PROJECT_ENABLE_UART7
 
 #define SYSTEM_UART_PRIM_UI uart0       // uart responsible for the primary UI
+namespace System { OCCUPY(UART0) }
 
 /*------------------------------------------------------*/
 
@@ -119,7 +120,6 @@ namespace System {
     /* bring system to immediate stop . requires chip reset to escape this */
     void FailHard(char const * str = nullptr);
 
-    /* this is simple enough that we wont bother with making a fancy wrapper class */
     namespace GPIO {
         struct GPIO_REG {
             /* e.g: GPIO_PORTN_BASE */
@@ -130,13 +130,15 @@ namespace System {
 
 
             // these functions should be inline but it gets cluttered here
+            /* generic act as output */
             void defaultInitAsOutput() const;
+            /* generic act as input */
             void defaultInitAsInput() const;
             void setValue(bool) const;
             uint32_t getValue() const;
         };
         /*
-         *  init example
+         *  custom init example
          *  "
          *      MAP_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0 | GPIO_PIN_1);
          *      MAP_GPIOPadConfigSet(GPIO_PORTN_BASE, GPIO_PIN_0 | GPIO_PIN_1,

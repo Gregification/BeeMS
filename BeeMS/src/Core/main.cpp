@@ -91,15 +91,14 @@ int main(){
 
 
     /* --- Start -------------------------------------------------- */
-    System::nputsUIUART(STRANDN("Starting FreeRTOS ..." NEWLINE));
+    System::nputsUIUART(STRANDN("Starting tasks ..." NEWLINE));
 
     xTaskCreate(Task::Blink::main,
-                "blink",
+                "blink indicator",
                 configMINIMAL_STACK_SIZE,
                 NULL,
                 tskIDLE_PRIORITY,
                 NULL);
-//    xTaskCreate(pxTaskCode, pcName, uxStackDepth, pvParameters, uxPriority, pxCreatedTask)
 
     vTaskStartScheduler();
 
