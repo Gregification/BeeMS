@@ -30,8 +30,7 @@
  *
  */
 
-#include "Core/system.hpp"
-#include "Core/system_init.hpp"
+#include <stdint.h>
 
 #include <inc/hw_sysctl.h>
 #include <inc/hw_memmap.h>
@@ -46,6 +45,10 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
+#include "Core/system.hpp"
+#include "Core/system_init.hpp"
+#include "Tasks/blink_task.hpp"
+
 int main(){
 
     /* --- Initialize on-chip ------------------------------------- */
@@ -58,7 +61,7 @@ int main(){
     // TODO make actual tests, e.g: loop back on the UARTS, confirm tx rx. that sort of thing
     // patented trust me bro testing technology
 
-    FATAL_ASSERT(System::CPU_FREQ == configCPU_CLOCK_HZ, "failed to set MOSC");
+    ASSERT_FATAL(System::CPU_FREQ == configCPU_CLOCK_HZ, "failed to set MOSC");
 
 
     /* --- display software information --------------------------- */
@@ -90,6 +93,12 @@ int main(){
     /* --- Start -------------------------------------------------- */
     System::nputsUIUART(STRANDN("Starting FreeRTOS ..." NEWLINE));
 
+    xTaskCreate(Task::Blink::main,
+                "blink",
+                configMINIMAL_STACK_SIZE,
+                NULL,
+                tskIDLE_PRIORITY,
+                NULL);
 //    xTaskCreate(pxTaskCode, pcName, uxStackDepth, pvParameters, uxPriority, pxCreatedTask)
 
     vTaskStartScheduler();

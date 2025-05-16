@@ -69,14 +69,15 @@
 #define TOSTRING(X) STRINGIFY(X)
 
 /* if fails BMS will immediately trigger a shutdown */
-#define FATAL_ASSERT(X, STR) if(!(X)) System::FailHard(STR " @assert:line" TOSTRING(__LINE__) "," __FILE__);
+#define ASSERT_FATAL(X, STR) if(!(X)) System::FailHard(STR " @assert:line" TOSTRING(__LINE__) "," __FILE__);
 
 /* for the uart nputs(char*,num len) command */
 #define STRANDN(STR) STR,sizeof(STR)
 
 /* OCCUPY macro defines a static const variable with a unique name per ID
     If the same ID is used again in the same translation unit, it will cause redefinition error
-    IMPORTANT: this macro will only work with things in the same scope! */
+    IMPORTANT: this macro will only work with things in the same scope!
+    * physical pins will be in the "System" name space */
 #define OCCUPY(ID) constexpr int const __PROJECT_OCCUPY_##ID = 0;
 
 /*--- constants ----------------------------------------*/
@@ -117,6 +118,40 @@ namespace System {
 
     /* bring system to immediate stop . requires chip reset to escape this */
     void FailHard(char const * str = nullptr);
+
+    /* this is simple enough that we wont bother with making a fancy wrapper class */
+    namespace GPIO {
+        struct GPIO_REG {
+            /* e.g: GPIO_PORTN_BASE */
+            uint32_t GPIO_PORTn_BASE;
+
+            /* e.g: GPIO_PIN_0 */
+            uint32_t GPIO_PIN_n;
+
+
+            // these functions should be inline but it gets cluttered here
+            void defaultInitAsOutput() const;
+            void defaultInitAsInput() const;
+            void setValue(bool) const;
+            uint32_t getValue() const;
+        };
+        /*
+         *  init example
+         *  "
+         *      MAP_GPIOPinTypeGPIOOutput(GPIO_PORTN_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+         *      MAP_GPIOPadConfigSet(GPIO_PORTN_BASE, GPIO_PIN_0 | GPIO_PIN_1,
+         *                   GPIO_STRENGTH_12MA, GPIO_PIN_TYPE_STD);
+         *  "
+         *  GPIO_PIN_TYPE_... meanings , ripped from DL gpio.h
+         *      STD     : push pull
+         *      STD_WPU : push pull with weak pull up
+         *      STD_WPD : push pull with weak pull down
+         *      OD      : open drain // fent reactors critical
+         *      ANALOG  : analog comparator
+         *      WAKE_HIGH   : hibernate wake, high
+         *      WAKE_LOW    : hibernate wake, low
+         */
+    }
 
     namespace UART {
         constexpr uint32_t BAUD_UI = 115200;
@@ -242,8 +277,10 @@ namespace System {
         // TODO add the UARTs'
         // just copy and paste from the one before, its not yet done because its tedious
         //  to track down all the pins from the data sheet
+        // make sure to use the correct version of the UART register struct, see datasheet
     #endif
 
+   /* put string to the UART responsible for UI */
    void nputsUIUART(char const * str, uint32_t n);
 }
 

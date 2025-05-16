@@ -12,6 +12,16 @@
 #include <driverlib/sysctl.h>
 #include <driverlib/gpio.h>
 
-void Task::blink(void*){
+void Task::Blink::main(void*)
+{
+    LED.defaultInitAsOutput();
 
+    period_ms = 1000 / portTICK_PERIOD_MS;
+
+    for(;;){
+        LED.setValue(0);
+        vTaskDelay(period_ms);
+        LED.setValue(1);
+        vTaskDelay(period_ms);
+    }
 }
