@@ -12,17 +12,22 @@
 #include <driverlib/sysctl.h>
 #include <driverlib/gpio.h>
 
-// default
-uint16_t Task::Blink::period_ms = Task::Blink::PERIOD_NORMAL;
-
-void Task::Blink::main(void*)
+void Task::Blink::main(void * v)
 {
-    LED.defaultInitAsOutput();
+    /*--- parameter validation -----------------------------*/
+
+    if(!v)
+        return;
+    Args * args = (Args *)v;
+
+    /*------------------------------------------------------*/
+
+    args->pin.defaultInitAsOutput();
 
     for(;;){
-        LED.setValue(0);
-        vTaskDelay(period_ms);
-        LED.setValue(1);
-        vTaskDelay(period_ms);
+        args->pin.setValue(0);
+        vTaskDelay(args->period_ms);
+        args->pin.setValue(1);
+        vTaskDelay(args->period_ms);
     }
 }

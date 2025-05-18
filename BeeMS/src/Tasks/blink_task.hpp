@@ -23,16 +23,13 @@ namespace Task {
         constexpr uint16_t PERIOD_WARNING   = 500   / portTICK_PERIOD_MS;
         constexpr uint16_t PERIOD_FAULT     = 100   / portTICK_PERIOD_MS;
 
-        constexpr System::GPIO::GPIO_REG LED = {
-                .GPIO_PORTn_BASE    = GPIO_PORTN_BASE,
-                .GPIO_PIN_n         = GPIO_PIN_0
-            };
-
-        /* blink period time in milliseconds */
-        extern uint16_t period_ms;
-
-        void main(void *);
-    }
+        struct Args {
+            System::GPIO::GPIO_REG pin;
+            /* blink period time in milliseconds */
+            uint16_t period_ms;
+        };
+        void main(void * args);
+    };
 }
 
 

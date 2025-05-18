@@ -13,6 +13,10 @@
 #include <FreeRTOS.h>
 
 void system_init_onchip(){
+    // set up main oscillator
+    //  the LP uses a 32.768 KHz radial can
+    SysCtlMOSCConfigSet(SYSCTL_MOSC_HIGHFREQ);
+
     // set system clock to the FreeRTOS settings
     System::CPU_FREQ = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
         SYSCTL_OSC_MAIN | SYSCTL_USE_PLL |
@@ -34,6 +38,8 @@ void system_init_onchip(){
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOQ);
+
+    _delay_cycles(16);
 
     // init uart
 

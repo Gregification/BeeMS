@@ -93,12 +93,34 @@ int main(){
     /* --- Start -------------------------------------------------- */
     System::nputsUIUART(STRANDN("Starting tasks ..." NEWLINE));
 
-    xTaskCreate(Task::Blink::main,
-                "blink indicator",
-                configMINIMAL_STACK_SIZE,
-                NULL,
-                tskIDLE_PRIORITY,
-                NULL);
+
+    // indicator led
+    {
+        static constexpr Task::Blink::Args args = {
+                .pin = System::GPIO::GPIO_REG {
+                        .GPIO_PORTn_BASE    = GPIO_PORTN_BASE,
+                        .GPIO_PIN_n         = GPIO_PIN_0,
+                    },
+                .period_ms = Task::Blink::PERIOD_NORMAL,
+            };
+        xTaskCreate(Task::Blink::main,
+                    "blink indicator 1",
+                    configMINIMAL_STACK_SIZE,
+                    (void *)&args,
+                    tskIDLE_PRIORITY,
+                    NULL);
+    }
+
+    // ethernet test
+    {
+        System::nputsUIUART(STRANDN("ethernet test" NEWLINE));
+        GPIOPinConfigure(GPIO_PF0_EN0LED0);
+        GPIOPinConfigure(GPIO_PF4_EN0LED1);
+
+        GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4);
+
+
+    }
 
     vTaskStartScheduler();
 

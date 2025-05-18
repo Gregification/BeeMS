@@ -63,13 +63,13 @@ void System::FailHard(char const * error_description) {
 void System::GPIO::GPIO_REG::defaultInitAsOutput() const
 {
     MAP_GPIOPinTypeGPIOOutput(GPIO_PORTn_BASE, GPIO_PIN_n);
-    MAP_GPIOPadConfigSet(GPIO_PORTn_BASE, GPIO_PIN_n, GPIO_STRENGTH_12MA, GPIO_PIN_TYPE_STD);
+    MAP_GPIOPadConfigSet(GPIO_PORTn_BASE, GPIO_PIN_n, GPIO_STRENGTH_10MA, GPIO_PIN_TYPE_STD);
 }
 
 void System::GPIO::GPIO_REG::defaultInitAsInput() const
 {
     MAP_GPIOPinTypeGPIOInput(GPIO_PORTn_BASE, GPIO_PIN_n);
-    MAP_GPIOPadConfigSet(GPIO_PORTn_BASE, GPIO_PIN_n, GPIO_STRENGTH_12MA, GPIO_PIN_TYPE_STD);
+    MAP_GPIOPadConfigSet(GPIO_PORTn_BASE, GPIO_PIN_n, GPIO_STRENGTH_10MA, GPIO_PIN_TYPE_STD);
 }
 
 void System::GPIO::GPIO_REG::setValue(bool v) const

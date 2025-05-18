@@ -284,6 +284,8 @@ namespace System {
 
    /* put string to the UART responsible for UI */
    void nputsUIUART(char const * str, uint32_t n);
+
+
 }
 
 #endif
