@@ -38,8 +38,23 @@ void system_init_onchip(){
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPION);
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOP);
     MAP_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOQ);
-
-    _delay_cycles(16);
+    
+    while(  !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOA)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOB)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOC)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOD)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOE)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOF)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOG)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOH)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOJ)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOK)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOL)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOM)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPION)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOP)
+            || !MAP_SysCtlPeripheralReady(SYSCTL_PERIPH_GPIOQ)
+        ) {}
 
     // init uart
 

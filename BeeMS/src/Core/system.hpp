@@ -105,6 +105,8 @@ namespace System { OCCUPY(UART0) }
 
 namespace System {
 
+    /*--- structs --------------------------------------------------------------------------------------------*/
+
     /* a single lock resource */
     struct LOCKABLE_SIMPLE {
         SemaphoreHandle_t semph = NULL;
@@ -112,13 +114,6 @@ namespace System {
         virtual inline bool _aquire(TickType_t blockTime);
         virtual inline void _release();
     };
-
-    /** CPU clock speed (Hz) */
-    uint32_t CPU_FREQ;
-    constexpr uint32_t PIOSC_FREQ = 16e6;
-
-    /* bring system to immediate stop . requires chip reset to escape this */
-    void FailHard(char const * str = nullptr);
 
     namespace GPIO {
         struct GPIO_REG {
@@ -234,6 +229,9 @@ namespace System {
                 GPIOPinConfigure(regs.GPIO_PIN_CONFIG_UnTX);
                 // enable UARTn
                 SysCtlPeripheralEnable(regs.SYSCTL_PERIPH_UARTn);
+                while(!MAP_SysCtlPeripheralReady(regs.SYSCTL_PERIPH_UARTn))
+                    {}
+
                 // set clock
                 UARTClockSourceSet(regs.UARTn_BASE, regs.UART_CLOCK_src);
                 // set alternative pin function
@@ -251,6 +249,34 @@ namespace System {
             }
         };
     }
+
+    /* Ethernet Controller */
+    namespace ETHC {
+
+        /* IPv4 address */
+        union IPv4 {
+            uint8_t raw[4];
+            unsigned long value : 32;
+        };
+
+        /* IPv6 address */
+        union IPv6 {
+            uint8_t raw[4];
+            struct {
+                IPv4 lower32;
+                IPv4 upper32;
+            };
+        };
+
+//        extern IPv4 localhost = { .raw = { 0x1, 2, 3, 4} };
+
+    }
+
+    /*--- variables ------------------------------------------------------------------------------------------*/
+
+    /** CPU clock speed (Hz) */
+    uint32_t CPU_FREQ;
+    constexpr uint32_t PIOSC_FREQ = 16e6;
 
     #ifdef PROJECT_ENABLE_UART0
         OCCUPY(PA0);
@@ -282,10 +308,13 @@ namespace System {
         // make sure to use the correct version of the UART register struct, see datasheet
     #endif
 
-   /* put string to the UART responsible for UI */
-   void nputsUIUART(char const * str, uint32_t n);
+    /*--- functions ------------------------------------------------------------------------------------------*/
 
+    /* put string to the UART responsible for UI */
+    void nputsUIUART(char const * str, uint32_t n);
 
+    /* bring system to immediate stop . requires chip reset to escape this */
+    void FailHard(char const * str = nullptr);
 }
 
 #endif

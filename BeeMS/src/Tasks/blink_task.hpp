@@ -19,9 +19,9 @@ namespace System {
 
 namespace Task {
     namespace Blink {
-        constexpr uint16_t PERIOD_NORMAL    = 1000  / portTICK_PERIOD_MS;
-        constexpr uint16_t PERIOD_WARNING   = 500   / portTICK_PERIOD_MS;
-        constexpr uint16_t PERIOD_FAULT     = 100   / portTICK_PERIOD_MS;
+        constexpr uint16_t PERIOD_NORMAL    = pdMS_TO_TICKS(1000);
+        constexpr uint16_t PERIOD_WARNING   = pdMS_TO_TICKS(500);
+        constexpr uint16_t PERIOD_FAULT     = pdMS_TO_TICKS(100);
 
         struct Args {
             System::GPIO::GPIO_REG pin;

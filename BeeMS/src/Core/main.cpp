@@ -42,6 +42,7 @@
 #include <driverlib/rom_map.h>
 #include <driverlib/sysctl.h>
 #include <driverlib/uart.h>
+#include <driverlib/emac.h>
 #include <FreeRTOS.h>
 #include <task.h>
 
@@ -66,6 +67,8 @@ int main(){
 
     /* --- display software information --------------------------- */
     {
+        System::nputsUIUART(STRANDN("\033[2J\033[H"));
+
         constexpr char logo[] =
             "  ____             __   __ ______  " NEWLINE
             " |  _ \\           |  \\ /  |\\  ___) " NEWLINE
@@ -73,7 +76,6 @@ int main(){
             " |  _ ( / __)/ __)| |\\_/| |  > >   " NEWLINE
             " | |_) )> _) > _) | |   | | / /__  " NEWLINE
             " |____/ \\___)\\___)|_|   |_|/_____) " NEWLINE;
-
         System::nputsUIUART(logo, sizeof(logo));
     }
     System::nputsUIUART(STRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
@@ -114,11 +116,13 @@ int main(){
     // ethernet test
     {
         System::nputsUIUART(STRANDN("ethernet test" NEWLINE));
+
         GPIOPinConfigure(GPIO_PF0_EN0LED0);
         GPIOPinConfigure(GPIO_PF4_EN0LED1);
-
         GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4);
 
+        // hollie mollie rollie pollie thank the people that ported FreeRTOS-plus-TCP and lwip to chip because learning the enet registers on this is NOT fun even with DL
+        //  just use the freertos process to init enet, its a pain to do it the register way
 
     }
 
