@@ -42,7 +42,7 @@
 #include <driverlib/rom_map.h>
 #include <driverlib/sysctl.h>
 #include <driverlib/uart.h>
-#include <driverlib/emac.h>
+#include <NetworkInterface.h>
 #include <FreeRTOS.h>
 #include <task.h>
 
@@ -124,6 +124,9 @@ int main(){
         // hollie mollie rollie pollie thank the people that ported FreeRTOS-plus-TCP and lwip to chip because learning the enet registers on this is NOT fun even with DL
         //  just use the freertos process to init enet, its a pain to do it the register way
 
+        xNetworkInterfaceInitialise();
+//        FreeRTOS_SendPingRequest();
+
     }
 
     vTaskStartScheduler();
@@ -195,5 +198,11 @@ void *malloc( size_t xSize )
     for( ;; );
 }
 
+
+/*-----------------------------------------------------------*/
+
+const char * pcApplicatoinHostnameHook( void ) {
+    return PROJECT_NAME " " PROJECT_VERSION " " __TIME__;
+}
 
 /*-----------------------------------------------------------*/

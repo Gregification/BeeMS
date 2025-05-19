@@ -21,6 +21,10 @@ namespace System {
     #ifdef PROJECT_ENABLE_UART0
         UART::UART<UART::UART_REG_MFC_MS> uart0(uart0_regs);
     #endif
+
+    namespace ETHC {
+        IPv4 localhost = { .raw = {41, 1, 1, 1} }; // default
+    }
 }
 
 /*--- miscellaneous asserts ------------------------------------------------------------------*/

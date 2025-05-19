@@ -268,7 +268,7 @@ namespace System {
             };
         };
 
-//        extern IPv4 localhost = { .raw = { 0x1, 2, 3, 4} };
+        extern IPv4 localhost;
 
     }
 
