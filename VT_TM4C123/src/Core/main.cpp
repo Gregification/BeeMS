@@ -31,6 +31,7 @@
  */
 
 #include <stdint.h>
+#include <stdio.h>
 
 #include <inc/hw_sysctl.h>
 #include <inc/hw_memmap.h>
@@ -42,7 +43,6 @@
 #include <driverlib/rom_map.h>
 #include <driverlib/sysctl.h>
 #include <driverlib/uart.h>
-#include <NetworkInterface.h>
 #include <FreeRTOS.h>
 #include <task.h>
 
@@ -51,7 +51,6 @@
 #include "Tasks/blink_task.hpp"
 
 int main(){
-
     /* --- Initialize on-chip ------------------------------------- */
 
     system_init_onchip();
@@ -62,27 +61,16 @@ int main(){
     // TODO make actual tests, e.g: loop back on the UARTS, confirm tx rx. that sort of thing
     // patented trust me bro testing technology
 
-    ASSERT_FATAL(System::CPU_FREQ == configCPU_CLOCK_HZ, "failed to set MOSC");
+    System::nputsUIUART(STRANDN("\033[2J\033[H"));
+    ASSERT_FATAL(SysCtlClockGet() == configCPU_CLOCK_HZ, "failed to set MOSC");
 
 
     /* --- display software information --------------------------- */
-    {
-        System::nputsUIUART(STRANDN("\033[2J\033[H"));
-
-        constexpr char logo[] =
-            "  ____             __   __ ______  " NEWLINE
-            " |  _ \\           |  \\ /  |\\  ___) " NEWLINE
-            " | |_) ) ___  ___ |   v   | \\ \\    " NEWLINE
-            " |  _ ( / __)/ __)| |\\_/| |  > >   " NEWLINE
-            " | |_) )> _) > _) | |   | | / /__  " NEWLINE
-            " |____/ \\___)\\___)|_|   |_|/_____) " NEWLINE;
-        System::nputsUIUART(logo, sizeof(logo));
-    }
     System::nputsUIUART(STRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
 
     /* --- Initialize off-chip ------------------------------------ */
-    System::nputsUIUART(STRANDN("Initializing off chip ..." NEWLINE));
+//    System::nputsUIUART(STRANDN("Initializing off chip ..." NEWLINE));
 
     system_init_offchip();
 
@@ -100,8 +88,8 @@ int main(){
     {
         static constexpr Task::Blink::Args args = {
                 .pin = System::GPIO::GPIO_REG {
-                        .GPIO_PORTn_BASE    = GPIO_PORTN_BASE,
-                        .GPIO_PIN_n         = GPIO_PIN_0,
+                        .GPIO_PORTn_BASE    = GPIO_PORTF_BASE,
+                        .GPIO_PIN_n         = GPIO_PIN_1, // red blue
                     },
                 .period_ms = Task::Blink::PERIOD_NORMAL,
             };
@@ -111,22 +99,6 @@ int main(){
                     (void *)&args,
                     tskIDLE_PRIORITY,
                     NULL);
-    }
-
-    // ethernet test
-    {
-        System::nputsUIUART(STRANDN("ethernet test" NEWLINE));
-
-        GPIOPinConfigure(GPIO_PF0_EN0LED0);
-        GPIOPinConfigure(GPIO_PF4_EN0LED1);
-        GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4);
-
-        // hollie mollie rollie pollie thank the people that ported FreeRTOS-plus-TCP and lwip to chip because learning the enet registers on this is NOT fun even with DL
-        //  just use the freertos process to init enet, its a pain to do it the register way
-
-//        xNetworkInterfaceInitialise();
-//        FreeRTOS_SendPingRequest();
-
     }
 
     vTaskStartScheduler();
