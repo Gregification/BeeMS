@@ -65,7 +65,6 @@ void System::GPIO::GPIO_REG::defaultInitAsOutput() const
     MAP_GPIOPinTypeGPIOOutput(GPIO_PORTn_BASE, GPIO_PIN_n);
     MAP_GPIODirModeSet(GPIO_PORTn_BASE, GPIO_PIN_n, GPIO_DIR_MODE_OUT);
     MAP_GPIOPadConfigSet(GPIO_PORTn_BASE, GPIO_PIN_n, GPIO_STRENGTH_8MA, GPIO_PIN_TYPE_STD);
-
 }
 
 void System::GPIO::GPIO_REG::defaultInitAsInput() const
@@ -77,7 +76,7 @@ void System::GPIO::GPIO_REG::defaultInitAsInput() const
 
 void System::GPIO::GPIO_REG::setValue(bool v) const
 {
-    MAP_GPIOPinWrite(GPIO_PORTn_BASE, GPIO_PIN_n, v);
+    MAP_GPIOPinWrite(GPIO_PORTn_BASE, GPIO_PIN_n, v ? GPIO_PIN_n : 0);
 }
 
 uint32_t System::GPIO::GPIO_REG::getValue() const

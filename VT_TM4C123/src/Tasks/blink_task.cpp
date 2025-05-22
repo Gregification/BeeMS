@@ -26,6 +26,7 @@ void Task::Blink::main(void * v)
 
     for(;;){
         System::nputsUIUART(STRANDN("blink" NEWLINE));
+
         args->pin.setValue(0);
         vTaskDelay(args->period_ms);
         args->pin.setValue(1);
