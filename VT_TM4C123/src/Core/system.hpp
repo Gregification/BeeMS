@@ -138,7 +138,7 @@ namespace System {
             /* e.g: GPIO_PIN_0 */
             uint32_t GPIO_PIN_nrx;
 
-            /* e.g: GPIO_PA0_U0TX */
+            /* e.g: GPIO_PA1_U0TX */
             uint32_t GPIO_PIN_CONFIG_UnTX;
             /* e.g: GPIO_PIN_1 */
             uint32_t GPIO_PIN_ntx;
@@ -225,6 +225,10 @@ namespace System {
                     UARTCharPut(regs.UARTn_BASE, str[i]);
             }
         };
+    }
+
+    namespace CAN {
+
     }
 
     /*--- variables ------------------------------------------------------------------------------------------*/

@@ -13,10 +13,6 @@
 
 #include "Core/system.hpp"
 
-namespace System {
-    OCCUPY(PN0) // LED / LP D2
-}
-
 namespace Task {
     namespace Blink {
         constexpr uint16_t PERIOD_NORMAL    = pdMS_TO_TICKS(1000);

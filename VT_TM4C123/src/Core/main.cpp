@@ -49,6 +49,7 @@
 #include "Core/system.hpp"
 #include "Core/system_init.hpp"
 #include "Tasks/blink_task.hpp"
+#include "Tasks/fiddle_task.hpp"
 
 int main(){
     /* --- Initialize on-chip ------------------------------------- */
@@ -89,7 +90,7 @@ int main(){
         static constexpr Task::Blink::Args args = {
                 .pin = System::GPIO::GPIO_REG {
                         .GPIO_PORTn_BASE    = GPIO_PORTF_BASE,
-                        .GPIO_PIN_n         = GPIO_PIN_1, // red blue
+                        .GPIO_PIN_n         = GPIO_PIN_1 | GPIO_PIN_2, // red blue
                     },
                 .period_ms = Task::Blink::PERIOD_NORMAL,
             };
@@ -101,6 +102,14 @@ int main(){
                     NULL);
     }
 
+    //fiddle
+    xTaskCreate(Task::Fiddle::main,
+                "fiddle",
+                configMINIMAL_STACK_SIZE,
+                NULL,
+                tskIDLE_PRIORITY + 2,
+                NULL);
+
     vTaskStartScheduler();
 
 
@@ -109,6 +118,11 @@ int main(){
         System::FailHard("FreeRTOS scheduler crashed");
 }
 
+
+namespace System {
+    OCCUPY(PF1) // RED LED , indicator
+    OCCUPY(PF2) // BLUE LED , indicator
+}
 
 /*-----------------------------------------------------------*/
 
