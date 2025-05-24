@@ -82,7 +82,7 @@ int main(){
 
 
     /* --- Start -------------------------------------------------- */
-    System::nputsUIUART(STRANDN("Starting tasks ..." NEWLINE));
+    System::nputsUIUART(STRANDN("Starting scheduler ..." NEWLINE));
 
 
     // indicator led
@@ -107,7 +107,7 @@ int main(){
                 "fiddle",
                 configMINIMAL_STACK_SIZE,
                 NULL,
-                tskIDLE_PRIORITY + 2,
+                tskIDLE_PRIORITY,
                 NULL);
 
     vTaskStartScheduler();
