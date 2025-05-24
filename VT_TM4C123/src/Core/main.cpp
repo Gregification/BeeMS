@@ -95,11 +95,11 @@ int main(){
                 .period_ms = Task::Blink::PERIOD_NORMAL,
             };
         xTaskCreate(Task::Blink::main,
-                    "blink indicator 1",
-                    configMINIMAL_STACK_SIZE,
-                    (void *)&args,
-                    tskIDLE_PRIORITY,
-                    NULL);
+                "blink indicator 1",
+                configMINIMAL_STACK_SIZE,
+                (void *)&args,
+                tskIDLE_PRIORITY,
+                NULL);
     }
 
     //fiddle

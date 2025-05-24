@@ -8,18 +8,13 @@
 #include "Core/system.hpp"
 
 #include <driverlib/gpio.h>
+#include <driverlib/can.h>
 #include <driverlib/rom_map.h>
 #include <driverlib/sysctl.h>
 #include <FreeRTOS.h>
 
 void system_init_onchip(){
-    // set up main oscillator
-//    SysCtlMOSCConfigSet(SYSCTL_MOSC_HIGHFREQ);
-
     // set system clock to the FreeRTOS settings
-//    System::CPU_FREQ = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
-//        SYSCTL_OSC_MAIN | SYSCTL_USE_PLL |
-//        SYSCTL_CFG_VCO_240), configCPU_CLOCK_HZ);
     // the ek-tm4c123gxl board uses a 2 external oscillators 32.768KHz(Y1) on the hibernation module and 16.0MHz on the main internal clock
     SysCtlClockSet(SYSCTL_SYSDIV_2_5|SYSCTL_USE_PLL|SYSCTL_OSC_MAIN|SYSCTL_XTAL_16MHZ);
 
@@ -49,5 +44,11 @@ void system_init_onchip(){
                 System::UART::BAUD_UI,
                 (UART_CONFIG_PAR_NONE | UART_CONFIG_STOP_ONE | UART_CONFIG_WLEN_8)
             );
+    #endif
+
+    #ifdef PROJECT_ENABLE_CAN0
+        System::can0.preinit();
+        CANBitRateSet(System::can0.regs.CANn_BASE, SysCtlClockGet(), 500e6);
+        CANEnable(System::can0.regs.CANn_BASE);
     #endif
 }

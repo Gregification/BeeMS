@@ -77,6 +77,10 @@
 //#define PROJECT_ENABLE_UART7
 
 #define SYSTEM_UART_PRIM_UI uart0       // uart responsible for the primary UI
+
+#define PROJECT_ENABLE_CAN0
+//#define PROJECT_ENABLE_CAN1
+
 namespace System { OCCUPY(UART0) }
 
 /*------------------------------------------------------*/
@@ -228,7 +232,51 @@ namespace System {
     }
 
     namespace CAN {
+        struct CAN_REG {
+            /* e.g: GPIO_PORTB_BASE */
+            uint32_t GPIO_PORTn_BASE;
+            /* e.g: GPIO_PB4_CAN0RX */
+            uint32_t GPIO_PIN_CONFIG_CANnRX;
+            /* e.g: GPIO_PIN_4 */
+            uint32_t GPIO_PIN_nrx;
+            /* e.g: GPIO_PB5_CAN0TX */
+            uint32_t GPIO_PIN_CONFIG_CANnTX;
+            /* e.g: GPIO_PIN_5 */
+            uint32_t GPIO_PIN_ntx;
 
+            /* e.g: SYSCTL_PERIPH_CAN0 */
+            uint32_t SYSCTL_PERIPH_CANn;
+            /* e.g: CAN0_BASE */
+            uint32_t CANn_BASE;
+
+            constexpr CAN_REG (
+                uint32_t GPIO_PORTn_BASE,
+                uint32_t GPIO_PIN_CONFIG_CANnRX,
+                uint32_t GPIO_PIN_nrx,
+                uint32_t GPIO_PIN_CONFIG_CANnTX,
+                uint32_t GPIO_PIN_ntx,
+                uint32_t SYSCTL_PERIPH_CANn,
+                uint32_t CANn_BASE) :
+            GPIO_PORTn_BASE(GPIO_PORTn_BASE),
+            GPIO_PIN_CONFIG_CANnRX(GPIO_PIN_CONFIG_CANnRX),
+            GPIO_PIN_nrx(GPIO_PIN_nrx),
+            GPIO_PIN_CONFIG_CANnTX(GPIO_PIN_CONFIG_CANnTX),
+            GPIO_PIN_ntx(GPIO_PIN_ntx),
+            SYSCTL_PERIPH_CANn(SYSCTL_PERIPH_CANn),
+            CANn_BASE(CANn_BASE)
+            {}
+        };
+
+        struct CAN : LOCKABLE_SIMPLE {
+            CAN_REG const regs;
+
+            constexpr CAN (CAN_REG const regs) : regs(regs)
+                {}
+
+            void preinit();
+            inline bool _aquire(TickType_t blockTime){ return xSemaphoreTake(semph, blockTime) == pdTRUE; }
+            inline void _release(){ xSemaphoreGive(semph); }
+        };
     }
 
     /*--- variables ------------------------------------------------------------------------------------------*/
@@ -265,6 +313,24 @@ namespace System {
         // just copy and paste from the one before, its not yet done because its tedious
         //  to track down all the pins from the data sheet
         // make sure to use the correct version of the UART register struct, see datasheet
+    #endif
+
+    #ifdef PROJECT_ENABLE_CAN0
+        OCCUPY(PB4);
+        OCCUPY(PB5);
+        constexpr const CAN::CAN_REG can0_regs(
+            GPIO_PORTB_BASE,    // GPIO_PORTn_BASE
+            GPIO_PB4_CAN0RX,    // GPIO_PIN_CONFIG_CANnRX
+            GPIO_PIN_4,         // GPIO_PIN_nrx
+            GPIO_PB5_CAN0TX,    // GPIO_PIN_CONFIG_CANnTX
+            GPIO_PIN_5,         // GPIO_PIN_ntx
+            SYSCTL_PERIPH_CAN0, // SYSCTL_PERIPH_CANn
+            CAN0_BASE           // CANn_BASE
+        );
+        extern CAN::CAN can0;
+    #endif
+    #ifdef PROJECT_ENABLE_CAN1
+        #error "lmao, can1's pins conflicts with uart0. better be sure to continue"
     #endif
 
     /*--- functions ------------------------------------------------------------------------------------------*/

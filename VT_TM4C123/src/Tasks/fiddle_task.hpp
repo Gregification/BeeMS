@@ -15,8 +15,8 @@
 
 
 namespace System {
-    OCCUPY(PB4);
-    OCCUPY(PB5);
+//    OCCUPY(PB4);
+//    OCCUPY(PB5);
 }
 
 namespace Task {

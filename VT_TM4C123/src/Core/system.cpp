@@ -13,6 +13,7 @@
 #include <driverlib/pin_map.h>
 #include <driverlib/sysctl.h>
 #include <driverlib/uart.h>
+#include <driverlib/can.h>
 #include <task.h>
 
 /*--- definitions ----------------------------------------------------------------------------*/
@@ -20,6 +21,9 @@
 namespace System {
     #ifdef PROJECT_ENABLE_UART0
         UART::UART<UART::UART_REG_MFC_MS> uart0(uart0_regs);
+    #endif
+    #ifdef PROJECT_ENABLE_CAN0
+        CAN::CAN can0(can0_regs);
     #endif
 }
 
@@ -88,3 +92,26 @@ void System::nputsUIUART(const char *str, uint32_t n)
 {
     System::SYSTEM_UART_PRIM_UI.nputs(str, n);
 }
+
+void System::CAN::CAN::preinit()
+{
+    semph = xSemaphoreCreateMutex();
+
+    GPIOPinConfigure(regs.GPIO_PIN_CONFIG_CANnRX);
+    GPIOPinConfigure(regs.GPIO_PIN_CONFIG_CANnTX);
+    GPIOPinTypeCAN(regs.GPIO_PORTn_BASE, regs.GPIO_PIN_nrx | regs.GPIO_PIN_ntx);
+
+    SysCtlPeripheralEnable(regs.SYSCTL_PERIPH_CANn);
+
+    while(!SysCtlPeripheralReady(regs.SYSCTL_PERIPH_CANn))
+        {}
+
+    CANInit(regs.CANn_BASE);
+
+    // for full init
+    /*
+    CANBitRateSet(regs.CANn_BASE, SysCtlClockGet(), 500e3);
+    CANEnable(regs.CANn_BASE);
+    */
+}
+
