@@ -8,8 +8,8 @@
 #include "OrionBMS.hpp"
 
 
-void OrionBMS::TEM::CAN::TMGB::Packet::updateChecksum() {
+void OrionBMS::TEM::CAN::TMtoBMS::Packet::updateChecksum() {
     checksum = sizeof(Packet) + 0x39;
     for(uint8_t i = 0; i < sizeof(Packet) - sizeof(checksum); i++)
-        checksum += ((uint8_t *)this)[0];
+        checksum += ((uint8_t *)this)[i];
 }

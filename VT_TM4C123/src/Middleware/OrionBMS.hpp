@@ -35,8 +35,8 @@ namespace OrionBMS {
 
             };
 
-            /* Thermistor Module General Broadcase */
-            struct TMGB {
+            /* Thermistor Module -> BMS Boradcast */
+            struct TMtoBMS {
                 constexpr static uint32_t can_id = 0x1839F380;
 
                 struct Packet {

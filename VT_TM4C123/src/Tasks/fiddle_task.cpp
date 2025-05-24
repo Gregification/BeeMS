@@ -20,13 +20,21 @@ void Task::Fiddle::main(void *)
     CANBitRateSet(can.regs.CANn_BASE, SysCtlClockGet(), 500e3);
     CANEnable(can.regs.CANn_BASE);
 
-    uint8_t arr[] = {0x1,0x1,0x1,0xf,0x1,0x1,0x1,0x1};
+    OrionBMS::TEM::CAN::TMtoBMS pktModuleBc;
+    pktModuleBc.data.module_number  = 1;
+    pktModuleBc.data.lowest_val     = 10;
+    pktModuleBc.data.highest_val    = 69;
+    pktModuleBc.data.average_val    = 99;
+    pktModuleBc.data.therms_enabled_count   = 80;
+    pktModuleBc.data.highest_id     = 1;
+    pktModuleBc.data.lowest_id      = 2;
+    pktModuleBc.data.updateChecksum();
 
     tCANMsgObject tx_handle;
-    tx_handle.ui32MsgID     = 0x4;
+    tx_handle.ui32MsgID     = pktModuleBc.can_id;
     tx_handle.ui32Flags     = 0;
-    tx_handle.ui32MsgLen    = sizeof(arr);
-    tx_handle.pui8MsgData   = arr;
+    tx_handle.ui32MsgLen    = sizeof(pktModuleBc.data);
+    tx_handle.pui8MsgData   = (uint8_t*)&pktModuleBc.data;
     System::nputsUIUART(STRANDN("start"NEWLINE));
 
     CANMessageSet(can.regs.CANn_BASE, 1, &tx_handle, MSG_OBJ_TYPE_TX);
