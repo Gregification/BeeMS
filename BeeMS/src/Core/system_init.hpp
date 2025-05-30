@@ -13,7 +13,8 @@
 
 #include "system.hpp"
 
-void system_init_offchip();
+// dont use this. instead just init it manually or in the tasks
+//void system_init_offchip();
 
 void system_init_onchip();
 

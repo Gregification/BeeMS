@@ -80,6 +80,8 @@
     * physical pins will be in the "System" name space */
 #define OCCUPY(ID) constexpr int const __PROJECT_OCCUPY_##ID = 0;
 
+#define IPV4_TO_INT(A,B,C,D) ( (uint32_t)( (A << (4 *3)) | (B << (4 *2)) | (C << (4 *1)) | (D) ) )
+
 /*--- constants ----------------------------------------*/
 
 #define NEWLINE "\n\r"

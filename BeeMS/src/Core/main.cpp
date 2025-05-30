@@ -44,11 +44,20 @@
 #include <driverlib/uart.h>
 #include <NetworkInterface.h>
 #include <FreeRTOS.h>
+#include <FreeRTOS_TCP_WIN.h>
 #include <task.h>
 
 #include "Core/system.hpp"
 #include "Core/system_init.hpp"
 #include "Tasks/blink_task.hpp"
+
+void fiddleTask(void * args){
+    for(;;){
+        FreeRTOS_SendPingRequest(IPV4_TO_INT(192,123,123,123), 0, pdMS_TO_TICKS(100));
+        System::nputsUIUART(STRANDN("fiddle task" NEWLINE));
+        vTaskDelay(pdMS_TO_TICKS(500));
+    }
+}
 
 int main(){
 
@@ -84,7 +93,7 @@ int main(){
     /* --- Initialize off-chip ------------------------------------ */
     System::nputsUIUART(STRANDN("Initializing off chip ..." NEWLINE));
 
-    system_init_offchip();
+
 
 
     /* --- POST off-chip ------------------------------------------ */
@@ -124,10 +133,10 @@ int main(){
         // hollie mollie rollie pollie thank the people that ported FreeRTOS-plus-TCP and lwip to chip because learning the enet registers on this is NOT fun even with DL
         //  just use the freertos process to init enet, its a pain to do it the register way
 
-//        xNetworkInterfaceInitialise();
-//        FreeRTOS_SendPingRequest();
-
+        FreeRTOS_IPInit_Multi();
     }
+
+
 
     vTaskStartScheduler();
 
@@ -201,8 +210,78 @@ void *malloc( size_t xSize )
 
 /*-----------------------------------------------------------*/
 
-const char * pcApplicatoinHostnameHook( void ) {
-    return PROJECT_NAME " " PROJECT_VERSION " " __TIME__;
+const char * pcApplicationHostnameHook( void ) {
+    return PROJECT_NAME " " PROJECT_VERSION;
+}
+
+/*-----------------------------------------------------------*/
+
+/*
+* Callback that provides the inputs necessary to generate a randomized TCP
+* Initial Sequence Number per RFC 6528.  In this case just a psuedo random
+* number is used so THIS IS NOT RECOMMENDED FOR PRODUCTION SYSTEMS.
+*/
+extern uint32_t ulApplicationGetNextSequenceNumber(
+    uint32_t ulSourceAddress,
+    uint16_t usSourcePort,
+    uint32_t ulDestinationAddress,
+    uint16_t usDestinationPort )
+{
+     ( void ) ulSourceAddress;
+     ( void ) usSourcePort;
+     ( void ) ulDestinationAddress;
+     ( void ) usDestinationPort;
+
+     static uint32_t randomnumber; // very random number
+     return randomnumber++;
+}
+
+/*-----------------------------------------------------------*/
+
+BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber ){
+    return *pulNumber ^ 0xBEE;
+}
+
+/*-----------------------------------------------------------*/
+
+/* called when the network connects or disconnects
+ * https://freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/58-vApplicationIPNetworkEventHook_Multi
+ */
+void vApplicationIPNetworkEventHook_Multi(
+                                           eIPCallbackEvent_t eNetworkEvent,
+                                           struct xNetworkEndPoint * pxEndPoint
+                                         ){
+    // explode
+    System::nputsUIUART(STRANDN("network connect/disconnect vApplicationIPNetworkEventHook_Multi" NEWLINE));
+
+    xTaskCreate(fiddleTask,
+        "blink indicator 1",
+        configMINIMAL_STACK_SIZE,
+        NULL,
+        tskIDLE_PRIORITY,
+        NULL);
+}
+
+/*-----------------------------------------------------------*/
+
+/* decides how to resolve DHCP communication decision points
+ * https://freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/64-xApplicationDHCPHook_Multi
+ */
+eDHCPCallbackAnswer_t xApplicationDHCPHook_Multi( eDHCPCallbackPhase_t eDHCPPhase,
+                                                  struct xNetworkEndPoint * pxEndPoint,
+                                                  IP_Address_t * pxIPAddress
+                                                ){
+    // vaporise
+    return eDHCPContinue;
+}
+
+/*-----------------------------------------------------------*/
+
+/* stop reading this, what do you think it does. use ur brain. we didnt leave agartha for you to be retarded. (((we))) left so we can be different colors
+ * https://www.freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/59-vApplicationPingReplyHook
+ */
+void vApplicationPingReplyHook( ePingReplyStatus_t eStatus, uint16_t usIdentifier ){
+    System::nputsUIUART(STRANDN("pong " NEWLINE));
 }
 
 /*-----------------------------------------------------------*/
