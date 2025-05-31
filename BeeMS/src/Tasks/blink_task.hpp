@@ -28,7 +28,7 @@ namespace Task {
             /* blink period time in milliseconds */
             uint16_t period_ms;
         };
-        void main(void * args);
+        void task(void * args);
     };
 }
 

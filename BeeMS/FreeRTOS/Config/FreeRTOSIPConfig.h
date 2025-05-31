@@ -44,7 +44,7 @@
 #define ipconfigMAXIMUM_DISCOVER_TX_PERIOD              pdMS_TO_TICKS(500)
 #define ipconfigREPLY_TO_INCOMING_PINGS                 1
 #define ipconfigSUPPORT_OUTGOING_PINGS                  1
-#define ipconfigCOMPATIBLE_WITH_SINGLE                  0 // hardware property, leave as 0 for tm4c129
+#define ipconfigCOMPATIBLE_WITH_SINGLE                  1
 #define ipconfigZERO_COPY_TX_DRIVER                     1 // property of the FreeRTOS port
 #define ipconfigZERO_COPY_RX_DRIVER                     1 // property of the FreeRTOS port
 

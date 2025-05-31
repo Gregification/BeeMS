@@ -12,7 +12,7 @@
 #include <driverlib/sysctl.h>
 #include <driverlib/gpio.h>
 
-void Task::Blink::main(void * v)
+void Task::Blink::task(void * v)
 {
     /*--- parameter validation -----------------------------*/
 

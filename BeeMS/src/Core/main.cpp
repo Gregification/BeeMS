@@ -35,6 +35,7 @@
 #include <inc/hw_sysctl.h>
 #include <inc/hw_memmap.h>
 #include <inc/hw_sysctl.h>
+#include <inc/hw_ints.h>
 #include <driverlib/gpio.h>
 #include <driverlib/interrupt.h>
 #include <driverlib/pin_map.h>
@@ -42,8 +43,9 @@
 #include <driverlib/rom_map.h>
 #include <driverlib/sysctl.h>
 #include <driverlib/uart.h>
-#include <NetworkInterface.h>
+#include <driverlib/emac.h>
 #include <FreeRTOS.h>
+#include <NetworkInterface.h>
 #include <FreeRTOS_TCP_WIN.h>
 #include <task.h>
 
@@ -58,6 +60,8 @@ void fiddleTask(void * args){
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
+
+void firstTask(void * args);
 
 int main(){
 
@@ -78,14 +82,14 @@ int main(){
     {
         System::nputsUIUART(STRANDN("\033[2J\033[H"));
 
-        constexpr char logo[] =
-            "  ____             __   __ ______  " NEWLINE
-            " |  _ \\           |  \\ /  |\\  ___) " NEWLINE
-            " | |_) ) ___  ___ |   v   | \\ \\    " NEWLINE
-            " |  _ ( / __)/ __)| |\\_/| |  > >   " NEWLINE
-            " | |_) )> _) > _) | |   | | / /__  " NEWLINE
-            " |____/ \\___)\\___)|_|   |_|/_____) " NEWLINE;
-        System::nputsUIUART(logo, sizeof(logo));
+//        constexpr char logo[] =
+//            "  ____             __   __ ______  " NEWLINE
+//            " |  _ \\           |  \\ /  |\\  ___) " NEWLINE
+//            " | |_) ) ___  ___ |   v   | \\ \\    " NEWLINE
+//            " |  _ ( / __)/ __)| |\\_/| |  > >   " NEWLINE
+//            " | |_) )> _) > _) | |   | | / /__  " NEWLINE
+//            " |____/ \\___)\\___)|_|   |_|/_____) " NEWLINE;
+//        System::nputsUIUART(logo, sizeof(logo));
     }
     System::nputsUIUART(STRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
@@ -114,7 +118,7 @@ int main(){
                     },
                 .period_ms = Task::Blink::PERIOD_NORMAL,
             };
-        xTaskCreate(Task::Blink::main,
+        xTaskCreate(Task::Blink::task,
                     "blink indicator 1",
                     configMINIMAL_STACK_SIZE,
                     (void *)&args,
@@ -122,21 +126,12 @@ int main(){
                     NULL);
     }
 
-    // ethernet test
-    {
-        System::nputsUIUART(STRANDN("ethernet test" NEWLINE));
-
-        GPIOPinConfigure(GPIO_PF0_EN0LED0);
-        GPIOPinConfigure(GPIO_PF4_EN0LED1);
-        GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4);
-
-        // hollie mollie rollie pollie thank the people that ported FreeRTOS-plus-TCP and lwip to chip because learning the enet registers on this is NOT fun even with DL
-        //  just use the freertos process to init enet, its a pain to do it the register way
-
-        FreeRTOS_IPInit_Multi();
-    }
-
-
+    xTaskCreate(firstTask,
+        "initializing task",
+        configMINIMAL_STACK_SIZE,
+        NULL,
+        configMAX_PRIORITIES - 1,
+        NULL);
 
     vTaskStartScheduler();
 
@@ -146,6 +141,45 @@ int main(){
         System::FailHard("FreeRTOS scheduler crashed");
 }
 
+/*-----------------------------------------------------------*/
+
+void firstTask(void * args) {
+    // ethernet test
+    {
+        System::nputsUIUART(STRANDN("ethernet test" NEWLINE));
+
+        GPIOPinConfigure(GPIO_PF0_EN0LED0);
+        GPIOPinConfigure(GPIO_PF4_EN0LED1);
+        GPIOPinConfigure(GPIO_PF1_EN0LED2);
+        GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4 | GPIO_PIN_1);
+
+        GPIOPinConfigure(GPIO_PG0_EN0PPS);
+        GPIOPinTypeEthernetMII(GPIO_PORTG_BASE, GPIO_PIN_0);
+
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
+
+        xNetworkInterfaceInitialise();
+
+        EMACIntEnable(
+                EMAC0_BASE,
+                (
+                    EMAC_INT_PHY |
+                    EMAC_INT_POWER_MGMNT |
+                    EMAC_INT_TRANSMIT |
+                    EMAC_INT_RECEIVE |
+                    EMAC_INT_RX_NO_BUFFER |
+                    EMAC_INT_RX_STOPPED
+                )
+            );
+        IntEnable(INT_EMAC0_TM4C129);
+        IntMasterEnable();
+
+        FreeRTOS_IPInit_Multi();
+    }
+
+    vTaskDelete(NULL);
+}
 
 /*-----------------------------------------------------------*/
 
@@ -253,13 +287,6 @@ void vApplicationIPNetworkEventHook_Multi(
                                          ){
     // explode
     System::nputsUIUART(STRANDN("network connect/disconnect vApplicationIPNetworkEventHook_Multi" NEWLINE));
-
-    xTaskCreate(fiddleTask,
-        "blink indicator 1",
-        configMINIMAL_STACK_SIZE,
-        NULL,
-        tskIDLE_PRIORITY,
-        NULL);
 }
 
 /*-----------------------------------------------------------*/
@@ -285,3 +312,5 @@ void vApplicationPingReplyHook( ePingReplyStatus_t eStatus, uint16_t usIdentifie
 }
 
 /*-----------------------------------------------------------*/
+
+
