@@ -63,6 +63,14 @@ void fiddleTask(void * args){
 
 void firstTask(void * args);
 
+Task::Blink::Args blink_indicator_args = {
+        .pin = System::GPIO::GPIO_REG {
+                .GPIO_PORTn_BASE    = GPIO_PORTN_BASE,
+                .GPIO_PIN_n         = GPIO_PIN_0,
+            },
+        .period_ms = Task::Blink::PERIOD_NORMAL,
+    };
+
 int main(){
 
     /* --- Initialize on-chip ------------------------------------- */
@@ -110,21 +118,12 @@ int main(){
 
 
     // indicator led
-    {
-        static constexpr Task::Blink::Args args = {
-                .pin = System::GPIO::GPIO_REG {
-                        .GPIO_PORTn_BASE    = GPIO_PORTN_BASE,
-                        .GPIO_PIN_n         = GPIO_PIN_0,
-                    },
-                .period_ms = Task::Blink::PERIOD_NORMAL,
-            };
-        xTaskCreate(Task::Blink::task,
-                    "blink indicator 1",
-                    configMINIMAL_STACK_SIZE,
-                    (void *)&args,
-                    tskIDLE_PRIORITY,
-                    NULL);
-    }
+    xTaskCreate(Task::Blink::task,
+        "blink indicator 1",
+        configMINIMAL_STACK_SIZE,
+        (void *)&blink_indicator_args,
+        tskIDLE_PRIORITY,
+        NULL);
 
     xTaskCreate(firstTask,
         "initializing task",
@@ -159,23 +158,15 @@ void firstTask(void * args) {
         SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
         SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
 
-        xNetworkInterfaceInitialise();
+        if(FreeRTOS_IPInit_Multi() == pdFAIL) {
+            blink_indicator_args.period_ms = Task::Blink::PERIOD_FAULT;
+            System::FailHard("failed FreeRTOS IP init" NEWLINE);
+        }
 
-        EMACIntEnable(
-                EMAC0_BASE,
-                (
-                    EMAC_INT_PHY |
-                    EMAC_INT_POWER_MGMNT |
-                    EMAC_INT_TRANSMIT |
-                    EMAC_INT_RECEIVE |
-                    EMAC_INT_RX_NO_BUFFER |
-                    EMAC_INT_RX_STOPPED
-                )
-            );
-        IntEnable(INT_EMAC0_TM4C129);
-        IntMasterEnable();
-
-        FreeRTOS_IPInit_Multi();
+        if(xNetworkInterfaceInitialise() == pdFAIL){
+            blink_indicator_args.period_ms = Task::Blink::PERIOD_FAULT;
+            System::FailHard("failed to init network interface");
+        }
     }
 
     vTaskDelete(NULL);
