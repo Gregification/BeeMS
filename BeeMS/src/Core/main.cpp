@@ -71,6 +71,19 @@ Task::Blink::Args blink_indicator_args = {
         .period_ms = Task::Blink::PERIOD_NORMAL,
     };
 
+void customprintf(const char * format, ...) {
+    char buffer[MAX_ERROR_MSG_LEN]; // Adjust the size as needed
+
+    va_list args;
+    va_start(args, format);
+
+    vsnprintf(buffer, sizeof(buffer), format, args);
+
+    va_end(args);
+
+    System::SYSTEM_UART_PRIM_UI.nputs_for_freertos(buffer, sizeof(buffer));
+}
+
 int main(){
 
     /* --- Initialize on-chip ------------------------------------- */
@@ -103,7 +116,7 @@ int main(){
 
 
     /* --- Initialize off-chip ------------------------------------ */
-    System::nputsUIUART(STRANDN("Initializing off chip ..." NEWLINE));
+    System::nputsUIUART(STRANDN("--- Initializing off chip" NEWLINE));
 
 
 
@@ -114,7 +127,7 @@ int main(){
 
 
     /* --- Start -------------------------------------------------- */
-    System::nputsUIUART(STRANDN("Starting tasks ..." NEWLINE));
+    System::nputsUIUART(STRANDN("--- Starting tasks " NEWLINE));
 
 
     // indicator led
@@ -127,13 +140,13 @@ int main(){
 
     xTaskCreate(firstTask,
         "initializing task",
-        configMINIMAL_STACK_SIZE,
+        configMINIMAL_STACK_SIZE * 2,
         NULL,
-        configMAX_PRIORITIES - 1,
+        tskIDLE_PRIORITY,
         NULL);
 
-    vTaskStartScheduler();
 
+    vTaskStartScheduler();
 
     for(;;)
         // go crazy
@@ -153,7 +166,7 @@ void firstTask(void * args) {
         GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4 | GPIO_PIN_1);
 
         GPIOPinConfigure(GPIO_PG0_EN0PPS);
-        GPIOPinTypeEthernetMII(GPIO_PORTG_BASE, GPIO_PIN_0);
+        GPIOPinTypeEthernetMII(GPIO_PORTB_BASE, GPIO_PIN_0);
 
         SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
         SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);

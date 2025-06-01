@@ -86,7 +86,7 @@
 
 #define NEWLINE "\n\r"
 #define MAX_COMMON_STRING_LEN 255   // assumed max length of a string if not specified. to minimize the damage of overruns.
-#define MAX_ERROR_MSG_LEN MAX_COMMON_STRING_LEN
+#define MAX_ERROR_MSG_LEN (MAX_COMMON_STRING_LEN * 2)
 #define MAX_RESOURCE_LOCK_TIMEOUT_UART 5
 
 /*--- hardware configuration ---------------------------*/
@@ -227,17 +227,17 @@ namespace System {
             /* a partial init */
             void preinit() {
                 // configure pin muxing
-                GPIOPinConfigure(regs.GPIO_PIN_CONFIG_UnRX);
-                GPIOPinConfigure(regs.GPIO_PIN_CONFIG_UnTX);
+                MAP_GPIOPinConfigure(regs.GPIO_PIN_CONFIG_UnRX);
+                MAP_GPIOPinConfigure(regs.GPIO_PIN_CONFIG_UnTX);
                 // enable UARTn
-                SysCtlPeripheralEnable(regs.SYSCTL_PERIPH_UARTn);
+                MAP_SysCtlPeripheralEnable(regs.SYSCTL_PERIPH_UARTn);
                 while(!MAP_SysCtlPeripheralReady(regs.SYSCTL_PERIPH_UARTn))
                     {}
 
                 // set clock
-                UARTClockSourceSet(regs.UARTn_BASE, regs.UART_CLOCK_src);
+                MAP_UARTClockSourceSet(regs.UARTn_BASE, regs.UART_CLOCK_src);
                 // set alternative pin function
-                GPIOPinTypeUART(regs.GPIO_PORTn_BASE, regs.GPIO_PIN_nrx | regs.GPIO_PIN_ntx);
+                MAP_GPIOPinTypeUART(regs.GPIO_PORTn_BASE, regs.GPIO_PIN_nrx | regs.GPIO_PIN_ntx);
 
                 semph = xSemaphoreCreateMutex();
             }
@@ -246,8 +246,17 @@ namespace System {
 
             /* transmits the string of max size n */
             void nputs(char const * str, uint32_t n) const {
-                for(uint32_t i = 0; (i < n) && (str[i] != '\0'); i++)
-                    UARTCharPut(regs.UARTn_BASE, str[i]);
+                for(uint32_t i = 0; (i < n) && (str[i] != '\0'); i++){
+                    MAP_UARTCharPut(regs.UARTn_BASE, str[i]);
+                }
+            }
+
+            void nputs_for_freertos(char const * str, uint32_t n) const {
+                for(uint32_t i = 0; (i < n) && (str[i] != '\0'); i++){
+                    MAP_UARTCharPut(regs.UARTn_BASE, str[i]);
+                    if(str[i] == '\n')
+                        MAP_UARTCharPut(regs.UARTn_BASE, '\r');
+                }
             }
         };
     }

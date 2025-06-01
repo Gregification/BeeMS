@@ -44,8 +44,9 @@
 #define ipconfigMAXIMUM_DISCOVER_TX_PERIOD              pdMS_TO_TICKS(500)
 #define ipconfigREPLY_TO_INCOMING_PINGS                 1
 #define ipconfigSUPPORT_OUTGOING_PINGS                  1
-#define ipconfigCOMPATIBLE_WITH_SINGLE                  1
+#define ipconfigCOMPATIBLE_WITH_SINGLE                  0
 #define ipconfigZERO_COPY_TX_DRIVER                     1 // property of the FreeRTOS port
 #define ipconfigZERO_COPY_RX_DRIVER                     1 // property of the FreeRTOS port
+#define ipconfigHAS_PRINTF                              1
 
 #endif /* FREERTOS_CONFIG_FREERTOSIPCONFIG_H_ */
