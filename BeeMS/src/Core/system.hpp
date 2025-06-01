@@ -279,6 +279,11 @@ namespace System {
             };
         };
 
+        union MAC {
+            uint8_t raw[6];
+            unsigned long long value : 48;
+        };
+
         extern IPv4 localhost;
 
     }

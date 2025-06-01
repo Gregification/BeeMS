@@ -45,15 +45,19 @@
 #include <driverlib/uart.h>
 #include <driverlib/emac.h>
 #include <FreeRTOS.h>
+#include <FreeRTOS_IP.h>
+#include <NetworkBufferManagement.h>
 #include <NetworkInterface.h>
-#include <FreeRTOS_TCP_WIN.h>
+#include <FreeRTOS_Sockets.h>
 #include <task.h>
 
 #include "Core/system.hpp"
 #include "Core/system_init.hpp"
+#include "Core/hooks.h"
 #include "Tasks/blink_task.hpp"
 
 void fiddleTask(void * args){
+
     for(;;){
         FreeRTOS_SendPingRequest(IPV4_TO_INT(192,123,123,123), 0, pdMS_TO_TICKS(100));
         System::nputsUIUART(STRANDN("fiddle task" NEWLINE));
@@ -62,6 +66,24 @@ void fiddleTask(void * args){
 }
 
 void firstTask(void * args);
+
+BaseType_t interfaceInitialise_wrapper ( struct xNetworkInterface *) {
+    return xNetworkInterfaceInitialise();
+}
+
+BaseType_t xNetworkInterfaceOutput_wrapper( struct xNetworkInterface *,
+                                    NetworkBufferDescriptor_t * const pxNetworkBuffer,
+                                    BaseType_t xReleaseAfterSend ){
+    return xNetworkInterfaceOutput(pxNetworkBuffer, xReleaseAfterSend);
+}
+NetworkInterface_t * pxFillInterfaceDescriptor( BaseType_t, NetworkInterface_t * pxInterface ) {
+    pxInterface->pcName = "da interface";
+    pxInterface->pvArgument = NULL;
+    pxInterface->pfInitialise = interfaceInitialise_wrapper;
+    pxInterface->pfOutput = xNetworkInterfaceOutput_wrapper;
+    FreeRTOS_AddNetworkInterface(pxInterface);
+    return pxInterface;
+}
 
 Task::Blink::Args blink_indicator_args = {
         .pin = System::GPIO::GPIO_REG {
@@ -127,7 +149,7 @@ int main(){
 
 
     /* --- Start -------------------------------------------------- */
-    System::nputsUIUART(STRANDN("--- Starting tasks " NEWLINE));
+    System::nputsUIUART(STRANDN("--- starting tasks " NEWLINE));
 
 
     // indicator led
@@ -145,6 +167,42 @@ int main(){
         tskIDLE_PRIORITY,
         NULL);
 
+    {
+        System::nputsUIUART(STRANDN("ethernet test" NEWLINE));
+
+        GPIOPinConfigure(GPIO_PF0_EN0LED0);
+        GPIOPinConfigure(GPIO_PF4_EN0LED1);
+        GPIOPinConfigure(GPIO_PF1_EN0LED2);
+        GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4 | GPIO_PIN_1);
+
+        GPIOPinConfigure(GPIO_PG0_EN0PPS);
+        GPIOPinTypeEthernetMII(GPIO_PORTB_BASE, GPIO_PIN_0);
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
+        SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
+
+        static System::ETHC::IPv4 ip        = {.value = IPV4_TO_INT(1,1,1,1)};
+        static System::ETHC::IPv4 mask      = {.value = IPV4_TO_INT(255,255,255,0)};
+        static System::ETHC::IPv4 gateway   = {.value = IPV4_TO_INT(8,8,8,8)};
+        static System::ETHC::IPv4 dns       = {.value = IPV4_TO_INT(7,7,7,7)};
+        static System::ETHC::MAC  mac       = {1,2,3,4,5,6};
+
+        static NetworkInterface_t interface;
+        pxFillInterfaceDescriptor(0, &interface);
+
+        if(FreeRTOS_IPInit(
+                    ip.raw,
+                    mask.raw,
+                    gateway.raw,
+                    dns.raw,
+                    mac.raw
+                )) {
+            blink_indicator_args.period_ms = Task::Blink::PERIOD_FAULT;
+            System::FailHard("failed FreeRTOS IP init");
+        }
+
+    }
+
+    System::nputsUIUART(STRANDN("--- starting scheduler " NEWLINE));
 
     vTaskStartScheduler();
 
@@ -156,165 +214,5 @@ int main(){
 /*-----------------------------------------------------------*/
 
 void firstTask(void * args) {
-    // ethernet test
-    {
-        System::nputsUIUART(STRANDN("ethernet test" NEWLINE));
-
-        GPIOPinConfigure(GPIO_PF0_EN0LED0);
-        GPIOPinConfigure(GPIO_PF4_EN0LED1);
-        GPIOPinConfigure(GPIO_PF1_EN0LED2);
-        GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4 | GPIO_PIN_1);
-
-        GPIOPinConfigure(GPIO_PG0_EN0PPS);
-        GPIOPinTypeEthernetMII(GPIO_PORTB_BASE, GPIO_PIN_0);
-
-        SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
-        SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
-
-        if(FreeRTOS_IPInit_Multi() == pdFAIL) {
-            blink_indicator_args.period_ms = Task::Blink::PERIOD_FAULT;
-            System::FailHard("failed FreeRTOS IP init" NEWLINE);
-        }
-
-        if(xNetworkInterfaceInitialise() == pdFAIL){
-            blink_indicator_args.period_ms = Task::Blink::PERIOD_FAULT;
-            System::FailHard("failed to init network interface");
-        }
-    }
-
     vTaskDelete(NULL);
 }
-
-/*-----------------------------------------------------------*/
-
-void vApplicationMallocFailedHook( void )
-{
-    /* vApplicationMallocFailedHook() will only be called if
-    configUSE_MALLOC_FAILED_HOOK is set to 1 in FreeRTOSConfig.h.  It is a hook
-    function that will get called if a call to pvPortMalloc() fails.
-    pvPortMalloc() is called internally by the kernel whenever a task, queue,
-    timer or semaphore is created.  It is also called by various parts of the
-    demo application.  If heap_1.c or heap_2.c are used, then the size of the
-    heap available to pvPortMalloc() is defined by configTOTAL_HEAP_SIZE in
-    FreeRTOSConfig.h, and the xPortGetFreeHeapSize() API function can be used
-    to query the size of free heap space that remains (although it does not
-    provide information on how the remaining heap might be fragmented). */
-    IntMasterDisable();
-    for( ;; );
-}
-
-
-/*-----------------------------------------------------------*/
-
-void vApplicationIdleHook( void )
-{
-    /* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
-    to 1 in FreeRTOSConfig.h.  It will be called on each iteration of the idle
-    task.  It is essential that code added to this hook function never attempts
-    to block in any way (for example, call xQueueReceive() with a block time
-    specified, or call vTaskDelay()).  If the application makes use of the
-    vTaskDelete() API function (as this demo application does) then it is also
-    important that vApplicationIdleHook() is permitted to return to its calling
-    function, because it is the responsibility of the idle task to clean up
-    memory allocated by the kernel to any task that has since been deleted. */
-}
-
-
-/*-----------------------------------------------------------*/
-
-void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
-{
-    ( void ) pcTaskName;
-    ( void ) pxTask;
-
-    /* Run time stack overflow checking is performed if
-    configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
-    function is called if a stack overflow is detected. */
-    IntMasterDisable();
-    for( ;; );
-}
-
-
-/*-----------------------------------------------------------*/
-
-void *malloc( size_t xSize )
-{
-    /* There should not be a heap defined, so trap any attempts to call
-    malloc. */
-    IntMasterDisable();
-    for( ;; );
-}
-
-
-/*-----------------------------------------------------------*/
-
-const char * pcApplicationHostnameHook( void ) {
-    return PROJECT_NAME " " PROJECT_VERSION;
-}
-
-/*-----------------------------------------------------------*/
-
-/*
-* Callback that provides the inputs necessary to generate a randomized TCP
-* Initial Sequence Number per RFC 6528.  In this case just a psuedo random
-* number is used so THIS IS NOT RECOMMENDED FOR PRODUCTION SYSTEMS.
-*/
-extern uint32_t ulApplicationGetNextSequenceNumber(
-    uint32_t ulSourceAddress,
-    uint16_t usSourcePort,
-    uint32_t ulDestinationAddress,
-    uint16_t usDestinationPort )
-{
-     ( void ) ulSourceAddress;
-     ( void ) usSourcePort;
-     ( void ) ulDestinationAddress;
-     ( void ) usDestinationPort;
-
-     static uint32_t randomnumber; // very random number
-     return randomnumber++;
-}
-
-/*-----------------------------------------------------------*/
-
-BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber ){
-    return *pulNumber ^ 0xBEE;
-}
-
-/*-----------------------------------------------------------*/
-
-/* called when the network connects or disconnects
- * https://freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/58-vApplicationIPNetworkEventHook_Multi
- */
-void vApplicationIPNetworkEventHook_Multi(
-                                           eIPCallbackEvent_t eNetworkEvent,
-                                           struct xNetworkEndPoint * pxEndPoint
-                                         ){
-    // explode
-    System::nputsUIUART(STRANDN("network connect/disconnect vApplicationIPNetworkEventHook_Multi" NEWLINE));
-}
-
-/*-----------------------------------------------------------*/
-
-/* decides how to resolve DHCP communication decision points
- * https://freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/64-xApplicationDHCPHook_Multi
- */
-eDHCPCallbackAnswer_t xApplicationDHCPHook_Multi( eDHCPCallbackPhase_t eDHCPPhase,
-                                                  struct xNetworkEndPoint * pxEndPoint,
-                                                  IP_Address_t * pxIPAddress
-                                                ){
-    // vaporise
-    return eDHCPContinue;
-}
-
-/*-----------------------------------------------------------*/
-
-/* stop reading this, what do you think it does. use ur brain. we didnt leave agartha for you to be retarded. (((we))) left so we can be different colors
- * https://www.freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/59-vApplicationPingReplyHook
- */
-void vApplicationPingReplyHook( ePingReplyStatus_t eStatus, uint16_t usIdentifier ){
-    System::nputsUIUART(STRANDN("pong " NEWLINE));
-}
-
-/*-----------------------------------------------------------*/
-
-
