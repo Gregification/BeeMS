@@ -104,9 +104,8 @@ BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber ){
 /*-----------------------------------------------------------*/
 
 /* called when the network connects or disconnects
- * https://www.freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/57-vApplicationIPNetworkEventHook
  */
-void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ) {
+void vApplicationIPNetworkEventHook_Multi( eIPCallbackEvent_t eNetworkEvent, struct xNetworkEndPoint * pxEndPoint ){
     // explode
     System::nputsUIUART(STRANDN("network connect/disconnect vApplicationIPNetworkEventHook_Multi" NEWLINE));
 }
@@ -114,9 +113,8 @@ void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ) {
 /*-----------------------------------------------------------*/
 
 /* decides how to resolve DHCP communication decision points
- * https://www.freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/60-xApplicationDHCPHook
  */
-eDHCPCallbackAnswer_t xApplicationDHCPHook( eDHCPCallbackPhase_t eDHCPPhase,uint32_t ulIPAddress ){
+eDHCPCallbackAnswer_t xApplicationDHCPHook_Multi( eDHCPCallbackPhase_t eDHCPPhase, struct xNetworkEndPoint * pxEndPoint, IP_Address_t * pxIPAddress ){
     // vaporise
     return eDHCPContinue;
 }

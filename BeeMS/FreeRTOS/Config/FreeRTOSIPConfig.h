@@ -48,7 +48,6 @@
 #define ipconfigZERO_COPY_TX_DRIVER                     1 // property of the FreeRTOS port
 #define ipconfigZERO_COPY_RX_DRIVER                     1 // property of the FreeRTOS port
 #define ipconfigHAS_PRINTF                              1
-#define ipconfigIPv4_BACKWARD_COMPATIBLE                1 // no touch. everything eplodes
 #define ipconfigETHERNET_AN_ENABLE                      1
 
 #endif /* FREERTOS_CONFIG_FREERTOSIPCONFIG_H_ */

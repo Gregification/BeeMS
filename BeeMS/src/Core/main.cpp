@@ -32,6 +32,7 @@
 
 #include <stdint.h>
 
+
 #include <inc/hw_sysctl.h>
 #include <inc/hw_memmap.h>
 #include <inc/hw_sysctl.h>
@@ -180,22 +181,26 @@ int main(){
         SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
         SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
 
-        static System::ETHC::IPv4 ip        = {.value = IPV4_TO_INT(1,1,1,1)};
-        static System::ETHC::IPv4 mask      = {.value = IPV4_TO_INT(255,255,255,0)};
+        static System::ETHC::IPv4 ip        = {.value = IPV4_TO_INT(169,254,111,111)};
+        static System::ETHC::IPv4 mask      = {.value = IPV4_TO_INT(255,255,0,0)};
         static System::ETHC::IPv4 gateway   = {.value = IPV4_TO_INT(8,8,8,8)};
         static System::ETHC::IPv4 dns       = {.value = IPV4_TO_INT(7,7,7,7)};
         static System::ETHC::MAC  mac       = {1,2,3,4,5,6};
 
-        static NetworkInterface_t interface;
-        pxFillInterfaceDescriptor(0, &interface);
+        static NetworkInterface_t xInterfaces[ 1 ];
+        static NetworkEndPoint_t xEndPoints[ 1 ];
 
-        if(FreeRTOS_IPInit(
-                    ip.raw,
-                    mask.raw,
-                    gateway.raw,
-                    dns.raw,
-                    mac.raw
-                )) {
+        /* IF the following function should be declared in the NetworkInterface.c
+         * linked in the project. */
+        ( void ) pxFillInterfaceDescriptor( 0, &( xInterfaces[ 0 ] ) );
+        FreeRTOS_FillEndPoint( &( xInterfaces[ 0 ] ), &( xEndPoints[ 0 ] ), ip.raw, mask.raw, gateway.raw, dns.raw, mac.raw);
+        #if ( ipconfigUSE_DHCP != 0 )
+        {
+            xEndPoints[ 0 ].bits.bWantDHCP = pdTRUE;
+        }
+        #endif /* ipconfigUSE_DHCP */
+
+        if(FreeRTOS_IPInit_Multi()) {
             blink_indicator_args.period_ms = Task::Blink::PERIOD_FAULT;
             System::FailHard("failed FreeRTOS IP init");
         }
