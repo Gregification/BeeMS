@@ -58,19 +58,19 @@ uint32_t ulApplicationGetNextSequenceNumber(
 BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber );
 
 /* called when the network connects or disconnects
- * https://freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/58-vApplicationIPNetworkEventHook_Multi
+ * https://www.freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/57-vApplicationIPNetworkEventHook
  */
-void vApplicationIPNetworkEventHook_Multi(eIPCallbackEvent_t eNetworkEvent, struct xNetworkEndPoint * pxEndPoint );
+void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent );
 
 
 
 /* decides how to resolve DHCP communication decision points
  * https://freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/64-xApplicationDHCPHook_Multi
  */
-eDHCPCallbackAnswer_t xApplicationDHCPHook_Multi( eDHCPCallbackPhase_t eDHCPPhase,
-                                                  struct xNetworkEndPoint * pxEndPoint,
-                                                  IP_Address_t * pxIPAddress
-                                                );
+//eDHCPCallbackAnswer_t xApplicationDHCPHook_Multi( eDHCPCallbackPhase_t eDHCPPhase,
+//                                                  struct xNetworkEndPoint * pxEndPoint,
+//                                                  IP_Address_t * pxIPAddress
+//                                                );
 
 /* stop reading this, what do you think it does. use ur brain. we didnt leave agartha for you to be retarded. (((we))) left so we can be different colors
  * https://www.freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/59-vApplicationPingReplyHook

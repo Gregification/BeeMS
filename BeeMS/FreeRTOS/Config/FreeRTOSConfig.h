@@ -6,12 +6,12 @@
 #define configUSE_PREEMPTION                                        1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION                     1
 #define configUSE_TICKLESS_IDLE                                     0
-#define configUSE_IDLE_HOOK                                         1
+#define configUSE_IDLE_HOOK                                         0
 #define configUSE_TICK_HOOK                                         0
 #define configCPU_CLOCK_HZ                                          ( ( unsigned long ) 120e6 )
 #define configTICK_RATE_HZ                                          ( ( portTickType ) 1000 )
 #define configMINIMAL_STACK_SIZE                                    ( ( unsigned short ) 200 )
-#define configTOTAL_HEAP_SIZE                                       ( ( size_t ) ( 100 * 1024 ) )
+#define configTOTAL_HEAP_SIZE                                       ( ( size_t ) ( 153 * 1024 ) )
 #define configMAX_TASK_NAME_LEN                                     ( 12 )
 #define configUSE_TRACE_FACILITY                                    1
 #define configUSE_16_BIT_TICKS                                      0
@@ -72,8 +72,12 @@ See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 //#define configKERNEL_INTERRUPT_PRIORITY         ( 7 << 5 )    /* Priority 7, or 0xE0 as only the top three bits are implemented.  This is the lowest priority. */
 //#define configMAX_SYSCALL_INTERRUPT_PRIORITY     ( 5 << 5 )  /* Priority 5, or 0xA0 as only the top three bits are implemented. */
 
+#define ipconfigHAS_PRINTF			1
+#define ipconfigHAS_DEBUG_PRINTF	1
+
 void customprintf(const char *, ...);
 #define configPRINTF(X) customprintf X
 #define FreeRTOS_printf(X) configPRINTF(X)
+#define FreeRTOS_debug_printf(X) configPRINTF(X)
 
 #endif /* FREERTOS_CONFIG_H */

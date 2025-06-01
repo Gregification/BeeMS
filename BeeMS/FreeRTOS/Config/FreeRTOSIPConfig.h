@@ -49,5 +49,12 @@
 #define ipconfigZERO_COPY_RX_DRIVER                     1 // property of the FreeRTOS port
 #define ipconfigHAS_PRINTF                              1
 #define ipconfigETHERNET_AN_ENABLE                      1
+#define ipconfigFILTER_OUT_NON_ETHERNET_II_FRAMES       1
+#define ipconfigTCP_KEEP_ALIVE				            1
+#define ipconfigTCP_KEEP_ALIVE_INTERVAL		            5 /* in seconds */
+#define ipconfigUSE_DNS_CACHE				            1
+#define ipconfigDNS_CACHE_NAME_LENGTH		            32
+#define ipconfigDNS_CACHE_ENTRIES			            4
+#define ipconfigDNS_REQUEST_ATTEMPTS		            2
 
 #endif /* FREERTOS_CONFIG_FREERTOSIPCONFIG_H_ */

@@ -24,6 +24,7 @@ void vApplicationMallocFailedHook( void ) {
     to query the size of free heap space that remains (although it does not
     provide information on how the remaining heap might be fragmented). */
     IntMasterDisable();
+    System::FailHard("vApplicationMallocFailedHook");
     for( ;; );
 }
 
@@ -53,6 +54,9 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName ) {
     configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
     function is called if a stack overflow is detected. */
     IntMasterDisable();
+    char str[MAX_ERROR_MSG_LEN];
+    snprintf(str, sizeof(str), "%s : %s", "vApplicationStackOverflowHook", pcTaskName);
+    System::FailHard(str);
     for( ;; );
 }
 
@@ -63,6 +67,9 @@ void *malloc( size_t xSize ) {
     /* There should not be a heap defined, so trap any attempts to call
     malloc. */
     IntMasterDisable();
+    char str[MAX_ERROR_MSG_LEN];
+    snprintf(str, sizeof(str), "%s : %d", "malloc", xSize);
+    System::FailHard(str);
     for( ;; );
 }
 
@@ -105,7 +112,7 @@ BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber ){
 
 /* called when the network connects or disconnects
  */
-void vApplicationIPNetworkEventHook_Multi( eIPCallbackEvent_t eNetworkEvent, struct xNetworkEndPoint * pxEndPoint ){
+void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ){
     // explode
     System::nputsUIUART(STRANDN("network connect/disconnect vApplicationIPNetworkEventHook_Multi" NEWLINE));
 }
@@ -114,10 +121,10 @@ void vApplicationIPNetworkEventHook_Multi( eIPCallbackEvent_t eNetworkEvent, str
 
 /* decides how to resolve DHCP communication decision points
  */
-eDHCPCallbackAnswer_t xApplicationDHCPHook_Multi( eDHCPCallbackPhase_t eDHCPPhase, struct xNetworkEndPoint * pxEndPoint, IP_Address_t * pxIPAddress ){
-    // vaporise
-    return eDHCPContinue;
-}
+//eDHCPCallbackAnswer_t xApplicationDHCPHook_Multi( eDHCPCallbackPhase_t eDHCPPhase, struct xNetworkEndPoint * pxEndPoint, IP_Address_t * pxIPAddress ){
+//    // vaporise
+//    return eDHCPContinue;
+//}
 
 /*-----------------------------------------------------------*/
 
