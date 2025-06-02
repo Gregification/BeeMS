@@ -80,7 +80,7 @@
     * physical pins will be in the "System" name space */
 #define OCCUPY(ID) constexpr int const __PROJECT_OCCUPY_##ID = 0;
 
-#define IPV4_TO_INT(A,B,C,D) ( (uint32_t)( (A << (4 *3)) | (B << (4 *2)) | (C << (4 *1)) | (D) ) )
+#define IPV4_TO_INT(D,C,B,A) ( (uint32_t)( (A << (4 *3)) | (B << (4 *2)) | (C << (4 *1)) | (D) ) )
 
 /*--- constants ----------------------------------------*/
 
@@ -103,6 +103,17 @@
 #define SYSTEM_UART_PRIM_UI uart0       // uart responsible for the primary UI
 namespace System { OCCUPY(UART0) }
 
+// ethernet
+namespace System {
+    OCCUPY(PF0) // link led
+    OCCUPY(PF4) // status led
+    OCCUPY(PF1) // connection led
+    OCCUPY(PG0) // PHY PPS signal
+    OCCUPY(EMAC0)
+    OCCUPY(EPHY0)
+    OCCUPY(EN0)
+}
+
 /*------------------------------------------------------*/
 
 namespace System {
@@ -124,7 +135,6 @@ namespace System {
 
             /* e.g: GPIO_PIN_0 */
             uint32_t GPIO_PIN_n;
-
 
             // these functions should be inline but it gets cluttered here
             /* generic act as output */
@@ -284,8 +294,11 @@ namespace System {
             unsigned long long value : 48;
         };
 
-        extern IPv4 localhost;
-
+        extern System::ETHC::IPv4 ip;
+        extern System::ETHC::IPv4 mask;
+        extern System::ETHC::IPv4 gateway;
+        extern System::ETHC::IPv4 dns;
+        extern System::ETHC::MAC  mac;
     }
 
     /*--- variables ------------------------------------------------------------------------------------------*/

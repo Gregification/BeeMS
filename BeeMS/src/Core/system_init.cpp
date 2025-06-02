@@ -16,7 +16,7 @@
 void system_init_onchip(){
     // set up main oscillator
     //  the LP uses a 32.768 KHz radial can
-    // - > 10MHz required for ETH PHY
+    // - >10MHz required for ETH PHY
     SysCtlMOSCConfigSet(SYSCTL_MOSC_HIGHFREQ);
 
     // set system clock to the FreeRTOS settings
@@ -69,6 +69,21 @@ void system_init_onchip(){
             );
     #endif
 
-   // init ethernet
-//    xNetworkInterfaceInitialise();
+    // init ethernet
+    // it'll be nice if someone could figure out how to integrate a mongoose service onto this without mangling plus-tcp.
+
+    GPIOPinConfigure(GPIO_PF0_EN0LED0);
+    GPIOPinConfigure(GPIO_PF4_EN0LED1);
+    GPIOPinConfigure(GPIO_PF1_EN0LED2);
+    GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4 | GPIO_PIN_1);
+
+    GPIOPinConfigure(GPIO_PG0_EN0PPS);
+    GPIOPinTypeEthernetMII(GPIO_PORTG_BASE, GPIO_PIN_0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
+
+    if(pdFAIL == FreeRTOS_IPInit(System::ETHC::ip.raw, System::ETHC::mask.raw, System::ETHC::gateway.raw, System::ETHC::dns.raw, System::ETHC::mac.raw)) {
+        System::FailHard("failed FreeRTOS IP init");
+    }
+
 }

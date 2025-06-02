@@ -114,7 +114,20 @@ BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber ){
  */
 void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ){
     // explode
-    System::nputsUIUART(STRANDN("network connect/disconnect vApplicationIPNetworkEventHook_Multi" NEWLINE));
+    switch(eNetworkEvent) {
+        case eIPCallbackEvent_t::eNetworkUp : {
+                System::nputsUIUART(STRANDN("network up event vApplicationIPNetworkEventHook_Multi" NEWLINE));
+                FreeRTOS_SendPingRequest(System::ETHC::IPv4{192,168,1,128}.value, 0, pdMS_TO_TICKS(100));
+            } break;
+
+        case eIPCallbackEvent_t::eNetworkDown : {
+            System::nputsUIUART(STRANDN("network down event vApplicationIPNetworkEventHook_Multi" NEWLINE));
+            } break;
+
+        default:{
+                System::nputsUIUART(STRANDN("network event(unknown) vApplicationIPNetworkEventHook_Multi" NEWLINE));
+            } break;
+    }
 }
 
 /*-----------------------------------------------------------*/
@@ -137,6 +150,16 @@ void vApplicationPingReplyHook( ePingReplyStatus_t eStatus, uint16_t usIdentifie
 
 /*-----------------------------------------------------------*/
 
+/* If the value in pcName matches the name of the device, then pdTRUE should be returned by the hook. Otherwise, a pdFALSE should be returned.
+ * https://www.freertos.org/Documentation/03-Libraries/02-FreeRTOS-plus/02-FreeRTOS-plus-TCP/09-API-reference/61-xApplicationDNSQueryHook
+ */
+BaseType_t xApplicationDNSQueryHook( const char * pcName ){
+    char const * host = pcApplicationHostnameHook();
+
+    if(strcmp(pcName, host) == 0)
+        return pdTRUE;
+    return pdFALSE;
+}
 
 
 

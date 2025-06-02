@@ -57,34 +57,30 @@
 #include "Core/hooks.h"
 #include "Tasks/blink_task.hpp"
 
-void fiddleTask(void * args){
+void fiddleTask(void *){
 
     for(;;){
-        FreeRTOS_SendPingRequest(IPV4_TO_INT(169,254,222,222), 0, pdMS_TO_TICKS(100));
-        System::nputsUIUART(STRANDN("fiddle task" NEWLINE));
-        vTaskDelay(pdMS_TO_TICKS(500));
+        static System::ETHC::IPv4 local;
+
+        vTaskDelay(pdMS_TO_TICKS(2000));
+
+        uint32_t tmp = FreeRTOS_GetIPAddress();
+
+        if(tmp == local.value)
+            continue;
+
+        local.value = tmp;
+
+        char str[32];
+        snprintf(str, sizeof(str), "local is: %01d.%01d.%01d.%01d" NEWLINE, local.raw[0],local.raw[1],local.raw[2],local.raw[3]);
+
+        System::nputsUIUART(str, sizeof(str));
     }
+
+//    vTaskDelete(NULL);
 }
 
 void firstTask(void * args);
-
-//BaseType_t interfaceInitialise_wrapper ( struct xNetworkInterface *) {
-//    return xNetworkInterfaceInitialise();
-//}
-//
-//BaseType_t xNetworkInterfaceOutput_wrapper( struct xNetworkInterface *,
-//                                    NetworkBufferDescriptor_t * const pxNetworkBuffer,
-//                                    BaseType_t xReleaseAfterSend ){
-//    return xNetworkInterfaceOutput(pxNetworkBuffer, xReleaseAfterSend);
-//}
-//NetworkInterface_t * pxFillInterfaceDescriptor( BaseType_t, NetworkInterface_t * pxInterface ) {
-//    pxInterface->pcName = "da interface";
-//    pxInterface->pvArgument = NULL;
-//    pxInterface->pfInitialise = interfaceInitialise_wrapper;
-//    pxInterface->pfOutput = xNetworkInterfaceOutput_wrapper;
-//    FreeRTOS_AddNetworkInterface(pxInterface);
-//    return pxInterface;
-//}
 
 Task::Blink::Args blink_indicator_args = {
         .pin = System::GPIO::GPIO_REG {
@@ -139,7 +135,7 @@ int main(){
 
 
     /* --- Initialize off-chip ------------------------------------ */
-    System::nputsUIUART(STRANDN("--- Initializing off chip" NEWLINE));
+    System::nputsUIUART(STRANDN("Initializing off chip" NEWLINE));
 
 
 
@@ -150,65 +146,32 @@ int main(){
 
 
     /* --- Start -------------------------------------------------- */
-    System::nputsUIUART(STRANDN("--- starting tasks " NEWLINE));
+    System::nputsUIUART(STRANDN("starting tasks " NEWLINE));
 
 
     // indicator led
     xTaskCreate(Task::Blink::task,
-        "blink indicator 1",
+        "blink indicator task",
         configMINIMAL_STACK_SIZE,
         (void *)&blink_indicator_args,
         tskIDLE_PRIORITY,
         NULL);
 
-//    xTaskCreate(firstTask,
-//        "initializing task",
-//        configMINIMAL_STACK_SIZE * 50,
-//        NULL,
-//        tskIDLE_PRIORITY,
-//        NULL);
+    xTaskCreate(firstTask,
+        "initializing task",
+        configMINIMAL_STACK_SIZE,
+        NULL,
+        tskIDLE_PRIORITY,
+        NULL);
 
-    {
-        System::nputsUIUART(STRANDN("ethernet test" NEWLINE));
+    xTaskCreate(fiddleTask,
+        "fiddle task",
+        configMINIMAL_STACK_SIZE,
+        NULL,
+        100e3,
+        NULL);
 
-        GPIOPinConfigure(GPIO_PF0_EN0LED0);
-        GPIOPinConfigure(GPIO_PF4_EN0LED1);
-        GPIOPinConfigure(GPIO_PF1_EN0LED2);
-        GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4 | GPIO_PIN_1);
-
-//        GPIOPinConfigure(GPIO_PG0_EN0PPS);
-//        GPIOPinTypeEthernetMII(GPIO_PORTB_BASE, GPIO_PIN_0);
-        SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
-        SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
-
-        static System::ETHC::IPv4 ip        = {.value = IPV4_TO_INT(169,254,111,111)};
-        static System::ETHC::IPv4 mask      = {.value = IPV4_TO_INT(255,255,0,0)};
-        static System::ETHC::IPv4 gateway   = {.value = IPV4_TO_INT(8,8,8,8)};
-        static System::ETHC::IPv4 dns       = {.value = IPV4_TO_INT(7,7,7,7)};
-        static System::ETHC::MAC  mac       = {1,2,3,4,5,6};
-
-//        static NetworkInterface_t xInterfaces[ 1 ];
-//        static NetworkEndPoint_t xEndPoints[ 1 ];
-//
-//        /* IF the following function should be declared in the NetworkInterface.c
-//         * linked in the project. */
-//        ( void ) pxFillInterfaceDescriptor( 0, &( xInterfaces[ 0 ] ) );
-//        FreeRTOS_FillEndPoint( &( xInterfaces[ 0 ] ), &( xEndPoints[ 0 ] ), ip.raw, mask.raw, gateway.raw, dns.raw, mac.raw);
-//        #if ( ipconfigUSE_DHCP != 0 )
-//        {
-//            xEndPoints[ 0 ].bits.bWantDHCP = pdTRUE;
-//        }
-//        #endif /* ipconfigUSE_DHCP */
-//
-        if(pdFAIL == FreeRTOS_IPInit(ip.raw, mask.raw, gateway.raw, dns.raw, mac.raw)) {
-            blink_indicator_args.period_ms = Task::Blink::PERIOD_FAULT;
-            System::FailHard("failed FreeRTOS IP init");
-        }
-//        FreeRTOS_IPInit(ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress)
-
-    }
-
-    System::nputsUIUART(STRANDN("--- starting scheduler " NEWLINE));
+    System::nputsUIUART(STRANDN("starting scheduler " NEWLINE));
 
     vTaskStartScheduler();
 
