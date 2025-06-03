@@ -156,20 +156,20 @@ int main(){
         (void *)&blink_indicator_args,
         tskIDLE_PRIORITY,
         NULL);
-
-    xTaskCreate(firstTask,
-        "initializing task",
-        configMINIMAL_STACK_SIZE,
-        NULL,
-        tskIDLE_PRIORITY,
-        NULL);
-
-    xTaskCreate(fiddleTask,
-        "fiddle task",
-        configMINIMAL_STACK_SIZE,
-        NULL,
-        100e3,
-        NULL);
+//
+//    xTaskCreate(firstTask,
+//        "initializing task",
+//        configMINIMAL_STACK_SIZE,
+//        NULL,
+//        tskIDLE_PRIORITY,
+//        NULL);
+//
+//    xTaskCreate(fiddleTask,
+//        "fiddle task",
+//        configMINIMAL_STACK_SIZE,
+//        NULL,
+//        100e3,
+//        NULL);
 
     System::nputsUIUART(STRANDN("starting scheduler " NEWLINE));
 

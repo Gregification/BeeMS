@@ -66,6 +66,8 @@
 #define ipconfigHAS_PRINTF                              1
 #define ipconfigHAS_DEBUG_PRINTF                        1
 #define ipconfigTCP_IP_SANITY                           1
-#define ipconfigETHERNET_MINIMUM_PACKET_BYTES           150
+#define ipconfigETHERNET_MINIMUM_PACKET_BYTES           60
+#define ipconfigETHERNET_DRIVER_FILTERS_FRAME_TYPES     0
+#define ipconfigETHERNET_DRIVER_FILTERS_PACKETS         0
 
 #endif /* FREERTOS_CONFIG_FREERTOSIPCONFIG_H_ */

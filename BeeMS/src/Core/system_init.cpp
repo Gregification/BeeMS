@@ -11,6 +11,8 @@
 #include <driverlib/rom_map.h>
 #include <driverlib/sysctl.h>
 #include <driverlib/emac.h>
+#include <driverlib/interrupt.h>
+#include <inc/hw_ints.h>
 #include <FreeRTOS.h>
 #include <NetworkInterface.h>
 
@@ -88,4 +90,5 @@ void system_init_onchip(){
     if(pdFAIL == FreeRTOS_IPInit(System::ETHC::ip.raw, System::ETHC::mask.raw, System::ETHC::gateway.raw, System::ETHC::dns.raw, System::ETHC::mac.raw)) {
         System::FailHard("failed FreeRTOS IP init");
     }
+
 }

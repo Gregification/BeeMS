@@ -118,7 +118,6 @@ void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ){
     switch(eNetworkEvent) {
         case eIPCallbackEvent_t::eNetworkUp : {
                 System::nputsUIUART(STRANDN("network up event vApplicationIPNetworkEventHook_Multi" NEWLINE));
-                FreeRTOS_SendPingRequest(System::ETHC::dns.value, 0, pdMS_TO_TICKS(100));
 
                 static BaseType_t xTasksAlreadyCreated = pdFALSE;
                 if( xTasksAlreadyCreated == pdFALSE ) {
