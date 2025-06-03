@@ -23,9 +23,9 @@ namespace System {
     #endif
 
     namespace ETHC {
-        System::ETHC::IPv4 ip        = {.raw = {169,254,129,1}};
-        System::ETHC::IPv4 mask      = {.raw = {0xFF,0xFF,0x0,0x0}};
-        System::ETHC::IPv4 gateway   = {.raw = {169,254,111,4}};
+        System::ETHC::IPv4 ip        = {.raw = {169,254,212,183}};
+        System::ETHC::IPv4 mask      = {.raw = {255,255,0,0}};
+        System::ETHC::IPv4 gateway   = {.raw = {169,254,212,181}};
         System::ETHC::IPv4 dns       = {.raw = {169,254,212,182}};
         System::ETHC::MAC  mac       = {0x00,0x0F,0x8B,0x00,0x00,0x00}; // Orion MultiSystems Inc
     }

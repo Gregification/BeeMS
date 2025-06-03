@@ -10,6 +10,7 @@
 #include <driverlib/gpio.h>
 #include <driverlib/rom_map.h>
 #include <driverlib/sysctl.h>
+#include <driverlib/emac.h>
 #include <FreeRTOS.h>
 #include <NetworkInterface.h>
 
@@ -82,8 +83,9 @@ void system_init_onchip(){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
 
+    EMACFrameFilterSet(EMAC0_BASE, EMAC_FRMFILTER_RX_ALL);
+
     if(pdFAIL == FreeRTOS_IPInit(System::ETHC::ip.raw, System::ETHC::mask.raw, System::ETHC::gateway.raw, System::ETHC::dns.raw, System::ETHC::mac.raw)) {
         System::FailHard("failed FreeRTOS IP init");
     }
-
 }

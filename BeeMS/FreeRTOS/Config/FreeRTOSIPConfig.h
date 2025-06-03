@@ -18,9 +18,10 @@
 
 #define ipconfigNETWORK_MTU                             1526
 #define ipconfigTCP_MSS                                 1460
-#define ipconfigTCP_TX_BUFFER_LENGTH                    ( 16 * ipconfigTCP_MSS )
-#define ipconfigTCP_RX_BUFFER_LENGTH                    ( 16 * ipconfigTCP_MSS )
-
+#define ipconfigNUM_NETWORK_BUFFER_DESCRIPTORS          16
+#define ipconfigTCP_TX_BUFFER_LENGTH                    ( ipconfigNUM_NETWORK_BUFFER_DESCRIPTORS * ipconfigTCP_MSS )
+#define ipconfigTCP_RX_BUFFER_LENGTH                    ( ipconfigNUM_NETWORK_BUFFER_DESCRIPTORS * ipconfigTCP_MSS )
+#define ipconfigIP_TASK_PRIORITY                        ( configMAX_PRIORITIES - 1 )
 
 /*--- options -----------------------------------------------------------------------------------------------*/
 
@@ -28,9 +29,9 @@
 #define ipconfigUSE_IPv4                                1
 #define ipconfigUSE_TCP                                 1
 #define ipconfigUSE_UDP                                 1
-#define ipconfigUSE_ARP                                 0
+#define ipconfigUSE_ARP                                 1
 #define ipconfigUSE_ICMP                                1
-#define ipconfigUSE_DHCP                                1
+#define ipconfigUSE_DHCP                                0
 #define ipconfigUSE_DNS                                 1 // dnc
 #define ipconfigUSE_ICMPv6                              0
 #define ipconfigUSE_DHCPv6                              0
@@ -64,5 +65,7 @@
 #define ipconfigCAN_FRAGMENT_OUTGOING_PACKETS           0 /* otherwise unsavory */
 #define ipconfigHAS_PRINTF                              1
 #define ipconfigHAS_DEBUG_PRINTF                        1
+#define ipconfigTCP_IP_SANITY                           1
+#define ipconfigETHERNET_MINIMUM_PACKET_BYTES           150
 
 #endif /* FREERTOS_CONFIG_FREERTOSIPCONFIG_H_ */

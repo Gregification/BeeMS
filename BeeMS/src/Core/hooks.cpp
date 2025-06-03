@@ -113,11 +113,20 @@ BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber ){
 /* called when the network connects or disconnects
  */
 void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ){
+
     // explode
     switch(eNetworkEvent) {
         case eIPCallbackEvent_t::eNetworkUp : {
                 System::nputsUIUART(STRANDN("network up event vApplicationIPNetworkEventHook_Multi" NEWLINE));
-                FreeRTOS_SendPingRequest(System::ETHC::IPv4{192,168,1,128}.value, 0, pdMS_TO_TICKS(100));
+                FreeRTOS_SendPingRequest(System::ETHC::dns.value, 0, pdMS_TO_TICKS(100));
+
+                static BaseType_t xTasksAlreadyCreated = pdFALSE;
+                if( xTasksAlreadyCreated == pdFALSE ) {
+                    xTasksAlreadyCreated = pdTRUE;
+
+
+                }
+
             } break;
 
         case eIPCallbackEvent_t::eNetworkDown : {
