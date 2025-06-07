@@ -80,8 +80,8 @@ void system_init_onchip(){
     GPIOPinConfigure(GPIO_PF1_EN0LED2);
     GPIOPinTypeEthernetLED(GPIO_PORTF_BASE, GPIO_PIN_0 | GPIO_PIN_4 | GPIO_PIN_1);
 
-    GPIOPinConfigure(GPIO_PG0_EN0PPS);
-    GPIOPinTypeEthernetMII(GPIO_PORTG_BASE, GPIO_PIN_0);
+//    GPIOPinConfigure(GPIO_PG0_EN0PPS);
+//    GPIOPinTypeEthernetMII(GPIO_PORTG_BASE, GPIO_PIN_0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_EMAC0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_EPHY0);
 
