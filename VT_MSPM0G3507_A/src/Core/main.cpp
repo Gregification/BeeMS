@@ -6,7 +6,6 @@
  *      https://cataas.com/cat/says/accumulating
  */
 
-
 #include <FreeRTOS.h>
 #include <task.h>
 
@@ -17,11 +16,9 @@
 int main(){
     System::init();
 
-//    fiddle_task(NULL);
-
     xTaskCreate(fiddle_task,
             "fiddle task",
-            configMINIMAL_STACK_SIZE,
+            configMINIMAL_STACK_SIZE * 10,
             NULL,
             tskIDLE_PRIORITY,
             NULL);

@@ -66,15 +66,15 @@
  * This behavior can have undesirable effects depending on application needs
  * (see FreeRTOS config documentation)
  */
-#define configIDLE_SHOULD_YIELD 0
-#define configUSE_16_BIT_TICKS 0 /* Only for 8 and 16-bit hardware. */
+#define configIDLE_SHOULD_YIELD                 0
+#define configUSE_16_BIT_TICKS                  0 /* Only for 8 and 16-bit hardware. */
 
 /* Constants that describe the hardware and memory usage. */
-#define configCPU_CLOCK_HZ ((unsigned long) 32000000)
+#define configCPU_CLOCK_HZ                      ((unsigned long) 32000000)
 /* Smallest stack size allowed in words */
-#define configMINIMAL_STACK_SIZE ((unsigned short) 128)
-#define configMAX_TASK_NAME_LEN (12)
-#define configTOTAL_HEAP_SIZE ((size_t)(3 * 1024))
+#define configMINIMAL_STACK_SIZE                ((unsigned short) 128)
+#define configMAX_TASK_NAME_LEN                 (12)
+#define configTOTAL_HEAP_SIZE                   ((size_t)(20 * 1024))
 
 /*
  * If static allocation is used (as well as timers, configUSE_TIMERS = 1),
@@ -85,36 +85,37 @@
  * Implementations of the functions are provided in StaticAllocs_freertos.c.
  * They are example implementations taken from the FreeRTOS config docs
  */
-#define configSUPPORT_STATIC_ALLOCATION 1
+#define configSUPPORT_STATIC_ALLOCATION         0
+#define configSUPPORT_DYNAMIC_ALLOCATION        1
 
 /* Idle task stack size in words */
-#define configIDLE_TASK_STACK_DEPTH (configMINIMAL_STACK_SIZE)
+#define configIDLE_TASK_STACK_DEPTH             (configMINIMAL_STACK_SIZE)
 
 /* Default stack size for TI-POSIX threads (in words) */
 //#define configPOSIX_STACK_SIZE ((unsigned short) 256)
 
 /* Constants that build features in or out. */
-#define configUSE_MUTEXES 1
-#define configUSE_TICKLESS_IDLE 1
-#define configUSE_APPLICATION_TASK_TAG 0
+#define configUSE_MUTEXES                       1
+#define configUSE_TICKLESS_IDLE                 1
+#define configUSE_APPLICATION_TASK_TAG          0
 /*
  * Co-routines are intended for use on very small processes with severe RAM
  * constraints and would not normally be used on 32-bit microcontrollers
  */
-#define configUSE_CO_ROUTINES 0
-#define configUSE_COUNTING_SEMAPHORES 1
-#define configUSE_RECURSIVE_MUTEXES 1
+#define configUSE_CO_ROUTINES                   0
+#define configUSE_COUNTING_SEMAPHORES           1
+#define configUSE_RECURSIVE_MUTEXES             1
 /*
  * If queue set functionality is enabled, tasks can treat multiple queues as a
  * set and block/pend on the set
  */
-#define configUSE_QUEUE_SETS 0
-#define configUSE_TASK_NOTIFICATIONS 1
+#define configUSE_QUEUE_SETS                    0
+#define configUSE_TASK_NOTIFICATIONS            1
 
 /* Constants that define which hook (callback) functions should be used. */
-#define configUSE_IDLE_HOOK 0
-#define configUSE_TICK_HOOK 0
-#define configUSE_MALLOC_FAILED_HOOK 0
+#define configUSE_IDLE_HOOK                     0
+#define configUSE_TICK_HOOK                     0
+#define configUSE_MALLOC_FAILED_HOOK            0
 
 /* Constants provided for debugging and optimisation assistance. */
 /*
@@ -137,20 +138,20 @@
  * The queue registry allows a textual name to be associated with a queue for
  * easy queue identification within a RTOS kernel aware debugger
  */
-#define configQUEUE_REGISTRY_SIZE 0
+#define configQUEUE_REGISTRY_SIZE               0
 
 /* Minimum FreeRTOS tick periods of idle before invoking Power policy */
 /* TODO: find way to reduce this; FreeRTOS requires it to be 2 or more */
-#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP 2
+#define configEXPECTED_IDLE_TIME_BEFORE_SLEEP   2
 
 /* Software timer definitions. */
-#define configUSE_TIMERS 1
-#define configTIMER_TASK_PRIORITY (5)
-#define configTIMER_QUEUE_LENGTH (20)
+#define configUSE_TIMERS                        1
+#define configTIMER_TASK_PRIORITY               (5)
+#define configTIMER_QUEUE_LENGTH                (20)
 /* Timer task stack size in words */
-#define configTIMER_TASK_STACK_DEPTH (configMINIMAL_STACK_SIZE)
+#define configTIMER_TASK_STACK_DEPTH            (configMINIMAL_STACK_SIZE)
 
-#define configENABLE_BACKWARD_COMPATIBILITY 0
+#define configENABLE_BACKWARD_COMPATIBILITY     0
 
 //#if defined(__TI_COMPILER_VERSION__) || defined(__ti_version__)
 //#include <ti/posix/freertos/PTLS.h>

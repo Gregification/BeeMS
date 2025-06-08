@@ -10,6 +10,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
+#include <stdio.h>
 
 #include "system.hpp"
 
@@ -18,40 +19,88 @@ namespace System {
     OCCUPY(PINCM22) //PA11
 }
 
+//void fiddle_task(void *){
+//
+//
+//    vTaskDelete(NULL);
+//}
+
+//void fiddle_task(void *){
+//    /* Power on GPIO, initialize pins as digital outputs */
+//        DL_GPIO_reset(GPIOA);
+//        DL_GPIO_reset(GPIOB);
+//
+//        DL_GPIO_enablePower(GPIOA);
+//        DL_GPIO_enablePower(GPIOB);
+//        delay_cycles(POWER_STARTUP_DELAY);
+//
+//
+//        DL_GPIO_initDigitalOutput((IOMUX_PINCM50));
+//
+//        DL_GPIO_initDigitalOutput((IOMUX_PINCM57));
+//
+//        DL_GPIO_initDigitalOutput((IOMUX_PINCM58));
+//
+//        DL_GPIO_initDigitalOutput((IOMUX_PINCM33));
+//
+//        DL_GPIO_clearPins((GPIOB), (DL_GPIO_PIN_22) |
+//                          (DL_GPIO_PIN_26) |
+//                          (DL_GPIO_PIN_27) |
+//                          (DL_GPIO_PIN_16));
+//        DL_GPIO_enableOutput((GPIOB),
+//                             (DL_GPIO_PIN_22) |
+//            (DL_GPIO_PIN_26) |
+//            (DL_GPIO_PIN_27) |
+//            (DL_GPIO_PIN_16)
+//            );
+//
+//
+//        DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL_0);
+//
+//
+//        DL_SYSCTL_setSYSOSCFreq(DL_SYSCTL_SYSOSC_FREQ_BASE);
+//        DL_SYSCTL_disableHFXT();
+//        DL_SYSCTL_disableSYSPLL();
+//
+//
+//
+//        /* Default: LED1 and LED3 ON, LED2 OFF */
+//        DL_GPIO_clearPins((GPIOB), (DL_GPIO_PIN_26));
+//        DL_GPIO_setPins((GPIOB), (DL_GPIO_PIN_22) |
+//                                            (DL_GPIO_PIN_27) |
+//                                            (DL_GPIO_PIN_16));
+//
+//        while (1) {
+//            /*
+//             * Call togglePins API to flip the current value of LEDs 1-3. This
+//             * API causes the corresponding HW bits to be flipped by the GPIO HW
+//             * without need for additional R-M-W cycles by the processor.
+//             */
+//            delay_cycles(16);
+//            DL_GPIO_togglePins((GPIOB),
+//                (DL_GPIO_PIN_22) | (DL_GPIO_PIN_26) |
+//                    (DL_GPIO_PIN_27) | (DL_GPIO_PIN_16));
+//        }
+//    vTaskDelete(NULL);
+//}
+
 void fiddle_task(void *){
-    DL_UART_reset(UART0);
-    DL_UART_enablePower(UART0);
 
-    DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
-    DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
+//    System::UART::partialInit(UART0);
+//    DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
+//    DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
+//    DL_UART_enable(UART0);
 
-    constexpr DL_UART_ClockConfig config_uart_clk = {
-        .clockSel   = DL_UART_CLOCK::DL_UART_CLOCK_BUSCLK,
-        .divideRatio= DL_UART_CLOCK_DIVIDE_RATIO::DL_UART_CLOCK_DIVIDE_RATIO_8,
-    };
-    constexpr DL_UART_Config config_uart = {
-        .mode        = DL_UART_MODE::DL_UART_MAIN_MODE_NORMAL,
-        .direction   = DL_UART_DIRECTION::DL_UART_MAIN_DIRECTION_TX_RX,
-        .flowControl = DL_UART_FLOW_CONTROL::DL_UART_MAIN_FLOW_CONTROL_NONE,
-        .parity      = DL_UART_PARITY::DL_UART_MAIN_PARITY_NONE,
-        .wordLength  = DL_UART_WORD_LENGTH::DL_UART_MAIN_WORD_LENGTH_8_BITS,
-        .stopBits    = DL_UART_STOP_BITS::DL_UART_MAIN_STOP_BITS_ONE
-    };
-    DL_UART_setClockConfig(UART0, &config_uart_clk);
-    DL_UART_init(UART0, &config_uart);
+    uint8_t a = 0;
+    char str[20] = "no work" NEWLINE;
 
-    DL_UART_setOversampling(UART0, DL_UART_OVERSAMPLING_RATE::DL_UART_OVERSAMPLING_RATE_16X);
-    DL_UART_setBaudRateDivisor(UART0, 2, 11); // 115200 baud
-
-    DL_UART_enableFIFOs(UART0);
-    DL_UART_setRXFIFOThreshold(UART0, DL_UART_RX_FIFO_LEVEL::DL_UART_RX_FIFO_LEVEL_1_4_FULL);
-    DL_UART_setTXFIFOThreshold(UART0, DL_UART_TX_FIFO_LEVEL::DL_UART_TX_FIFO_LEVEL_ONE_ENTRY);
-
-    DL_UART_enable(UART0);
     for(;;){
-        DL_UART_transmitDataBlocking(UART0, 'N');
-        DL_UART_transmitDataBlocking(UART0, '\n');
-        DL_UART_transmitDataBlocking(UART0, '\r');
+        a++;
+        System::UART::nputs(UARTUI, str, sizeof(str));
+        snprintf(str, sizeof(str), "%d" NEWLINE, a);
+        System::UART::nputs(UARTUI, STRANDN("llllllllll"));
+        System::UART::nputs(UARTUI, STRANDN(NEWLINE));
+        vTaskDelay(pdMS_TO_TICKS(200));
     }
 
     vTaskDelete(NULL);

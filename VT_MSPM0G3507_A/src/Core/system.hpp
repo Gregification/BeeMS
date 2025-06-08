@@ -5,8 +5,13 @@
  *      Author: FSAE
  */
 
+// i give up about making this all fancy and modular. its just going to be a slap job
+
 #ifndef SRC_CORE_SYSTEM_HPP_
 #define SRC_CORE_SYSTEM_HPP_
+
+#include <stdint.h>
+#include <ti/driverlib/driverlib.h>
 
 /*--- meta ---------------------------------------------*/
 
@@ -33,27 +38,49 @@
     * physical pins will be in the "System" name space */
 #define OCCUPY(ID)                  constexpr int const __PROJECT_OCCUPY_##ID = 0;
 
-/*--- constants ----------------------------------------*/
+/*--- configuration maybe ------------------------------*/
 
 #define NEWLINE                     "\n\r"
 #define MAX_STR_LEN_COMMON          255   // assumed max length of a string if not specified. to minimize the damage of overruns.
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
+#define UARTUI                      UART0
 
 /*------------------------------------------------------*/
 
-#define PROJECT_ENABLE_UART0
-
+namespace System {
+    OCCUPY(UART0)   // UI
+}
 
 namespace System {
+    namespace CLK {
+        /* womp womp. no constexpr's plz */
+
+        extern uint32_t busclkUART; // has different values depending on the UART's PD. solution is to not give a toot about power usage
+    }
 
     void init();
 
     /* put string to the UART responsible for UI */
-//    void nputsUIUART(char const * str, uint32_t n);
 
     /* bring system to immediate stop . requires chip reset to escape this */
-//    void FailHard(char const * str = nullptr);
+    void FailHard(char const * str = nullptr);
+
+    namespace UART {
+        /** a generic initialization*/
+        void partialInit(UART_Regs *);
+
+        void setBaudTarget(UART_Regs *, uint32_t target_baud, uint32_t clk = System::CLK::busclkUART);
+
+        void nputs(UART_Regs *, char const * str, uint32_t n);
+    }
+
+    namespace GPIO
+    {
+        void partialInit(UART_Regs *);
+
+    }
+
 }
 
 
