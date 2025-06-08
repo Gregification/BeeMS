@@ -46,20 +46,20 @@
 
 /* Constants related to the behaviour or the scheduler. */
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
-#define configTICK_RATE_HZ ((TickType_t) 1000)
-#define configUSE_PREEMPTION 1
+#define configTICK_RATE_HZ                      ((TickType_t) 1000)
+#define configUSE_PREEMPTION                    1
 /*
  * Scheduler will run highest priority task in Ready state but won't switch
  * between tasks of equal priority just because a tick interrupt occured
  */
-#define configUSE_TIME_SLICING 1
+#define configUSE_TIME_SLICING                  1
 /*
  * The number of priorities available to application tasks. Any number of
  * tasks can share the same priority. Low priority numbers denote low priority
  * tasks. This value should not be set higher than actually required by the
  * application since each available priority consumes RAM
  */
-#define configMAX_PRIORITIES (10UL)
+#define configMAX_PRIORITIES                    (10UL)
 /*
  * When tasks share the idle priority, the idle task will yield if any other
  * task at the idle priority is ready to run.
@@ -74,7 +74,7 @@
 /* Smallest stack size allowed in words */
 #define configMINIMAL_STACK_SIZE                ((unsigned short) 128)
 #define configMAX_TASK_NAME_LEN                 (12)
-#define configTOTAL_HEAP_SIZE                   ((size_t)(20 * 1024))
+#define configTOTAL_HEAP_SIZE                   ((size_t)(28 * 1024))
 
 /*
  * If static allocation is used (as well as timers, configUSE_TIMERS = 1),

@@ -16,6 +16,9 @@
 int main(){
     System::init();
 
+    System::UART::setBaudTarget(UARTUI, 115200);
+    DL_UART_enable(UARTUI);
+
     xTaskCreate(fiddle_task,
             "fiddle task",
             configMINIMAL_STACK_SIZE * 10,

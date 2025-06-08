@@ -11,6 +11,7 @@
 #define SRC_CORE_SYSTEM_HPP_
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <ti/driverlib/driverlib.h>
 
 /*--- meta ---------------------------------------------*/
@@ -75,9 +76,9 @@ namespace System {
         void nputs(UART_Regs *, char const * str, uint32_t n);
     }
 
-    namespace GPIO
+    namespace SPI
     {
-        void partialInit(UART_Regs *);
+        void partialInit(SPI_Regs *);
 
     }
 

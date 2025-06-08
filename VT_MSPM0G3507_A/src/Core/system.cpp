@@ -7,6 +7,8 @@
 
 #include "system.hpp"
 
+#include <FreeRTOS.h>
+#include <task.h>
 #include <ti/driverlib/driverlib.h>
 
 void System::init() {
@@ -56,7 +58,7 @@ void System::init() {
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
     #else
-        #error "unknown pinout"
+        #error "UARTUI : undefined pinout"
     #endif
     DL_UART_enable(UARTUI);
 }
@@ -83,15 +85,19 @@ void System::UART::setBaudTarget(UART_Regs * reg, uint32_t target_baud, uint32_t
 
     int32_t integer, fractional;
     integer = nume / deno;
-    fractional = ( (nume << 6) + 1 ) / deno;
+    fractional = ( (nume * 64) + 1 ) / deno;
 
     DL_UART_setBaudRateDivisor(reg, integer, fractional);
 }
 
 /**
- * example gpio configuration
+ * usage example
+ *      System::UART::partialInit(UART0);
  *      DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
  *      DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
+ *
+ *      setBaudTarget(UART0, 115200);
+ *      DL_UART_enable(UART0);
  */
 void System::UART::partialInit(UART_Regs * reg) {
     DL_UART_disable(reg);
@@ -115,12 +121,12 @@ void System::UART::partialInit(UART_Regs * reg) {
     DL_UART_init(reg, &config_uart);
 
     DL_UART_setOversampling(reg, DL_UART_OVERSAMPLING_RATE::DL_UART_OVERSAMPLING_RATE_16X);
-    setBaudTarget(reg, 115200);
 
-    DL_UART_enableFIFOs(reg);
+    DL_UART_enableFIFOs(reg); // not required but very useful
 }
 
 void System::FailHard(const char *str) {
+    taskDISABLE_INTERRUPTS();
     for(;;){
         UART::nputs(UARTUI, STRANDN(NEWLINE "fatal error: "));
         UART::nputs(UARTUI, str, MAX_STR_ERROR_LEN);
@@ -128,7 +134,7 @@ void System::FailHard(const char *str) {
 }
 
 void System::UART::nputs(UART_Regs * reg, const char *str, uint32_t n) {
-    // do NOT make this a task, keep ti simple. we'll make another function later that does it passively as a task
+    // do NOT make this a task, keep it simple. we'll make another function later that does it passively as a task
 
     for(uint32_t i = 0; (i < n) && (str[i] != '\0'); i++){
         DL_UART_transmitDataBlocking(reg, str[i]);
