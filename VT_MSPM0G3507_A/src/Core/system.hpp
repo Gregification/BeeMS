@@ -5,14 +5,24 @@
  *      Author: FSAE
  */
 
-// i give up about making this all fancy and modular. its just going to be a slap job
+/*
+ * general wrappers and control macros for the project. A small layer on top of DriverLib, this is by no means
+ *  a replacement for DriverLib.
+ *
+ * - defaults to MFCLK
+ */
 
 #ifndef SRC_CORE_SYSTEM_HPP_
 #define SRC_CORE_SYSTEM_HPP_
 
 #include <stdint.h>
 #include <stdbool.h>
+
+#include <FreeRTOS.h>
+#include <semphr.h>
+
 #include <ti/driverlib/driverlib.h>
+
 
 /*--- meta ---------------------------------------------*/
 
@@ -45,43 +55,77 @@
 #define MAX_STR_LEN_COMMON          255   // assumed max length of a string if not specified. to minimize the damage of overruns.
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
-#define UARTUI                      UART0
 
 /*------------------------------------------------------*/
 
+#define PROJECT_ENABLE_UART0
+
 namespace System {
     OCCUPY(UART0)   // UI
+    OCCUPY(PINCM21) //PA10
+    OCCUPY(PINCM22) //PA11
 }
 
 namespace System {
-    namespace CLK {
-        /* womp womp. no constexpr's plz */
+    struct Lockable { // Java gang
+        SemaphoreHandle_t semph = NULL;
 
-        extern uint32_t busclkUART; // has different values depending on the UART's PD. solution is to not give a toot about power usage
+        Lockable() {
+            semph = xSemaphoreCreateRecursiveMutex();
+            while(semph == NULL){
+                // bad stuff
+            }
+        }
+
+    };
+
+    /* see clock tree diagram ... and SysConfig's */
+    namespace CLK {
+        /* no constexpr's plz */
+
+        extern uint32_t LFCLK;
+        extern uint32_t ULPCLK;
+        extern uint32_t &MCLK;
+        extern uint32_t CPUCLK;
+        extern uint32_t CANCLK;
+        extern uint32_t MFPCLK;
+        constexpr uint32_t MFCLK = 4e6;
     }
 
-    void init();
+    namespace UART {
+        struct UART : Lockable {
+            UART_Regs * reg;
 
-    /* put string to the UART responsible for UI */
+            void partialInit();
+            void setBaudTarget(uint32_t target_baud, uint32_t clk = System::CLK::MFCLK);
+
+            /** transmits - blocking - a string of at most size n */
+            void nputs(char const * str, uint32_t n);
+        };
+
+    }
+
+    namespace SPI {
+
+        /* TODO: missing a "transfer" function because I dont feel like making it, you can make one */
+
+        void partialInit(SPI_Regs *);
+        void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::MFCLK);
+
+        void tx_blocking(void const * data, uint16_t size);
+        void rx_blocking(void * data, uint16_t size);
+    }
+
+
+    void init();
 
     /* bring system to immediate stop . requires chip reset to escape this */
     void FailHard(char const * str = nullptr);
 
-    namespace UART {
-        /** a generic initialization*/
-        void partialInit(UART_Regs *);
-
-        void setBaudTarget(UART_Regs *, uint32_t target_baud, uint32_t clk = System::CLK::busclkUART);
-
-        void nputs(UART_Regs *, char const * str, uint32_t n);
-    }
-
-    namespace SPI
-    {
-        void partialInit(SPI_Regs *);
-
-    }
-
+    #ifdef PROJECT_ENABLE_UART0
+        extern UART::UART uart0;
+    #endif
+    extern UART::UART &uart_ui;
 }
 
 

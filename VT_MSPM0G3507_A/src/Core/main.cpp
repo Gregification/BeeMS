@@ -6,24 +6,40 @@
  *      https://cataas.com/cat/says/accumulating
  */
 
+#include <stdio.h>
+#include <stdint.h>
+
 #include <FreeRTOS.h>
 #include <task.h>
 
 #include "system.hpp"
+#include "Tasks/blink_task.hpp"
 
 #include "fiddle.hpp"
 
 int main(){
     System::init();
 
-    System::UART::setBaudTarget(UARTUI, 115200);
-    DL_UART_enable(UARTUI);
+    System::uart_ui.setBaudTarget(115200);
+//    DL_UART_enable(UARTUI);
+
+    System::uart_ui.nputs(STRANDN("\033[2J\033[H"));
+    System::uart_ui.nputs(STRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
+
+    // we should move to uboot one bright sunny day
 
     xTaskCreate(fiddle_task,
             "fiddle task",
             configMINIMAL_STACK_SIZE * 10,
             NULL,
             tskIDLE_PRIORITY,
+            NULL);
+
+    xTaskCreate(Task::blink_task,
+            "blink status",
+            configMINIMAL_STACK_SIZE,
+            NULL,
+            configMAX_PRIORITIES - 1,
             NULL);
 
     vTaskStartScheduler();
@@ -72,6 +88,7 @@ void vApplicationIdleHook(void)
      * idle task to clean up memory allocated by the kernel to any task that
      * has since been deleted.
      */
+    System::uart_ui.nputs(STRANDN("idle hook" NEWLINE));
 }
 
 /*-----------------------------------------------------------*/
@@ -95,16 +112,13 @@ void __attribute__((weak))
 vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 #endif
 {
-    (void) pcTaskName;
-    (void) pxTask;
-
-    /*
-     * Run time stack overflow checking is performed if
-     * configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2. This hook
-     * function is called if a stack overflow is detected.
-     */
     taskDISABLE_INTERRUPTS();
+
+    char str[MAX_STR_ERROR_LEN];
+    snprintf(str,sizeof(str), "vApplicationStackOverflowHook: %s", pcTaskName);
+
     for (;;)
+        System::FailHard(str);
         ;
 }
 #endif

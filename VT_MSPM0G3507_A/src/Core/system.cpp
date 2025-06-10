@@ -11,6 +11,28 @@
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
 
+/*--- variables ------------------------------------------------------------------------*/
+
+namespace System {
+    namespace CLK {
+        extern uint32_t LFCLK   = 32768;
+        extern uint32_t ULPCLK  = 32e6;
+        extern uint32_t &MCLK   = CPUCLK;
+        extern uint32_t CPUCLK  = configCPU_CLOCK_HZ;
+        extern uint32_t CANCLK  = 0;
+        extern uint32_t MFPCLK  = 4e6;
+    }
+
+    #ifdef PROJECT_ENABLE_UART0
+        UART::UART uart0 = {.reg = UART0};
+    #endif
+
+    UART::UART &uart_ui = uart0;
+}
+
+
+/*--- functions ------------------------------------------------------------------------*/
+
 void System::init() {
     /*
      * BOR typical trigger level (v) (DS.7.6.1)
@@ -22,6 +44,8 @@ void System::init() {
     DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_0);
 
     DL_SYSCTL_disableHFXT();
+    DL_SYSCTL_enableMFCLK();
+    DL_SYSCTL_enableMFPCLK();
     // catch 22 forces a <=32Mhz cpu if we want 500Kb can
     // 32Mhz
     {
@@ -53,21 +77,17 @@ void System::init() {
     DL_GPIO_enablePower(GPIOB);
     delay_cycles(POWER_STARTUP_DELAY);
 
-    System::UART::partialInit(UART0);
-    #if UARTUI == UART0
+    #ifdef PROJECT_ENABLE_UART0
+        System::uart0.partialInit();
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
-    #else
-        #error "UARTUI : undefined pinout"
+        DL_UART_enable(System::uart0.reg);
     #endif
-    DL_UART_enable(UARTUI);
 }
 
 /*--- UART ---------------------------------------------*/
 
-uint32_t System::CLK::busclkUART        = 4e6;
-
-void System::UART::setBaudTarget(UART_Regs * reg, uint32_t target_baud, uint32_t clk) {
+void System::UART::UART::setBaudTarget(uint32_t target_baud, uint32_t clk) {
     //TODO pg1351 https://www.ti.com/lit/ug/slau846b/slau846b.pdf?ts=1749245238762&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
     // 115200 baud
     uint32_t nume = clk;
@@ -99,14 +119,14 @@ void System::UART::setBaudTarget(UART_Regs * reg, uint32_t target_baud, uint32_t
  *      setBaudTarget(UART0, 115200);
  *      DL_UART_enable(UART0);
  */
-void System::UART::partialInit(UART_Regs * reg) {
+void System::UART::UART::partialInit() {
     DL_UART_disable(reg);
     DL_UART_disablePower(reg);
     DL_UART_reset(reg);
     DL_UART_enablePower(reg);
 
     constexpr DL_UART_ClockConfig config_uart_clk = {
-            .clockSel   = DL_UART_CLOCK::DL_UART_CLOCK_BUSCLK,
+            .clockSel   = DL_UART_CLOCK::DL_UART_CLOCK_MFCLK,
             .divideRatio= DL_UART_CLOCK_DIVIDE_RATIO::DL_UART_CLOCK_DIVIDE_RATIO_8,
         };
     constexpr DL_UART_Config config_uart = {
@@ -128,15 +148,31 @@ void System::UART::partialInit(UART_Regs * reg) {
 void System::FailHard(const char *str) {
     taskDISABLE_INTERRUPTS();
     for(;;){
-        UART::nputs(UARTUI, STRANDN(NEWLINE "fatal error: "));
-        UART::nputs(UARTUI, str, MAX_STR_ERROR_LEN);
+        System::uart_ui.nputs(STRANDN(NEWLINE "fatal error: "));
+        System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
     }
 }
 
-void System::UART::nputs(UART_Regs * reg, const char *str, uint32_t n) {
+void System::UART::UART::nputs(const char *str, uint32_t n) {
     // do NOT make this a task, keep it simple. we'll make another function later that does it passively as a task
 
     for(uint32_t i = 0; (i < n) && (str[i] != '\0'); i++){
         DL_UART_transmitDataBlocking(reg, str[i]);
     }
 }
+
+void System::SPI::tx_blocking(const void *data, uint16_t size) {
+
+}
+
+void System::SPI::rx_blocking(void *data, uint16_t size) {
+
+}
+
+
+/*--- idiot detection ------------------------------------------------------------------*/
+
+#if !defined(PROJECT_ENABLE_UART0)
+    #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
+    /* uart0 is used by the LP */
+#endif
