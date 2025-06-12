@@ -11,23 +11,106 @@
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
 
+/*--- example intis' --- for intis that are too specialized to wrap --------------------*/
+/*--- SPI ---------------------------------------------*/
+/* DL , note: auto CS
+     DL_SPI_enablePower(SPI0);
+    delay_cycles(POWER_STARTUP_DELAY);
+
+    DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM43, IOMUX_PINCM43_PF_SPI0_PICO);// MOSI , PB17
+    DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM45, IOMUX_PINCM45_PF_SPI0_POCI); // MISO , PB19
+    DL_GPIO_initPeripheralOutputFunctionFeatures(   // SCLK , PB18
+            IOMUX_PINCM44,
+            IOMUX_PINCM44_PF_SPI0_SCLK,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+    DL_GPIO_initPeripheralOutputFunctionFeatures(   // CS2  , PB20
+            IOMUX_PINCM48,
+            IOMUX_PINCM48_PF_SPI0_CS2_POCI2,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+
+    DL_SPI_setChipSelect(SPI0, DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2);
+
+    DL_GPIO_enableOutput(GPIOB, DL_GPIO_PIN_17 | DL_GPIO_PIN_18 | DL_GPIO_PIN_19 | DL_GPIO_PIN_20);
+    delay_cycles(32e6/1000 * 10); // optional. since the peripherals used immediately, wait for voltage to stabilize
+
+    DL_SPI_Config config = {
+            .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
+            .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
+            .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
+            .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
+            .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_LSB_FIRST,
+            .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2,
+        };
+    DL_SPI_ClockConfig clk_config = {
+             .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_MFCLK, // MFCLK is always 4Mhz on the G3507
+             .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
+        };
+    DL_SPI_setClockConfig(SPI0, &clk_config);
+    DL_SPI_init(SPI0, &config);
+    DL_SPI_setBitRateSerialClockDivider(SPI0, 19); // CLK / 20 , 4M->100k
+    DL_SPI_disablePacking(SPI0);
+    DL_SPI_enable(SPI0);
+    for(int a = 0; a < 3; a++){
+        DL_SPI_transmitDataBlocking8(SPI0, a);
+    }
+ */
+/* name space System, note: auto CS
+     // same upper as DL version
+
+    System::spi0.partialInit();
+    DL_SPI_Config config = {
+            .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
+            .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
+            .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
+            .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
+            .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_LSB_FIRST,
+            .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2,
+        };
+    DL_SPI_init(System::spi0.reg, &config);
+    DL_SPI_setBitRateSerialClockDivider(System::spi0.reg, 19); // CLK / 20 , 4M->100k
+    DL_SPI_disablePacking(System::spi0.reg);
+    DL_SPI_enable(System::spi0.reg);
+
+    uint8_t tx[] = {1,2,3,4,5};
+    System::spi0.tx_blocking(ARRANDN(tx));
+ */
+
+
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
     namespace CLK {
-        extern uint32_t LFCLK   = 32768;
-        extern uint32_t ULPCLK  = 32e6;
-        extern uint32_t &MCLK   = CPUCLK;
-        extern uint32_t CPUCLK  = configCPU_CLOCK_HZ;
-        extern uint32_t CANCLK  = 0;
-        extern uint32_t MFPCLK  = 4e6;
+        uint32_t LFCLK   = 32768;
+        uint32_t ULPCLK  = 32e6;
+        uint32_t &MCLK   = CPUCLK;
+        uint32_t CPUCLK  = configCPU_CLOCK_HZ;
+        uint32_t CANCLK  = 0;
+        uint32_t MFPCLK  = 4e6;
     }
+
+    // we should move to uboot one bright sunny day
+
+    UART::UART &uart_ui = uart0;
 
     #ifdef PROJECT_ENABLE_UART0
         UART::UART uart0 = {.reg = UART0};
     #endif
 
-    UART::UART &uart_ui = uart0;
+    #ifdef PROJECT_ENABLE_SPI0
+        SPI::SPI spi0 = {.reg = SPI0};
+    #endif
+    #ifdef PROJECT_ENABLE_SPI1
+        SPI::SPI spi1 = {.reg = SPI1};
+    #endif
+
 }
 
 
@@ -148,7 +231,7 @@ void System::UART::UART::partialInit() {
 void System::FailHard(const char *str) {
     taskDISABLE_INTERRUPTS();
     for(;;){
-        System::uart_ui.nputs(STRANDN(NEWLINE "fatal error: "));
+        System::uart_ui.nputs(ARRANDN(NEWLINE "fatal error: "));
         System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
     }
 }
@@ -161,12 +244,28 @@ void System::UART::UART::nputs(const char *str, uint32_t n) {
     }
 }
 
-void System::SPI::tx_blocking(const void *data, uint16_t size) {
+void System::SPI::SPI::partialInit() {
+    DL_SPI_ClockConfig clk_config = {
+             .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_MFCLK, // MFCLK is always 4Mhz on the G3507
+             .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
+        };
+    DL_SPI_setClockConfig(reg, &clk_config);
+}
+
+void System::SPI::SPI::setSCLKTarget(uint32_t target, uint32_t clk){
 
 }
 
-void System::SPI::rx_blocking(void *data, uint16_t size) {
+void System::SPI::SPI::tx_blocking(const void *data, uint16_t size) {
+    for(uint16_t i = 0; i < size; i++){
+        DL_SPI_transmitDataBlocking8(reg, ((uint8_t *)data)[i]);
+    }
+}
 
+void System::SPI::SPI::rx_blocking(void *data, uint16_t size) {
+    for(uint16_t i = 0; i < size; i++){
+       ((uint8_t *)data)[i] = DL_SPI_receiveDataBlocking8(reg);
+    }
 }
 
 

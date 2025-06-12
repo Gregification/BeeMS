@@ -3,13 +3,30 @@
  *
  *  Created on: Jun 6, 2025
  *      Author: FSAE
+ *
+ *  target MCU : MSPM0G3507         https://www.ti.com/product/MSPM0G3507
+ *
  */
 
-/*
+/*** OVERVIEW **************************************************************************************
  * general wrappers and control macros for the project. A small layer on top of DriverLib, this is by no means
- *  a replacement for DriverLib.
+ *  a replacement for DriverLib. Purpose is to make development easier without having to actively research
+ *  the chip.
  *
- * - defaults to MFCLK
+ *** NOTES *****************************************************************************************
+ * - all peripherals have wrappers. no matter how pointless it is. for semaphore control stuff
+ *      - the semaphore is runtime so the compiler probably wont optimize it.
+ * - "FDS" : family specific data sheet                 https://www.ti.com/lit/ug/slau846b/slau846b.pdf?ts=1749245238762&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
+ * - "TDS" : chip specific technical data sheet         https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf?ts=1749166832439&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
+ * - "LPDS" : launch pad user-guide/data-sheet          https://www.ti.com/lit/ug/slau873d/slau873d.pdf?ts=1749180414460&ref_url=https%253A%252F%252Fwww.ti.com%252Ftool%252FLP-MSPM0G3507
+ * - "LP" : launch-pad/evaluation-board                 https://www.ti.com/tool/LP-MSPM0G3507
+ * - citations
+ *      - always have the section
+ *      - page number if possible
+ *      - eg: family data sheet , section 19.2.1 - which is on page 1428
+ *          - "FDS.19.2.1/1428" or omit the page "FDS.19.2.1"
+ * - default clock is MFCLK : this is factory set to 4Mhz on the MSPM0G3507
+ * - the comment style is what ever I feel like. no Doxygen, no JavaDoc, we ball
  */
 
 #ifndef SRC_CORE_SYSTEM_HPP_
@@ -41,7 +58,7 @@
 #define ASSERT_FATAL(X, STR)        if(!(X)) System::FailHard(STR " @assert:line" TOSTRING(__LINE__) "," __FILE__);
 
 /* for the uart nputs(char*,num len) command */
-#define STRANDN(STR)                STR,sizeof(STR)
+#define ARRANDN(ARR)                ARR,sizeof(ARR)
 
 /* OCCUPY macro defines a static const variable with a unique name per ID
     If the same ID is used again in the same translation unit, it will cause redefinition error
@@ -57,14 +74,23 @@
 #define POWER_STARTUP_DELAY         16
 
 /*------------------------------------------------------*/
+/* so many pin conflicts. TDS.6.2/10 */
 
-#define PROJECT_ENABLE_UART0
+#define PROJECT_ENABLE_UART0        // LP
+
+#define PROJECT_ENABLE_SPI0         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
+#define PROJECT_ENABLE_SPI1         // up to 2Mhz
+
+/*--- common peripheral pins ---------------------------*/
 
 namespace System {
     OCCUPY(UART0)   // UI
     OCCUPY(PINCM21) //PA10
     OCCUPY(PINCM22) //PA11
 }
+
+
+/*------------------------------------------------------*/
 
 namespace System {
     struct Lockable { // Java gang
@@ -74,6 +100,7 @@ namespace System {
             semph = xSemaphoreCreateRecursiveMutex();
             while(semph == NULL){
                 // bad stuff
+                //TODO: hard restart
             }
         }
 
@@ -106,14 +133,22 @@ namespace System {
     }
 
     namespace SPI {
+        /* - you must manually control CS
+         * - for any transmission speeds worth a crap you will have to use DL
+         * - functions here are general and are nowhere near peak performance
+         */
 
-        /* TODO: missing a "transfer" function because I dont feel like making it, you can make one */
+        /* TODO: missing a SPI "transfer" function because I don't feel like making it, you can make one */
+        struct SPI : Lockable {
+            SPI_Regs * reg;
 
-        void partialInit(SPI_Regs *);
-        void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::MFCLK);
+            /* see system.cpp top comments for example */
+            void partialInit();
+            void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::MFCLK);
 
-        void tx_blocking(void const * data, uint16_t size);
-        void rx_blocking(void * data, uint16_t size);
+            void tx_blocking(void const * data, uint16_t size);
+            void rx_blocking(void * data, uint16_t size);
+        };
     }
 
 
@@ -122,10 +157,22 @@ namespace System {
     /* bring system to immediate stop . requires chip reset to escape this */
     void FailHard(char const * str = nullptr);
 
+
+    /*--- system globals -----------------------------------*/
+
+    /* a reference to the UART acting as the main text UI */
+    extern UART::UART &uart_ui;
+
     #ifdef PROJECT_ENABLE_UART0
         extern UART::UART uart0;
     #endif
-    extern UART::UART &uart_ui;
+    #ifdef PROJECT_ENABLE_SPI0
+        extern SPI::SPI spi0;
+    #endif
+    #ifdef PROJECT_ENABLE_SPI1
+        extern SPI::SPI spi1;
+    #endif
+
 }
 
 

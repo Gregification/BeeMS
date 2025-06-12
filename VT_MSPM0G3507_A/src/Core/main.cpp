@@ -23,10 +23,8 @@ int main(){
     System::uart_ui.setBaudTarget(115200);
 //    DL_UART_enable(UARTUI);
 
-    System::uart_ui.nputs(STRANDN("\033[2J\033[H"));
-    System::uart_ui.nputs(STRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
-
-    // we should move to uboot one bright sunny day
+    System::uart_ui.nputs(ARRANDN("\033[2J\033[H"));
+    System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
     xTaskCreate(fiddle_task,
             "fiddle task",
@@ -88,7 +86,7 @@ void vApplicationIdleHook(void)
      * idle task to clean up memory allocated by the kernel to any task that
      * has since been deleted.
      */
-    System::uart_ui.nputs(STRANDN("idle hook" NEWLINE));
+    System::uart_ui.nputs(ARRANDN("idle hook" NEWLINE));
 }
 
 /*-----------------------------------------------------------*/
