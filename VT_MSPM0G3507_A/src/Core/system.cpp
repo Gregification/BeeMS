@@ -89,10 +89,10 @@
 namespace System {
     namespace CLK {
         uint32_t LFCLK   = 32768;
-        uint32_t ULPCLK  = 32e6;
+        uint32_t ULPCLK  = 40e6;
         uint32_t &MCLK   = CPUCLK;
         uint32_t CPUCLK  = configCPU_CLOCK_HZ;
-        uint32_t CANCLK  = 0;
+        uint32_t CANCLK  = 80e6;
         uint32_t MFPCLK  = 4e6;
     }
 
@@ -126,34 +126,48 @@ void System::init() {
      */
     DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_0);
 
-    DL_SYSCTL_disableHFXT();
-    DL_SYSCTL_enableMFCLK();
-    DL_SYSCTL_enableMFPCLK();
-    // catch 22 forces a <=32Mhz cpu if we want 500Kb can
-    // 32Mhz
+    // clock configuration
     {
-        DL_SYSCTL_disableSYSPLL();
-//            constexpr DL_SYSCTL_SYSPLLConfig pll_config = {
-//                .rDivClk2x  = 0x0,
-//                .rDivClk1   = 0xF,
-//                .rDivClk0   = 0x0,
-////                .enableCLK2x= , // idk
-//                .sysPLLMCLK = DL_SYSCTL_SYSPLL_MCLK::DL_SYSCTL_SYSPLL_MCLK_CLK0,
-//                .sysPLLRef  = DL_SYSCTL_SYSPLL_REF::DL_SYSCTL_SYSPLL_REF_SYSOSC,
-//                .qDiv       = 0x01,
-//                .pDiv       = DL_SYSCTL_SYSPLL_PDIV::DL_SYSCTL_SYSPLL_PDIV_2,
-//                .inputFreq  = DL_SYSCTL_SYSPLL_INPUT_FREQ::DL_SYSCTL_SYSPLL_INPUT_FREQ_32_48_MHZ
-//            };
-        DL_SYSCTL_setSYSOSCFreq(DL_SYSCTL_SYSOSC_FREQ::DL_SYSCTL_SYSOSC_FREQ_BASE);
-//            DL_SYSCTL_switchMCLKfromSYSOSCtoHSCLK(DL_SYSCTL_HSCLK_SOURCE::DL_SYSCTL_HSCLK_SOURCE_SYSPLL);
-//            DL_SYSCTL_setMCLKDivider(DL_SYSCTL_MCLK_DIVIDER::DL_SYSCTL_MCLK_DIVIDER_DISABLE);
-//            DL_SYSCTL_setULPCLKDivider(DL_SYSCTL_ULPCLK_DIV::DL_SYSCTL_ULPCLK_DIV_1);
-//            DL_SYSCTL_configSYSPLL(&pll_config);
-    }
-    while ((DL_SYSCTL_getClockStatus() & (DL_SYSCTL_CLK_STATUS_LFOSC_GOOD))
-               != (DL_SYSCTL_CLK_STATUS_LFOSC_GOOD))
-    {}
+        DL_SYSCTL_setSYSOSCFreq(DL_SYSCTL_SYSOSC_FREQ::DL_SYSCTL_SYSOSC_FREQ_BASE); // SYSOSC 32Mhz
 
+        DL_SYSCTL_disableHFXT();
+        DL_SYSCTL_enableMFPCLK();
+        DL_SYSCTL_enableMFCLK();
+        DL_SYSCTL_disableSYSPLL();
+
+        //target 160Mhz VCO
+        constexpr DL_SYSCTL_SYSPLLConfig pll_config = {
+                .rDivClk2x  = 0x3,
+                .rDivClk1   = 0x0,
+                .rDivClk0   = 0x0, // unused
+                .enableCLK2x= DL_SYSCTL_SYSPLL_CLK2X_ENABLE,
+                .enableCLK1 = DL_SYSCTL_SYSPLL_CLK1_ENABLE,
+                .enableCLK0 = DL_SYSCTL_SYSPLL_CLK0_DISABLE,
+                .sysPLLMCLK = DL_SYSCTL_SYSPLL_MCLK::DL_SYSCTL_SYSPLL_MCLK_CLK2X,
+                .sysPLLRef  = DL_SYSCTL_SYSPLL_REF::DL_SYSCTL_SYSPLL_REF_SYSOSC,
+                .qDiv       = 0x04,
+                .pDiv       = DL_SYSCTL_SYSPLL_PDIV::DL_SYSCTL_SYSPLL_PDIV_1,
+                .inputFreq  = DL_SYSCTL_SYSPLL_INPUT_FREQ::DL_SYSCTL_SYSPLL_INPUT_FREQ_32_48_MHZ
+            };
+        DL_SYSCTL_configSYSPLL(&pll_config);
+        DL_SYSCTL_setMCLKDivider(DL_SYSCTL_MCLK_DIVIDER::DL_SYSCTL_MCLK_DIVIDER_DISABLE);
+        DL_SYSCTL_setULPCLKDivider(DL_SYSCTL_ULPCLK_DIV::DL_SYSCTL_ULPCLK_DIV_2);
+
+    }
+    while ((DL_SYSCTL_getClockStatus() & (DL_SYSCTL_CLK_STATUS_SYSPLL_GOOD
+             | DL_SYSCTL_CLK_STATUS_HSCLK_GOOD
+             | DL_SYSCTL_CLK_STATUS_LFOSC_GOOD))
+               != (DL_SYSCTL_CLK_STATUS_SYSPLL_GOOD
+             | DL_SYSCTL_CLK_STATUS_HSCLK_GOOD
+             | DL_SYSCTL_CLK_STATUS_LFOSC_GOOD))
+        {}
+    DL_SYSCTL_switchMCLKfromSYSOSCtoHSCLK(DL_SYSCTL_HSCLK_SOURCE::DL_SYSCTL_HSCLK_SOURCE_SYSPLL);
+
+    // must be done after enabling PLL
+    //    DL_FlashCTL_executeClearStatus(); // ERRNO thing
+
+    DL_GPIO_disablePower(GPIOA);
+    DL_GPIO_disablePower(GPIOB);
     DL_GPIO_reset(GPIOA);
     DL_GPIO_reset(GPIOB);
     DL_GPIO_enablePower(GPIOA);
@@ -163,7 +177,7 @@ void System::init() {
     #ifdef PROJECT_ENABLE_UART0
         System::uart0.partialInit();
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
-        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
+        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
         DL_UART_enable(System::uart0.reg);
     #endif
 }
@@ -210,7 +224,7 @@ void System::UART::UART::partialInit() {
 
     constexpr DL_UART_ClockConfig config_uart_clk = {
             .clockSel   = DL_UART_CLOCK::DL_UART_CLOCK_MFCLK,
-            .divideRatio= DL_UART_CLOCK_DIVIDE_RATIO::DL_UART_CLOCK_DIVIDE_RATIO_8,
+            .divideRatio= DL_UART_CLOCK_DIVIDE_RATIO::DL_UART_CLOCK_DIVIDE_RATIO_1,
         };
     constexpr DL_UART_Config config_uart = {
             .mode        = DL_UART_MODE::DL_UART_MAIN_MODE_NORMAL,

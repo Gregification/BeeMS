@@ -14,7 +14,40 @@
 
 #include "system.hpp"
 
+//void fiddle_task(void *){
+//
+//    vTaskDelete(NULL);
+//}
+
+//I2C
 void fiddle_task(void *){
+
+    DL_I2C_enablePower(I2C1);
+    delay_cycles(POWER_STARTUP_DELAY);
+
+    // PA15
+    DL_GPIO_initPeripheralInputFunctionFeatures(
+            IOMUX_PINCM37,
+            IOMUX_PINCM37_PF_I2C1_SCL,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+            DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+        );
+    // PA16
+    DL_GPIO_initPeripheralInputFunctionFeatures(
+            IOMUX_PINCM38,
+            IOMUX_PINCM38_PF_I2C1_SDA,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+            DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+        );
+
+    DL_I2C_ClockConfig clk_config = {
+             .clockSel      = DL_I2C_CLOCK::DL_I2C_CLOCK_BUSCLK, // note
+             .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_8
+        };
 
     vTaskDelete(NULL);
 }
