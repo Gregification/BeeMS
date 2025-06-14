@@ -316,7 +316,7 @@ void System::SPI::SPI::rx_blocking(void *data, uint16_t size, GPIO::GPIO * cs) {
 void System::I2C::I2C::partialInitController(){
     DL_I2C_ClockConfig clk_config = {
              .clockSel      = DL_I2C_CLOCK::DL_I2C_CLOCK_BUSCLK,
-             .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_1
+             .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2
         };
     DL_I2C_setClockConfig(reg, &clk_config);
     DL_I2C_enableAnalogGlitchFilter(reg);
@@ -332,19 +332,50 @@ void System::I2C::I2C::partialInitController(){
 void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
     DL_I2C_ClockConfig clk_config;
     DL_I2C_getClockConfig(reg, &clk_config);
-    switch(clk_config.divideRatio){
-        default:
-        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_1: clk /= 1; break;
-        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2: clk /= 2; break;
-        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_3: clk /= 3; break;
-        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_4: clk /= 4; break;
-        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_5: clk /= 5; break;
-        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_6: clk /= 6; break;
-        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_7: clk /= 7; break;
-        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_8: clk /= 8; break;
+
+    // if clk too slow
+    if(target * 20 > clk){
+        clk_config.divideRatio = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_1;
+        DL_I2C_setClockConfig(reg, &clk_config);
     }
 
-    DL_I2C_setTimerPeriod(reg, clk / (target * 10) - 1);
+    uint32_t effective_clk;
+    do {
+        effective_clk = clk;
+        switch(clk_config.divideRatio){
+            default:
+            case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_1: effective_clk /= 1; break;
+            case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2: effective_clk /= 2; break;
+            case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_3: effective_clk /= 3; break;
+            case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_4: effective_clk /= 4; break;
+            case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_5: effective_clk /= 5; break;
+            case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_6: effective_clk /= 6; break;
+            case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_7: effective_clk /= 7; break;
+            case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_8: effective_clk /= 8; break;
+        }
+
+        // if clk too fast
+        if((effective_clk / (target * 10) - 1) > BV(5) && (clk_config.divideRatio != DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_8)) {
+
+            // increase divider and see if that works
+            switch(clk_config.divideRatio){
+                case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_1: clk_config.divideRatio = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2; break;
+                case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2: clk_config.divideRatio = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_3; break;
+                case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_3: clk_config.divideRatio = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_4; break;
+                case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_4: clk_config.divideRatio = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_5; break;
+                case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_5: clk_config.divideRatio = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_6; break;
+                case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_6: clk_config.divideRatio = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_7; break;
+                case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_7: clk_config.divideRatio = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_8; break;
+                default:
+                case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_8: break;
+            }
+            DL_I2C_setClockConfig(reg, &clk_config);
+        } else
+            break;
+
+    }while (true);
+
+    DL_I2C_setTimerPeriod(reg, effective_clk / (target * 10) - 1);
 }
 
 uint8_t System::I2C::I2C::tx_ctrl_blocking(uint8_t addr, void const * data, uint8_t size){

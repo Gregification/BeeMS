@@ -22,7 +22,7 @@
 //I2C
 void fiddle_task(void *){
 
-    DL_I2C_enablePower(I2C1);
+    DL_I2C_enablePower(System::i2c1.reg);
     delay_cycles(POWER_STARTUP_DELAY);
 
     // PA15
@@ -30,7 +30,7 @@ void fiddle_task(void *){
             IOMUX_PINCM37,
             IOMUX_PINCM37_PF_I2C1_SCL,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
             DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
             DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
         );
@@ -39,15 +39,17 @@ void fiddle_task(void *){
             IOMUX_PINCM38,
             IOMUX_PINCM38_PF_I2C1_SDA,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
             DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
             DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
         );
-    DL_GPIO_enableHiZ(IOMUX_PINCM37);
-    DL_GPIO_enableHiZ(IOMUX_PINCM38);
+    DL_GPIO_disableHiZ(IOMUX_PINCM37);
+    DL_GPIO_disableHiZ(IOMUX_PINCM38);
+//    DL_GPIO_enableHiZ(IOMUX_PINCM37);
+//    DL_GPIO_enableHiZ(IOMUX_PINCM38);
 
     System::i2c1.partialInitController();
-    System::i2c1.setSCLTarget(400e3);
+    System::i2c1.setSCLTarget(10e3);
     DL_I2C_enableController(System::i2c1.reg);
 
     uint8_t buff[8];
@@ -59,6 +61,7 @@ void fiddle_task(void *){
         uint8_t addr = 0x10;
 
         uint8_t success1 = System::i2c1.tx_ctrl_blocking(0x10, buff, 1);
+        delay_cycles(80 * 60);
         uint8_t success2 = System::i2c1.rx_ctrl_blocking(0x11, buff, 2);
 
         snprintf(str, sizeof(str), "rx (success:%1d:%1d) : %d" NEWLINE, success1, success2, ((uint16_t *)buff)[0]);
