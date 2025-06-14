@@ -110,6 +110,9 @@ namespace System {
     #ifdef PROJECT_ENABLE_SPI1
         SPI::SPI spi1 = {.reg = SPI1};
     #endif
+    #ifdef PROJECT_ENABLE_I2C1
+        I2C::I2C i2c1 = {.reg = I2C1};
+    #endif
 
 }
 
@@ -260,28 +263,151 @@ void System::UART::UART::nputs(const char *str, uint32_t n) {
 
 void System::SPI::SPI::partialInit() {
     DL_SPI_ClockConfig clk_config = {
-             .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_MFCLK, // MFCLK is always 4Mhz on the G3507
+             .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
              .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
         };
     DL_SPI_setClockConfig(reg, &clk_config);
 }
 
 void System::SPI::SPI::setSCLKTarget(uint32_t target, uint32_t clk){
-
+    uint32_t t = clk / target;
+    if(clk - t * target)
+        t++;
+    DL_SPI_setBitRateSerialClockDivider(reg, t+1); // eh
 }
 
-void System::SPI::SPI::tx_blocking(const void *data, uint16_t size) {
+void System::SPI::SPI::tx_blocking(const void *data, uint16_t size, GPIO::GPIO * cs) {
+    if(cs){
+        while(DL_SPI_isBusy(reg));
+        cs->set();
+    }
+
     for(uint16_t i = 0; i < size; i++){
-        DL_SPI_transmitDataBlocking8(reg, ((uint8_t *)data)[i]);
+        i += DL_SPI_fillTXFIFO8(reg, ((uint8_t *)data) + i, size - i);
+    }
+
+    if(cs){
+        while(DL_SPI_isBusy(reg));
+        cs->clear();
     }
 }
 
-void System::SPI::SPI::rx_blocking(void *data, uint16_t size) {
+void System::SPI::SPI::rx_blocking(void *data, uint16_t size, GPIO::GPIO * cs) {
+    if(cs){
+        while(DL_SPI_isBusy(reg));
+        cs->set();
+    }
+
+    for(uint8_t c,i; c > 0 ;)
+        c = DL_SPI_drainRXFIFO8(reg, &i, 1);
+
     for(uint16_t i = 0; i < size; i++){
-       ((uint8_t *)data)[i] = DL_SPI_receiveDataBlocking8(reg);
+        DL_SPI_transmitDataBlocking8(reg, 0);
+       ((uint8_t *)data)[i] = DL_SPI_receiveData8(reg);
+    }
+
+    if(cs){
+        while(DL_SPI_isBusy(reg));
+        cs->clear();
     }
 }
 
+
+void System::I2C::I2C::partialInitController(){
+    DL_I2C_ClockConfig clk_config = {
+             .clockSel      = DL_I2C_CLOCK::DL_I2C_CLOCK_BUSCLK,
+             .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_1
+        };
+    DL_I2C_setClockConfig(reg, &clk_config);
+    DL_I2C_enableAnalogGlitchFilter(reg);
+
+    // as controller
+    DL_I2C_resetControllerTransfer(reg);
+
+    DL_I2C_setControllerTXFIFOThreshold(reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_EMPTY);
+    DL_I2C_setControllerRXFIFOThreshold(reg, DL_I2C_RX_FIFO_LEVEL::DL_I2C_RX_FIFO_LEVEL_BYTES_1);
+    DL_I2C_enableControllerClockStretching(reg);
+}
+
+void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
+    DL_I2C_ClockConfig clk_config;
+    DL_I2C_getClockConfig(reg, &clk_config);
+    switch(clk_config.divideRatio){
+        default:
+        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_1: clk /= 1; break;
+        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2: clk /= 2; break;
+        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_3: clk /= 3; break;
+        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_4: clk /= 4; break;
+        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_5: clk /= 5; break;
+        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_6: clk /= 6; break;
+        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_7: clk /= 7; break;
+        case DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_8: clk /= 8; break;
+    }
+
+    DL_I2C_setTimerPeriod(reg, clk / (target * 10) - 1);
+}
+
+uint8_t System::I2C::I2C::tx_ctrl_blocking(uint8_t addr, void const * data, uint8_t size){
+    uint8_t const * arr = (uint8_t const *)data;
+
+    DL_I2C_flushControllerTXFIFO(reg);
+
+    size -= DL_I2C_fillControllerTXFIFO(reg, arr, size);
+
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+        {}
+
+    DL_I2C_startControllerTransfer(
+            reg,
+            addr,
+            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
+            size
+        );
+
+    while(size > 0){
+        size -= DL_I2C_fillControllerTXFIFO(reg, arr, size);
+
+        if(DL_I2C_getControllerStatus(reg) & (
+                DL_I2C_CONTROLLER_STATUS_IDLE
+                | DL_I2C_CONTROLLER_STATUS_ERROR
+            ))
+            break;
+    }
+
+    while (DL_I2C_getControllerStatus(reg) &
+               DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+            ;
+
+    return size;
+}
+
+uint8_t System::I2C::I2C::rx_ctrl_blocking(uint8_t addr, void * data, uint8_t size){
+
+
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+            {}
+
+    DL_I2C_flushControllerTXFIFO(reg);
+
+    DL_I2C_startControllerTransfer(
+                reg,
+                addr,
+                DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
+                size
+            );
+    for(uint8_t i = 0; i < size; i++){
+        while(DL_I2C_isControllerRXFIFOEmpty(reg)){
+            if(DL_I2C_getControllerStatus(reg) & (
+                    DL_I2C_CONTROLLER_STATUS_IDLE
+                    | DL_I2C_CONTROLLER_STATUS_ERROR
+                ))
+                break;
+        }
+        ((uint8_t *)data)[i] = DL_I2C_receiveControllerData(reg);
+    }
+
+    return size;
+}
 
 /*--- idiot detection ------------------------------------------------------------------*/
 

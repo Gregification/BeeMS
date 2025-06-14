@@ -78,8 +78,12 @@
 
 #define PROJECT_ENABLE_UART0        // LP
 
-#define PROJECT_ENABLE_SPI0         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
-#define PROJECT_ENABLE_SPI1         // up to 2Mhz
+#define PROJECT_ENABLE_SPI0         // up to 2Mhz
+//#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
+
+//#define PROJECT_ENABLE_I2C0
+#define PROJECT_ENABLE_I2C1
+
 
 /*--- common peripheral pins ---------------------------*/
 
@@ -121,7 +125,7 @@ namespace System {
 
     namespace UART {
         struct UART : Lockable {
-            UART_Regs * reg;
+            UART_Regs * const reg;
 
             void partialInit();
             void setBaudTarget(uint32_t target_baud, uint32_t clk = System::CLK::MFCLK);
@@ -132,6 +136,16 @@ namespace System {
 
     }
 
+    namespace GPIO {
+        struct GPIO {
+            GPIO_Regs * port;   // eg: GPIOA
+            uint32_t    pin;    // eg: DL_GPIO_PIN_0
+
+            inline void set() { DL_GPIO_setPins(port, pin); }
+            inline void clear() { DL_GPIO_clearPins(port, pin); }
+        };
+    }
+
     namespace SPI {
         /* - you must manually control CS
          * - for any transmission speeds worth a crap you will have to use DL
@@ -140,17 +154,30 @@ namespace System {
 
         /* TODO: missing a SPI "transfer" function because I don't feel like making it, you can make one */
         struct SPI : Lockable {
-            SPI_Regs * reg;
+            SPI_Regs * const reg;
 
             /* see system.cpp top comments for example */
             void partialInit();
-            void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::MFCLK);
+            void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
 
-            void tx_blocking(void const * data, uint16_t size);
-            void rx_blocking(void * data, uint16_t size);
+            void tx_blocking(const void * data, uint16_t size, GPIO::GPIO * cs = NULL);
+            void rx_blocking(void * data, uint16_t size, GPIO::GPIO * cs = NULL);
         };
     }
 
+    namespace I2C {
+        struct I2C : Lockable {
+            I2C_Regs * const reg;
+
+            void partialInitController();
+            void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
+
+            /** return 0 on success */
+            uint8_t tx_ctrl_blocking(uint8_t addr, void const *, uint8_t size);
+            /** return 0 on success */
+            uint8_t rx_ctrl_blocking(uint8_t addr, void *, uint8_t size);
+        };
+    }
 
     void init();
 
@@ -171,6 +198,13 @@ namespace System {
     #endif
     #ifdef PROJECT_ENABLE_SPI1
         extern SPI::SPI spi1;
+    #endif
+
+    #ifdef PROJECT_ENABLE_I2C0
+        #error "I2C0 not implimented"
+    #endif
+    #ifdef PROJECT_ENABLE_I2C1
+        extern I2C::I2C i2c1;
     #endif
 
 }

@@ -30,7 +30,7 @@ void fiddle_task(void *){
             IOMUX_PINCM37,
             IOMUX_PINCM37_PF_I2C1_SCL,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
             DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
             DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
         );
@@ -39,15 +39,33 @@ void fiddle_task(void *){
             IOMUX_PINCM38,
             IOMUX_PINCM38_PF_I2C1_SDA,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
             DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
             DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
         );
+    DL_GPIO_enableHiZ(IOMUX_PINCM37);
+    DL_GPIO_enableHiZ(IOMUX_PINCM38);
 
-    DL_I2C_ClockConfig clk_config = {
-             .clockSel      = DL_I2C_CLOCK::DL_I2C_CLOCK_BUSCLK, // note
-             .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_8
-        };
+    System::i2c1.partialInitController();
+    System::i2c1.setSCLTarget(400e3);
+    DL_I2C_enableController(System::i2c1.reg);
+
+    uint8_t buff[8];
+    char str[MAX_STR_LEN_COMMON];
+
+    while(true){
+        vTaskDelay(pdMS_TO_TICKS(500));
+
+        uint8_t addr = 0x10;
+
+        uint8_t success1 = System::i2c1.tx_ctrl_blocking(0x10, buff, 1);
+        uint8_t success2 = System::i2c1.rx_ctrl_blocking(0x11, buff, 2);
+
+        snprintf(str, sizeof(str), "rx (success:%1d:%1d) : %d" NEWLINE, success1, success2, ((uint16_t *)buff)[0]);
+//        snprintf(str, sizeof(str), "rx : %d" NEWLINE, ((uint16_t *)buff)[0]);
+        System::uart_ui.nputs(str, sizeof(str));
+
+    }
 
     vTaskDelete(NULL);
 }
@@ -62,7 +80,15 @@ void fiddle_task(void *){
 //    /*--- GPIO config ----------------*/
 //
 //    DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM43, IOMUX_PINCM43_PF_SPI0_PICO);// MOSI , PB17
-//    DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM45, IOMUX_PINCM45_PF_SPI0_POCI); // MISO , PB19
+//    DL_GPIO_initPeripheralInputFunctionFeatures(   // MISO , PB19
+//            IOMUX_PINCM45,
+//            IOMUX_PINCM45_PF_SPI0_POCI,
+//            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+//            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+//            DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+//            DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+//        );
+//    DL_GPIO_enableHiZ(IOMUX_PINCM45);
 //    DL_GPIO_initPeripheralOutputFunctionFeatures(   // SCLK , PB18
 //            IOMUX_PINCM44,
 //            IOMUX_PINCM44_PF_SPI0_SCLK,
@@ -71,19 +97,20 @@ void fiddle_task(void *){
 //            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
 //            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
 //        );
-//    DL_GPIO_initPeripheralOutputFunctionFeatures(   // CS2  , PB20
+//    DL_GPIO_initDigitalOutputFeatures(   // CS2  , PB20
 //            IOMUX_PINCM48,
-//            IOMUX_PINCM48_PF_SPI0_CS2_POCI2,
-//            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+//            DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
 //            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
 //            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
 //            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
 //        );
-//
-//    DL_SPI_setChipSelect(System::spi0.reg, DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2);
-//
+//    DL_SPI_setChipSelect(System::spi0.reg, DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_NONE);
 //    DL_GPIO_enableOutput(GPIOB, DL_GPIO_PIN_17 | DL_GPIO_PIN_18 | DL_GPIO_PIN_19 | DL_GPIO_PIN_20);
-//    delay_cycles(32e6/1000 * 10);
+//
+//    System::GPIO::GPIO cs = {.port = GPIOB, .pin = DL_GPIO_PIN_20};
+//    cs.clear();
+//
+//    vTaskDelay(pdMS_TO_TICKS(100));
 //
 //    /*--- SPI config -----------------*/
 //
@@ -97,12 +124,20 @@ void fiddle_task(void *){
 //            .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2,
 //        };
 //    DL_SPI_init(System::spi0.reg, &config);
-//    DL_SPI_setBitRateSerialClockDivider(System::spi0.reg, 19); // CLK / 20 , 4M->100k
 //    DL_SPI_disablePacking(System::spi0.reg);
+//    System::spi0.setSCLKTarget(125e3);
 //    DL_SPI_enable(System::spi0.reg);
 //
-//    uint8_t tx[] = {1,2,3,4,5};
-//    System::spi0.tx_blocking(ARRANDN(tx));
+//    /*--- stuff ----------------------*/
+//
+//    uint8_t buff[10] = {0x22, BV(4)};
+//
+//    cs.set();
+//    System::spi0.tx_blocking(buff, 3, &cs);
+//    delay_cycles(80 * 100);
+//    System::spi0.rx_blocking(buff, 3, &cs);
+//
+//    System::uart_ui.nputs(ARRANDN("end of fiddle" NEWLINE));
 //
 //    vTaskDelete(NULL);
 //}
