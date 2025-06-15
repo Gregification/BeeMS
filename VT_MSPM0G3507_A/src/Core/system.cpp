@@ -319,12 +319,14 @@ void System::I2C::I2C::partialInitController(){
              .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2
         };
     DL_I2C_setClockConfig(reg, &clk_config);
-    DL_I2C_enableAnalogGlitchFilter(reg);
+//    DL_I2C_enableAnalogGlitchFilter(reg);
+    DL_I2C_disableAnalogGlitchFilter(reg);
+    DL_I2C_setControllerAddressingMode(reg, DL_I2C_CONTROLLER_ADDRESSING_MODE::DL_I2C_CONTROLLER_ADDRESSING_MODE_7_BIT);
 
     // as controller
     DL_I2C_resetControllerTransfer(reg);
 
-    DL_I2C_setControllerTXFIFOThreshold(reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_EMPTY);
+    DL_I2C_setControllerTXFIFOThreshold(reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_BYTES_1);
     DL_I2C_setControllerRXFIFOThreshold(reg, DL_I2C_RX_FIFO_LEVEL::DL_I2C_RX_FIFO_LEVEL_BYTES_1);
     DL_I2C_enableControllerClockStretching(reg);
 }
@@ -409,6 +411,9 @@ uint8_t System::I2C::I2C::tx_ctrl_blocking(uint8_t addr, void const * data, uint
                DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
             ;
 
+    // delay some
+    delay_cycles(80 * 60);
+
     return size;
 }
 
@@ -436,6 +441,9 @@ uint8_t System::I2C::I2C::rx_ctrl_blocking(uint8_t addr, void * data, uint8_t si
         }
         ((uint8_t *)data)[i] = DL_I2C_receiveControllerData(reg);
     }
+
+    // delay some
+    delay_cycles(80 * 60);
 
     return size;
 }

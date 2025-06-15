@@ -27,7 +27,7 @@ int main(){
 
     xTaskCreate(fiddle_task,
             "fiddle task",
-            configMINIMAL_STACK_SIZE * 10,
+            configMINIMAL_STACK_SIZE * 50,
             NULL,
             tskIDLE_PRIORITY,
             NULL);
@@ -66,6 +66,7 @@ void vApplicationMallocFailedHook(void)
      */
     taskDISABLE_INTERRUPTS();
     for (;;)
+        System::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
         ;
 }
 
@@ -85,7 +86,7 @@ void vApplicationIdleHook(void)
      * idle task to clean up memory allocated by the kernel to any task that
      * has since been deleted.
      */
-    System::uart_ui.nputs(ARRANDN("idle hook" NEWLINE));
+    System::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
 }
 
 /*-----------------------------------------------------------*/
@@ -115,7 +116,7 @@ vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
     snprintf(str,sizeof(str), "vApplicationStackOverflowHook: %s", pcTaskName);
 
     for (;;)
-        System::FailHard(str);
+        System::uart_ui.nputs(ARRANDN(str));
         ;
 }
 #endif
