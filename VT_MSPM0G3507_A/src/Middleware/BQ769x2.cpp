@@ -31,8 +31,8 @@
  */
 
 #include <FreeRTOS.h>
+#include <Middleware/BQ769x2.hpp>
 #include <task.h>
-#include <Middleware/BQ769x2_protocol.hpp>
 
 //******************************************************************************
 // BQ Parameters ***************************************************************

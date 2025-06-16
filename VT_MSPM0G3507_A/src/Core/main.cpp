@@ -25,6 +25,13 @@ int main(){
     System::uart_ui.nputs(ARRANDN("\033[2J\033[H"));
     System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
+    xTaskCreate(Task::blink_task,
+            "blink status",
+            configMINIMAL_STACK_SIZE,
+            NULL,
+            configMAX_PRIORITIES,
+            NULL);
+
     xTaskCreate(fiddle_task,
             "fiddle task",
             configMINIMAL_STACK_SIZE * 50,
@@ -32,17 +39,12 @@ int main(){
             tskIDLE_PRIORITY,
             NULL);
 
-    xTaskCreate(Task::blink_task,
-            "blink status",
-            configMINIMAL_STACK_SIZE,
-            NULL,
-            configMAX_PRIORITIES - 1,
-            NULL);
 
     vTaskStartScheduler();
 
-    while(true)
-    {}
+    while(true) {
+        System::FailHard("reached end of main");
+    }
 }
 
 

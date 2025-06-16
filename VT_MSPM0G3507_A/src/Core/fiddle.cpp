@@ -12,12 +12,12 @@
 #include "fiddle.hpp"
 
 #include <FreeRTOS.h>
+#include <Middleware/BQ769x2.hpp>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
 #include <stdio.h>
 
 #include "system.hpp"
-#include "Middleware/BQ769x2_protocol.hpp"
 
 //void fiddle_task(void *){
 //
@@ -51,190 +51,162 @@ void fiddle_task(void *){
         );
     DL_GPIO_enableHiZ(IOMUX_PINCM37);
     DL_GPIO_enableHiZ(IOMUX_PINCM38);
-//    DL_GPIO_disableHiZ(IOMUX_PINCM37);
-//    DL_GPIO_disableHiZ(IOMUX_PINCM38);
-
     System::i2c1.partialInitController();
     System::i2c1.setSCLTarget(100e3);
-//    DL_I2C_enableACKOverrideOnStart(System::i2c1.reg);
-//    DL_I2C_enableControllerBurst(System::i2c1.reg);
-//    DL_I2C_enableControllerACKOverride(System::i2c1.reg);
-//    DL_I2C_enableControllerACK(System::i2c1.reg);
-//    DL_I2C_enableACKOverrideOnPECNext(System::i2c1.reg);
-//    DL_I2C_enableACKOverrideOnPECDone(System::i2c1.reg);
-//    DL_I2C_enableControllerACK(System::i2c1.reg);
     DL_I2C_enableController(System::i2c1.reg);
 
-//    uint8_t buff[8];
     char str[MAX_STR_LEN_COMMON];
-//
-//    while(true){
-//        vTaskDelay(pdMS_TO_TICKS(1000));
-//
-//        // write exit sleep command
-//        uint16_t cmd = 0x009A;
-//        uint8_t success1 = System::i2c1.tx_ctrl_blocking(0x08, ARRANDN((uint8_t[]){0}));
-//        uint8_t success2 = System::i2c1.rx_ctrl_blocking(0x08, buff, 2);
-//
-//        snprintf(str, sizeof(str), "rx (success:%1d:%1d) : %d" NEWLINE, success1, success2, ((uint16_t *)buff)[0]);
-////        snprintf(str, sizeof(str), "rx : %d" NEWLINE, ((uint16_t *)buff)[0]);
-//        System::uart_ui.nputs(str, sizeof(str));
-//
-//    }
-
     vTaskDelay(pdMS_TO_TICKS(500));
 
-//    CommandSubcommands(SLEEP_DISABLE);
-//    vTaskDelay(pdMS_TO_TICKS(5));
-
-//    for(;;){
-//        BQ769x2_ReadAllVoltages();
-//        vTaskDelay(pdMS_TO_TICKS(5));
-//        uint16_t v;
-//        System::i2c1.tx_ctrl_blocking(0x10, ARRANDN((uint8_t[]){0x14}));
-//        uint16_t rx;
-//        System::i2c1.rx_ctrl_blocking(0x11, &rx, 2);
-//
-//        System::uart_ui.nputs(ARRANDN(str));
-//        vTaskDelay(pdMS_TO_TICKS(500));
-//    }
+    CommandSubcommands(BQ769x2_RESET);
+    delayUS(60000);
+    CommandSubcommands(SET_CFGUPDATE);
+    delayUS(8000);
 
 
-//    CommandSubcommands(BQ769x2_RESET);
-//    delayUS(60000);
-//    CommandSubcommands(SET_CFGUPDATE);
-//    delayUS(8000);
-//
-//
-//    // After entering CONFIG_UPDATE mode, RAM registers can be programmed. When programming RAM, checksum and length must also be
-//    // programmed for the change to take effect. All of the RAM registers are described in detail in the BQ769x2 TRM.
-//    // An easier way to find the descriptions is in the BQStudio Data Memory screen. When you move the mouse over the register name,
-//    // a full description of the register and the bits will pop up on the screen.
-//
-//    // 'Power Config' - 0x9234 = 0x2D80
-//    // Setting the DSLP_LDO bit allows the LDOs to remain active when the device goes into Deep Sleep mode
-//    // Set wake speed bits to 00 for best performance
-//    BQ769x2_SetRegister(PowerConfig, 0x2D80, 2);
-//
-//    // 'REG0 Config' - set REG0_EN bit to enable pre-regulator
-//    BQ769x2_SetRegister(REG0Config, 0x01, 1);
-//
-//    // 'REG12 Config' - Enable REG1 with 3.3V output (0x0D for 3.3V, 0x0F for 5V)
-//    BQ769x2_SetRegister(REG12Config, 0x0D, 1);
-//
-//    // Set DFETOFF pin to control BOTH CHG and DSG FET - 0x92FB = 0x42 (set to 0x00 to disable)
-//    BQ769x2_SetRegister(DFETOFFPinConfig, 0x42, 1);
-//
-//    // Set up ALERT Pin - 0x92FC = 0x2A
-//    // This configures the ALERT pin to drive high (REG1 voltage) when enabled.
-//    // The ALERT pin can be used as an interrupt to the MCU when a protection has triggered or new measurements are available
-//    BQ769x2_SetRegister(ALERTPinConfig, 0x2A, 1);
-//
-//    // Set TS1 to measure Cell Temperature - 0x92FD = 0x07
-//    BQ769x2_SetRegister(TS1Config, 0x07, 1);
-//
-//    // Set TS3 to measure FET Temperature - 0x92FF = 0x0F
-//    BQ769x2_SetRegister(TS3Config, 0x0F, 1);
-//
-//    // Set HDQ to measure Cell Temperature - 0x9300 = 0x07
-//    BQ769x2_SetRegister(HDQPinConfig, 0x00, 1);  // No thermistor installed on EVM HDQ pin, so set to 0x00
-//
-//    // 'VCell Mode' - Enable 16 cells - 0x9304 = 0x0000; Writing 0x0000 sets the default of 16 cells
-//    // Only for openwire detection and  protection
-//    uint16_t u16TempValue = 0;
-//    for (uint8_t u8Count = 0; u8Count < (16 - 1); u8Count++) {
-//        u16TempValue += (0x1 << u8Count);
-//    }
-//    u16TempValue += 0x8000;
-//    BQ769x2_SetRegister(VCellMode, u16TempValue, 2);
-//
-//    // Enable protections in 'Enabled Protections A' 0x9261 = 0xBC
-//    // Enables SCD (short-circuit), OCD1 (over-current in discharge), OCC (over-current in charge),
-//    // COV (over-voltage), CUV (under-voltage)
-//    BQ769x2_SetRegister(EnabledProtectionsA, 0xBC, 1);
-//
-//    // Enable all protections in 'Enabled Protections B' 0x9262 = 0xF7
-//    // Enables OTF (over-temperature FET), OTINT (internal over-temperature), OTD (over-temperature in discharge),
-//    // OTC (over-temperature in charge), UTINT (internal under-temperature), UTD (under-temperature in discharge), UTC (under-temperature in charge)
-//    BQ769x2_SetRegister(EnabledProtectionsB, 0xF7, 1);
-//
-//    // 'Default Alarm Mask' - 0x..82 Enables the FullScan and ADScan bits, default value = 0xF800
-//    BQ769x2_SetRegister(DefaultAlarmMask, 0xF882, 2);
-//
-//    // Set up Cell Balancing Configuration - 0x9335 = 0x03   -  Automated balancing while in Relax or Charge modes
-//    // Also see "Cell Balancing with BQ769x2 Battery Monitors" document on ti.com
-//    BQ769x2_SetRegister(BalancingConfiguration, 0x03, 1);
-//
-//    //Set the minimum cell balance voltage in charge - 0x933B = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
-//    BQ769x2_SetRegister(CellBalanceMinCellVCharge, 3.3 - 100, 2);
-////        pBattParamsCfg->u16MinFullChgVoltThd_mV - 100, 2);
-//    //Set the minimum cell balance voltage in rest - 0x933F = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
-//    BQ769x2_SetRegister(CellBalanceMinCellVRelax, 3.3 - 100, 2);
-////        pBattParamsCfg->u16MinFullChgVoltThd_mV - 100, 2);
-//
-//    // Set up CUV (under-voltage) Threshold - 0x9275 = 0x31 (2479 mV)
-//    // CUV Threshold is this value multiplied by 50.6mV
-//        BQ769x2_SetRegister(CUVThreshold, 0x31, 1);
-////    BQ769x2_SetRegister(
-////        CUVThreshold, pBattParamsCfg->u16MinBattVoltThd_mV / 51, 1);
-//
-//    // Set up COV (over-voltage) Threshold - 0x9278 = 0x55 (4301 mV)
-//    // COV Threshold is this value multiplied by 50.6mV
-//        BQ769x2_SetRegister(COVThreshold, 0x55, 1);
-////    BQ769x2_SetRegister(
-////        COVThreshold, pBattParamsCfg->u16MaxBattVoltThd_mV / 51, 1);
-//
-//    // Set up OCC (over-current in charge) Threshold - 0x9280 = 0x05 (10 mV = 10A across 1mOhm sense resistor) Units in 2mV
-//        BQ769x2_SetRegister(OCCThreshold, 0x05, 1);
-////    BQ769x2_SetRegister(
-////        OCCThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
-//
-//    // Set up OCD1 (over-current in discharge) Threshold - 0x9282 = 0x0A (20 mV = 20A across 1mOhm sense resistor) units of 2mV
-//        BQ769x2_SetRegister(OCD1Threshold, 0x0A, 1);
-////    BQ769x2_SetRegister(
-////        OCD1Threshold, pBattParamsCfg->i16MinDhgCurtThd_mA / 2000, 1);
-//
-//    // Set up SCD (short discharge current) Threshold - 0x9286 = 0x05 (100 mV = 100A across 1mOhm sense resistor)  0x05=100mV
-//        BQ769x2_SetRegister(SCDThreshold, 0x05, 1);
-////    BQ769x2_SetRegister(
-////        SCDThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
-//
-//    // Set up SCD Delay - 0x9287 = 0x03 (30 us) Enabled with a delay of (value - 1) * 15 us; min value of 1
-//    BQ769x2_SetRegister(SCDDelay, 0x03, 1);
-//
-//    // Set up SCDL Latch Limit to 1 to set SCD recovery only with load removal 0x9295 = 0x01
-//    // If this is not set, then SCD will recover based on time (SCD Recovery Time parameter).
-//    BQ769x2_SetRegister(SCDLLatchLimit, 0x01, 1);
-//
-//
-//    delayUS(8000);
-//    // Exit CONFIGUPDATE mode  - Subcommand 0x0092
-//    CommandSubcommands(EXIT_CFGUPDATE);
-//    delayUS(8000);
-//    //Control All FETs on
-//    CommandSubcommands(FET_ENABLE);
-//    delayUS(8000);
-//    CommandSubcommands(ALL_FETS_ON);
-//    delayUS(8000);
-//    CommandSubcommands(SLEEP_DISABLE);
-//    delayUS(8000);
+    // After entering CONFIG_UPDATE mode, RAM registers can be programmed. When programming RAM, checksum and length must also be
+    // programmed for the change to take effect. All of the RAM registers are described in detail in the BQ769x2 TRM.
+    // An easier way to find the descriptions is in the BQStudio Data Memory screen. When you move the mouse over the register name,
+    // a full description of the register and the bits will pop up on the screen.
+
+    // 'Power Config' - 0x9234 = 0x2D80
+    // Setting the DSLP_LDO bit allows the LDOs to remain active when the device goes into Deep Sleep mode
+    // Set wake speed bits to 00 for best performance
+    BQ769x2_SetRegister(PowerConfig, 0x2D80, 2);
+
+    // 'REG0 Config' - set REG0_EN bit to enable pre-regulator
+    BQ769x2_SetRegister(REG0Config, 0x01, 1);
+
+    // 'REG12 Config' - Enable REG1 with 3.3V output (0x0D for 3.3V, 0x0F for 5V)
+    BQ769x2_SetRegister(REG12Config, 0x0D, 1);
+
+    // Set DFETOFF pin to control BOTH CHG and DSG FET - 0x92FB = 0x42 (set to 0x00 to disable)
+    BQ769x2_SetRegister(DFETOFFPinConfig, 0x42, 1);
+
+    // Set up ALERT Pin - 0x92FC = 0x2A
+    // This configures the ALERT pin to drive high (REG1 voltage) when enabled.
+    // The ALERT pin can be used as an interrupt to the MCU when a protection has triggered or new measurements are available
+    BQ769x2_SetRegister(ALERTPinConfig, 0x2A, 1);
+
+    // Set TS1 to measure Cell Temperature - 0x92FD = 0x07
+    BQ769x2_SetRegister(TS1Config, 0x07, 1);
+
+    // Set TS3 to measure FET Temperature - 0x92FF = 0x0F
+    BQ769x2_SetRegister(TS3Config, 0x0F, 1);
+
+    // Set HDQ to measure Cell Temperature - 0x9300 = 0x07
+    BQ769x2_SetRegister(HDQPinConfig, 0x00, 1);  // No thermistor installed on EVM HDQ pin, so set to 0x00
+
+    // 'VCell Mode' - Enable 16 cells - 0x9304 = 0x0000; Writing 0x0000 sets the default of 16 cells
+    // Only for openwire detection and  protection
+    uint16_t u16TempValue = 0;
+    for (uint8_t u8Count = 0; u8Count < (16 - 1); u8Count++) {
+        u16TempValue += (0x1 << u8Count);
+    }
+    u16TempValue += 0x8000;
+    BQ769x2_SetRegister(VCellMode, u16TempValue, 2);
+
+    // Enable protections in 'Enabled Protections A' 0x9261 = 0xBC
+    // Enables SCD (short-circuit), OCD1 (over-current in discharge), OCC (over-current in charge),
+    // COV (over-voltage), CUV (under-voltage)
+    BQ769x2_SetRegister(EnabledProtectionsA, 0xBC, 1);
+
+    // Enable all protections in 'Enabled Protections B' 0x9262 = 0xF7
+    // Enables OTF (over-temperature FET), OTINT (internal over-temperature), OTD (over-temperature in discharge),
+    // OTC (over-temperature in charge), UTINT (internal under-temperature), UTD (under-temperature in discharge), UTC (under-temperature in charge)
+    BQ769x2_SetRegister(EnabledProtectionsB, 0xF7, 1);
+
+    // 'Default Alarm Mask' - 0x..82 Enables the FullScan and ADScan bits, default value = 0xF800
+    BQ769x2_SetRegister(DefaultAlarmMask, 0xF882, 2);
+
+    // Set up Cell Balancing Configuration - 0x9335 = 0x03   -  Automated balancing while in Relax or Charge modes
+    // Also see "Cell Balancing with BQ769x2 Battery Monitors" document on ti.com
+    BQ769x2_SetRegister(BalancingConfiguration, 0x03, 1);
+
+    //Set the minimum cell balance voltage in charge - 0x933B = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
+    BQ769x2_SetRegister(CellBalanceMinCellVCharge, 3.3 - 100, 2);
+//        pBattParamsCfg->u16MinFullChgVoltThd_mV - 100, 2);
+    //Set the minimum cell balance voltage in rest - 0x933F = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
+    BQ769x2_SetRegister(CellBalanceMinCellVRelax, 3.3 - 100, 2);
+//        pBattParamsCfg->u16MinFullChgVoltThd_mV - 100, 2);
+
+    // Set up CUV (under-voltage) Threshold - 0x9275 = 0x31 (2479 mV)
+    // CUV Threshold is this value multiplied by 50.6mV
+        BQ769x2_SetRegister(CUVThreshold, 0x31, 1);
+//    BQ769x2_SetRegister(
+//        CUVThreshold, pBattParamsCfg->u16MinBattVoltThd_mV / 51, 1);
+
+    // Set up COV (over-voltage) Threshold - 0x9278 = 0x55 (4301 mV)
+    // COV Threshold is this value multiplied by 50.6mV
+        BQ769x2_SetRegister(COVThreshold, 0x55, 1);
+//    BQ769x2_SetRegister(
+//        COVThreshold, pBattParamsCfg->u16MaxBattVoltThd_mV / 51, 1);
+
+    // Set up OCC (over-current in charge) Threshold - 0x9280 = 0x05 (10 mV = 10A across 1mOhm sense resistor) Units in 2mV
+        BQ769x2_SetRegister(OCCThreshold, 0x05, 1);
+//    BQ769x2_SetRegister(
+//        OCCThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
+
+    // Set up OCD1 (over-current in discharge) Threshold - 0x9282 = 0x0A (20 mV = 20A across 1mOhm sense resistor) units of 2mV
+        BQ769x2_SetRegister(OCD1Threshold, 0x0A, 1);
+//    BQ769x2_SetRegister(
+//        OCD1Threshold, pBattParamsCfg->i16MinDhgCurtThd_mA / 2000, 1);
+
+    // Set up SCD (short discharge current) Threshold - 0x9286 = 0x05 (100 mV = 100A across 1mOhm sense resistor)  0x05=100mV
+        BQ769x2_SetRegister(SCDThreshold, 0x05, 1);
+//    BQ769x2_SetRegister(
+//        SCDThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
+
+    // Set up SCD Delay - 0x9287 = 0x03 (30 us) Enabled with a delay of (value - 1) * 15 us; min value of 1
+    BQ769x2_SetRegister(SCDDelay, 0x03, 1);
+
+    // Set up SCDL Latch Limit to 1 to set SCD recovery only with load removal 0x9295 = 0x01
+    // If this is not set, then SCD will recover based on time (SCD Recovery Time parameter).
+    BQ769x2_SetRegister(SCDLLatchLimit, 0x01, 1);
+
+
+    delayUS(8000);
+    // Exit CONFIGUPDATE mode  - Subcommand 0x0092
+    CommandSubcommands(EXIT_CFGUPDATE);
+    delayUS(8000);
+    //Control All FETs on
+    CommandSubcommands(FET_ENABLE);
+    delayUS(8000);
+    CommandSubcommands(ALL_FETS_ON);
+    delayUS(8000);
+    CommandSubcommands(SLEEP_DISABLE);
+    delayUS(8000);
 
 //    System::i2c1.tx_ctrl_blocking(0x08, ARRANDN(((uint8_t[]){0x36, 0x72, 0x41, 0x4})));
+    uint8_t cells[16] = {
+             Cell1Voltage,
+             Cell2Voltage,
+             Cell3Voltage,
+             Cell4Voltage,
+             Cell5Voltage,
+             Cell6Voltage,
+             Cell7Voltage,
+             Cell8Voltage,
+             Cell9Voltage,
+             Cell10Voltage,
+             Cell12Voltage,
+             Cell13Voltage,
+             Cell14Voltage,
+             Cell15Voltage,
+             Cell16Voltage
+        };
 
-//    while(true){
-        DirectCommands(StackVoltage, 0, R);
-//        CommandSubcommands(Cell1Voltage);
+    while(true){
+        for(uint8_t i = 0; i < sizeof(cells); i++){
+            uint16_t v;
+            I2C_ReadReg(cells[i], (uint8_t *)&v, W2);
 
-        System::uart_ui.nputs(ARRANDN("reading voltage... "));
-
-        uint16_t v;// = BQ769x2_ReadVoltage(Cell1Voltage);
-        System::i2c1.tx_ctrl_blocking(0x08, ARRANDN(((uint8_t[]){0x14})));
-        System::i2c1.rx_ctrl_blocking(0x08, &v, 2);
-
-        snprintf(ARRANDN(str), "0x%x" NEWLINE, v);
-        System::uart_ui.nputs(ARRANDN(str));
-        vTaskDelay(pdMS_TO_TICKS(500));
-//    }
+            snprintf(ARRANDN(str), "%d,", v);
+            System::uart_ui.nputs(ARRANDN(str));
+            vTaskDelay(pdMS_TO_TICKS(100));
+        }
+        System::uart_ui.nputs(ARRANDN(NEWLINE));
+    }
 
     System::uart_ui.nputs(ARRANDN("fiddle task end" NEWLINE));
     vTaskDelete(NULL);

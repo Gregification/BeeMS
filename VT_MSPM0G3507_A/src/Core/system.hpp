@@ -137,13 +137,29 @@ namespace System {
     }
 
     namespace GPIO {
+        #define GPIOPINPUX(X) X.port,X.pin
+
         struct GPIO {
             GPIO_Regs * port;   // eg: GPIOA
             uint32_t    pin;    // eg: DL_GPIO_PIN_0
+            uint32_t    iomux;  // eg: IOMUX_PINCM0
 
             inline void set() { DL_GPIO_setPins(port, pin); }
             inline void clear() { DL_GPIO_clearPins(port, pin); }
         };
+
+        // Port A (PA) pins
+        extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
+                     PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                     PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
+                     PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31;
+
+        // Port B (PB) pins
+        extern const GPIO PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7,
+                     PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
+                     PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23,
+                     PB24, PB25, PB26, PB27;
+
     }
 
     namespace SPI {

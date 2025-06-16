@@ -11,7 +11,7 @@
 #include "Core/system.hpp"
 
 namespace System {
-    OCCUPY(PINCM28) //PB11
+    OCCUPY(PB26)
 }
 
 namespace Task {
