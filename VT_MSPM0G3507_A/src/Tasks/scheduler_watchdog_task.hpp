@@ -18,7 +18,7 @@ namespace System {
      * - WWDT0/1 difference : FDS.30.1/2229
      * - Boot Configuration Routine : FDS.1.4.2/20
      */
-    OCCUPY(WWDT1)
+//    OCCUPY(WWDT1)
 }
 
 namespace Task {

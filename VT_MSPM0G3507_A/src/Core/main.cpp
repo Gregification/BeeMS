@@ -32,7 +32,7 @@ int main(){
             configMAX_PRIORITIES,
             NULL);
 
-    xTaskCreate(fiddle_task,
+    xTaskCreate(Task::fiddle_task,
             "fiddle task",
             configMINIMAL_STACK_SIZE * 50,
             NULL,

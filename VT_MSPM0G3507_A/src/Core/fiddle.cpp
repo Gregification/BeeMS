@@ -25,7 +25,7 @@
 //}
 
 //I2C
-void fiddle_task(void *){
+void Task::fiddle_task(void *){
     System::uart_ui.nputs(ARRANDN("fiddle task start" NEWLINE));
 
     DL_I2C_enablePower(System::i2c1.reg);

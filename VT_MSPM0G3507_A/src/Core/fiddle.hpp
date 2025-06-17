@@ -8,8 +8,9 @@
 #ifndef SRC_CORE_FIDDLE_HPP_
 #define SRC_CORE_FIDDLE_HPP_
 
-
-void fiddle_task(void *);
+namespace Task {
+    void fiddle_task(void *);
+}
 
 
 #endif /* SRC_CORE_FIDDLE_HPP_ */
