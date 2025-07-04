@@ -499,6 +499,6 @@ void BQ769x2::BQ769x2_ReadPassQ()
 
 void BQ769x2::delayUS(uint16_t us)
 {
-    delay_cycles(80);
+    delay_cycles(800 * us);
 }
 //************************************End of BQ769x2 Measurement Commands******************************************
