@@ -107,7 +107,6 @@ namespace System {
                 //TODO: hard restart
             }
         }
-
     };
 
     /* see clock tree diagram ... and SysConfig's */

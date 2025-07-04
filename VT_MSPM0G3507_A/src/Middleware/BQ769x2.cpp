@@ -121,7 +121,7 @@ uint8_t CRC8(uint8_t *ptr, uint8_t len)
     return (crc);
 }
 
-void DirectCommands(uint8_t command, uint16_t data, uint8_t type)
+void BQ769x2::DirectCommands(uint8_t command, uint16_t data, uint8_t type)
 // See the TRM or the BQ76952 header file for a full list of Direct Commands.
 // For read type, user can read data from command address and stored in the Rx state of global variable to be read.
 // For write type, user can write the data to the command address.
@@ -145,7 +145,7 @@ void DirectCommands(uint8_t command, uint16_t data, uint8_t type)
     }
 }
 
-void CommandSubcommands(uint16_t command)  //For Command only Subcommands
+void BQ769x2::CommandSubcommands(uint16_t command)  //For Command only Subcommands
 // See the TRM or the BQ76952 header file for a full list of Command-only subcommands
 // All that this function do is formatting the transfer array then writing the array to hex 3E,
 // the monitor will then operate based on the command.
@@ -200,7 +200,7 @@ void Subcommands(uint16_t command, uint16_t data, uint8_t type)
     }
 }
 
-void BQ769x2_SetRegister(uint16_t reg_addr, uint32_t reg_data, uint8_t datalen)
+void BQ769x2::BQ769x2_SetRegister(uint16_t reg_addr, uint32_t reg_data, uint8_t datalen)
 // This function will write hex 3E for the initial write for subcommands in direct memory
 // and write to register hex 60 for the checksum to enter the data transmitted was correct.
 // and there are different cases for the three varying data lengths.
@@ -248,7 +248,7 @@ void BQ769x2_SetRegister(uint16_t reg_addr, uint32_t reg_data, uint8_t datalen)
     }
 }
 //************************************BQ769X2 Functions*********************************
-void BQ769x2_Init(tGaugeApplication *pGaugeApp)
+void BQ769x2::BQ769x2_Init(tGaugeApplication *pGaugeApp)
 {
     uint16_t u16TempValue;
     uint8_t u8Count;
@@ -381,14 +381,14 @@ void BQ769x2_Init(tGaugeApplication *pGaugeApp)
 
 // ********************************* BQ769x2 Status and Fault Commands   *****************************************
 
-void BQ769x2_ReadAlarmStatus()
+void BQ769x2::BQ769x2_ReadAlarmStatus()
 {
     // Read this register to find out why the ALERT pin was asserted
     DirectCommands(AlarmStatus, 0x00, R);
     AlarmBits = (uint16_t) RX_data[1] * 256 + (uint16_t) RX_data[0];
 }
 
-void BQ769x2_ReadSafetyStatus()
+void BQ769x2::BQ769x2_ReadSafetyStatus()
 {
     // Read Safety Status A/B/C and find which bits are set
     // This shows which primary protections have been triggered
@@ -411,7 +411,7 @@ void BQ769x2_ReadSafetyStatus()
     }
 }
 
-void BQ769x2_ReadPFStatus()
+void BQ769x2::BQ769x2_ReadPFStatus()
 {
     // Read Permanent Fail Status A/B/C and find which bits are set
     // This shows which permanent failures have been triggered
@@ -423,7 +423,7 @@ void BQ769x2_ReadPFStatus()
     value_PFStatusC = (RX_data[1] * 256 + RX_data[0]);
 }
 
-void BQ769x2_ReadFETStatus()
+void BQ769x2::BQ769x2_ReadFETStatus()
 {
     // Read FET Status to see which FETs are enabled
     DirectCommands(FETStatus, 0x00, R);
@@ -433,7 +433,7 @@ void BQ769x2_ReadFETStatus()
 
 // ********************************* BQ769x2 Measurement Commands   *****************************************
 
-uint16_t BQ769x2_ReadVoltage(uint8_t command)
+uint16_t BQ769x2::BQ769x2_ReadVoltage(uint8_t command)
 // This function can be used to read a specific cell voltage or stack / pack / LD voltage
 {
     //RX_data is global var
@@ -447,7 +447,7 @@ uint16_t BQ769x2_ReadVoltage(uint8_t command)
     }
 }
 
-void BQ769x2_ReadAllVoltages()
+void BQ769x2::BQ769x2_ReadAllVoltages()
 // Reads all cell voltages, Stack voltage, PACK pin voltage, and LD pin voltage
 {
     uint8_t x;
@@ -461,7 +461,7 @@ void BQ769x2_ReadAllVoltages()
     LD_Voltage    = BQ769x2_ReadVoltage(LDPinVoltage);
 }
 
-void BQ769x2_ReadCurrent()
+void BQ769x2::BQ769x2_ReadCurrent()
 // Reads PACK current
 {
     DirectCommands(CC2Current, 0x00, R);
@@ -470,7 +470,7 @@ void BQ769x2_ReadCurrent()
                   (uint16_t) RX_data[0]);  // current is reported in mA
 }
 
-float BQ769x2_ReadTemperature(uint8_t command)
+float BQ769x2::BQ769x2_ReadTemperature(uint8_t command)
 {
     DirectCommands(command, 0x00, R);
     //RX_data is a global var
@@ -478,14 +478,14 @@ float BQ769x2_ReadTemperature(uint8_t command)
            273.15;  // converts from 0.1K to Celcius
 }
 
-void BQ769x2_ReadAllTemperatures()
+void BQ769x2::BQ769x2_ReadAllTemperatures()
 {
     Temperature[0] = BQ769x2_ReadTemperature(TS1Temperature);
     Temperature[1] = BQ769x2_ReadTemperature(TS2Temperature);
     Temperature[2] = BQ769x2_ReadTemperature(TS3Temperature);
 }
 
-void BQ769x2_ReadPassQ()
+void BQ769x2::BQ769x2_ReadPassQ()
 {  // Read Accumulated Charge and Time from DASTATUS6
     Subcommands(DASTATUS6, 0x00, R);
     AccumulatedCharge_Int  = ((RX_32Byte[3] << 24) + (RX_32Byte[2] << 16) +
@@ -495,5 +495,10 @@ void BQ769x2_ReadPassQ()
     AccumulatedCharge_Time =
         ((RX_32Byte[11] << 24) + (RX_32Byte[10] << 16) + (RX_32Byte[9] << 8) +
             RX_32Byte[8]);  //Bytes 8-11
+}
+
+void BQ769x2::delayUS(uint16_t us)
+{
+    delay_cycles(80);
 }
 //************************************End of BQ769x2 Measurement Commands******************************************
