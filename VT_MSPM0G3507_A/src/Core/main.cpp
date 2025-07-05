@@ -14,6 +14,7 @@
 
 #include "system.hpp"
 #include "Tasks/blink_task.hpp"
+#include "Tasks/Test_UART_Task.hpp"
 
 #include "fiddle.hpp"
 
@@ -32,13 +33,19 @@ int main(){
             configMAX_PRIORITIES,
             NULL);
 
-    xTaskCreate(Task::fiddle_task,
-            "fiddle task",
-            configMINIMAL_STACK_SIZE * 50,
-            NULL,
-            tskIDLE_PRIORITY,
-            NULL);
+//    xTaskCreate(Task::fiddle_task,
+//            "fiddle task",
+//            configMINIMAL_STACK_SIZE * 50,
+//            NULL,
+//            tskIDLE_PRIORITY,
+//            NULL);
 
+    xTaskCreate(Task::UART_Task,
+                "UART_Task",
+                configMINIMAL_STACK_SIZE * 10,
+                NULL,
+                tskIDLE_PRIORITY,
+                NULL);
 
     vTaskStartScheduler();
 

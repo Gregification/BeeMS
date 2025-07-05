@@ -140,6 +140,7 @@ namespace System {
 
             /** transmits - blocking - a string of at most size n */
             void nputs(char const * str, uint32_t n);
+            void ngets(char * str, uint32_t n);
         };
 
     }

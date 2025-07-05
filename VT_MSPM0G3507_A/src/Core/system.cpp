@@ -357,6 +357,26 @@ void System::UART::UART::nputs(const char *str, uint32_t n) {
     }
 }
 
+void System::UART::UART::ngets(char *str, uint32_t n) {
+    // do NOT make this a task, keep it simple. we'll make another function later that does it passively as a task
+
+    for(uint32_t i = 0; i < n; i++){
+        char data = DL_UART_receiveDataBlocking(reg);
+
+        str[i] = data;
+
+        if(data == '\0' || data == '\n' || data == '\r') {
+            if(i == n)
+                str[i] ='\0';
+            else
+                str[i+1] ='\0';
+            return;
+        }
+        else
+            DL_UART_transmitDataBlocking(reg, data);
+    }
+}
+
 void System::SPI::SPI::partialInit() {
     DL_SPI_ClockConfig clk_config = {
              .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
@@ -481,10 +501,6 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
             controllerStatus_ = ControllerStatus_t::TX_COMPLETE;
             if(host_task != NULL){
-<<<<<<< Updated upstream
-=======
-                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
->>>>>>> Stashed changes
                 host_task = NULL;
                 xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
             }
@@ -493,10 +509,6 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
             controllerStatus_ = ControllerStatus_t::RX_COMPLETE;
             if(host_task != NULL){
-<<<<<<< Updated upstream
-=======
-                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
->>>>>>> Stashed changes
                 host_task = NULL;
                 xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
             }
