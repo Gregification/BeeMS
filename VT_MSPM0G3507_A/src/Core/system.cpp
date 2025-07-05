@@ -482,16 +482,16 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
             controllerStatus_ = ControllerStatus_t::TX_COMPLETE;
             if(host_task != NULL){
-                xTaskNotifyGiveIndexed(host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
                 host_task = NULL;
+                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
             }
             break;
 
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
             controllerStatus_ = ControllerStatus_t::RX_COMPLETE;
             if(host_task != NULL){
-                xTaskNotifyGiveIndexed(host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
                 host_task = NULL;
+                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
             }
             break;
 
@@ -544,6 +544,7 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void const * data, ui
     txBuffer = data;
     txBufferCount = size;
     txBufferIdx = 0;
+    controllerStatus_ = ControllerStatus_t::IDLE;
 
     DL_I2C_flushControllerTXFIFO(reg);
     txBufferIdx += DL_I2C_fillControllerTXFIFO(reg, (uint8_t *)txBuffer, txBufferCount - txBufferIdx);
@@ -552,6 +553,8 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void const * data, ui
     while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
         {}
 
+    controllerStatus_ = ControllerStatus_t::TX_STARTED;
+
     DL_I2C_startControllerTransfer(
             reg,
             target_address,
@@ -559,12 +562,16 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void const * data, ui
             txBufferCount
         );
 
-    // await notification from IRQ of success
+    // await notification from IRQ
     // IRQ will handle the data transfer in the meantime
     ulTaskNotifyTake(pdTRUE, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
 
+    // clean up
+    txBufferCount =  0;
+    txBufferIdx = 0;
+    txBuffer = NULL;
 
-    return true;
+    return controllerStatus() == ControllerStatus_t::TX_COMPLETE;
 }
 
 

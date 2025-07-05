@@ -214,7 +214,8 @@ namespace System {
             void _irq();
 
             /** the calling task awaits a task notification from the IRQ.
-             * return true if I2C was available to use.
+             * the timout
+             * @return true if tx success
              */
             bool tx_blocking(uint8_t target_address, void const * data, uint8_t size, TickType_t timeout);
 
