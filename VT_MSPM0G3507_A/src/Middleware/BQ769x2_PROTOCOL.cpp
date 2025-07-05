@@ -31,7 +31,7 @@
  */
 
 #include <FreeRTOS.h>
-#include <Middleware/BQ769x2_PROTOCOL.hpp>
+#include <Middleware/BQ769X2_PROTOCOL.hpp>
 #include <task.h>
 
 //******************************************************************************
@@ -77,6 +77,7 @@ uint8_t RX_data[2]    = {0x00};
 
 //**********************************BQ Parameters *********************************
 
+
 //**********************************Function prototypes **********************************
 void delayUS(uint16_t us)
 // Sets the delay in microseconds.
@@ -121,7 +122,7 @@ uint8_t CRC8(uint8_t *ptr, uint8_t len)
     return (crc);
 }
 
-void BQ769x2::sendDirectCommand(CmdDrt command, uint16_t data, DIR_CMD_TYPE type)
+void BQ769X2_PROTOCOL::sendDirectCommand(CmdDrt command, uint16_t data, DIR_CMD_TYPE type)
 // See the TRM or the BQ76952 header file for a full list of Direct Commands.
 // For read type, user can read data from command address and stored in the Rx state of global variable to be read.
 // For write type, user can write the data to the command address.
@@ -145,7 +146,7 @@ void BQ769x2::sendDirectCommand(CmdDrt command, uint16_t data, DIR_CMD_TYPE type
     }
 }
 
-void BQ769x2::sendCommandSubcommand(Cmd command)  //For Command only Subcommands
+void BQ769X2_PROTOCOL::sendCommandSubcommand(Cmd command)  //For Command only Subcommands
 // See the TRM or the BQ76952 header file for a full list of Command-only subcommands
 // All that this function do is formatting the transfer array then writing the array to hex 3E,
 // the monitor will then operate based on the command.
@@ -161,7 +162,7 @@ void BQ769x2::sendCommandSubcommand(Cmd command)  //For Command only Subcommands
     delayUS(2000);
 }
 
-void BQ769x2::sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type)
+void BQ769X2_PROTOCOL::sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type)
 // See the TRM or the BQ76952 header file for a full list of Subcommands
 // The input type can either be the defined macros R for read, W for write, or W2 for write two bytes.
 {
@@ -174,11 +175,11 @@ void BQ769x2::sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type)
     TX_Reg[0] = command & 0xff;
     TX_Reg[1] = (command >> 8) & 0xff;
 
-    if (type == BQ769x2::DIR_CMD_TYPE::R) {  //read
+    if (type == BQ769X2_PROTOCOL::DIR_CMD_TYPE::R) {  //read
         I2C_WriteReg(0x3E, TX_Reg, 2);
         delayUS(2000);
         I2C_ReadReg(0x40, RX_32Byte, 32);  //RX_32Byte is a global variable
-    } else if (type == BQ769x2::DIR_CMD_TYPE::W) {
+    } else if (type == BQ769X2_PROTOCOL::DIR_CMD_TYPE::W) {
         //FET_Control, REG12_Control
         TX_Reg[2] = data & 0xff;
         I2C_WriteReg(0x3E, TX_Reg, 3);
@@ -187,7 +188,7 @@ void BQ769x2::sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type)
         TX_Buffer[1] = 0x05;  //combined length of registers address and data
         I2C_WriteReg(0x60, TX_Buffer, 2);
         delayUS(1000);
-    } else if (type == BQ769x2::DIR_CMD_TYPE::W2) {  //write data with 2 bytes
+    } else if (type == BQ769X2_PROTOCOL::DIR_CMD_TYPE::W2) {  //write data with 2 bytes
         //CB_Active_Cells, CB_SET_LVL
         TX_Reg[2] = data & 0xff;
         TX_Reg[3] = (data >> 8) & 0xff;
@@ -200,7 +201,7 @@ void BQ769x2::sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type)
     }
 }
 
-void BQ769x2::setRegister(uint16_t reg_addr, uint32_t reg_data, uint8_t datalen)
+void BQ769X2_PROTOCOL::setRegister(uint16_t reg_addr, uint32_t reg_data, uint8_t datalen)
 // This function will write hex 3E for the initial write for subcommands in direct memory
 // and write to register hex 60 for the checksum to enter the data transmitted was correct.
 // and there are different cases for the three varying data lengths.
@@ -247,8 +248,8 @@ void BQ769x2::setRegister(uint16_t reg_addr, uint32_t reg_data, uint8_t datalen)
             break;
     }
 }
-//************************************BQ769X2 Functions*********************************
-void BQ769x2::init(tGaugeApplication *pGaugeApp)
+//************************************BQ769X2_PROTOCOL Functions*********************************
+void BQ769X2_PROTOCOL::init(tGaugeApplication *pGaugeApp)
 {
     uint16_t u16TempValue;
     uint8_t u8Count;
@@ -260,13 +261,13 @@ void BQ769x2::init(tGaugeApplication *pGaugeApp)
 
     // Enter CONFIGUPDATE mode (Subcommand 0x0090) - It is required to be in CONFIG_UPDATE mode to program the device RAM settings
     // See TRM for full description of CONFIG_UPDATE mode
-    sendCommandSubcommand(BQ769x2_RESET);
+    sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
     delayUS(60000);
     sendCommandSubcommand(SET_CFGUPDATE);
     delayUS(8000);
 
     // After entering CONFIG_UPDATE mode, RAM registers can be programmed. When programming RAM, checksum and length must also be
-    // programmed for the change to take effect. All of the RAM registers are described in detail in the BQ769x2 TRM.
+    // programmed for the change to take effect. All of the RAM registers are described in detail in the BQ769X2_PROTOCOL TRM.
     // An easier way to find the descriptions is in the BQStudio Data Memory screen. When you move the mouse over the register name,
     // a full description of the register and the bits will pop up on the screen.
 
@@ -322,7 +323,7 @@ void BQ769x2::init(tGaugeApplication *pGaugeApp)
     setRegister(DefaultAlarmMask, 0xF882, 2);
 
     // Set up Cell Balancing Configuration - 0x9335 = 0x03   -  Automated balancing while in Relax or Charge modes
-    // Also see "Cell Balancing with BQ769x2 Battery Monitors" document on ti.com
+    // Also see "Cell Balancing with BQ769X2_PROTOCOL Battery Monitors" document on ti.com
     setRegister(BalancingConfiguration, 0x03, 1);
 
     //Set the minimum cell balance voltage in charge - 0x933B = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
@@ -334,28 +335,28 @@ void BQ769x2::init(tGaugeApplication *pGaugeApp)
 
     // Set up CUV (under-voltage) Threshold - 0x9275 = 0x31 (2479 mV)
     // CUV Threshold is this value multiplied by 50.6mV
-    //    BQ769x2_SetRegister(CUVThreshold, 0x31, 1);
+    //    BQ769X2_PROTOCOL_SetRegister(CUVThreshold, 0x31, 1);
     setRegister(
         CUVThreshold, pBattParamsCfg->u16MinBattVoltThd_mV / 51, 1);
 
     // Set up COV (over-voltage) Threshold - 0x9278 = 0x55 (4301 mV)
     // COV Threshold is this value multiplied by 50.6mV
-    //    BQ769x2_SetRegister(COVThreshold, 0x55, 1);
+    //    BQ769X2_PROTOCOL_SetRegister(COVThreshold, 0x55, 1);
     setRegister(
         COVThreshold, pBattParamsCfg->u16MaxBattVoltThd_mV / 51, 1);
 
     // Set up OCC (over-current in charge) Threshold - 0x9280 = 0x05 (10 mV = 10A across 1mOhm sense resistor) Units in 2mV
-    //    BQ769x2_SetRegister(OCCThreshold, 0x05, 1);
+    //    BQ769X2_PROTOCOL_SetRegister(OCCThreshold, 0x05, 1);
     setRegister(
         OCCThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
 
     // Set up OCD1 (over-current in discharge) Threshold - 0x9282 = 0x0A (20 mV = 20A across 1mOhm sense resistor) units of 2mV
-    //    BQ769x2_SetRegister(OCD1Threshold, 0x0A, 1);
+    //    BQ769X2_PROTOCOL_SetRegister(OCD1Threshold, 0x0A, 1);
     setRegister(
         OCD1Threshold, pBattParamsCfg->i16MinDhgCurtThd_mA / 2000, 1);
 
     // Set up SCD (short discharge current) Threshold - 0x9286 = 0x05 (100 mV = 100A across 1mOhm sense resistor)  0x05=100mV
-    //    BQ769x2_SetRegister(SCDThreshold, 0x05, 1);
+    //    BQ769X2_PROTOCOL_SetRegister(SCDThreshold, 0x05, 1);
     setRegister(
         SCDThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
 
@@ -379,16 +380,16 @@ void BQ769x2::init(tGaugeApplication *pGaugeApp)
     delayUS(8000);
 }
 
-// ********************************* BQ769x2 Status and Fault Commands   *****************************************
+// ********************************* BQ769X2_PROTOCOL Status and Fault Commands   *****************************************
 
-void BQ769x2::readAlarmStatus()
+void BQ769X2_PROTOCOL::readAlarmStatus()
 {
     // Read this register to find out why the ALERT pin was asserted
     sendDirectCommand(AlarmStatus, 0x00, R);
     AlarmBits = (uint16_t) RX_data[1] * 256 + (uint16_t) RX_data[0];
 }
 
-void BQ769x2::readSafetyStatus()
+void BQ769X2_PROTOCOL::readSafetyStatus()
 {
     // Read Safety Status A/B/C and find which bits are set
     // This shows which primary protections have been triggered
@@ -411,7 +412,7 @@ void BQ769x2::readSafetyStatus()
     }
 }
 
-void BQ769x2::readPFStatus()
+void BQ769X2_PROTOCOL::readPFStatus()
 {
     // Read Permanent Fail Status A/B/C and find which bits are set
     // This shows which permanent failures have been triggered
@@ -423,21 +424,21 @@ void BQ769x2::readPFStatus()
     value_PFStatusC = (RX_data[1] * 256 + RX_data[0]);
 }
 
-void BQ769x2::readFETStatus()
+void BQ769X2_PROTOCOL::readFETStatus()
 {
     // Read FET Status to see which FETs are enabled
     sendDirectCommand(FETStatus, 0x00, R);
     FET_Status = (RX_data[1] * 256 + RX_data[0]);
 }
-// ********************************* End of BQ769x2 Status and Fault Commands   *****************************************
+// ********************************* End of BQ769X2_PROTOCOL Status and Fault Commands   *****************************************
 
-// ********************************* BQ769x2 Measurement Commands   *****************************************
+// ********************************* BQ769X2_PROTOCOL Measurement Commands   *****************************************
 
-uint16_t BQ769x2::readVoltage(CmdDrt command)
+uint16_t BQ769X2_PROTOCOL::readVoltage(CmdDrt command)
 // This function can be used to read a specific cell voltage or stack / pack / LD voltage
 {
     //RX_data is global var
-    sendDirectCommand(command, 0x00, BQ769x2::DIR_CMD_TYPE::R);
+    sendDirectCommand(command, 0x00, BQ769X2_PROTOCOL::DIR_CMD_TYPE::R);
     if (command >= CmdDrt::Cell1Voltage &&
         command <= CmdDrt::Cell16Voltage) {  //Cells 1 through 16 (0x14 to 0x32)
         return (RX_data[1] * 256 + RX_data[0]);  //voltage is reported in mV
@@ -463,7 +464,7 @@ void readAllVoltages()
 }
 */
 
-void BQ769x2::readCurrent()
+void BQ769X2_PROTOCOL::readCurrent()
 // Reads PACK current
 {
     sendDirectCommand(CmdDrt::CC2Current, 0x00, DIR_CMD_TYPE::R);
@@ -472,7 +473,7 @@ void BQ769x2::readCurrent()
                   (uint16_t) RX_data[0]);  // current is reported in mA
 }
 
-float BQ769x2::readTemperature(CmdDrt command)
+float BQ769X2_PROTOCOL::readTemperature(CmdDrt command)
 {
     sendDirectCommand(command, 0x00, DIR_CMD_TYPE::R);
     //RX_data is a global var
@@ -480,14 +481,14 @@ float BQ769x2::readTemperature(CmdDrt command)
            273.15;  // converts from 0.1K to Celcius
 }
 
-void BQ769x2::readAllTemperatures()
+void BQ769X2_PROTOCOL::readAllTemperatures()
 {
     Temperature[0] = readTemperature(TS1Temperature);
     Temperature[1] = readTemperature(TS2Temperature);
     Temperature[2] = readTemperature(TS3Temperature);
 }
 
-void BQ769x2::readPassQ()
+void BQ769X2_PROTOCOL::readPassQ()
 {  // Read Accumulated Charge and Time from DASTATUS6
     sendSubcommand(Cmd::DASTATUS6, 0x00, DIR_CMD_TYPE::R);
     AccumulatedCharge_Int  = ((RX_32Byte[3] << 24) + (RX_32Byte[2] << 16) +
@@ -498,4 +499,79 @@ void BQ769x2::readPassQ()
         ((RX_32Byte[11] << 24) + (RX_32Byte[10] << 16) + (RX_32Byte[9] << 8) +
             RX_32Byte[8]);  //Bytes 8-11
 }
-//************************************End of BQ769x2 Measurement Commands******************************************
+
+void BQ769X2_PROTOCOL::I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count)
+{
+    DL_I2C_fillControllerTXFIFO(I2C_0_INST, &reg_addr, count);
+
+    /* Wait for I2C to be Idle */
+    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
+             DL_I2C_CONTROLLER_STATUS_IDLE))
+        ;
+
+    DL_I2C_startControllerTransfer(
+        I2C_0_INST, I2C_TARGET_ADDRESS, DL_I2C_CONTROLLER_DIRECTION_TX, 1);
+
+    while (DL_I2C_getControllerStatus(I2C_0_INST) &
+           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+        ;
+    /* Wait for I2C to be Idle */
+    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
+             DL_I2C_CONTROLLER_STATUS_IDLE))
+        ;
+
+    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+
+    /* Send a read request to Target */
+    DL_I2C_startControllerTransfer(
+        I2C_0_INST, I2C_TARGET_ADDRESS, DL_I2C_CONTROLLER_DIRECTION_RX, count);
+
+    for (uint8_t i = 0; i < count; i++) {
+        while (DL_I2C_isControllerRXFIFOEmpty(I2C_0_INST))
+            ;
+        reg_data[i] = DL_I2C_receiveControllerData(I2C_0_INST);
+    }
+}
+
+void BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count)
+{
+    uint8_t I2Ctxbuff[8] = {0x00};
+
+    I2Ctxbuff[0] = reg_addr;
+    uint8_t i, j = 1;
+
+    for (i = 0; i < count; i++) {
+        I2Ctxbuff[j] = reg_data[i];
+        j++;
+    }
+
+    //    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+    DL_I2C_fillControllerTXFIFO(I2C_0_INST, &I2Ctxbuff[0], count + 1);
+
+    /* Wait for I2C to be Idle */
+    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
+             DL_I2C_CONTROLLER_STATUS_IDLE))
+        ;
+
+    DL_I2C_startControllerTransfer(I2C_0_INST, I2C_TARGET_ADDRESS,
+        DL_I2C_CONTROLLER_DIRECTION_TX, count + 1);
+
+    while (DL_I2C_getControllerStatus(I2C_0_INST) &
+           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+        ;
+    /* Wait for I2C to be Idle */
+    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
+             DL_I2C_CONTROLLER_STATUS_IDLE))
+        ;
+
+    //Avoid BQ769x2 to stretch the SCLK too long and generate a timeout interrupt at 400kHz because of low power mode
+    // if(DL_I2C_getRawInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT))
+    // {
+    //     DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+    //     DL_I2C_clearInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT);
+    //     I2C_WriteReg(reg_addr, reg_data, count);
+    // }
+    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+}
+
+//************************************End of BQ769X2_PROTOCOL Measurement Commands******************************************

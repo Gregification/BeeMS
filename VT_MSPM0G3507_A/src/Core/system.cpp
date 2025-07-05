@@ -180,7 +180,6 @@ namespace System {
     #ifdef PROJECT_ENABLE_I2C1
         I2C::I2C i2c1 = {.reg = I2C1};
     #endif
-
 }
 
 
@@ -482,6 +481,10 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
             controllerStatus_ = ControllerStatus_t::TX_COMPLETE;
             if(host_task != NULL){
+<<<<<<< Updated upstream
+=======
+                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+>>>>>>> Stashed changes
                 host_task = NULL;
                 xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
             }
@@ -490,6 +493,10 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
             controllerStatus_ = ControllerStatus_t::RX_COMPLETE;
             if(host_task != NULL){
+<<<<<<< Updated upstream
+=======
+                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+>>>>>>> Stashed changes
                 host_task = NULL;
                 xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
             }

@@ -44,12 +44,29 @@
 #ifndef BQ769X2_PROTOCOL_HPP_
 #define BQ769X2_PROTOCOL_HPP_
 
+/* Maximum size of TX packet */
+#define I2C_TX_MAX_PACKET_SIZE (16)
+
+/* Number of bytes to send to target device */
+#define I2C_TX_PACKET_SIZE (16)
+
+/* Maximum size of RX packet */
+#define I2C_RX_MAX_PACKET_SIZE (16)
+
+/* Number of bytes to received from target */
+#define I2C_RX_PACKET_SIZE (16)
+
+/* I2C Target address */
+#define I2C_TARGET_ADDRESS \
+    (0x08)  // BQ769x2 address is 0x10 including R/W bit or 0x8 as 7-bit address
+
+#define I2C_0_INST System::i2c1.reg
+
+
 #include "Core/system.hpp"
-#include "Middleware/I2C_communication.hpp"
 #include "ti/battery_gauge/gauge_level2/Gauge_Type.h"
 
 namespace BQ769X2_PROTOCOL {
-public:
     //Data  Memory  registers   Name in TRM
     enum RegAddr : uint16_t {
         Cell1Gain                     = 0x9180,   //Calibration:Voltage:Cell 1 Gain
@@ -473,7 +490,7 @@ public:
     };
 
 
-    bool crc_enabled = false;
+    //bool crc_enabled;
 
     void init(tGaugeApplication *pGaugeApp);
     void readAlarmStatus();
@@ -495,12 +512,10 @@ public:
     void readAllTemperatures();
     void sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type);
     void sendCommandSubcommand(Cmd command);
-    void delayUS(uint16_t us);
     void sendDirectCommand(CmdDrt command, uint16_t data, DIR_CMD_TYPE type);
     void setRegister(
         uint16_t reg_addr, uint32_t reg_data, uint8_t datalen);
 
-protected:
     void I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
     void I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
 };
