@@ -250,6 +250,36 @@ void System::init() {
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
         DL_UART_enable(System::uart0.reg);
     #endif
+
+    #ifdef PROJECT_ENABLE_I2C0
+        DL_I2C_enableInterrupt(System::i2c0.reg,
+                  DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+                | DL_I2C_INTERRUPT_CONTROLLER_NACK
+                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
+                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_FULL
+                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+                | DL_I2C_INTERRUPT_CONTROLLER_START
+                | DL_I2C_INTERRUPT_CONTROLLER_STOP
+            );
+    #endif
+    #ifdef PROJECT_ENABLE_I2C1
+        DL_I2C_enableInterrupt(System::i2c1.reg,
+                  DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+                | DL_I2C_INTERRUPT_CONTROLLER_NACK
+                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
+                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
+                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+                | DL_I2C_INTERRUPT_CONTROLLER_START
+                | DL_I2C_INTERRUPT_CONTROLLER_STOP
+            );
+    #endif
+
 }
 
 /*--- UART ---------------------------------------------*/
@@ -447,7 +477,98 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
     DL_I2C_setTimerPeriod(reg, effective_clk / (target * 10) - 1);
 }
 
-uint8_t System::I2C::I2C::tx_ctrl_blocking(uint8_t addr, void const * data, uint8_t size){
+void System::I2C::I2C::_irq() {
+    switch(DL_I2C_getPendingInterrupt(reg)){
+        case DL_I2C_IIDX_CONTROLLER_TX_DONE:
+            controllerStatus_ = ControllerStatus_t::TX_COMPLETE;
+            if(host_task != NULL){
+                xTaskNotifyGiveIndexed(host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+                host_task = NULL;
+            }
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_RX_DONE:
+            controllerStatus_ = ControllerStatus_t::RX_COMPLETE;
+            if(host_task != NULL){
+                xTaskNotifyGiveIndexed(host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+                host_task = NULL;
+            }
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
+            controllerStatus_ = ControllerStatus_t::RX_INPOGRESS;
+            // read all data
+            while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
+                if((rxBuffer != NULL) && (rxBufferIdx < rxBufferCount)){
+                    ((uint8_t*)rxBuffer)[rxBufferIdx++] = DL_I2C_receiveControllerData(reg);
+                } else { // if fifo is full
+                    // ignore and flush
+                    DL_I2C_receiveControllerData(reg);
+                }
+            }
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
+            controllerStatus_ = ControllerStatus_t::TX_INPOGRESS;
+            // fill TX fifo
+            if((txBuffer != NULL) && (txBufferIdx < txBufferCount)){
+                txBufferIdx += DL_I2C_fillControllerTXFIFO(reg, (const uint8_t *)txBuffer, txBufferCount - txBufferIdx);
+            }
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
+        case DL_I2C_IIDX_CONTROLLER_NACK:
+            controllerStatus_ = ControllerStatus_t::ERROR;
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_RXFIFO_FULL:
+        case DL_I2C_IIDX_CONTROLLER_TXFIFO_EMPTY:
+        case DL_I2C_IIDX_CONTROLLER_START:
+        case DL_I2C_IIDX_CONTROLLER_STOP:
+        case DL_I2C_IIDX_CONTROLLER_EVENT1_DMA_DONE:
+        case DL_I2C_IIDX_CONTROLLER_EVENT2_DMA_DONE:
+        default:
+            break;
+
+    };
+}
+
+const System::I2C::ControllerStatus_t & System::I2C::I2C::controllerStatus() const {
+    return controllerStatus_;
+}
+
+bool System::I2C::I2C::tx_blocking(uint8_t target_address, void const * data, uint8_t size, TickType_t timeout) {
+    if(host_task == NULL)
+        return false;
+
+    txBuffer = data;
+    txBufferCount = size;
+    txBufferIdx = 0;
+
+    DL_I2C_flushControllerTXFIFO(reg);
+    txBufferIdx += DL_I2C_fillControllerTXFIFO(reg, (uint8_t *)txBuffer, txBufferCount - txBufferIdx);
+
+    // a chance of blocking here
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+        {}
+
+    DL_I2C_startControllerTransfer(
+            reg,
+            target_address,
+            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
+            txBufferCount
+        );
+
+    // await notification from IRQ of success
+    // IRQ will handle the data transfer in the meantime
+    ulTaskNotifyTake(pdTRUE, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+
+
+    return true;
+}
+
+
+uint8_t System::I2C::I2C::basic_tx_blocking(uint8_t addr, void const * data, uint8_t size){
     uint8_t const * arr = (uint8_t const *)data;
 
     DL_I2C_flushControllerTXFIFO(reg);
@@ -484,7 +605,7 @@ uint8_t System::I2C::I2C::tx_ctrl_blocking(uint8_t addr, void const * data, uint
     return size;
 }
 
-uint8_t System::I2C::I2C::rx_ctrl_blocking(uint8_t addr, void * data, uint8_t size){
+uint8_t System::I2C::I2C::basic_rx_blocking(uint8_t addr, void * data, uint8_t size){
 
 
     while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
@@ -514,6 +635,17 @@ uint8_t System::I2C::I2C::rx_ctrl_blocking(uint8_t addr, void * data, uint8_t si
 
     return size;
 }
+
+/*--- Peripheral IRQ assignment --------------------------------------------------------*/
+/* most peripherals don't need a IRQ
+ */
+
+#ifdef PROJECT_ENABLE_I2C0
+    void I2C0_IRQHandler(void){ System::i2c0._irq(); }
+#endif
+#ifdef PROJECT_ENABLE_I2C1
+    void I2C1_IRQHandler(void){ System::i2c1._irq(); }
+#endif
 
 /*--- idiot detection ------------------------------------------------------------------*/
 

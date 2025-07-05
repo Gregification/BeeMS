@@ -12,7 +12,7 @@
 #include "fiddle.hpp"
 
 #include <FreeRTOS.h>
-#include <Middleware/BQ769x2.hpp>
+#include <Middleware/BQ769x2_PROTOCOL.hpp>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
 #include <stdio.h>
@@ -60,9 +60,9 @@ void Task::fiddle_task(void *){
 
     BQ769x2 bbq;
 
-    bbq.CommandSubcommands(BQ769x2::BQ769x2_RESET);
+    bbq.sendCommandSubcommand(BQ769x2::BQ769x2_RESET);
     bbq.delayUS(60000);
-    bbq.CommandSubcommands(BQ769x2::SET_CFGUPDATE);
+    bbq.sendCommandSubcommand(BQ769x2::SET_CFGUPDATE);
     bbq.delayUS(8000);
 
 
@@ -74,30 +74,30 @@ void Task::fiddle_task(void *){
     // 'Power Config' - 0x9234 = 0x2D80
     // Setting the DSLP_LDO bit allows the LDOs to remain active when the device goes into Deep Sleep mode
     // Set wake speed bits to 00 for best performance
-    bbq.BQ769x2_SetRegister(BQ769x2::PowerConfig, 0x2D80, 2);
+    bbq.setRegister(BQ769x2::PowerConfig, 0x2D80, 2);
 
     // 'REG0 Config' - set REG0_EN bit to enable pre-regulator
-    bbq.BQ769x2_SetRegister(BQ769x2::REG0Config, 0x01, 1);
+    bbq.setRegister(BQ769x2::REG0Config, 0x01, 1);
 
     // 'REG12 Config' - Enable REG1 with 3.3V output (0x0D for 3.3V, 0x0F for 5V)
-    bbq.BQ769x2_SetRegister(BQ769x2::REG12Config, 0x0D, 1);
+    bbq.setRegister(BQ769x2::REG12Config, 0x0D, 1);
 
     // Set DFETOFF pin to control BOTH CHG and DSG FET - 0x92FB = 0x42 (set to 0x00 to disable)
-    bbq.BQ769x2_SetRegister(BQ769x2::DFETOFFPinConfig, 0x42, 1);
+    bbq.setRegister(BQ769x2::DFETOFFPinConfig, 0x42, 1);
 
     // Set up ALERT Pin - 0x92FC = 0x2A
     // This configures the ALERT pin to drive high (REG1 voltage) when enabled.
     // The ALERT pin can be used as an interrupt to the MCU when a protection has triggered or new measurements are available
-    bbq.BQ769x2_SetRegister(BQ769x2::ALERTPinConfig, 0x2A, 1);
+    bbq.setRegister(BQ769x2::ALERTPinConfig, 0x2A, 1);
 
     // Set TS1 to measure Cell Temperature - 0x92FD = 0x07
-    bbq.BQ769x2_SetRegister(BQ769x2::TS1Config, 0x07, 1);
+    bbq.setRegister(BQ769x2::TS1Config, 0x07, 1);
 
     // Set TS3 to measure FET Temperature - 0x92FF = 0x0F
-    bbq.BQ769x2_SetRegister(BQ769x2::TS3Config, 0x0F, 1);
+    bbq.setRegister(BQ769x2::TS3Config, 0x0F, 1);
 
     // Set HDQ to measure Cell Temperature - 0x9300 = 0x07
-    bbq.BQ769x2_SetRegister(BQ769x2::HDQPinConfig, 0x00, 1);  // No thermistor installed on EVM HDQ pin, so set to 0x00
+    bbq.setRegister(BQ769x2::HDQPinConfig, 0x00, 1);  // No thermistor installed on EVM HDQ pin, so set to 0x00
 
     // 'VCell Mode' - Enable 16 cells - 0x9304 = 0x0000; Writing 0x0000 sets the default of 16 cells
     // Only for openwire detection and  protection
@@ -106,106 +106,106 @@ void Task::fiddle_task(void *){
         u16TempValue += (0x1 << u8Count);
     }
     u16TempValue += 0x8000;
-    bbq.BQ769x2_SetRegister(BQ769x2::VCellMode, u16TempValue, 2);
+    bbq.setRegister(BQ769x2::VCellMode, u16TempValue, 2);
 
     // Enable protections in 'Enabled Protections A' 0x9261 = 0xBC
     // Enables SCD (short-circuit), OCD1 (over-current in discharge), OCC (over-current in charge),
     // COV (over-voltage), CUV (under-voltage)
-    bbq.BQ769x2_SetRegister(BQ769x2::EnabledProtectionsA, 0xBC, 1);
+    bbq.setRegister(BQ769x2::EnabledProtectionsA, 0xBC, 1);
 
     // Enable all protections in 'Enabled Protections B' 0x9262 = 0xF7
     // Enables OTF (over-temperature FET), OTINT (internal over-temperature), OTD (over-temperature in discharge),
     // OTC (over-temperature in charge), UTINT (internal under-temperature), UTD (under-temperature in discharge), UTC (under-temperature in charge)
-    bbq.BQ769x2_SetRegister(BQ769x2::EnabledProtectionsB, 0xF7, 1);
+    bbq.setRegister(BQ769x2::EnabledProtectionsB, 0xF7, 1);
 
     // 'Default Alarm Mask' - 0x..82 Enables the FullScan and ADScan bits, default value = 0xF800
-    bbq.BQ769x2_SetRegister(BQ769x2::DefaultAlarmMask, 0xF882, 2);
+    bbq.setRegister(BQ769x2::DefaultAlarmMask, 0xF882, 2);
 
     // Set up Cell Balancing Configuration - 0x9335 = 0x03   -  Automated balancing while in Relax or Charge modes
     // Also see "Cell Balancing with BQ769x2 Battery Monitors" document on ti.com
-    bbq.BQ769x2_SetRegister(BQ769x2::BalancingConfiguration, 0x03, 1);
+    bbq.setRegister(BQ769x2::BalancingConfiguration, 0x03, 1);
 
     //Set the minimum cell balance voltage in charge - 0x933B = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
-    bbq.BQ769x2_SetRegister(BQ769x2::CellBalanceMinCellVCharge, 3.3 - 100, 2);
+    bbq.setRegister(BQ769x2::CellBalanceMinCellVCharge, 3.3 - 100, 2);
 //        pBattParamsCfg->u16MinFullChgVoltThd_mV - 100, 2);
     //Set the minimum cell balance voltage in rest - 0x933F = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
-    bbq. BQ769x2_SetRegister(BQ769x2::CellBalanceMinCellVRelax, 3.3 - 100, 2);
+    bbq.setRegister(BQ769x2::CellBalanceMinCellVRelax, 3.3 - 100, 2);
 //        pBattParamsCfg->u16MinFullChgVoltThd_mV - 100, 2);
 
     // Set up CUV (under-voltage) Threshold - 0x9275 = 0x31 (2479 mV)
     // CUV Threshold is this value multiplied by 50.6mV
-    bbq.BQ769x2_SetRegister(BQ769x2::CUVThreshold, 0x31, 1);
+    bbq.setRegister(BQ769x2::CUVThreshold, 0x31, 1);
 //    BQ769x2_SetRegister(
 //        CUVThreshold, pBattParamsCfg->u16MinBattVoltThd_mV / 51, 1);
 
     // Set up COV (over-voltage) Threshold - 0x9278 = 0x55 (4301 mV)
     // COV Threshold is this value multiplied by 50.6mV
-    bbq.BQ769x2_SetRegister(BQ769x2::COVThreshold, 0x55, 1);
+    bbq.setRegister(BQ769x2::COVThreshold, 0x55, 1);
 //    BQ769x2_SetRegister(
 //        COVThreshold, pBattParamsCfg->u16MaxBattVoltThd_mV / 51, 1);
 
     // Set up OCC (over-current in charge) Threshold - 0x9280 = 0x05 (10 mV = 10A across 1mOhm sense resistor) Units in 2mV
-    bbq.BQ769x2_SetRegister(BQ769x2::OCCThreshold, 0x05, 1);
+    bbq.setRegister(BQ769x2::OCCThreshold, 0x05, 1);
 //    BQ769x2_SetRegister(
 //        OCCThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
 
     // Set up OCD1 (over-current in discharge) Threshold - 0x9282 = 0x0A (20 mV = 20A across 1mOhm sense resistor) units of 2mV
-    bbq.BQ769x2_SetRegister(BQ769x2::OCD1Threshold, 0x0A, 1);
+    bbq.setRegister(BQ769x2::OCD1Threshold, 0x0A, 1);
 //    BQ769x2_SetRegister(
 //        OCD1Threshold, pBattParamsCfg->i16MinDhgCurtThd_mA / 2000, 1);
 
     // Set up SCD (short discharge current) Threshold - 0x9286 = 0x05 (100 mV = 100A across 1mOhm sense resistor)  0x05=100mV
-    bbq.BQ769x2_SetRegister(BQ769x2::SCDThreshold, 0x05, 1);
+    bbq.setRegister(BQ769x2::SCDThreshold, 0x05, 1);
 //    BQ769x2_SetRegister(
 //        SCDThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
 
     // Set up SCD Delay - 0x9287 = 0x03 (30 us) Enabled with a delay of (value - 1) * 15 us; min value of 1
-    bbq.BQ769x2_SetRegister(BQ769x2::SCDDelay, 0x03, 1);
+    bbq.setRegister(BQ769x2::SCDDelay, 0x03, 1);
 
     // Set up SCDL Latch Limit to 1 to set SCD recovery only with load removal 0x9295 = 0x01
     // If this is not set, then SCD will recover based on time (SCD Recovery Time parameter).
-    bbq.BQ769x2_SetRegister(BQ769x2::SCDLLatchLimit, 0x01, 1);
+    bbq.setRegister(BQ769x2::SCDLLatchLimit, 0x01, 1);
 
 
     bbq.delayUS(8000);
     // Exit CONFIGUPDATE mode  - Subcommand 0x0092
-    bbq.CommandSubcommands(BQ769x2::EXIT_CFGUPDATE);
+    bbq.sendCommandSubcommand(BQ769x2::EXIT_CFGUPDATE);
     bbq.delayUS(8000);
     //Control All FETs on
-    bbq.CommandSubcommands(BQ769x2::FET_ENABLE);
+    bbq.sendCommandSubcommand(BQ769x2::FET_ENABLE);
     bbq.delayUS(8000);
-    bbq.CommandSubcommands(BQ769x2::ALL_FETS_ON);
+    bbq.sendCommandSubcommand(BQ769x2::ALL_FETS_ON);
     bbq.delayUS(8000);
-    bbq.CommandSubcommands(BQ769x2::SLEEP_DISABLE);
+    bbq.sendCommandSubcommand(BQ769x2::SLEEP_DISABLE);
     bbq.delayUS(8000);
 
 //    System::i2c1.tx_ctrl_blocking(0x08, ARRANDN(((uint8_t[]){0x36, 0x72, 0x41, 0x4})));
-    uint8_t cells[16] = {
-             BQ769x2::Cell1Voltage,
-             BQ769x2::Cell2Voltage,
-             BQ769x2::Cell3Voltage,
-             BQ769x2::Cell4Voltage,
-             BQ769x2::Cell5Voltage,
-             BQ769x2::Cell6Voltage,
-             BQ769x2::Cell7Voltage,
-             BQ769x2::Cell8Voltage,
-             BQ769x2::Cell9Voltage,
-             BQ769x2::Cell10Voltage,
-             BQ769x2::Cell12Voltage,
-             BQ769x2::Cell13Voltage,
-             BQ769x2::Cell14Voltage,
-             BQ769x2::Cell15Voltage,
-             BQ769x2::Cell16Voltage
+    const BQ769x2::CmdDrt cmds[16] = {
+             BQ769x2::CmdDrt::Cell1Voltage,
+             BQ769x2::CmdDrt::Cell2Voltage,
+             BQ769x2::CmdDrt::Cell3Voltage,
+             BQ769x2::CmdDrt::Cell4Voltage,
+             BQ769x2::CmdDrt::Cell5Voltage,
+             BQ769x2::CmdDrt::Cell6Voltage,
+             BQ769x2::CmdDrt::Cell7Voltage,
+             BQ769x2::CmdDrt::Cell8Voltage,
+             BQ769x2::CmdDrt::Cell9Voltage,
+             BQ769x2::CmdDrt::Cell10Voltage,
+             BQ769x2::CmdDrt::Cell12Voltage,
+             BQ769x2::CmdDrt::Cell13Voltage,
+             BQ769x2::CmdDrt::Cell14Voltage,
+             BQ769x2::CmdDrt::Cell15Voltage,
+             BQ769x2::CmdDrt::Cell16Voltage
         };
 
     while(true){
-        for(uint8_t i = 0; i < sizeof(cells); i++){
+        for(uint8_t i = 0; i < sizeof(cmds); i++){
             uint16_t v;
-            I2C_ReadReg(cells[i], (uint8_t *)&v, W2);
+            I2C_ReadReg(cmds[i], (uint8_t *)&v, W2);
 
             snprintf(ARRANDN(str), "%d,", v);
             System::uart_ui.nputs(ARRANDN(str));
-            vTaskDelay(pdMS_TO_TICKS(100));d
+            vTaskDelay(pdMS_TO_TICKS(100));
         }
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }

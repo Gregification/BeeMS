@@ -270,6 +270,8 @@
  */
 #define configENABLE_ISR_STACK_INIT 1
 
+#define configTASK_NOTIFICATION_ARRAY_ENTRIES 5
+
 /*
  * Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
  * standard names - can't be used with CCS due to limitations in the assemblers
