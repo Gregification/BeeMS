@@ -75,7 +75,7 @@
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
 
-/*------------------------------------------------------*/
+/*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
 
 #define PROJECT_ENABLE_UART0        // LP
@@ -184,7 +184,8 @@ namespace System {
     }
 
     namespace I2C {
-        struct I2C : Lockable {
+
+        /** I2C peripheral controller interface */
             I2C_Regs * const reg;
 
             void partialInitController();
@@ -194,6 +195,17 @@ namespace System {
             uint8_t tx_ctrl_blocking(uint8_t addr, void const *, uint8_t size);
             /** return 0 on success */
             uint8_t rx_ctrl_blocking(uint8_t addr, void *, uint8_t size);
+
+            I2C(I2C_Regs * const reg) : reg(reg) {}
+
+            void partialInitController();
+            void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
+
+            /** returns true if trx completed, and so before timeout */
+            bool tx_blocking(uint8_t addr, void const *, uint8_t size, TickType_t timeout);
+            /** returns true if trx completed, and so before timeout */
+            bool rx_blocking(uint8_t addr, void *, uint8_t size, TickType_t timeout);
+
         };
     }
 
