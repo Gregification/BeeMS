@@ -359,6 +359,26 @@ void System::UART::UART::nputs(const char *str, uint32_t n) {
     }
 }
 
+void System::UART::UART::ngets(char *str, uint32_t n) {
+    // do NOT make this a task, keep it simple. we'll make another function later that does it passively as a task
+
+    for(uint32_t i = 0; i < n; i++){
+        char data = DL_UART_receiveDataBlocking(reg);
+
+        str[i] = data;
+
+        if(data == '\0' || data == '\n' || data == '\r') {
+            if(i == n)
+                str[i] ='\0';
+            else
+                str[i+1] ='\0';
+            return;
+        }
+        else
+            DL_UART_transmitDataBlocking(reg, data);
+    }
+}
+
 void System::SPI::SPI::partialInit() {
     DL_SPI_ClockConfig clk_config = {
              .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
