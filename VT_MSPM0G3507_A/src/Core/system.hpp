@@ -79,9 +79,6 @@
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
 
-/* the System IRQ functions rely on notifications, this is the specific index used */
-#define TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX configTASK_NOTIFICATION_ARRAY_ENTRIES
-
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
 
@@ -190,50 +187,22 @@ namespace System {
     }
 
     namespace I2C {
-        typedef enum {
-            IDLE,
-            ERROR,
-            TX_STARTED,
-            RX_STARTED,
-            TX_COMPLETE,
-            RX_COMPLETE,
-            TX_INPOGRESS,
-            RX_INPOGRESS,
-        } ControllerStatus_t;
 
         /** I2C peripheral controller interface */
         struct I2C : Lockable {
 
             I2C_Regs * const reg;
 
-//            I2C(I2C_Regs * const reg) : reg(reg) {}
+            I2C(I2C_Regs * const reg) : reg(reg) {}
 
             void partialInitController();
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
-            const ControllerStatus_t & controllerStatus() const;
-            void _irq();
 
-            /** the calling task awaits a task notification from the IRQ.
-             * the timout
-             * @return true if tx success
-             */
-            bool tx_blocking(uint8_t target_address, void const * data, uint8_t size, TickType_t timeout);
+            /** returns true if trx completed, and so before timeout */
+            bool tx_blocking(uint8_t addr, void const *, uint8_t size, TickType_t timeout);
+            /** returns true if trx completed, and so before timeout */
+            bool rx_blocking(uint8_t addr, void *, uint8_t size, TickType_t timeout);
 
-
-            /** return 0 on success. does not require freeRTOS */
-            uint8_t basic_tx_blocking(uint8_t addr, void const *, uint8_t size);
-            /** return 0 on success. does not require freeRTOS */
-            uint8_t basic_rx_blocking(uint8_t addr, void *, uint8_t size);
-
-//        private:
-            ControllerStatus_t controllerStatus_ = ControllerStatus_t::IDLE; //set though IRQ
-            TaskHandle_t * host_task = NULL;
-
-            void const * txBuffer;
-            uint8_t txBufferCount, txBufferIdx;
-
-            void * rxBuffer;
-            uint8_t rxBufferCount, rxBufferIdx;
         };
     }
 
