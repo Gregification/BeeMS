@@ -6,7 +6,6 @@
  *
  *  target MCU : MSPM0G3507         https://www.ti.com/product/MSPM0G3507
  *
- *  Intended for use with FreeRTOS
  */
 
 /*** OVERVIEW **************************************************************************************
@@ -17,19 +16,17 @@
  *** NOTES *****************************************************************************************
  * - all peripherals have wrappers. no matter how pointless it is. for semaphore control stuff
  *      - the semaphore is runtime so the compiler probably wont optimize it.
- *
- * - citation formatting
+ * - "FDS" : family specific data sheet                 https://www.ti.com/lit/ug/slau846b/slau846b.pdf?ts=1749245238762&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
+ * - "TDS" : chip specific technical data sheet         https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf?ts=1749166832439&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
+ * - "LPDS" : launch pad user-guide/data-sheet          https://www.ti.com/lit/ug/slau873d/slau873d.pdf?ts=1749180414460&ref_url=https%253A%252F%252Fwww.ti.com%252Ftool%252FLP-MSPM0G3507
+ * - "LP" : launch-pad/evaluation-board                 https://www.ti.com/tool/LP-MSPM0G3507
+ * - "BDS" : BQ76952 Data Sheet                                      https://www.ti.com/lit/ug/sluuby2b/sluuby2b.pdf?ts=1751602193881&ref_url=https%253A%252F%252Fminiappassets.microsoft.com%252F
+ * - "TDS2" : https://www.ti.com/lit/ug/sluuby2b/sluuby2b.pdf?ts=1751602193881&ref_url=https%253A%252F%252Fminiappassets.microsoft.com%252F#page=15&zoom=100,0,688
+ * - citations
  *      - always have the section
  *      - page number if possible
  *      - eg: family data sheet , section 19.2.1 - which is on page 1428
  *          - "FDS.19.2.1/1428" or omit the page "FDS.19.2.1"
- *      - "FDS" : family specific data sheet                 https://www.ti.com/lit/ug/slau846b/slau846b.pdf?ts=1749245238762&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
- *      - "TDS" : chip specific technical data sheet         https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf?ts=1749166832439&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
- *      - "LPDS" : launch pad user-guide/data-sheet          https://www.ti.com/lit/ug/slau873d/slau873d.pdf?ts=1749180414460&ref_url=https%253A%252F%252Fwww.ti.com%252Ftool%252FLP-MSPM0G3507
- *      - "LP" : launch-pad/evaluation-board                 https://www.ti.com/tool/LP-MSPM0G3507
- *      - "BQ769x2DS" : BQ769x2 data sheet                   https://www.ti.com/lit/ds/symlink/bq76952.pdf?ts=1751601724825&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FBQ76952
- *      - "BQ769x2TRM" : BQ769x2 technical reference manual  https://www.ti.com/lit/ug/sluuby2b/sluuby2b.pdf?ts=1751657887923&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FBQ76952%253Futm_source%253Dgoogle%2526utm_medium%253Dcpc%2526utm_campaign%253Dapp-null-null-GPN_EN-cpc-pf-google-ww_en_cons%2526utm_content%253DBQ76952%2526ds_k%253DBQ76952+Datasheet%2526DCM%253Dyes%2526gad_source%253D1%2526gad_campaignid%253D1767856010%2526gbraid%253D0AAAAAC068F3kMVn5JB15cZNcLXZ2ysu0t%2526gclid%253DCj0KCQjw953DBhCyARIsANhIZoa8LrrvSAnWBtKYvyJsSyVJWRKfkSw7Zxzr4w8DOEBf7oJBMp3RtwcaAklgEALw_wcB%2526gclsrc%253Daw.ds
- *
  * - default clock is MFCLK : this is factory set to 4Mhz on the MSPM0G3507
  * - the comment style is what ever I feel like. no Doxygen, no JavaDoc, we ball
  */
@@ -42,7 +39,6 @@
 
 #include <FreeRTOS.h>
 #include <semphr.h>
-#include <task.h>
 
 #include <ti/driverlib/driverlib.h>
 
@@ -72,17 +68,14 @@
     * physical pins will be in the "System" name space */
 #define OCCUPY(ID)                  constexpr int const __PROJECT_OCCUPY_##ID = 0;
 
-/*--- general configuration ----------------------------*/
+/*--- configuration maybe ------------------------------*/
 
 #define NEWLINE                     "\n\r"
 #define MAX_STR_LEN_COMMON          125   // assumed max length of a string if not specified. to minimize the damage of overruns.
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
 
-/* the System IRQ functions rely on notifications, this is the specific index used */
-#define TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX configTASK_NOTIFICATION_ARRAY_ENTRIES
-
-/*--- peripheral configuration -------------------------*/
+/*------------------------------------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
 
 #define PROJECT_ENABLE_UART0        // LP
@@ -140,7 +133,7 @@ namespace System {
 
             /** transmits - blocking - a string of at most size n */
             void nputs(char const * str, uint32_t n);
-            void ngets(char * str, uint32_t n);
+            //TODO: "void ngets(char const * str, uint32_t n);"
         };
 
     }
@@ -191,50 +184,16 @@ namespace System {
     }
 
     namespace I2C {
-        typedef enum {
-            IDLE,
-            ERROR,
-            TX_STARTED,
-            RX_STARTED,
-            TX_COMPLETE,
-            RX_COMPLETE,
-            TX_INPOGRESS,
-            RX_INPOGRESS,
-        } ControllerStatus_t;
-
-        /** I2C peripheral controller interface */
         struct I2C : Lockable {
-
             I2C_Regs * const reg;
-
-//            I2C(I2C_Regs * const reg) : reg(reg) {}
 
             void partialInitController();
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
-            const ControllerStatus_t & controllerStatus() const;
-            void _irq();
 
-            /** the calling task awaits a task notification from the IRQ.
-             * the timout
-             * @return true if tx success
-             */
-            bool tx_blocking(uint8_t target_address, void const * data, uint8_t size, TickType_t timeout);
-
-
-            /** return 0 on success. does not require freeRTOS */
-            uint8_t basic_tx_blocking(uint8_t addr, void const *, uint8_t size);
-            /** return 0 on success. does not require freeRTOS */
-            uint8_t basic_rx_blocking(uint8_t addr, void *, uint8_t size);
-
-//        private:
-            ControllerStatus_t controllerStatus_ = ControllerStatus_t::IDLE; //set though IRQ
-            TaskHandle_t * host_task = NULL;
-
-            void const * txBuffer;
-            uint8_t txBufferCount, txBufferIdx;
-
-            void * rxBuffer;
-            uint8_t rxBufferCount, rxBufferIdx;
+            /** return 0 on success */
+            uint8_t tx_ctrl_blocking(uint8_t addr, void const *, uint8_t size);
+            /** return 0 on success */
+            uint8_t rx_ctrl_blocking(uint8_t addr, void *, uint8_t size);
         };
     }
 
@@ -267,5 +226,6 @@ namespace System {
     #endif
 
 }
+
 
 #endif /* SRC_CORE_SYSTEM_HPP_ */
