@@ -45,21 +45,22 @@
 #define BQ769X2_PROTOCOL_HPP_
 
 /* Maximum size of TX packet */
-//#define I2C_TX_MAX_PACKET_SIZE (16)
+#define I2C_TX_MAX_PACKET_SIZE (16)
 
 /* Number of bytes to send to target device */
-//#define I2C_TX_PACKET_SIZE (16)
+#define I2C_TX_PACKET_SIZE (16)
 
 /* Maximum size of RX packet */
-//#define I2C_RX_MAX_PACKET_SIZE (16)
+#define I2C_RX_MAX_PACKET_SIZE (16)
 
 /* Number of bytes to received from target */
-//#define I2C_RX_PACKET_SIZE (16)
+#define I2C_RX_PACKET_SIZE (16)
 
 /* I2C Target address */
-#define I2C_TARGET_ADDRESS (0x08)  // BQ769x2 address is 0x10 including R/W bit or 0x8 as 7-bit address
+#define I2C_TARGET_ADDRESS \
+    (0x08)  // BQ769x2 address is 0x10 including R/W bit or 0x8 as 7-bit address
 
-//#define I2C_0_INST System::i2c1.reg
+#define I2C_0_INST System::i2c1.reg
 
 
 #include "Core/system.hpp"
@@ -481,6 +482,7 @@ namespace BQ769X2_PROTOCOL {
         MCR_REG              = 0x1228,
     };
 
+//BQ769x2 General Program Header File
     enum DIR_CMD_TYPE : uint8_t {
         R       = 0,         //Read
         W       = 1,         //Write
@@ -490,10 +492,10 @@ namespace BQ769X2_PROTOCOL {
 
     //bool crc_enabled;
 
-    //void init(tGaugeApplication *pGaugeApp);
-//    void readAlarmStatus();
-//    void readSafetyStatus();
-//    void readPFStatus();
+    void init(tGaugeApplication *pGaugeApp);
+    void readAlarmStatus();
+    void readSafetyStatus();
+    void readPFStatus();
 
     /** reads a specific cells voltage
      * @param command : eg :  CmdDrt::Cell1Voltage, CmdDrt::StackVoltage, CmdDrt::LDPinVoltage, ...
@@ -501,20 +503,21 @@ namespace BQ769X2_PROTOCOL {
      * - 16b resolution, units of 1mV
      * " –0.2 V to 5.5 V " - BQ769x2DS.10.1/35
      */
-    uint16_t readVoltage(I2C_Regs * reg, CmdDrt command);
-//    void readSeriesCurrent();
-    float readTemperature(I2C_Regs * reg, CmdDrt command);
-//    void readCurrent();
-//    void readPassQ();
-//    void readFETStatus();
-//    void readAllTemperatures();
-    void sendSubcommand(I2C_Regs * reg, Cmd command, uint16_t data, DIR_CMD_TYPE type);
-    void sendCommandSubcommand(I2C_Regs * reg, Cmd command);
-    void sendDirectCommand(I2C_Regs * reg, CmdDrt command, uint16_t data, DIR_CMD_TYPE type);
-    void setRegister(I2C_Regs * reg, uint16_t reg_addr, uint32_t reg_data, uint8_t datalen);
+    uint16_t readVoltage(CmdDrt command);
+    void readSeriesCurrent();
+    float readTemperature(CmdDrt command);
+    void readCurrent();
+    void readPassQ();
+    void readFETStatus();
+    void readAllTemperatures();
+    void sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type);
+    void sendCommandSubcommand(Cmd command);
+    void sendDirectCommand(CmdDrt command, uint16_t data, DIR_CMD_TYPE type);
+    void setRegister(
+        uint16_t reg_addr, uint32_t reg_data, uint8_t datalen);
 
-    void I2C_WriteReg(I2C_Regs * reg, uint8_t reg_addr, uint8_t const * reg_data, uint8_t count);
-    void I2C_ReadReg(I2C_Regs * reg, uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
+    void I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
+    void I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
 };
 
 #endif /* BQ769X2_PROTOCOL_HPP_ */

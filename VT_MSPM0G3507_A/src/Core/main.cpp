@@ -14,9 +14,9 @@
 
 #include "system.hpp"
 #include "Tasks/blink_task.hpp"
-#include "Tasks/BQ769x2_protocol_test.hpp"
-#include "Tasks/scheduler_watchdog_task.hpp"
-#include "Tasks/fiddle.hpp"
+#include "Tasks/Test_UART_Task.hpp"
+
+#include "fiddle.hpp"
 
 int main(){
     System::init();
@@ -34,26 +34,18 @@ int main(){
             NULL);
 
 //    xTaskCreate(Task::fiddle_task,
-//            "fiddle_task",
+//            "fiddle task",
 //            configMINIMAL_STACK_SIZE * 50,
 //            NULL,
 //            tskIDLE_PRIORITY,
 //            NULL);
 
-    xTaskCreate(Task::BQ769x2_protocol_test_task,
-            "BQ769x2_protocol_test_tasks",
-            configMINIMAL_STACK_SIZE * 20,
-            NULL,
-            tskIDLE_PRIORITY,
-            NULL);
-
-    // TODO: make this work
-//    xTaskCreate(Task::scheduler_watchdog_task,
-//            "scheduler_watchdog_task",
-//            configMINIMAL_STACK_SIZE * 1,
-//            NULL,
-//            tskIDLE_PRIORITY,
-//            NULL);
+    xTaskCreate(Task::UART_Task,
+                "UART_Task",
+                configMINIMAL_STACK_SIZE * 10,
+                NULL,
+                tskIDLE_PRIORITY,
+                NULL);
 
     vTaskStartScheduler();
 
