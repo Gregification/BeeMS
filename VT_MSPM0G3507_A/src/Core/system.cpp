@@ -502,6 +502,10 @@ void System::I2C::I2C::_irq() {
             controllerStatus_ = ControllerStatus_t::TX_COMPLETE;
             if(host_task != NULL){
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+>>>>>>> Stashed changes
 =======
                 xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
 >>>>>>> Stashed changes
@@ -514,6 +518,10 @@ void System::I2C::I2C::_irq() {
             controllerStatus_ = ControllerStatus_t::RX_COMPLETE;
             if(host_task != NULL){
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+>>>>>>> Stashed changes
 =======
                 xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
 >>>>>>> Stashed changes
