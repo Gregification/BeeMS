@@ -182,9 +182,6 @@ namespace System {
     #endif
 }
 
-
-/*--- functions ------------------------------------------------------------------------*/
-
 void System::init() {
     /*
      * BOR typical trigger level (v) (DS.7.6.1)
@@ -281,9 +278,18 @@ void System::init() {
 
 }
 
-/*--- UART ---------------------------------------------*/
+inline bool System::Lockable::takeResource(TickType_t timeout) {
+    return pdTRUE == xSemaphoreTakeRecursive(semph, timeout);
+}
+
+inline void System::Lockable::releaseResource() {
+    xSemaphoreGiveRecursive(semph);
+}
 
 void System::UART::UART::setBaudTarget(uint32_t target_baud, uint32_t clk) {
+    // i remember seeing there was some function in DL that did exactly the same thing.
+    // I cant find it anymore :(
+
     //TODO pg1351 https://www.ti.com/lit/ug/slau846b/slau846b.pdf?ts=1749245238762&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
     // 115200 baud
     uint32_t nume = clk;
@@ -673,9 +679,3 @@ uint8_t System::I2C::I2C::basic_rx_blocking(uint8_t addr, void * data, uint8_t s
     void I2C1_IRQHandler(void){ System::i2c1._irq(); }
 #endif
 
-/*--- idiot detection ------------------------------------------------------------------*/
-
-#if !defined(PROJECT_ENABLE_UART0)
-    #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
-    /* uart0 is used by the LP */
-#endif
