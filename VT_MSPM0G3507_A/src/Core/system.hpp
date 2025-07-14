@@ -32,6 +32,8 @@
  *
  * - default clock is MFCLK : this is factory set to 4Mhz on the MSPM0G3507
  * - the comment style is what ever I feel like. no Doxygen, no JavaDoc, we ball
+ * - hardware resources are coordinated across 'tasks' using mutex's, even if we decide that a
+ *      specific peripheral will only ever be used by a specific 'task' still use resource locking.
  */
 
 #ifndef SRC_CORE_SYSTEM_HPP_
@@ -106,16 +108,43 @@ namespace System {
 /*------------------------------------------------------*/
 
 namespace System {
-    struct Lockable { // Java gang
+
+    /** wrapper for controlling access to limited hardware resource.
+     * purpose is to standardize resource access.
+     */
+    class Lockable { // Java gang
+        /* theres a design consideration between sharing a resource across multiple 'tasks' though
+         * locks or having a trx buffer they all reference and a single 'task' handle the resource.
+         * theres benefits to both but Im going with a locking design since its allows 'tasks' more
+         * detailed hardware control.
+         */
+
         SemaphoreHandle_t semph = NULL;
+
+    public:
 
         Lockable() {
             semph = xSemaphoreCreateRecursiveMutex();
             while(semph == NULL){
-                // bad stuff
-                //TODO: hard restart
+                // ran out of memory
+
+                // TODO: handle this problem somehow, probably just restart the device. just
+                //      make sure the system is in a state where nothing dangerous is enabled
+                //      as this is happening.
             }
         }
+
+        /** takes the recursive lock.
+         * returns true if resource was acquired
+         */
+        bool takeResource(TickType_t timeout);
+
+        /** releases the recursive lock.
+         * returns true of the resource was successfully released
+         *      can fail in cases such as releasing a resource without taking it first.
+         */
+        void releaseResource();
+
     };
 
     /* see clock tree diagram ... and SysConfig's */
@@ -246,7 +275,7 @@ namespace System {
 
     /*--- system globals -----------------------------------*/
 
-    /* a reference to the UART acting as the main text UI */
+    /** a reference to the UART acting as the main text UI */
     extern UART::UART &uart_ui;
 
     #ifdef PROJECT_ENABLE_UART0
@@ -268,4 +297,23 @@ namespace System {
 
 }
 
+/*--- idiot detection ------------------------------------------------------------------*/
+
+#if !defined(PROJECT_ENABLE_UART0)
+    #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
+    /* uart0 is used by the LP */
+#endif
+
+// i fear for the day this happens
+static_assert(pdTRUE == true,
+        "pdTRUE != true . the FreeRTOS definition of \"true\" is not the same value as c/c++s \
+        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
+    );
+static_assert(pdFALSE == false,
+        "pdFALSE != false . the FreeRTOS definition of \"false\" is not the same value as c/c++s \
+        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
+    );
+
+
 #endif /* SRC_CORE_SYSTEM_HPP_ */
+
