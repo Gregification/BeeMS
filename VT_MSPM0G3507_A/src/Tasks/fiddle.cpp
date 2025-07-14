@@ -12,15 +12,15 @@
 #include "fiddle.hpp"
 
 #include <FreeRTOS.h>
-#include <Middleware/BQ769X2_PROTOCOL.hpp>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
 #include <stdio.h>
 
 #include "Core/system.hpp"
+#include "Middleware/BQ769x2_PROTOCOL.hpp"
 
 //SPI
-void fiddle_task(void *) {
+void Task::fiddle_task(void *) {
     // - SPI0 goes up to 32Mhz. speed restraints depending on MCU speed. check DOCs.
 
     DL_SPI_enablePower(System::spi0.reg);

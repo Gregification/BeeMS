@@ -13,10 +13,11 @@
 #include <task.h>
 
 #include "system.hpp"
+
 #include "Tasks/blink_task.hpp"
 #include "Tasks/Test_UART_Task.hpp"
-
 #include "Tasks/fiddle.hpp"
+#include "Tasks/BQ769x2_PROTOCOL_test.hpp"
 
 int main(){
     System::init();
@@ -40,13 +41,20 @@ int main(){
 //            tskIDLE_PRIORITY,
 //            NULL);
 
-    xTaskCreate(Task::UART_Task,
-                "UART_Task",
-                configMINIMAL_STACK_SIZE * 10,
+    xTaskCreate(Task::BQ769x2_PROTOCOL_test_task,
+                "BQ769x2_PROTOCOL_test_task",
+                configMINIMAL_STACK_SIZE * 50,
                 NULL,
                 tskIDLE_PRIORITY,
                 NULL);
 
+//    xTaskCreate(Task::UART_Task,
+//                "UART_Task",
+//                configMINIMAL_STACK_SIZE * 10,
+//                NULL,
+//                tskIDLE_PRIORITY,
+//                NULL);
+//
     vTaskStartScheduler();
 
     while(true) {
