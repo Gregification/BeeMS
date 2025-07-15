@@ -50,20 +50,20 @@ int main(){
 //                NULL);
 
 
-    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_task,
-                "BQ769x2_PROTOCOL_Test_T_Task",
-                configMINIMAL_STACK_SIZE * 50,
+//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_task,
+//                "BQ769x2_PROTOCOL_Test_T_Task",
+//                configMINIMAL_STACK_SIZE * 50,
+//                NULL,
+//                tskIDLE_PRIORITY,
+//                NULL);
+
+    xTaskCreate(Task::UART_Task,
+                "UART_Task",
+                configMINIMAL_STACK_SIZE * 10,
                 NULL,
                 tskIDLE_PRIORITY,
                 NULL);
 
-//    xTaskCreate(Task::UART_Task,
-//                "UART_Task",
-//                configMINIMAL_STACK_SIZE * 10,
-//                NULL,
-//                tskIDLE_PRIORITY,
-//                NULL);
-//
     vTaskStartScheduler();
 
     while(true) {

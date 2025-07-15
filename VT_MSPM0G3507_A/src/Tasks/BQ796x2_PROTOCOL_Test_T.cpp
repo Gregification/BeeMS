@@ -33,7 +33,7 @@ void Task::BQ769x2_PROTOCOL_Test_T_task(void*) {
 // Voltage Tap
 void VoltageTap(char * p_str) {
     //    System::i2c1.tx_ctrl_blocking(0x08, ARRANDN(((uint8_t[]){0x36, 0x72, 0x41, 0x4})));
-        const BQ769X2_PROTOCOL::CmdDrt cmds[16] = {
+        const BQ769X2_PROTOCOL::CmdDrt cmds[] = {
                  BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage,
                  BQ769X2_PROTOCOL::CmdDrt::Cell2Voltage,
                  BQ769X2_PROTOCOL::CmdDrt::Cell3Voltage,
@@ -66,23 +66,25 @@ void VoltageTap(char * p_str) {
 
 // Temperature Monitor
 void TemperatureMonitor(char * p_str) {
-    const BQ769X2_PROTOCOL::CmdDrt cmds[2] = {
+    const BQ769X2_PROTOCOL::CmdDrt cmds[] = {
              BQ769X2_PROTOCOL::CmdDrt::TS1Temperature,
-             BQ769X2_PROTOCOL::CmdDrt::TS3Temperature
+             BQ769X2_PROTOCOL::CmdDrt::TS3Temperature,
+             BQ769X2_PROTOCOL::CmdDrt::IntTemperature
         };
 
     while(true){
         for(uint8_t i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++){
-            uint16_t v;
-            BQ769X2_PROTOCOL::I2C_ReadReg(cmds[i], (uint8_t *)&v, BQ769X2_PROTOCOL::DIR_CMD_TYPE::W2);
+            uint32_t _adcValue;
+            BQ769X2_PROTOCOL::I2C_ReadReg(cmds[i], (uint8_t *)&_adcValue, BQ769X2_PROTOCOL::DIR_CMD_TYPE::W2);
 
-            uint16_t _internalTemperature = BQ769X2_PROTOCOL::ADCGain * BQ769X2_PROTOCOL::IntGain / 65536 + BQ769X2_PROTOCOL::InternalTempOffset;
-            if(BQ769X2_PROTOCOL::ADCGain > BQ769X2_PROTOCOL::IntMaximumAD)
-                _internalTemperature = BQ769X2_PROTOCOL::IntMaximumAD;
+            // OBSOLETE DO NOT USE UNLESS TOLD WE GOTO NOT BE LAZY
+            //uint32_t _internalTemperature = _adcValue * (float)BQ769X2_PROTOCOL::IntGain / (float)65536 + BQ769X2_PROTOCOL::Intbaseoffset + BQ769X2_PROTOCOL::InternalTempOffset;
+            //if(_adcValue > BQ769X2_PROTOCOL::IntMaximumAD)
+            //    _internalTemperature = BQ769X2_PROTOCOL::IntMaximumAD;
 
             char str[15];
             //snprintf(str, sizeof(str), "%d,", v);
-            snprintf(str, sizeof(str), "%d,", _internalTemperature / v); //This is what I assumed it was idk this stuff hurts my brain
+            snprintf(str, sizeof(str), "%d,", _adcValue); //This is what I assumed it was idk this stuff hurts my brain
             System::uart_ui.nputs(ARRANDN(str));
             vTaskDelay(pdMS_TO_TICKS(100));
         }

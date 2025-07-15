@@ -384,7 +384,7 @@ namespace BQ769X2_PROTOCOL {
         AlarmStatus         = 0x62,
         AlarmRawStatus      = 0x64,
         AlarmEnable         = 0x66,
-        IntTemperature      = 0x68,
+        IntTemperature      = 0x68, // Internal DIE Temperature
         CFETOFFTemperature  = 0x6A,
         DFETOFFTemperature  = 0x6C,
         ALERTTemperature    = 0x6E,
