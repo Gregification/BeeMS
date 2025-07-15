@@ -11,13 +11,14 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
+//#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
+#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
 
 #include "system.hpp"
 
 #include "Tasks/blink_task.hpp"
 #include "Tasks/Test_UART_Task.hpp"
 #include "Tasks/fiddle.hpp"
-#include "Tasks/BQ769x2_PROTOCOL_test.hpp"
 
 int main(){
     System::init();
@@ -41,8 +42,16 @@ int main(){
 //            tskIDLE_PRIORITY,
 //            NULL);
 
-    xTaskCreate(Task::BQ769x2_PROTOCOL_test_task,
-                "BQ769x2_PROTOCOL_test_task",
+//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_task,
+//                "BQ769x2_PROTOCOL_Test_V_Task",
+//                configMINIMAL_STACK_SIZE * 50,
+//                NULL,
+//                tskIDLE_PRIORITY,
+//                NULL);
+
+
+    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_task,
+                "BQ769x2_PROTOCOL_Test_T_Task",
                 configMINIMAL_STACK_SIZE * 50,
                 NULL,
                 tskIDLE_PRIORITY,

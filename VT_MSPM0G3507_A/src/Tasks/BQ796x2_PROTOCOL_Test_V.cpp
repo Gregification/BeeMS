@@ -5,18 +5,17 @@
  *      Author: FSAE
  */
 
-#include "Tasks/BQ769x2_PROTOCOL_test.hpp"
-
 #include <FreeRTOS.h>
 #include <task.h>
 #include <stdio.h>
 #include <ti/driverlib/driverlib.h>
+#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
 
 #include "Middleware/BQ769x2_PROTOCOL.hpp"
 #include "Core/system.hpp"
 
-void Task::BQ769x2_PROTOCOL_test_task(void*) {
-    System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_test_task start" NEWLINE));
+void Task::BQ769x2_PROTOCOL_Test_V(void*) {
+    System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
 
 
     //--- hardware init -----------------------------------------
