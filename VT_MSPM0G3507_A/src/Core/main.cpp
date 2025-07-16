@@ -42,7 +42,7 @@ int main(){
 //            tskIDLE_PRIORITY,
 //            NULL);
 
-//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_task,
+//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
 //                "BQ769x2_PROTOCOL_Test_V_Task",
 //                configMINIMAL_STACK_SIZE * 50,
 //                NULL,
@@ -50,19 +50,19 @@ int main(){
 //                NULL);
 
 
-//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_task,
-//                "BQ769x2_PROTOCOL_Test_T_Task",
-//                configMINIMAL_STACK_SIZE * 50,
-//                NULL,
-//                tskIDLE_PRIORITY,
-//                NULL);
-
-    xTaskCreate(Task::UART_Task,
-                "UART_Task",
-                configMINIMAL_STACK_SIZE * 10,
+    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_Task,
+                "BQ769x2_PROTOCOL_Test_T_Task",
+                configMINIMAL_STACK_SIZE * 50,
                 NULL,
                 tskIDLE_PRIORITY,
                 NULL);
+
+//    xTaskCreate(Task::UART_Task,
+//                "UART_Task",
+//                configMINIMAL_STACK_SIZE * 10,
+//                NULL,
+//                tskIDLE_PRIORITY,
+//                NULL);
 
     vTaskStartScheduler();
 
@@ -118,7 +118,7 @@ void vApplicationIdleHook(void)
 /*-----------------------------------------------------------*/
 
 #if (configCHECK_FOR_STACK_OVERFLOW)
-/*
+    /*
      *  ======== vApplicationStackOverflowHook ========
      *  When stack overflow checking is enabled the application must provide a
      *  stack overflow hook function. This default hook function is declared as

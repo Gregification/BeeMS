@@ -1,5 +1,5 @@
 /*
- * BQ769x2_PROTOCOL_test.hpp
+ * BQ769x2_PROTOCOL_Test_V.hpp
  *
  *  Created on: Jul 13, 2025
  *      Author: FSAE
@@ -17,7 +17,7 @@ namespace System {
 }
 
 namespace Task {
-    void BQ769x2_PROTOCOL_Test_V(void *);
+    void BQ769x2_PROTOCOL_Test_V_Task(void *);
 }
 
 #endif /* SRC_TASKS_BQ769X2_PROTOCOL_TEST_V_HPP_ */

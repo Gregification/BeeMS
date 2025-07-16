@@ -1,7 +1,7 @@
 /*
- * BQ796x2_PROTOCOL_test.cpp
+ * BQ796x2_PROTOCOL_Test_T.cpp
  *
- *  Created on: Jul 13, 2025
+ *  Created on: Jul 15, 2025
  *      Author: FSAE
  */
 
@@ -18,7 +18,7 @@ void Init(char * p_str);
 void VoltageTap(char * p_str);
 void TemperatureMonitor(char * p_str);
 
-void Task::BQ769x2_PROTOCOL_Test_T_task(void*) {
+void Task::BQ769x2_PROTOCOL_Test_T_Task(void*) {
     char str[MAX_STR_LEN_COMMON];
 
     Init(str);

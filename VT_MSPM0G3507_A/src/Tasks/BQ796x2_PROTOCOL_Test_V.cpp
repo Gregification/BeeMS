@@ -1,5 +1,5 @@
 /*
- * BQ796x2_PROTOCOL_test.cpp
+ * BQ796x2_PROTOCOL_Test_V.cpp
  *
  *  Created on: Jul 13, 2025
  *      Author: FSAE
@@ -14,7 +14,7 @@
 #include "Middleware/BQ769x2_PROTOCOL.hpp"
 #include "Core/system.hpp"
 
-void Task::BQ769x2_PROTOCOL_Test_V(void*) {
+void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
 
 
@@ -200,6 +200,7 @@ void Task::BQ769x2_PROTOCOL_Test_V(void*) {
             System::uart_ui.nputs(ARRANDN(str));
             vTaskDelay(pdMS_TO_TICKS(100));
         }
+        System::uart_ui.nputs(ARRANDN(NEWLINE));
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
 
