@@ -39,6 +39,7 @@
 1. include git repo on silkscreen
 1. include contributor names on silkscreen
 1. ~5.5k 3v3 pull up on the i2c lines
+1. on board battery simulator resistors
 
 ## Would be nice to have done
 1. FreeRTOS + tcp using the W5500
