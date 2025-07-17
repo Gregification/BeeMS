@@ -20,26 +20,26 @@
 1. determin approach with SOC algo. custom or 3rd party?
 
 ## changes for next itteration of VT board
-1. correct can transceiver footprint
-1. add TP to VCORE of MSP
-1. add silk screen lables on all jumpers
-1. voltage output of can transceiver subsystem ranges from 4.5V to 5.5V as input voltage varies. find why, it should be a constant 5V
-	- also swap out the funky coil inductor with some potted one, very noisy
-1. thermistors were wrong size; footprint is correct, part bought was wrong.
-1. 1206 is a good size, keep it
-1. BLS invoke line from the XDS110 is not needed. figure out what its for. Y is it there if we dont need it.
+1. <s>correct can transceiver footprint</s>
+1. <s>add TP to VCORE of MSP</s>
+1. add silk screen lables on all jumpers, connections, buttons
+1. <s>voltage output of can transceiver subsystem ranges from 4.5V to 5.5V as input voltage varies.</s> _(put a bigger buff cap)_.
+1. <s>thermistors were wrong size; footprint is correct, part bought was wrong.</s>
+1. <s>1206 is a good size, keep it</s>
+1. <s>BLS invoke line from the XDS110 is not needed. figure out what its for. Y is it there if we dont need it.</s> _(bootstrap loader)_
 1. consider increasing fill zone clearance around VT traces
-1. figure out and buy the debugger ribon cable connector thing, or get a clamp on for the pin headers
-1. bigger led's. its hard to solder :(
-1. jumper pad series resistors for cell simulation
-1. exposed ground pad near edge for alligator clip
-1. TP on both comm lines between BQ and MSP
+1. <s>figure out and buy the debugger ribon cable connector thing, or get a clamp on for the pin headers</s>_(too expensive. do later or make edge connector)_
+1. <s>bigger led's. its hard to solder :(</s>_(no choice)_
+1. <s>jumper pad series resistors for cell simulation</s>_(no need, continue using TH)_
+1. <s>exposed ground pad near edge for alligator clip</s>
+1. <s>TP on both comm lines between BQ and MSP</s>
 1. include uart comm settings on silkscreen
 1. include version number on silkscreen
 1. include git repo on silkscreen
 1. include contributor names on silkscreen
-1. ~5.5k 3v3 pull up on the i2c lines
-1. on board battery simulator resistors
+1. <s>~5.5k 3v3 pull up on the i2c lines</s>
+1. uart <-> usb method
+1. series sense resistor. size for car?
 
 ## Would be nice to have done
 1. FreeRTOS + tcp using the W5500

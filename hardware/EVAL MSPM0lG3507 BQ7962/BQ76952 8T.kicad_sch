@@ -252,6 +252,158 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:D_Schottky_Small"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "D"
+				(at -1.27 2.032 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "D_Schottky_Small"
+				(at -7.112 -2.032 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Schottky diode, small symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode Schottky"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "D_Schottky_Small_0_1"
+				(polyline
+					(pts
+						(xy -1.27 0.762) (xy -1.27 1.016) (xy -0.762 1.016) (xy -0.762 -1.016) (xy -0.254 -1.016) (xy -0.254 -0.762)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.762 0) (xy 0.762 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -1.016) (xy -0.762 0) (xy 0.762 1.016) (xy 0.762 -1.016)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "D_Schottky_Small_1_1"
+				(pin passive line
+					(at -2.54 0 0)
+					(length 1.778)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 0 180)
+					(length 1.778)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:R_US"
 			(pin_numbers
 				(hide yes)
@@ -1838,6 +1990,16 @@
 		)
 		(uuid "6fdbdb93-488a-4958-83ee-9b6719d64443")
 	)
+	(text "raise to 3.3v to shut off device"
+		(exclude_from_sim no)
+		(at 213.868 111.76 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "9c0af982-4e79-479d-827e-7d0426c6ff08")
+	)
 	(junction
 		(at 52.07 38.1)
 		(diameter 0)
@@ -1995,12 +2157,6 @@
 		(uuid "63c0b243-f96e-42a3-a9c2-06aad6badd6a")
 	)
 	(junction
-		(at 149.86 34.29)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "6abee5c5-bc23-4954-aa89-2cd117f2cf74")
-	)
-	(junction
 		(at 96.52 57.15)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2151,6 +2307,12 @@
 		(uuid "d8b27e6b-4268-486d-a277-75803a09869f")
 	)
 	(junction
+		(at 142.24 34.29)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ebb1aaef-1173-4219-9a1a-afb65ee27403")
+	)
+	(junction
 		(at 190.5 71.12)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2222,7 +2384,7 @@
 	)
 	(wire
 		(pts
-			(xy 140.97 34.29) (xy 149.86 34.29)
+			(xy 140.97 34.29) (xy 142.24 34.29)
 		)
 		(stroke
 			(width 0)
@@ -2439,6 +2601,16 @@
 			(type default)
 		)
 		(uuid "1e178e37-d91d-4ee9-9c6f-d92ccd3f214b")
+	)
+	(wire
+		(pts
+			(xy 142.24 34.29) (xy 158.75 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1ee0ff02-64ce-45d2-9fcb-c627d06b08d7")
 	)
 	(wire
 		(pts
@@ -2862,6 +3034,16 @@
 	)
 	(wire
 		(pts
+			(xy 118.11 34.29) (xy 128.27 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "49510d5a-355a-4fea-856e-4179900adcef")
+	)
+	(wire
+		(pts
 			(xy 55.88 127) (xy 72.39 127)
 		)
 		(stroke
@@ -3059,6 +3241,16 @@
 			(type default)
 		)
 		(uuid "5a4658d5-902c-4f80-8d4e-cea2118f9db4")
+	)
+	(wire
+		(pts
+			(xy 142.24 34.29) (xy 142.24 39.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ab43118-0236-4b5c-bf97-0fbbcd5ecc60")
 	)
 	(wire
 		(pts
@@ -3269,16 +3461,6 @@
 			(type default)
 		)
 		(uuid "743e70e9-e91f-47f7-9607-ad109e04b166")
-	)
-	(wire
-		(pts
-			(xy 149.86 34.29) (xy 158.75 34.29)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7661df86-9b0b-44b1-9d87-99bd09f90356")
 	)
 	(wire
 		(pts
@@ -3940,6 +4122,16 @@
 		)
 		(uuid "c67cf62c-624d-44c2-b460-c850eb6de58a")
 	)
+	(polyline
+		(pts
+			(xy 194.31 111.76) (xy 198.12 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c6f61671-6c20-40a6-b623-b2eeea81e171")
+	)
 	(wire
 		(pts
 			(xy 138.43 132.08) (xy 142.24 132.08)
@@ -4332,7 +4524,7 @@
 	)
 	(wire
 		(pts
-			(xy 52.07 34.29) (xy 128.27 34.29)
+			(xy 52.07 34.29) (xy 110.49 34.29)
 		)
 		(stroke
 			(width 0)
@@ -4972,13 +5164,13 @@
 			)
 		)
 		(pin "1"
-			(uuid "dd2c69de-0423-43ff-94f7-784e26e4f374")
+			(uuid "d63585ce-cc29-4704-ad7a-66082ee3df21")
 		)
 		(pin "2"
-			(uuid "310888c9-9974-46aa-bd39-5633c652182b")
+			(uuid "5263bad6-3193-4315-ae80-a28b23ea70e4")
 		)
 		(pin "3"
-			(uuid "b63d3248-9330-4045-81d9-2118abb9c93a")
+			(uuid "6c4dce16-4e83-48cd-bccf-4ff418e63988")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5078,15 +5270,83 @@
 			)
 		)
 		(pin "2"
-			(uuid "1ebd5f55-98f6-48ad-bc45-0d2d13074182")
+			(uuid "a0193938-4605-4ca7-bbad-bfca538f8fed")
 		)
 		(pin "1"
-			(uuid "a44258a8-698c-4225-8ce5-f308ac8b332c")
+			(uuid "3c43e0e7-adb7-4efb-9110-b06247c6b44e")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
 					(reference "R24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:D_Schottky_Small")
+		(at 207.01 59.69 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "18047a01-1c5d-438a-bc95-a5906fa211c1")
+		(property "Reference" "D3"
+			(at 207.264 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "D_Schottky_Small"
+			(at 207.264 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 207.01 59.69 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 207.01 59.69 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Schottky diode, small symbol"
+			(at 207.01 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "6e3840e3-32c3-47ea-be49-c70e1feae228")
+		)
+		(pin "1"
+			(uuid "5d1c8ea0-7cae-4fba-8dbb-f89408c75316")
+		)
+		(instances
+			(project ""
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
+					(reference "D3")
 					(unit 1)
 				)
 			)
@@ -5181,10 +5441,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "0306db49-b278-4783-b0a8-ad2ca7eb969e")
+			(uuid "ba4d785c-e323-499f-855d-dbb19c9c7738")
 		)
 		(pin "1"
-			(uuid "913561b3-115d-405d-883f-2af2ccafc581")
+			(uuid "b8637e1e-8cc4-4de4-b985-e766a3c4e7be")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5269,10 +5529,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "df50cdd3-0baf-4ad0-a9e5-bcdc9693d5a5")
+			(uuid "4b85af9d-be4e-434e-8d68-4f0d95f78209")
 		)
 		(pin "1"
-			(uuid "004a616c-3ca7-4723-aaf5-eeaf8fcda45a")
+			(uuid "77044d53-a2a0-4adf-928a-c682e8bfa653")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5366,13 +5626,13 @@
 			)
 		)
 		(pin "1"
-			(uuid "1758ffc7-6f7c-4359-9730-6a32c844bd3e")
+			(uuid "99294422-c15f-41eb-8730-059d837d68b9")
 		)
 		(pin "2"
-			(uuid "587194a5-9a6b-4371-85d6-0c056bffb322")
+			(uuid "8c9ecfab-ef57-48d9-8435-74c81d066a1f")
 		)
 		(pin "3"
-			(uuid "877ae6c8-7991-4b5d-a4b3-610595865269")
+			(uuid "409e96a3-794a-4158-a507-a29d71e14890")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5456,11 +5716,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "d86b1260-3d44-44da-aafa-f954139e5781")
+			(uuid "8f655cac-4d18-45d6-83dd-94d66098269b")
 		)
 		(pin "1"
-			(uuid "9770cdc9-1da8-4a37-99a1-0fb83db16ad6")
+			(uuid "d7f62355-1fa8-4a25-8196-fad3bf67fab5")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5546,7 +5833,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "3b359ae4-3bbe-4a9f-bfd2-91d482171b75")
+			(uuid "626082ae-45ac-4fe2-842a-a2768049e2c7")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5631,10 +5918,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "c3e2283a-1338-411f-b9bc-b8b8a34baaaa")
+			(uuid "e5ce4c37-0b82-4a08-8898-5e2f0b81c798")
 		)
 		(pin "1"
-			(uuid "545aa3db-545d-40ee-af75-31526d3a7716")
+			(uuid "e543f497-5b91-4119-b9f6-7457add97839")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5734,10 +6021,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "0acb4819-53c8-4c9c-b231-4323b77e5d49")
+			(uuid "5f67b4f1-a38f-4896-87f5-5467caa69d2d")
 		)
 		(pin "1"
-			(uuid "b600b602-9f52-4be5-9ccc-594ee75a10e2")
+			(uuid "9ec64ef5-6e18-468e-93ce-32bb0e8ac88b")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5822,10 +6109,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "0a9e95df-1d50-4ee4-ab74-f997a5154aca")
+			(uuid "10cc77b9-2c93-4d2d-93f1-938c4ea73947")
 		)
 		(pin "1"
-			(uuid "eb812f98-f86e-454c-8f63-3d621f96c617")
+			(uuid "1e6e4375-879e-4043-9db9-ab8a224601d8")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -5910,10 +6197,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "126b1840-acb1-4809-9f5a-47d8e2478709")
+			(uuid "126ae399-6974-4d74-83d1-e0df82534ad1")
 		)
 		(pin "1"
-			(uuid "be48234c-348d-4f99-bfa1-004b9d9510e7")
+			(uuid "370f591f-18d8-4257-bfb8-baf1e0c24cb5")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6013,10 +6300,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "dc0070cc-ea08-4bc3-92a3-37f0f0355d6d")
+			(uuid "1cd38f6b-579b-48eb-96ec-229999fdf741")
 		)
 		(pin "1"
-			(uuid "0fa7af78-4717-4da6-9a60-df703c33e1c1")
+			(uuid "99c996d5-9044-4376-aa6b-2af02b07acff")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6100,11 +6387,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "4719b560-91c6-499c-903f-b312c115357a")
+			(uuid "b90e93d6-a482-421a-a7e2-57f3c44c8f96")
 		)
 		(pin "1"
-			(uuid "d480cd80-eb96-4a42-a17e-aed6fd33bb2e")
+			(uuid "af795279-94a1-429e-98b9-1918e38c1ea5")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6190,7 +6504,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "5717be30-38a5-403a-963e-58aa9cf4b27a")
+			(uuid "116ce68d-eee6-4342-a01a-578f28209553")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6290,10 +6604,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "0c3ba9b0-9154-4840-a2b8-7b47d4bfb0ad")
+			(uuid "5f9db180-4bac-44e8-a3d0-c528565f6657")
 		)
 		(pin "1"
-			(uuid "1096c62e-1625-42db-9f5e-f0ae014abb0a")
+			(uuid "d834b469-f7a4-4a7c-a1b6-1f272e6b024e")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6377,11 +6691,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "8fc4e122-8ad0-4334-b6d2-c200bae6c985")
+			(uuid "2af19c79-cdf4-4257-87bd-78a66d422f4f")
 		)
 		(pin "1"
-			(uuid "81909ac6-2abf-4c3e-b0af-7dfefec8fb02")
+			(uuid "6cb604b5-cf7f-410f-b291-e1725dff266f")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6481,10 +6822,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "24f8a1cd-3ecb-4b02-8538-18d775d962e1")
+			(uuid "139e269c-c4f0-4980-aea3-8f51e93b16c0")
 		)
 		(pin "1"
-			(uuid "765105a7-6a0f-4027-89bb-d04cb09b8c5f")
+			(uuid "05d36ca6-933f-4332-9195-22de5b27e30b")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6584,10 +6925,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "f8fc7cd9-0eb2-473d-8173-d9ecda045599")
+			(uuid "a056a430-45a4-40e0-8dee-c1a3a97915c7")
 		)
 		(pin "1"
-			(uuid "98409718-8410-452b-b86b-9980e2477466")
+			(uuid "cfba422c-ab2c-4bf6-8b05-ad51bba5fb97")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6671,11 +7012,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "dd7eeca3-8a07-4d07-91ff-fa3fd0f1d1f2")
+			(uuid "a15a065a-84b6-4172-b99c-8734973dc97f")
 		)
 		(pin "1"
-			(uuid "433dbd40-f994-451c-8d16-e8049b549731")
+			(uuid "44f88edf-ecfd-4bac-be6c-ea1a66b3fe61")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6775,10 +7143,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "90810756-4fa6-4016-8ef9-ce02efdaa4a5")
+			(uuid "18d8e74e-5165-4e3a-ad1b-b48bc651aa15")
 		)
 		(pin "1"
-			(uuid "364364a4-72f5-4dc5-bc20-08b6a598e7a2")
+			(uuid "81f4b83b-4c1f-4f78-a8c9-0408e9b578e9")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6871,10 +7239,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "0ed9b02c-df5f-44e2-b267-f469b2a41165")
+			(uuid "e0415780-a539-456b-8d81-441ac9559606")
 		)
 		(pin "1"
-			(uuid "3d8108e2-c2e6-48df-9d1a-fb3860998ac8")
+			(uuid "4ce59d06-abec-4907-9ab9-a0464ef9b10a")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -6957,11 +7325,29 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08J201V?qs=js9DCdkuA2r%2FYZjmQm4p2A%3D%3D"
+			(at 208.28 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "200Ohms, 660mW, 200PPM, 500V, 5%, -55C, +155C"
+			(at 208.28 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "6a148a03-473a-44d7-aefa-de7850d8a6ef")
+			(uuid "73895680-5ad5-47e7-a6d8-4bd611be4cf7")
 		)
 		(pin "1"
-			(uuid "7ca0ce22-525e-44cc-8724-2f8e1e26cabb")
+			(uuid "a14da4f0-3750-4ffe-ae93-d003d7911422")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -7045,16 +7431,148 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "9331f301-92fc-42b1-b42a-c8c7058f33aa")
+			(uuid "6e8365f3-2244-4b54-b19c-c0f330e8cbb5")
 		)
 		(pin "1"
-			(uuid "d07186ff-1cfb-4297-9073-13da84c9a80d")
+			(uuid "afd946ec-df67-4e8b-8b55-4ddeea18f8b1")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
 					(reference "C44")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 114.3 34.29 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "649d1b0f-6985-481f-be09-d7d84088b4de")
+		(property "Reference" "R45"
+			(at 116.332 29.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "200"
+			(at 116.332 31.496 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 114.046 35.306 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08J201V?qs=js9DCdkuA2r%2FYZjmQm4p2A%3D%3D"
+			(at 114.3 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 114.3 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 114.3 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 114.3 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08J201V?qs=js9DCdkuA2r%2FYZjmQm4p2A%3D%3D"
+			(at 114.3 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "200Ohms, 660mW, 200PPM, 500V, 5%, -55C, +155C"
+			(at 114.3 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e2aec224-2604-44b7-85a8-82860641d83a")
+		)
+		(pin "1"
+			(uuid "f7ad2b9b-6b41-4793-80cd-f3aba4103c1a")
+		)
+		(instances
+			(project "EVAL MSPM0lG3507 BQ7962"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
+					(reference "R45")
 					(unit 1)
 				)
 			)
@@ -7134,10 +7652,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "03b4caa4-e898-4d47-b1c1-68c612fbdd0a")
+			(uuid "dfaed210-78cf-46a3-959a-437ade36fc6a")
 		)
 		(pin "1"
-			(uuid "b7198ed3-1b99-4660-a3cf-a243e8eb7929")
+			(uuid "1ff54aa1-1cab-4dd0-a282-567ca893f3cd")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -7221,11 +7739,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 96.52 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 96.52 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 96.52 99.06 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "535f51b2-322f-42ce-87c1-caedb2ce6ac8")
+			(uuid "a98920eb-7003-477f-99dc-6e6485d9fffc")
 		)
 		(pin "1"
-			(uuid "594aa713-b4fd-4de6-b2b6-ecb894b2b226")
+			(uuid "f6cfc3f9-4d57-4c52-a70e-4e978431b45d")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -7325,10 +7870,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "a55158ba-fb17-4e35-a9eb-2fad66f3e94f")
+			(uuid "09ae3a23-896c-4a1f-8d29-f1f894a5a923")
 		)
 		(pin "1"
-			(uuid "e76f4f33-110b-40ac-a202-e2fc1b26b42d")
+			(uuid "d64e5e09-d170-495a-bca0-7852adaaee2d")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -7428,10 +7973,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "3b0cbf51-7a0b-41f9-869e-158b8f3af3d8")
+			(uuid "90b1bed9-df52-4ff3-93a3-8291d16d4140")
 		)
 		(pin "1"
-			(uuid "d1c7ea3c-ee1d-4673-afd8-0dc795885c16")
+			(uuid "d5eff632-23bd-40de-a9b2-fa1108344d67")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -7524,148 +8069,148 @@
 			)
 		)
 		(pin "28"
-			(uuid "c41f21bb-d8a5-4a8d-9f04-a931306ef0be")
+			(uuid "1f7b327c-a2d3-4cc1-a991-ba717b1ed425")
 		)
 		(pin "26"
-			(uuid "1770401c-c6fc-4bb0-a951-8a1c28668f30")
+			(uuid "0a2737b6-b3e4-4d0c-9915-e1b3b4c655bc")
 		)
 		(pin "27"
-			(uuid "6132c0c7-86dd-4464-9ebb-68f021284ac7")
+			(uuid "0cb1c6ec-ae52-47ca-bbf5-f5f95db17e74")
 		)
 		(pin "25"
-			(uuid "4ec7b2a7-4ea8-4250-aee2-ecc55281bd9e")
+			(uuid "088bc157-42db-4242-9c90-eb4b0cd030b9")
 		)
 		(pin "3"
-			(uuid "789e05f5-ee51-4a88-9186-399ce19ebd8a")
+			(uuid "1a292c4a-eb68-4e8b-8028-db7ebcc2ee26")
 		)
 		(pin "24"
-			(uuid "87439053-ea6f-4602-97f5-3f21bc7e9b7d")
+			(uuid "a9f6036c-8bc2-4b64-9235-afd322097406")
 		)
 		(pin "10"
-			(uuid "bc62dae6-86c9-4cc3-bc8c-4b2f29645875")
+			(uuid "58bb3fb3-b3b0-4ef0-a7f7-ca8ea84e6363")
 		)
 		(pin "14"
-			(uuid "b4c6aa6b-5872-472e-b367-9dc749d09fa9")
+			(uuid "0f8ecbf7-112b-463c-94e1-f790541de54a")
 		)
 		(pin "17"
-			(uuid "0ea0a642-7a4b-49e4-a415-0831bf6ddb47")
+			(uuid "3ba72bc8-6b19-4b33-b607-de21a32bc146")
 		)
 		(pin "15"
-			(uuid "4358da5a-4932-441b-aa5e-3164cd4306c6")
+			(uuid "89889b00-3dc5-4b36-9b88-b1152131abbf")
 		)
 		(pin "19"
-			(uuid "f8a527ca-d6f1-4697-b702-445cddf57f92")
+			(uuid "51e2d404-1842-4d2e-9763-0762147a4c19")
 		)
 		(pin "4"
-			(uuid "484a5d55-8db2-4306-bac2-1896bb44eb3c")
+			(uuid "aae8f1b0-fc7c-4e47-908d-97d78bcb8a18")
 		)
 		(pin "9"
-			(uuid "00ea0f1b-cc76-4df5-8d24-222a4d5bd745")
+			(uuid "a8f32282-4001-4b5b-8c99-ad5fd11f2cf8")
 		)
 		(pin "23"
-			(uuid "a3fb0bd3-f746-415c-ac9d-42d1351cf104")
+			(uuid "8f4a4491-0fae-4a39-8366-71974824e203")
 		)
 		(pin "48"
-			(uuid "a7485cc7-db1b-41d3-b827-4ab9a273c1a5")
+			(uuid "3ce3045d-7029-4178-85d3-b1d16dd0b422")
 		)
 		(pin "1"
-			(uuid "3d4a1ddc-b2f5-4cca-bae2-f107cda5a87f")
+			(uuid "e2ca76e3-4f61-4a96-917a-cbe86f075b5d")
 		)
 		(pin "2"
-			(uuid "b8f2372b-c219-4072-bec5-f9b2de1dda0a")
+			(uuid "2164bbc6-0931-4d3e-ac80-ce237d61e77a")
 		)
 		(pin "13"
-			(uuid "daabebf6-d0fb-42b3-bb32-49c4fb088a92")
+			(uuid "cf4697f2-ea77-43c2-a9e1-0a07afb8c05a")
 		)
 		(pin "7"
-			(uuid "bce142da-1877-47ff-bd42-46c70d67593a")
+			(uuid "e89951ba-3c52-4b11-80d4-818c4528dc76")
 		)
 		(pin "8"
-			(uuid "6fa106cd-f329-470e-98e3-83647a2cc234")
+			(uuid "76bc13af-0009-4e55-b93f-cdda54d9aeb5")
 		)
 		(pin "5"
-			(uuid "ab9081c4-33e8-4462-9cb6-d2ffacc27fbc")
+			(uuid "31d04b3f-25d0-49d4-a693-90d4a31da735")
 		)
 		(pin "12"
-			(uuid "9a044de6-34db-4d2c-acb4-4705e177c6b2")
+			(uuid "2f958af6-28e7-4196-a2bd-c879a307a096")
 		)
 		(pin "16"
-			(uuid "fb250db6-9dc5-4ebb-b791-62ce2acb1d77")
+			(uuid "6ddc12ff-a202-4de0-b38d-caec14d138e6")
 		)
 		(pin "11"
-			(uuid "b2825ec9-921a-4927-b83b-abf40f9d1f1a")
+			(uuid "800b0d4e-9d88-4327-a204-e3cdb84cae75")
 		)
 		(pin "22"
-			(uuid "9b8d390b-06f4-47ac-acb6-e7f29a80d4f1")
+			(uuid "ab3f26a6-abfa-460b-8cb7-d4d20e804267")
 		)
 		(pin "20"
-			(uuid "256862fe-25bc-4621-bfc4-14a66b5bd08a")
+			(uuid "9e3294c9-5882-470c-a59d-fbde5ecc4ee9")
 		)
 		(pin "18"
-			(uuid "b691e6f9-f317-44ec-99af-d0e9072093b7")
+			(uuid "81376a1e-a2e7-4398-a79d-ba43dbe3f834")
 		)
 		(pin "6"
-			(uuid "4200c287-1c37-4fb4-a100-6368f539ef14")
+			(uuid "24290378-7d0a-4c1d-8ae5-369e9bcdb6f1")
 		)
 		(pin "21"
-			(uuid "5f0d00e3-8fed-4106-a3cb-f2a03948a51d")
+			(uuid "fbc87f2a-e8b0-4be2-934c-d83b623ce2ed")
 		)
 		(pin "41"
-			(uuid "afce37c6-9726-40c9-aa0a-c5eb9783ce19")
+			(uuid "5e10e134-a41d-4282-9fc5-d4416d4216c7")
 		)
 		(pin "38"
-			(uuid "164ff828-b4fd-4fa0-ab66-5c5572765303")
+			(uuid "fde3956f-2895-4789-8aa8-d20db58ea920")
 		)
 		(pin "34"
-			(uuid "96551cca-029f-4211-b1a1-fb0c84537be3")
+			(uuid "647e8e58-60b4-4543-a707-c4d32eda9f97")
 		)
 		(pin "33"
-			(uuid "83f88c2a-9b3e-4a83-904b-69b9d9da1229")
+			(uuid "1064af5e-2708-4c5b-a9e1-9184e9d493e9")
 		)
 		(pin "31"
-			(uuid "be5bd337-299a-4bb4-a9db-64c1cf2e7e2d")
+			(uuid "50aaef74-87c1-42e3-9dc3-f6e44ecf1ecc")
 		)
 		(pin "30"
-			(uuid "dd0b3097-e017-486b-90cb-12d463e92728")
+			(uuid "85d619f2-9880-45ee-82cb-a017e54816c1")
 		)
 		(pin "47"
-			(uuid "fd535e9f-f0d4-4f66-85d1-f31e982ead45")
+			(uuid "91a58f85-1a34-4dfc-ab02-b6a765bf02ed")
 		)
 		(pin "46"
-			(uuid "d3f62dc5-c3dc-42b1-adbf-14ca5cdb7d8f")
+			(uuid "8e362344-c4c6-4c1e-af5e-5b5b77c99d3d")
 		)
 		(pin "35"
-			(uuid "bc63a7a0-83a1-49b5-ab10-fe30b6af967b")
+			(uuid "f54bb481-c85e-4cb6-bf28-5705341b796e")
 		)
 		(pin "32"
-			(uuid "21fcd7a6-3c2f-4896-b269-7f68e72f914c")
+			(uuid "a8400b4d-0d91-4671-98f1-b32de0da41b7")
 		)
 		(pin "29"
-			(uuid "f17b2403-20d4-449f-94c7-d6b92020bb89")
+			(uuid "c80591e5-0d11-4c5a-8416-68cd2aecf3a4")
 		)
 		(pin "45"
-			(uuid "0a6b7ade-1096-4838-919f-d2d321934f19")
+			(uuid "b6fc4717-3035-4ea1-abf4-41548c7be830")
 		)
 		(pin "40"
-			(uuid "d2824528-d102-4c8a-bd92-950862cbd27c")
+			(uuid "3e79ecbd-2c18-49aa-934f-3a1d9197f04a")
 		)
 		(pin "37"
-			(uuid "5d1b0dd4-c67f-48de-95a5-23e6f627ed9e")
+			(uuid "60d3e98e-9cbc-4227-8092-dfade6e2a870")
 		)
 		(pin "39"
-			(uuid "9ffde6b7-2870-4fe8-8d61-b543060c681f")
+			(uuid "d98127f6-cec6-4409-bf6e-648e254e4545")
 		)
 		(pin "36"
-			(uuid "e17f6310-f074-4bb1-8e62-e60aa27622cb")
+			(uuid "7ce99b91-eb9c-47e4-90b7-ab7be4508858")
 		)
 		(pin "43"
-			(uuid "433a9813-3493-469d-8612-d75d90cc11db")
+			(uuid "492f68fc-c7f4-4375-a384-5a6cd7f15347")
 		)
 		(pin "44"
-			(uuid "f6f4ca18-291d-408e-8c15-8e56003d92b1")
+			(uuid "f869edf6-a843-4c6f-abcf-869c3db052f1")
 		)
 		(pin "42"
-			(uuid "ab3572d0-9499-46f5-b187-4874250bed51")
+			(uuid "6a160f9e-f267-4ddf-bf87-048ee1653c2c")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -7749,11 +8294,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 96.52 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 96.52 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 96.52 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "d4e20f7b-e853-4208-a442-28eaed65fc6a")
+			(uuid "d85da219-59e6-48f2-968f-394de6384c7b")
 		)
 		(pin "1"
-			(uuid "4fb8b772-0940-432e-acd8-f5c6951a86f8")
+			(uuid "89928822-db97-4204-9aa5-d9d0eea9944d")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -7837,11 +8409,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 96.52 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 96.52 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 96.52 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "eb1ed421-d306-47ff-9471-747fb6153f0d")
+			(uuid "c37666a9-ada3-46f3-8f1b-f3b413e2d6a0")
 		)
 		(pin "1"
-			(uuid "5bbd9554-96c1-4cbc-9e33-e7dc3aa69afe")
+			(uuid "dfa4866d-89a1-4846-be1c-057a65a540aa")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -7925,11 +8524,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "bd97be66-6c3a-4858-9975-aedf67265e57")
+			(uuid "b52e5967-7175-4aa3-9616-9a796cf83818")
 		)
 		(pin "1"
-			(uuid "affaf9b2-4750-419c-911d-8c96b9cd5437")
+			(uuid "0e9ebf38-789e-48cc-81fa-f5df02feb1aa")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8013,11 +8639,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 96.52 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 96.52 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 96.52 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "ae721626-95a2-4521-b108-f31f9985d304")
+			(uuid "a61d054f-6f0d-4bcb-87b3-5332e2606d2b")
 		)
 		(pin "1"
-			(uuid "b2d32a8a-0050-4557-bfe5-4d7676b35e52")
+			(uuid "431d2990-0aed-473f-9a95-0014bae55d19")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8064,7 +8717,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+		(property "Datasheet" ""
 			(at 138.43 137.16 0)
 			(effects
 				(font
@@ -8109,16 +8762,120 @@
 				(hide yes)
 			)
 		)
+		(property "specs" "10uF, 50VDC, X5R, 10%, -55C, +85C"
+			(at 138.43 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.07"
+			(at 138.43 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "1ae8ab13-f935-4b2f-9714-b4032814ed48")
+			(uuid "0ebdc1d7-2cce-4d86-bec7-0583ad21a75a")
 		)
 		(pin "1"
-			(uuid "30b0b69b-dca2-4570-b9c1-d4e9617683ff")
+			(uuid "72d3e66e-e0f7-44c8-8018-dc70407bc4dd")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
 					(reference "C57")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 190.5 34.29 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9f2ac3bb-4403-4a4b-be7f-0ded6f2b6e5d")
+		(property "Reference" "TP18"
+			(at 193.04 30.9879 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint"
+			(at 193.04 32.2579 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm_LowProfile"
+			(at 195.58 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 195.58 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point"
+			(at 190.5 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 190.5 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 190.5 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "35efca03-dcb1-4709-adf2-2c5b7cef6f7a")
+		)
+		(instances
+			(project "EVAL MSPM0lG3507 BQ7962"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
+					(reference "TP18")
 					(unit 1)
 				)
 			)
@@ -8213,10 +8970,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "ea50d281-3cd0-4596-8724-b0d3f6c54794")
+			(uuid "e4d35311-0d72-4205-a0dc-a3c4248788fa")
 		)
 		(pin "1"
-			(uuid "6c7570e4-5f10-4204-baee-2d9cd60ae8b5")
+			(uuid "0dc094fb-dc93-4ba1-9f98-f3812523f68e")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8310,10 +9067,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "e5b55b64-60e2-40a2-ad2e-5caa2ee0380a")
+			(uuid "77757c87-7bea-4bfe-b9f3-0bb7a46f8cea")
 		)
 		(pin "1"
-			(uuid "fd410610-28ec-49d7-8690-8bb833e2f096")
+			(uuid "4fd7e101-7dd6-4812-9e8d-365c1e75563f")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8397,11 +9154,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 96.52 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 96.52 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 96.52 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "d958c767-4839-46a9-a942-538aed7a93cc")
+			(uuid "449f6fd9-c7bf-4029-abc6-85ec2e62c2d8")
 		)
 		(pin "1"
-			(uuid "c6fbee7d-ed2c-4620-b621-6186729bacee")
+			(uuid "2c9c11a6-1020-49e7-9a90-2fe043b3b867")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8483,10 +9267,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "a8498b0f-b550-46f7-8a73-274679e19ccf")
+			(uuid "e6702027-a791-4dff-89ec-81512be1168e")
 		)
 		(pin "1"
-			(uuid "fa4421f2-8d4f-4e64-9c6b-2a861dcfa2bb")
+			(uuid "0e59422d-a748-421c-933c-1ab9af62c4fb")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8586,10 +9370,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "8b3f935a-1d9e-4dbb-abf1-608503b99485")
+			(uuid "13a0c8ca-ed03-409f-a83a-5ff2d131da3d")
 		)
 		(pin "1"
-			(uuid "77793b85-43dc-4906-94f7-8ea568aa5a0a")
+			(uuid "1ed9d73e-910f-4abf-b9b9-7f7bdacd1cd9")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8689,10 +9473,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "d39ebea7-71a8-4a73-9743-0bb9038fc811")
+			(uuid "92d3cdb1-b451-4e98-a82f-9a7b52efd46d")
 		)
 		(pin "1"
-			(uuid "eb1a253f-998d-44af-a63d-285e173eba79")
+			(uuid "985d5ae5-0c3d-44d7-97d9-4cb50e55fe5f")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8776,11 +9560,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 96.52 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 96.52 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 96.52 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "f46e0b5e-d227-4e52-a822-f875dde862da")
+			(uuid "228656e5-c6b4-44b2-adc5-2ad65163e5aa")
 		)
 		(pin "1"
-			(uuid "eb02aed4-eabe-451b-b7f9-7c6abd0d9999")
+			(uuid "23f46046-9eef-401d-ade9-34067a3ff4ea")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8864,11 +9675,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 96.52 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 96.52 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 96.52 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "913f7613-2fbd-488e-b066-c6cd03cb9bb3")
+			(uuid "ac8d98d5-591a-43a7-a30a-634bcc9ed6ea")
 		)
 		(pin "1"
-			(uuid "54d69ff2-81a8-4cad-b469-a423f465d446")
+			(uuid "cd5ab4b0-cd81-4b36-9453-bad9dc29a283")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -8968,10 +9806,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "e18610c9-e07b-410a-85d6-8a2f4addcc9c")
+			(uuid "a4c58d16-d732-469c-9c46-13c97ef5c59b")
 		)
 		(pin "1"
-			(uuid "fe2eadd6-29b2-4272-a8a0-5659e8c57f5a")
+			(uuid "3f627501-c99c-4d39-85b9-366888443e44")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9055,11 +9893,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 96.52 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 96.52 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 96.52 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "8bddc0b9-8c90-44a9-a2e9-cbab8deb9949")
+			(uuid "93df4732-8451-4ca0-9124-04f1fdada5a9")
 		)
 		(pin "1"
-			(uuid "45848ade-8e92-4927-8531-aaf2d832119f")
+			(uuid "3864a30d-1c97-4cac-9148-49d0ad884a25")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9159,10 +10024,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "c68e8b00-16b7-4309-94f0-cc1fd5006e59")
+			(uuid "ab93fc39-96f6-43b5-ae09-45564867ee98")
 		)
 		(pin "1"
-			(uuid "8a28594b-56a4-4566-8fd1-c99b75f6a8f9")
+			(uuid "79ece5de-5e8e-4a55-81dd-289e989f9a04")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9246,10 +10111,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "41c10f19-34ec-4756-8185-6fa7392ee3a5")
+			(uuid "80aa125e-869a-4fd6-a10c-8ed3505e8bb0")
 		)
 		(pin "1"
-			(uuid "0e3c4b68-247f-4f40-8138-778e461e81df")
+			(uuid "de6ff2ea-37d6-4820-8598-fb54f71e0555")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9335,7 +10200,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "b596de79-5d5e-48dc-a187-4db83e3b1502")
+			(uuid "10b5dab9-e6ee-4424-a396-ecef97c01cc9")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9419,11 +10284,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "a3142659-2380-4d96-9a2b-19a078f7fd26")
+			(uuid "928d0b31-9c41-4197-8f0b-87cb499c8d98")
 		)
 		(pin "1"
-			(uuid "e3edeb86-d0e2-452c-96db-f895c297d869")
+			(uuid "ae97edc7-1390-4148-bfc3-314dfed6e039")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9523,10 +10415,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "385da401-6170-434f-b467-7971b2990775")
+			(uuid "14fea85c-7e24-4be1-a3f9-efab521fa1fd")
 		)
 		(pin "1"
-			(uuid "f97191b7-36c5-4b43-b045-e03d8c5265ad")
+			(uuid "db36ea16-f57a-464e-9583-14b548d51850")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9610,11 +10502,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "91f6ad12-ca1f-44e5-832b-d1313d340ddc")
+			(uuid "ec634236-07ba-47ca-9dcb-1442146ac1dd")
 		)
 		(pin "1"
-			(uuid "618816e5-d56e-4320-b9be-4235fb36d3ba")
+			(uuid "e04d1d40-dd65-43fa-8638-8fddf01f759e")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9696,10 +10615,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "9aad49c1-9773-4b83-9186-849e64e29788")
+			(uuid "f5c73494-c664-40de-b31c-2e4c7545307e")
 		)
 		(pin "1"
-			(uuid "0864aeb5-5b54-4a15-86c8-6ea9ba1b566f")
+			(uuid "51c9471c-6a06-473c-8a2a-cc2526ce196f")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9712,7 +10631,7 @@
 	)
 	(symbol
 		(lib_id "Connector:TestPoint")
-		(at 149.86 34.29 0)
+		(at 142.24 39.37 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -9721,16 +10640,16 @@
 		(fields_autoplaced yes)
 		(uuid "f13373be-569e-415a-b697-7b8d49d63516")
 		(property "Reference" "TP8"
-			(at 152.4 30.9879 0)
+			(at 144.78 42.6719 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Value" "TestPoint"
-			(at 152.4 32.2579 0)
+			(at 139.7 41.4021 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9740,7 +10659,7 @@
 			)
 		)
 		(property "Footprint" "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm_LowProfile"
-			(at 154.94 34.29 0)
+			(at 137.16 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9749,7 +10668,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 154.94 34.29 0)
+			(at 137.16 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9758,7 +10677,7 @@
 			)
 		)
 		(property "Description" "test point"
-			(at 149.86 34.29 0)
+			(at 142.24 39.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9767,7 +10686,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 149.86 34.29 90)
+			(at 142.24 39.37 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9776,7 +10695,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 149.86 34.29 90)
+			(at 142.24 39.37 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9785,7 +10704,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "37bb9433-219c-4b33-820d-c03e12884e08")
+			(uuid "3d7911f3-5c40-46ed-97bd-d4df366a6a93")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9885,10 +10804,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "e9c52d03-819b-4d51-b574-6699e3ba8ddd")
+			(uuid "eeb6a775-db42-49fc-b0da-dbe6c44bb788")
 		)
 		(pin "1"
-			(uuid "e4c56709-e69f-418a-869b-eb848c4a9ee6")
+			(uuid "29146384-5db9-4bda-8c81-a55d376243f7")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -9972,11 +10891,38 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 90.17 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 90.17 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 90.17 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
-			(uuid "4ab12eed-6f58-4211-abd5-1ae050cef3b5")
+			(uuid "48b15153-143c-40ec-aebc-6de38a153314")
 		)
 		(pin "1"
-			(uuid "f5b230c7-979f-46e8-a8ed-5d0479af5ab8")
+			(uuid "f83e00ed-4271-44ad-9930-217c979f478e")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
@@ -10060,10 +11006,10 @@
 			)
 		)
 		(pin "2"
-			(uuid "c264ce01-7cc8-4415-bc2f-518c6a8db7ed")
+			(uuid "ba4a555e-0a57-430b-9c57-725baaa08d66")
 		)
 		(pin "1"
-			(uuid "30025b6c-aad4-463a-86b4-1312db3a9f1a")
+			(uuid "3d70524a-a49f-42c8-ba0e-c32c2e21e04c")
 		)
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
