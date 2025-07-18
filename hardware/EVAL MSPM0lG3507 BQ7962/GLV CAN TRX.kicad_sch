@@ -1637,16 +1637,16 @@
 		(uuid "329779ff-9677-478e-a6bf-24020020914b")
 	)
 	(junction
-		(at 87.63 22.86)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "373a5a42-788f-4c40-9587-30f240575a63")
-	)
-	(junction
 		(at 71.12 106.68)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "37d0ae56-2d0a-4401-ada4-9ee70b5485b6")
+	)
+	(junction
+		(at 87.63 30.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3bdd89fd-5eb2-4d2f-95d2-f51bfd3c42a1")
 	)
 	(junction
 		(at 99.06 49.53)
@@ -1691,16 +1691,16 @@
 		(uuid "93224b98-8018-4b90-b3f2-13b94b663a15")
 	)
 	(junction
-		(at 87.63 30.48)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ae1789be-4213-4123-89bf-f162ec83b7e0")
-	)
-	(junction
 		(at 102.87 67.31)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "b64b9e4f-0ef2-4767-8967-e996d96802e3")
+	)
+	(junction
+		(at 87.63 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bc527333-f666-4740-9791-86b4f79d73d9")
 	)
 	(junction
 		(at 33.02 25.4)
@@ -1899,6 +1899,16 @@
 			(type default)
 		)
 		(uuid "22555803-c429-4282-ab80-eccb2fcc8183")
+	)
+	(wire
+		(pts
+			(xy 87.63 22.86) (xy 99.06 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2a67e11d-6f28-4b47-b1d7-b664ef7acb2d")
 	)
 	(wire
 		(pts
@@ -2129,16 +2139,6 @@
 			(type default)
 		)
 		(uuid "a55f0514-4655-4f23-83e6-b4cf54a1dcfa")
-	)
-	(wire
-		(pts
-			(xy 87.63 22.86) (xy 99.06 22.86)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aaf51c68-4c48-4b3b-bb24-1a8184cccb02")
 	)
 	(wire
 		(pts
@@ -3272,7 +3272,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "50k"
+		(property "Value" "49.9k"
 			(at 86.36 101.5999 0)
 			(effects
 				(font
@@ -3326,7 +3326,25 @@
 				(hide yes)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RT1206BRD0750KL?qs=sGAEpiMZZMtlubZbdhIBICrUjP9DMKcXmemmIeztDVw%3D"
+		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP1206FTD49K9?qs=sGAEpiMZZMtlubZbdhIBIA%252B43obPAL0t%252Bb%2FrZA8g8Pk%3D"
+			(at 88.9 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "49.9kOhms, 500mW, 1%, 200V, 100PPM, -55C, +155C"
+			(at 88.9 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.014"
 			(at 88.9 100.33 0)
 			(effects
 				(font
@@ -3790,95 +3808,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_US")
-		(at 87.63 26.67 0)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "bd677ef7-1767-481e-8369-b1eeea18b173")
-		(property "Reference" "R27"
-			(at 85.09 25.3999 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "100k"
-			(at 85.09 27.9399 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 88.646 26.416 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Bourns/CHV1206-FX-1003EST?qs=QNEnbhJQKvb7tN9X9nEnDA%3D%3D"
-			(at 87.63 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 87.63 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 87.63 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 87.63 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "331280d4-91dd-444b-bf89-f6ba11c835b5")
-		)
-		(pin "2"
-			(uuid "1239d504-b397-422e-98e3-1bc8400214be")
-		)
-		(instances
-			(project "VT MSPM0lG3507 BQ7962 layout test"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/4ffd2b84-af2a-4004-aa58-8e29f88cb3f6"
-					(reference "R27")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Jumper:SolderJumper_2_Open")
 		(at 130.81 22.86 0)
 		(unit 1)
@@ -3959,6 +3888,122 @@
 			(project "VT MSPM0lG3507 BQ7962 layout test"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/4ffd2b84-af2a-4004-aa58-8e29f88cb3f6"
 					(reference "JP4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 87.63 26.67 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "be726576-6a2c-4a05-8b63-ea526134e379")
+		(property "Reference" "R15"
+			(at 85.09 25.3999 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "100k"
+			(at 85.09 27.9399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 88.646 26.416 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/ProductDetail/Bourns/CHV1206-FX-1003EST?qs=QNEnbhJQKvb7tN9X9nEnDA%3D%3D"
+			(at 87.63 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 87.63 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 87.63 26.67 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 87.63 26.67 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Bourns/CHV1206-FX-1003EST?qs=QNEnbhJQKvb7tN9X9nEnDA%3D%3D"
+			(at 87.63 26.67 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100kOhm, 800V, 250mW, 100PPM, 1%, -55C, 155C"
+			(at 87.63 26.67 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.083"
+			(at 87.63 26.67 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "ae51e7f7-2d74-4ae1-863b-5a65e277e0f2")
+		)
+		(pin "2"
+			(uuid "30be1422-4123-4a69-9140-9ff9ac8668c8")
+		)
+		(instances
+			(project "EVAL MSPM0lG3507 BQ7962"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/4ffd2b84-af2a-4004-aa58-8e29f88cb3f6"
+					(reference "R15")
 					(unit 1)
 				)
 			)
@@ -4383,7 +4428,7 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Walsin/1206B104K251CT?qs=fIkAfuXiAQKkmX5niKUTKw%3D%3D"
+		(property "Datasheet" ""
 			(at 67.31 22.86 0)
 			(effects
 				(font
@@ -4411,6 +4456,33 @@
 			)
 		)
 		(property "Sim.Type" ""
+			(at 67.31 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Walsin/1206B104K251CT?qs=fIkAfuXiAQKkmX5niKUTKw%3D%3D"
+			(at 67.31 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100nF, 250VDC, X7R, 10%, -55C, +125C"
+			(at 67.31 22.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.062"
 			(at 67.31 22.86 0)
 			(effects
 				(font
