@@ -38,8 +38,8 @@
 1. include git repo on silkscreen
 1. include contributor names on silkscreen
 1. <s>~5.5k 3v3 pull up on the i2c lines</s>
-1. uart <-> usb method
-1. series sense resistor. size for car?
+1. <s>uart <-> usb method</s>
+1. <s>series sense resistor.</s> _(max 65A)_
 
 ## Would be nice to have done
 1. FreeRTOS + tcp using the W5500
