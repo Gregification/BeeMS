@@ -33,10 +33,6 @@
 1. <s>jumper pad series resistors for cell simulation</s>_(no need, continue using TH)_
 1. <s>exposed ground pad near edge for alligator clip</s>
 1. <s>TP on both comm lines between BQ and MSP</s>
-1. include uart comm settings on silkscreen
-1. include version number on silkscreen
-1. include git repo on silkscreen
-1. include contributor names on silkscreen
 1. <s>~5.5k 3v3 pull up on the i2c lines</s>
 1. <s>uart <-> usb method</s>
 1. <s>series sense resistor.</s> _(max 65A)_
