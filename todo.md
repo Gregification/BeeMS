@@ -1,9 +1,5 @@
 ## TODO
-1. Setup Thermister Demo > DONE
-1. I2C wrapper : missing TRX > LOW PRIORITY (LATER)
-1. UART wrapper : missing RX
-	- RX blocking function
-	- function to check if RX fifo is empty
+1. I2C wrapper : missing TRX _(LOW PRIORITY)_
 1. UART CLI, consider using _FreeRTOS + CLI_
 1. SPI wrapper : verify funcitonality
 1. BQ protocol & troubleshooting
