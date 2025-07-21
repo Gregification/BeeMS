@@ -8,12 +8,14 @@
 1. BQ wrapper
 1. BQ class
 1. BQ flush out core feature of the chip
-	- BQ read thermisters test
+	- <s>BQ read thermisters test (done)</s>
 	- BQ s/w controlled ldo test
+	- use CRC on the I2C if viable
 1. prototype mcu & BQ chip
 	- iterate design
 	- test on E25
 1. determin approach with SOC algo. custom or 3rd party?
+1. use the MSPM0G RTC for time stamping. until this is done just use hte FRTOS system tick.
 
 ## changes for next itteration of VT board
 1. <s>correct can transceiver footprint</s>

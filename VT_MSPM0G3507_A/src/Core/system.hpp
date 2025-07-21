@@ -55,7 +55,7 @@
 
 #define PROJECT_NAME            "Voltage Tap"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "0.0.0"
+#define PROJECT_VERSION         "0.0.0" // [project version].[hardware version].[software version]
 
 
 /*--- shorthand ----------------------------------------*/
@@ -83,8 +83,11 @@
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
 
-/* the System IRQ functions rely on notifications, this is the specific index used */
-#define TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX configTASK_NOTIFICATION_ARRAY_ENTRIES
+/* the System IRQ functions rely on notifications to sync with tasks, this is the specific index used as the notification
+ * - the max index value is determined by the arbitrary value of "configTASK_NOTIFICATION_ARRAY_ENTRIES"
+ * - index 0 is the default so avoid using that since it may get triggered by something else
+ */
+#define TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ 1
 
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
@@ -147,6 +150,19 @@ namespace System {
          */
         void releaseResource();
 
+    };
+
+    struct TRXBuffer {
+        TaskHandle_t host_task; // task to notify when TRX is complete
+
+        void * data;
+        uint8_t
+            data_length,    // total bytes of data
+            nxt_index;      // index next byte is read/written by
+
+        void clear();
+        void init(void * data, uint8_t length);
+        bool isInUse() const;     // returns true if host_task exists and buffer iteration is not complete
     };
 
     /* see clock tree diagram ... and SysConfig's */
@@ -222,17 +238,6 @@ namespace System {
     }
 
     namespace I2C {
-        typedef enum {
-            IDLE,
-            ERROR,
-            TX_STARTED,
-            RX_STARTED,
-            TX_COMPLETE,
-            RX_COMPLETE,
-            TX_INPOGRESS,
-            RX_INPOGRESS,
-        } ControllerStatus_t;
-
         /** I2C peripheral controller interface */
         struct I2C : Lockable {
 
@@ -242,30 +247,29 @@ namespace System {
 
             void partialInitController();
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
-            const ControllerStatus_t & controllerStatus() const;
             void _irq();
 
-            /** the calling task awaits a task notification from the IRQ.
-             * the timout
-             * @return true if tx success
+            /** blocks the task calling this function until TX is complete or timeout.
+             * uses IRQ+Notifications. other tasks can run while this is blocking
+             * @return true if TX success. returns false if timed out, lost arbitration, or received NACK
              */
-            bool tx_blocking(uint8_t target_address, void const * data, uint8_t size, TickType_t timeout);
+            bool tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
+
+            /** blocks the task calling this function until RX is complete or timeout.
+             *  uses IRQ+Notifications. other tasks can run while this is blocking
+             *  @return true if RX success. returns false if timed out, lost arbitration, received NACK,
+             *      or received less than expected amount of bytes.
+             */
+            bool rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
 
 
             /** return 0 on success. does not require freeRTOS */
-            uint8_t basic_tx_blocking(uint8_t addr, void const *, uint8_t size);
+//            uint8_t basic_tx_blocking(uint8_t addr, void const *, uint8_t size);
             /** return 0 on success. does not require freeRTOS */
-            uint8_t basic_rx_blocking(uint8_t addr, void *, uint8_t size);
+//            uint8_t basic_rx_blocking(uint8_t addr, void *, uint8_t size);
 
 //        private:
-            ControllerStatus_t controllerStatus_ = ControllerStatus_t::IDLE; //set though IRQ
-            TaskHandle_t * host_task = NULL;
-
-            void const * txBuffer;
-            uint8_t txBufferCount, txBufferIdx;
-
-            void * rxBuffer;
-            uint8_t rxBufferCount, rxBufferIdx;
+            TRXBuffer trxBuffer;
         };
     }
 

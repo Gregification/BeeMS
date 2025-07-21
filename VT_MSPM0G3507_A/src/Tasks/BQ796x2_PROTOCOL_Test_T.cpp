@@ -69,25 +69,37 @@ void TemperatureMonitor(char * p_str) {
     const BQ769X2_PROTOCOL::CmdDrt cmds[] = {
              BQ769X2_PROTOCOL::CmdDrt::TS1Temperature,
              BQ769X2_PROTOCOL::CmdDrt::TS3Temperature,
-             BQ769X2_PROTOCOL::CmdDrt::IntTemperature
+//             BQ769X2_PROTOCOL::CmdDrt::IntTemperature
         };
 
+    uint32_t c = 0;
+    char str[20];
     while(true){
+        snprintf(ARRANDN(str), "%4x: ", c);
+        System::uart_ui.nputs(ARRANDN(str));
+        c++;
+        uint32_t bad_read = 0;
         for(uint8_t i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++){
-            uint32_t _adcValue;
-            BQ769X2_PROTOCOL::I2C_ReadReg(cmds[i], (uint8_t *)&_adcValue, BQ769X2_PROTOCOL::DIR_CMD_TYPE::W2);
+            uint16_t _adcValue;
+
+            bool rx_success = BQ769X2_PROTOCOL::I2C_ReadReg(cmds[i], (uint8_t *)&_adcValue, BQ769X2_PROTOCOL::DIR_CMD_TYPE::W2);
+            if(!rx_success)
+                bad_read++;
 
             // OBSOLETE DO NOT USE UNLESS TOLD WE GOTO NOT BE LAZY
             //uint32_t _internalTemperature = _adcValue * (float)BQ769X2_PROTOCOL::IntGain / (float)65536 + BQ769X2_PROTOCOL::Intbaseoffset + BQ769X2_PROTOCOL::InternalTempOffset;
             //if(_adcValue > BQ769X2_PROTOCOL::IntMaximumAD)
             //    _internalTemperature = BQ769X2_PROTOCOL::IntMaximumAD;
 
-            char str[15];
+
             //snprintf(str, sizeof(str), "%d,", v);
             snprintf(str, sizeof(str), "%d,", _adcValue); //This is what I assumed it was idk this stuff hurts my brain
             System::uart_ui.nputs(ARRANDN(str));
-            vTaskDelay(pdMS_TO_TICKS(100));
+//            vTaskDelay(pdMS_TO_TICKS(10));
         }
+        if(bad_read)
+            snprintf(ARRANDN(str), "\t | bad read! x%d", bad_read);
+
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
 }
@@ -95,42 +107,7 @@ void TemperatureMonitor(char * p_str) {
 
 // Init
 void Init(char * p_str) {
-    System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_T_Task start" NEWLINE));
-
-
-        //--- hardware init -----------------------------------------
-
-        DL_I2C_enablePower(System::i2c1.reg);
-        delay_cycles(POWER_STARTUP_DELAY);
-
-        // PA15
-        DL_GPIO_initPeripheralInputFunctionFeatures(
-                IOMUX_PINCM37,
-                IOMUX_PINCM37_PF_I2C1_SCL,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
-                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
-            );
-        // PA16
-        DL_GPIO_initPeripheralInputFunctionFeatures(
-                IOMUX_PINCM38,
-                IOMUX_PINCM38_PF_I2C1_SDA,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
-                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
-            );
-        DL_GPIO_enableHiZ(IOMUX_PINCM37);
-        DL_GPIO_enableHiZ(IOMUX_PINCM38);
-        System::i2c1.partialInitController();
-        System::i2c1.setSCLTarget(100e3);
-        DL_I2C_enableController(System::i2c1.reg);
-
-        vTaskDelay(pdMS_TO_TICKS(500));
-
-
-        //--- communicaiton -----------------------------------------
+        System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_T_Task start" NEWLINE));
 
         BQ769X2_PROTOCOL::sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
         vTaskDelay(pdMS_TO_TICKS(60));

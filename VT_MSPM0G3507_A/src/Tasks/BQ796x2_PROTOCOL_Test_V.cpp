@@ -17,38 +17,7 @@
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
 
-
-    //--- hardware init -----------------------------------------
-
-    DL_I2C_enablePower(System::i2c1.reg);
-    delay_cycles(POWER_STARTUP_DELAY);
-
-    // PA15
-    DL_GPIO_initPeripheralInputFunctionFeatures(
-            IOMUX_PINCM37,
-            IOMUX_PINCM37_PF_I2C1_SCL,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
-            DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
-        );
-    // PA16
-    DL_GPIO_initPeripheralInputFunctionFeatures(
-            IOMUX_PINCM38,
-            IOMUX_PINCM38_PF_I2C1_SDA,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
-            DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
-        );
-    DL_GPIO_enableHiZ(IOMUX_PINCM37);
-    DL_GPIO_enableHiZ(IOMUX_PINCM38);
-    System::i2c1.partialInitController();
-    System::i2c1.setSCLTarget(100e3);
-    DL_I2C_enableController(System::i2c1.reg);
-
     char str[MAX_STR_LEN_COMMON];
-    vTaskDelay(pdMS_TO_TICKS(500));
 
 
     //--- communicaiton -----------------------------------------

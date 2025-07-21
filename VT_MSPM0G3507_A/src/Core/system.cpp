@@ -7,6 +7,8 @@
 
 #include "system.hpp"
 
+#include <cstdio>
+
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
@@ -97,6 +99,11 @@ namespace System {
     }
 
     namespace GPIO {
+        // this may look redundant but the IOMUX and PIN numbers don't necessarily match and
+        //      I got tired of proding the data sheet everytime I want a new pin
+        //      I dont really understand whats going on with the IOMUX thing but this probably
+        //          destroys all functionality of that. eh, I dont use it anyways
+
         // Port A (PA) pins
         const GPIO PA0  = { .port = GPIOA, .pin = DL_GPIO_PIN_0,  .iomux = IOMUX_PINCM1  };
         const GPIO PA1  = { .port = GPIOA, .pin = DL_GPIO_PIN_1,  .iomux = IOMUX_PINCM2  };
@@ -230,7 +237,7 @@ void System::init() {
     DL_SYSCTL_switchMCLKfromSYSOSCtoHSCLK(DL_SYSCTL_HSCLK_SOURCE::DL_SYSCTL_HSCLK_SOURCE_SYSPLL);
 
     // must be done after enabling PLL
-    //    DL_FlashCTL_executeClearStatus(); // ERRNO thing
+//    DL_FlashCTL_executeClearStatus(); // ERRNO thing
 
     DL_GPIO_disablePower(GPIOA);
     DL_GPIO_disablePower(GPIOB);
@@ -248,6 +255,9 @@ void System::init() {
     #endif
 
     #ifdef PROJECT_ENABLE_I2C0
+        // TODO: code to set this up. should look like I2C1's init code below
+
+        NVIC_EnableIRQ(I2C0_INT_IRQn);
         DL_I2C_enableInterrupt(System::i2c0.reg,
                   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
                 | DL_I2C_INTERRUPT_CONTROLLER_NACK
@@ -262,6 +272,34 @@ void System::init() {
             );
     #endif
     #ifdef PROJECT_ENABLE_I2C1
+        DL_I2C_enablePower(System::i2c1.reg);
+        delay_cycles(POWER_STARTUP_DELAY);
+
+        // PA15
+        DL_GPIO_initPeripheralInputFunctionFeatures(
+                IOMUX_PINCM37,
+                IOMUX_PINCM37_PF_I2C1_SCL,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+            );
+        // PA16
+        DL_GPIO_initPeripheralInputFunctionFeatures(
+                IOMUX_PINCM38,
+                IOMUX_PINCM38_PF_I2C1_SDA,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+            );
+        DL_GPIO_enableHiZ(IOMUX_PINCM37);
+        DL_GPIO_enableHiZ(IOMUX_PINCM38);
+        System::i2c1.partialInitController();
+        System::i2c1.setSCLTarget(100e3);
+        DL_I2C_enableController(System::i2c1.reg);
+
+        NVIC_EnableIRQ(I2C1_INT_IRQn);
         DL_I2C_enableInterrupt(System::i2c1.reg,
                   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
                 | DL_I2C_INTERRUPT_CONTROLLER_NACK
@@ -276,6 +314,28 @@ void System::init() {
             );
     #endif
 
+}
+
+void System::TRXBuffer::clear(){
+    data_length     = 0;
+    data            = NULL;
+    host_task       = NULL;
+    nxt_index       = 0;
+};
+
+void System::TRXBuffer::init(void * data, uint8_t length) {
+    host_task       = xTaskGetCurrentTaskHandle();
+    this->data      = data;
+    data_length     = length;
+    nxt_index       = 0;
+}
+
+bool System::TRXBuffer::isInUse() const {
+    return  ( data_length > 0 )
+        &&  ( nxt_index < data_length )
+        &&  ( data != NULL )
+        &&  ( host_task != NULL )
+        ;
 }
 
 inline bool System::Lockable::takeResource(TickType_t timeout) {
@@ -505,28 +565,27 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 void System::I2C::I2C::_irq() {
     switch(DL_I2C_getPendingInterrupt(reg)){
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
-            controllerStatus_ = ControllerStatus_t::TX_COMPLETE;
-            if(host_task != NULL){
-                host_task = NULL;
-                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+//            System::uart_ui.nputs(ARRANDN("TX DONE" NEWLINE));
+            if(trxBuffer.host_task != NULL){
+                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
+                trxBuffer.clear();
             }
             break;
 
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
-            controllerStatus_ = ControllerStatus_t::RX_COMPLETE;
-            if(host_task != NULL){
-                host_task = NULL;
-                xTaskNotifyGiveIndexed(*host_task, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
+//            System::uart_ui.nputs(ARRANDN("RX DONE" NEWLINE));
+            if(trxBuffer.host_task != NULL){
+                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
+                trxBuffer.clear();
             }
             break;
 
         case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
-            controllerStatus_ = ControllerStatus_t::RX_INPOGRESS;
-            // read all data
+//            System::uart_ui.nputs(ARRANDN("RXFIFO TRIGGER" NEWLINE));
             while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
-                if((rxBuffer != NULL) && (rxBufferIdx < rxBufferCount)){
-                    ((uint8_t*)rxBuffer)[rxBufferIdx++] = DL_I2C_receiveControllerData(reg);
-                } else { // if fifo is full
+                if(trxBuffer.isInUse()){
+                    ((uint8_t*)trxBuffer.data)[trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
+                } else {
                     // ignore and flush
                     DL_I2C_receiveControllerData(reg);
                 }
@@ -534,16 +593,22 @@ void System::I2C::I2C::_irq() {
             break;
 
         case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
-            controllerStatus_ = ControllerStatus_t::TX_INPOGRESS;
+//            System::uart_ui.nputs(ARRANDN("TXFIFO TRIGGER" NEWLINE));
             // fill TX fifo
-            if((txBuffer != NULL) && (txBufferIdx < txBufferCount)){
-                txBufferIdx += DL_I2C_fillControllerTXFIFO(reg, (const uint8_t *)txBuffer, txBufferCount - txBufferIdx);
+            if(trxBuffer.isInUse()){
+                trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
+                        reg,
+                        (uint8_t *)trxBuffer.data,
+                        trxBuffer.data_length - trxBuffer.nxt_index
+                    );
             }
             break;
 
         case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
         case DL_I2C_IIDX_CONTROLLER_NACK:
-            controllerStatus_ = ControllerStatus_t::ERROR;
+//            System::uart_ui.nputs(ARRANDN("ARB NACK" NEWLINE));
+            if(trxBuffer.isInUse())
+                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
             break;
 
         case DL_I2C_IIDX_CONTROLLER_RXFIFO_FULL:
@@ -553,129 +618,226 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_EVENT1_DMA_DONE:
         case DL_I2C_IIDX_CONTROLLER_EVENT2_DMA_DONE:
         default:
+//            System::uart_ui.nputs(ARRANDN("DEFAULT" NEWLINE));
             break;
 
     };
 }
 
-const System::I2C::ControllerStatus_t & System::I2C::I2C::controllerStatus() const {
-    return controllerStatus_;
+bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t size, TickType_t timeout) {
+    TickType_t timeoutTime = xTaskGetTickCount() + timeout;
+
+    //--- prep for tx ----------------------------------------
+    trxBuffer.clear();
+    DL_I2C_flushControllerTXFIFO(reg);
+
+    DL_I2C_disableInterrupt(System::i2c1.reg,
+                DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
+            |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+            |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+        );
+    DL_I2C_enableInterrupt(System::i2c1.reg,
+                DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
+            |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+            |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+        );
+
+    bool ret = true;
+
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)){
+        vTaskDelay(0);
+        if(xTaskGetTickCount() > timeoutTime){ // check timeout
+            ret = false;
+            break;
+        }
+    }
+
+    if(ret) {
+        trxBuffer.init(data, size);
+        trxBuffer.nxt_index += DL_I2C_fillControllerTXFIFO(
+                reg,
+                (uint8_t *)data,
+                trxBuffer.data_length - trxBuffer.nxt_index
+            );
+
+
+        //--- tx -------------------------------------------------
+        DL_I2C_startControllerTransfer(
+                reg,
+                target_address,
+                DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
+                trxBuffer.data_length
+            );
+
+
+        //--- await notification from IRQ ------------------------
+        // IRQ will handle the data transfer in the meantime
+
+        // don't simplify this. will be pain to debug if someone screws up the notification indices.
+        if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeoutTime - xTaskGetTickCount())){
+            // timed out
+            ret = false;
+        } else {
+            // received a notification
+            ret = true;
+        }
+
+        trxBuffer.clear();
+        DL_I2C_flushControllerTXFIFO(reg);
+    }
+
+    DL_I2C_disableInterrupt(System::i2c1.reg,
+                DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
+            |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+            |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+        );
+
+    return ret;
 }
 
-bool System::I2C::I2C::tx_blocking(uint8_t target_address, void const * data, uint8_t size, TickType_t timeout) {
-    if(host_task == NULL)
-        return false;
+bool System::I2C::I2C::rx_blocking(uint8_t target_address, void * data, uint8_t size, TickType_t timeout) {
+    TickType_t timeoutTime = xTaskGetTickCount() + timeout;
 
-    txBuffer = data;
-    txBufferCount = size;
-    txBufferIdx = 0;
-    controllerStatus_ = ControllerStatus_t::IDLE;
-
+    //--- prep for rx ----------------------------------------
+    trxBuffer.clear();
     DL_I2C_flushControllerTXFIFO(reg);
-    txBufferIdx += DL_I2C_fillControllerTXFIFO(reg, (uint8_t *)txBuffer, txBufferCount - txBufferIdx);
+
+    DL_I2C_disableInterrupt(System::i2c1.reg,
+                DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
+            |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+            |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+        );
+    DL_I2C_enableInterrupt(System::i2c1.reg,
+                DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
+            |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+            |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+        );
+
+    bool ret = true;
 
     // a chance of blocking here
-    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
-        {}
-
-    controllerStatus_ = ControllerStatus_t::TX_STARTED;
-
-    DL_I2C_startControllerTransfer(
-            reg,
-            target_address,
-            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
-            txBufferCount
-        );
-
-    // await notification from IRQ
-    // IRQ will handle the data transfer in the meantime
-    ulTaskNotifyTake(pdTRUE, TASK_NOTIFICATION_ARRAY_ENTRIES_SYSTEM_IRQ_INDEX);
-
-    // clean up
-    txBufferCount =  0;
-    txBufferIdx = 0;
-    txBuffer = NULL;
-
-    return controllerStatus() == ControllerStatus_t::TX_COMPLETE;
-}
-
-
-uint8_t System::I2C::I2C::basic_tx_blocking(uint8_t addr, void const * data, uint8_t size){
-    uint8_t const * arr = (uint8_t const *)data;
-
-    DL_I2C_flushControllerTXFIFO(reg);
-
-    size -= DL_I2C_fillControllerTXFIFO(reg, arr, size);
-
-    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
-        {}
-
-    DL_I2C_startControllerTransfer(
-            reg,
-            addr,
-            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
-            size
-        );
-
-    while(size > 0){
-        size -= DL_I2C_fillControllerTXFIFO(reg, arr, size);
-
-        if(DL_I2C_getControllerStatus(reg) & (
-                DL_I2C_CONTROLLER_STATUS_IDLE
-                | DL_I2C_CONTROLLER_STATUS_ERROR
-            ))
+    while (!(DL_I2C_getControllerStatus(reg) & (DL_I2C_CONTROLLER_STATUS_IDLE | DL_I2C_CONTROLLER_STATUS_BUSY_BUS) )){
+        vTaskDelay(0);
+        if(xTaskGetTickCount() > timeoutTime){ // check timeout
+            ret = false;
             break;
-    }
-
-    while (DL_I2C_getControllerStatus(reg) &
-               DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
-            ;
-
-    // delay some
-    delay_cycles(80 * 60);
-
-    return size;
-}
-
-uint8_t System::I2C::I2C::basic_rx_blocking(uint8_t addr, void * data, uint8_t size){
-
-
-    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
-            {}
-
-    DL_I2C_flushControllerTXFIFO(reg);
-
-    DL_I2C_startControllerTransfer(
-                reg,
-                addr,
-                DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
-                size
-            );
-    for(uint8_t i = 0; i < size; i++){
-        while(DL_I2C_isControllerRXFIFOEmpty(reg)){
-            if(DL_I2C_getControllerStatus(reg) & (
-                    DL_I2C_CONTROLLER_STATUS_IDLE
-                    | DL_I2C_CONTROLLER_STATUS_ERROR
-                ))
-                break;
         }
-        ((uint8_t *)data)[i] = DL_I2C_receiveControllerData(reg);
     }
 
-    // delay some
-    delay_cycles(80 * 60);
+    if(ret){
+        DL_I2C_flushControllerRXFIFO(reg);
+        trxBuffer.init(data, size);
 
-    return size;
+        //--- rx -------------------------------------------------
+        DL_I2C_startControllerTransfer(
+                reg,
+                target_address,
+                DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
+                trxBuffer.data_length
+            );
+
+        //--- await notification from IRQ ------------------------
+        // IRQ will handle the data transfer in the meantime
+
+        bool ret = false;
+        // don't simplify this. will be pain to debug if someone screws up the notification indices.
+        if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeout)){
+            // timed out
+            ret = false;
+        } else {
+            // received a notification
+            ret = true;
+        }
+
+        trxBuffer.clear();
+    }
+
+    DL_I2C_disableInterrupt(System::i2c1.reg,
+                DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
+            |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+            |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+        );
+
+    return ret;
 }
+
+
+//uint8_t System::I2C::I2C::basic_tx_blocking(uint8_t addr, void const * data, uint8_t size){
+//    uint8_t const * arr = (uint8_t const *)data;
+//
+//    DL_I2C_flushControllerTXFIFO(reg);
+//
+//    size -= DL_I2C_fillControllerTXFIFO(reg, arr, size);
+//
+//    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+//        {}
+//
+//    DL_I2C_startControllerTransfer(
+//            reg,
+//            addr,
+//            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
+//            size
+//        );
+//
+//    while(size > 0){
+//        size -= DL_I2C_fillControllerTXFIFO(reg, arr, size);
+//
+//        if(DL_I2C_getControllerStatus(reg) & (
+//                DL_I2C_CONTROLLER_STATUS_IDLE
+//                | DL_I2C_CONTROLLER_STATUS_ERROR
+//            ))
+//            break;
+//    }
+//
+//    while (DL_I2C_getControllerStatus(reg) &
+//               DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+//            ;
+//
+//    // delay some
+//    delay_cycles(80 * 60);
+//
+//    return size;
+//}
+//
+//uint8_t System::I2C::I2C::basic_rx_blocking(uint8_t addr, void * data, uint8_t size){
+//
+//
+//    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+//            {}
+//
+//    DL_I2C_flushControllerTXFIFO(reg);
+//
+//    DL_I2C_startControllerTransfer(
+//                reg,
+//                addr,
+//                DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
+//                size
+//            );
+//    for(uint8_t i = 0; i < size; i++){
+//        while(DL_I2C_isControllerRXFIFOEmpty(reg)){
+//            if(DL_I2C_getControllerStatus(reg) & (
+//                    DL_I2C_CONTROLLER_STATUS_IDLE
+//                    | DL_I2C_CONTROLLER_STATUS_ERROR
+//                ))
+//                break;
+//        }
+//        ((uint8_t *)data)[i] = DL_I2C_receiveControllerData(reg);
+//    }
+//
+//    // delay some
+//    delay_cycles(80 * 60);
+//
+//    return size;
+//}
 
 /*--- Peripheral IRQ assignment --------------------------------------------------------*/
 /* most peripherals don't need a IRQ
  */
 
 #ifdef PROJECT_ENABLE_I2C0
-    void I2C0_IRQHandler(void){ System::i2c0._irq(); }
+    extern "C" void I2C0_IRQHandler(void){ System::i2c0._irq(); }
 #endif
 #ifdef PROJECT_ENABLE_I2C1
-    void I2C1_IRQHandler(void){ System::i2c1._irq(); }
+    extern "C" void I2C1_IRQHandler(void){ System::i2c1._irq(); }
 #endif
 

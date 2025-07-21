@@ -32,7 +32,7 @@ int main(){
             "blink status",
             configMINIMAL_STACK_SIZE,
             NULL,
-            configMAX_PRIORITIES,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
 //    xTaskCreate(Task::fiddle_task,
@@ -54,7 +54,7 @@ int main(){
                 "BQ769x2_PROTOCOL_Test_T_Task",
                 configMINIMAL_STACK_SIZE * 50,
                 NULL,
-                tskIDLE_PRIORITY,
+                configMAX_PRIORITIES,//tskIDLE_PRIORITY,
                 NULL);
 
 //    xTaskCreate(Task::UART_Task,
@@ -66,8 +66,10 @@ int main(){
 
     vTaskStartScheduler();
 
+    taskDISABLE_INTERRUPTS();
     while(true) {
-        System::FailHard("reached end of main");
+        System::FailHard("reached end of main" NEWLINE);
+        delay_cycles(20e6);
     }
 }
 
@@ -91,9 +93,10 @@ void vApplicationMallocFailedHook(void)
      * on how the remaining heap might be fragmented).
      */
     taskDISABLE_INTERRUPTS();
-    for (;;)
+    for (;;) {
         System::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
-        ;
+        delay_cycles(20e6);
+    }
 }
 
 /*-----------------------------------------------------------*/
@@ -141,9 +144,11 @@ vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
     char str[MAX_STR_ERROR_LEN];
     snprintf(str,sizeof(str), "vApplicationStackOverflowHook: %s", pcTaskName);
 
-    for (;;)
+    for (;;){
         System::uart_ui.nputs(ARRANDN(str));
-        ;
+        System::uart_ui.nputs(ARRANDN(NEWLINE));
+        delay_cycles(20e6);
+    }
 }
 #endif
 

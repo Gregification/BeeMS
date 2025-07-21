@@ -45,16 +45,16 @@
 #define BQ769X2_PROTOCOL_HPP_
 
 /* Maximum size of TX packet */
-#define I2C_TX_MAX_PACKET_SIZE (16)
+//#define I2C_TX_MAX_PACKET_SIZE (16)
 
 /* Number of bytes to send to target device */
-#define I2C_TX_PACKET_SIZE (16)
+//#define I2C_TX_PACKET_SIZE (16)
 
 /* Maximum size of RX packet */
-#define I2C_RX_MAX_PACKET_SIZE (16)
+//#define I2C_RX_MAX_PACKET_SIZE (16)
 
 /* Number of bytes to received from target */
-#define I2C_RX_PACKET_SIZE (16)
+//#define I2C_RX_PACKET_SIZE (16)
 
 /* I2C Target address */
 #define I2C_TARGET_ADDRESS \
@@ -67,6 +67,11 @@
 #include "ti/battery_gauge/gauge_level2/Gauge_Type.h"
 
 namespace BQ769X2_PROTOCOL {
+    struct I2C_addr {
+        uint8_t read;
+        uint8_t write;
+    };
+
     //Data  Memory  registers   Name in TRM
     enum RegAddr : uint16_t {
         Cell1Gain                     = 0x9180,   //Calibration:Voltage:Cell 1 Gain
@@ -486,7 +491,7 @@ namespace BQ769X2_PROTOCOL {
     enum DIR_CMD_TYPE : uint8_t {
         R       = 0,         //Read
         W       = 1,         //Write
-        W2      = 2,        //write data with two bytes
+        W2      = 2,         //write data with two bytes
     };
 
 
@@ -513,11 +518,18 @@ namespace BQ769X2_PROTOCOL {
     void sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type);
     void sendCommandSubcommand(Cmd command);
     void sendDirectCommand(CmdDrt command, uint16_t data, DIR_CMD_TYPE type);
-    void setRegister(
-        uint16_t reg_addr, uint32_t reg_data, uint8_t datalen);
+    void setRegister(uint16_t reg_addr, uint32_t reg_data, uint8_t datalen);
 
-    void I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
-    void I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
+
+    /** there's a issue with the BQ76952 getting hung and clock stretching indefinitely,
+     * theres a way to set the comm mode on the BQ to reset itself "if a clock is detected low
+     * longer than a t_timeout of 25 to 25ms, or if .... " but you actually have to enable that.
+     * for safety we just enforce detection on the MCU side.
+     */
+    /** returns false if timed out */
+    bool I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(1000));
+    /** returns false if timed out */
+    bool I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(1000));
 };
 
 #endif /* BQ769X2_PROTOCOL_HPP_ */
