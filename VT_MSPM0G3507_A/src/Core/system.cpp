@@ -300,7 +300,7 @@ void System::init() {
         DL_I2C_enableController(System::i2c1.reg);
 
         NVIC_EnableIRQ(I2C1_INT_IRQn);
-        DL_I2C_enableInterrupt(System::i2c1.reg,
+        DL_I2C_disableInterrupt(System::i2c1.reg,
                   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
                 | DL_I2C_INTERRUPT_CONTROLLER_NACK
                 | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
@@ -565,7 +565,6 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 void System::I2C::I2C::_irq() {
     switch(DL_I2C_getPendingInterrupt(reg)){
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
-//            System::uart_ui.nputs(ARRANDN("TX DONE" NEWLINE));
             if(trxBuffer.host_task != NULL){
                 xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
                 trxBuffer.clear();
@@ -573,7 +572,6 @@ void System::I2C::I2C::_irq() {
             break;
 
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
-//            System::uart_ui.nputs(ARRANDN("RX DONE" NEWLINE));
             if(trxBuffer.host_task != NULL){
                 xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
                 trxBuffer.clear();
@@ -581,7 +579,6 @@ void System::I2C::I2C::_irq() {
             break;
 
         case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
-//            System::uart_ui.nputs(ARRANDN("RXFIFO TRIGGER" NEWLINE));
             while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
                 if(trxBuffer.isInUse()){
                     ((uint8_t*)trxBuffer.data)[trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
@@ -593,7 +590,6 @@ void System::I2C::I2C::_irq() {
             break;
 
         case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
-//            System::uart_ui.nputs(ARRANDN("TXFIFO TRIGGER" NEWLINE));
             // fill TX fifo
             if(trxBuffer.isInUse()){
                 trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
@@ -606,7 +602,6 @@ void System::I2C::I2C::_irq() {
 
         case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
         case DL_I2C_IIDX_CONTROLLER_NACK:
-//            System::uart_ui.nputs(ARRANDN("ARB NACK" NEWLINE));
             if(trxBuffer.isInUse())
                 xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
             break;
@@ -618,7 +613,6 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_EVENT1_DMA_DONE:
         case DL_I2C_IIDX_CONTROLLER_EVENT2_DMA_DONE:
         default:
-//            System::uart_ui.nputs(ARRANDN("DEFAULT" NEWLINE));
             break;
 
     };
@@ -631,12 +625,12 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t 
     trxBuffer.clear();
     DL_I2C_flushControllerTXFIFO(reg);
 
-    DL_I2C_disableInterrupt(System::i2c1.reg,
+    DL_I2C_disableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
             |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
         );
-    DL_I2C_enableInterrupt(System::i2c1.reg,
+    DL_I2C_enableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
             |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
@@ -686,7 +680,7 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t 
         DL_I2C_flushControllerTXFIFO(reg);
     }
 
-    DL_I2C_disableInterrupt(System::i2c1.reg,
+    DL_I2C_disableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
             |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE

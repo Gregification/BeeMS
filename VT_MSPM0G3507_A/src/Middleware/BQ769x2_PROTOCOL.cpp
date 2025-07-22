@@ -582,20 +582,6 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t 
     } else {
         return false;
     }
-    /* Send a read request to Target */
-//        DL_I2C_startControllerTransfer(
-//            I2C_0_INST, I2C_TARGET_ADDRESS, DL_I2C_CONTROLLER_DIRECTION_RX, count);
-//
-//        for (uint8_t i = 0; i < count; i++) {
-//            while (DL_I2C_isControllerRXFIFOEmpty(I2C_0_INST)) {
-//                if(xTaskGetTickCount() > timeoutTime){ // check timeout
-//                    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-//                    return false;
-//                }
-//            }
-//
-//            reg_data[i] = DL_I2C_receiveControllerData(I2C_0_INST);
-//        }
 }
 
 //bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
@@ -677,10 +663,8 @@ bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t
             count + 1,
             timeout
         )){
-        System::uart_ui.nputs(ARRANDN("tx complete" NEWLINE));
         return true;
     } else {
-        System::uart_ui.nputs(ARRANDN("tx timed out" NEWLINE));
         return false;
     }
 

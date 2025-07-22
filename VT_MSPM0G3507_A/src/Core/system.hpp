@@ -243,8 +243,6 @@ namespace System {
 
             I2C_Regs * const reg;
 
-//            I2C(I2C_Regs * const reg) : reg(reg) {}
-
             void partialInitController();
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
@@ -261,12 +259,6 @@ namespace System {
              *      or received less than expected amount of bytes.
              */
             bool rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
-
-
-            /** return 0 on success. does not require freeRTOS */
-//            uint8_t basic_tx_blocking(uint8_t addr, void const *, uint8_t size);
-            /** return 0 on success. does not require freeRTOS */
-//            uint8_t basic_rx_blocking(uint8_t addr, void *, uint8_t size);
 
 //        private:
             TRXBuffer trxBuffer;
