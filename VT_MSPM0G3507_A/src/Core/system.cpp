@@ -303,14 +303,14 @@ void System::init() {
         DL_I2C_disableInterrupt(System::i2c1.reg,
                   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
                 | DL_I2C_INTERRUPT_CONTROLLER_NACK
+                | DL_I2C_INTERRUPT_CONTROLLER_START
+                | DL_I2C_INTERRUPT_CONTROLLER_STOP
                 | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
                 | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
                 | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
                 | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
                 | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
                 | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-                | DL_I2C_INTERRUPT_CONTROLLER_START
-                | DL_I2C_INTERRUPT_CONTROLLER_STOP
             );
     #endif
 
@@ -323,11 +323,11 @@ void System::TRXBuffer::clear(){
     nxt_index       = 0;
 };
 
-void System::TRXBuffer::init(void * data, uint8_t length) {
-    host_task       = xTaskGetCurrentTaskHandle();
-    this->data      = data;
+void System::TRXBuffer::init(void * data, uint8_t length, TaskHandle_t hdl) {
+    host_task       = hdl;
     data_length     = length;
     nxt_index       = 0;
+    this->data      = data;
 }
 
 bool System::TRXBuffer::isInUse() const {
@@ -501,7 +501,7 @@ void System::I2C::I2C::partialInitController(){
              .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2
         };
     DL_I2C_setClockConfig(reg, &clk_config);
-//    DL_I2C_enableAnalogGlitchFilter(reg);
+    DL_I2C_enableAnalogGlitchFilter(reg);
     DL_I2C_disableAnalogGlitchFilter(reg);
     DL_I2C_setControllerAddressingMode(reg, DL_I2C_CONTROLLER_ADDRESSING_MODE::DL_I2C_CONTROLLER_ADDRESSING_MODE_7_BIT);
 
@@ -622,18 +622,24 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t 
     TickType_t timeoutTime = xTaskGetTickCount() + timeout;
 
     //--- prep for tx ----------------------------------------
-    trxBuffer.clear();
-    DL_I2C_flushControllerTXFIFO(reg);
 
     DL_I2C_disableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
             |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
         );
+
+    trxBuffer.clear(); // this must never be called when the interrupts are enabled
+    DL_I2C_flushControllerTXFIFO(reg);
+
     DL_I2C_enableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
             |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+            |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+            |   DL_I2C_INTERRUPT_CONTROLLER_NACK
+            |   DL_I2C_INTERRUPT_CONTROLLER_START
+            |   DL_I2C_INTERRUPT_CONTROLLER_STOP
         );
 
     bool ret = true;
@@ -676,15 +682,22 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t 
             ret = true;
         }
 
-        trxBuffer.clear();
+        trxBuffer.data_length = 0; // stop tx. this is cheese code but by gollie i cant get this to be safe otherwise
         DL_I2C_flushControllerTXFIFO(reg);
+
     }
 
     DL_I2C_disableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
             |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+            |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+            |   DL_I2C_INTERRUPT_CONTROLLER_NACK
+            |   DL_I2C_INTERRUPT_CONTROLLER_START
+            |   DL_I2C_INTERRUPT_CONTROLLER_STOP
         );
+
+    trxBuffer.clear(); // this must never be called when the interrupts are enabled
 
     return ret;
 }
@@ -693,18 +706,24 @@ bool System::I2C::I2C::rx_blocking(uint8_t target_address, void * data, uint8_t 
     TickType_t timeoutTime = xTaskGetTickCount() + timeout;
 
     //--- prep for rx ----------------------------------------
-    trxBuffer.clear();
-    DL_I2C_flushControllerTXFIFO(reg);
 
-    DL_I2C_disableInterrupt(System::i2c1.reg,
+    DL_I2C_disableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
             |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
         );
-    DL_I2C_enableInterrupt(System::i2c1.reg,
+
+    trxBuffer.clear(); // this must never be called when the interrupts are enabled
+    DL_I2C_flushControllerTXFIFO(reg);
+
+    DL_I2C_enableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
             |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+            |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+            |   DL_I2C_INTERRUPT_CONTROLLER_NACK
+            |   DL_I2C_INTERRUPT_CONTROLLER_START
+            |   DL_I2C_INTERRUPT_CONTROLLER_STOP
         );
 
     bool ret = true;
@@ -743,14 +762,20 @@ bool System::I2C::I2C::rx_blocking(uint8_t target_address, void * data, uint8_t 
             ret = true;
         }
 
-        trxBuffer.clear();
+        trxBuffer.data_length = 0;
     }
 
-    DL_I2C_disableInterrupt(System::i2c1.reg,
+    DL_I2C_disableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
             |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
             |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+            |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+            |   DL_I2C_INTERRUPT_CONTROLLER_NACK
+            |   DL_I2C_INTERRUPT_CONTROLLER_START
+            |   DL_I2C_INTERRUPT_CONTROLLER_STOP
         );
+
+    trxBuffer.clear(); // this must never be called when the interrupts are enabled
 
     return ret;
 }

@@ -161,7 +161,7 @@ namespace System {
             nxt_index;      // index next byte is read/written by
 
         void clear();
-        void init(void * data, uint8_t length);
+        void init(void * data, uint8_t length, TaskHandle_t = xTaskGetCurrentTaskHandle());
         bool isInUse() const;     // returns true if host_task exists and buffer iteration is not complete
     };
 

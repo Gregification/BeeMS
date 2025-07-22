@@ -72,33 +72,23 @@ void TemperatureMonitor(char * p_str) {
 //             BQ769X2_PROTOCOL::CmdDrt::IntTemperature
         };
 
-    uint32_t c = 0;
-    char str[20];
     while(true){
-        snprintf(ARRANDN(str), "%4x: ", c);
-        System::uart_ui.nputs(ARRANDN(str));
-        c++;
-        uint32_t bad_read = 0;
         for(uint8_t i = 0; i < sizeof(cmds)/sizeof(cmds[0]); i++){
-            uint16_t _adcValue;
+            uint16_t _adcValue = 0;
 
-            bool rx_success = BQ769X2_PROTOCOL::I2C_ReadReg(cmds[i], (uint8_t *)&_adcValue, BQ769X2_PROTOCOL::DIR_CMD_TYPE::W2);
-            if(!rx_success)
-                bad_read++;
+            BQ769X2_PROTOCOL::I2C_ReadReg(cmds[i], (uint8_t *)&_adcValue, BQ769X2_PROTOCOL::DIR_CMD_TYPE::W2);
 
             // OBSOLETE DO NOT USE UNLESS TOLD WE GOTO NOT BE LAZY
             //uint32_t _internalTemperature = _adcValue * (float)BQ769X2_PROTOCOL::IntGain / (float)65536 + BQ769X2_PROTOCOL::Intbaseoffset + BQ769X2_PROTOCOL::InternalTempOffset;
             //if(_adcValue > BQ769X2_PROTOCOL::IntMaximumAD)
             //    _internalTemperature = BQ769X2_PROTOCOL::IntMaximumAD;
 
-
+            static char str[20];
             //snprintf(str, sizeof(str), "%d,", v);
             snprintf(str, sizeof(str), "%d,", _adcValue); //This is what I assumed it was idk this stuff hurts my brain
             System::uart_ui.nputs(ARRANDN(str));
 //            vTaskDelay(pdMS_TO_TICKS(10));
         }
-        if(bad_read)
-            snprintf(ARRANDN(str), "\t | bad read! x%d", bad_read);
 
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
@@ -214,7 +204,6 @@ void Init(char * p_str) {
         // Set up SCDL Latch Limit to 1 to set SCD recovery only with load removal 0x9295 = 0x01
         // If this is not set, then SCD will recover based on time (SCD Recovery Time parameter).
         BQ769X2_PROTOCOL::setRegister(BQ769X2_PROTOCOL::RegAddr::SCDLLatchLimit, 0x01, 1);
-
 
         vTaskDelay(pdMS_TO_TICKS(8));
         // Exit CONFIGUPDATE mode  - Subcommand 0x0092
