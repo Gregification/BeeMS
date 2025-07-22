@@ -11,8 +11,8 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
-//#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
-#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
+#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
+//#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
 
 #include "system.hpp"
 
@@ -42,20 +42,20 @@ int main(){
 //            tskIDLE_PRIORITY,
 //            NULL);
 
-//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
-//                "BQ769x2_PROTOCOL_Test_V_Task",
+    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
+                "BQ769x2_PROTOCOL_Test_V_Task",
+                configMINIMAL_STACK_SIZE * 50,
+                NULL,
+                tskIDLE_PRIORITY,
+                NULL);
+
+
+//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_Task,
+//                "BQ769x2_PROTOCOL_Test_T_Task",
 //                configMINIMAL_STACK_SIZE * 50,
 //                NULL,
 //                tskIDLE_PRIORITY,
 //                NULL);
-
-
-    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_Task,
-                "BQ769x2_PROTOCOL_Test_T_Task",
-                configMINIMAL_STACK_SIZE * 50,
-                NULL,
-                configMAX_PRIORITIES,//tskIDLE_PRIORITY,
-                NULL);
 
 //    xTaskCreate(Task::UART_Task,
 //                "UART_Task",

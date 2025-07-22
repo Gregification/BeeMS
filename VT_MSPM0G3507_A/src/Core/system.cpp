@@ -303,14 +303,6 @@ void System::init() {
         DL_I2C_disableInterrupt(System::i2c1.reg,
                   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
                 | DL_I2C_INTERRUPT_CONTROLLER_NACK
-                | DL_I2C_INTERRUPT_CONTROLLER_START
-                | DL_I2C_INTERRUPT_CONTROLLER_STOP
-                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
-                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
-                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
             );
     #endif
 
@@ -563,6 +555,8 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 }
 
 void System::I2C::I2C::_irq() {
+    static UBaseType_t isr_status;
+    isr_status = taskENTER_CRITICAL_FROM_ISR();
     switch(DL_I2C_getPendingInterrupt(reg)){
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
             if(trxBuffer.host_task != NULL){
@@ -616,31 +610,16 @@ void System::I2C::I2C::_irq() {
             break;
 
     };
+    taskEXIT_CRITICAL_FROM_ISR(isr_status);
 }
 
 bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t size, TickType_t timeout) {
     TickType_t timeoutTime = xTaskGetTickCount() + timeout;
 
     //--- prep for tx ----------------------------------------
+    trxBuffer.init(data, size);
 
-    DL_I2C_disableInterrupt(reg,
-                DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
-            |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-            |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-        );
-
-    trxBuffer.clear(); // this must never be called when the interrupts are enabled
-    DL_I2C_flushControllerTXFIFO(reg);
-
-    DL_I2C_enableInterrupt(reg,
-                DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
-            |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-            |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-            |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
-            |   DL_I2C_INTERRUPT_CONTROLLER_NACK
-            |   DL_I2C_INTERRUPT_CONTROLLER_START
-            |   DL_I2C_INTERRUPT_CONTROLLER_STOP
-        );
+    NVIC_EnableIRQ(I2C1_INT_IRQn);
 
     bool ret = true;
 
@@ -653,11 +632,26 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t 
     }
 
     if(ret) {
-        trxBuffer.init(data, size);
+        DL_I2C_disableInterrupt(reg,
+                        DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
+                    |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+                    |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+                );
+
         trxBuffer.nxt_index += DL_I2C_fillControllerTXFIFO(
                 reg,
                 (uint8_t *)data,
                 trxBuffer.data_length - trxBuffer.nxt_index
+            );
+
+        DL_I2C_enableInterrupt(reg,
+                    DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
+                |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+                |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+                |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+                |   DL_I2C_INTERRUPT_CONTROLLER_NACK
+                |   DL_I2C_INTERRUPT_CONTROLLER_START
+                |   DL_I2C_INTERRUPT_CONTROLLER_STOP
             );
 
 
@@ -697,6 +691,8 @@ bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t 
             |   DL_I2C_INTERRUPT_CONTROLLER_STOP
         );
 
+    NVIC_DisableIRQ(I2C1_INT_IRQn);
+
     trxBuffer.clear(); // this must never be called when the interrupts are enabled
 
     return ret;
@@ -713,8 +709,8 @@ bool System::I2C::I2C::rx_blocking(uint8_t target_address, void * data, uint8_t 
             |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
         );
 
-    trxBuffer.clear(); // this must never be called when the interrupts are enabled
     DL_I2C_flushControllerTXFIFO(reg);
+    trxBuffer.clear(); // this must never be called when the interrupts are enabled
 
     DL_I2C_enableInterrupt(reg,
                 DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL

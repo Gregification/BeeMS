@@ -87,7 +87,8 @@ void TemperatureMonitor(char * p_str) {
             //snprintf(str, sizeof(str), "%d,", v);
             snprintf(str, sizeof(str), "%d,", _adcValue); //This is what I assumed it was idk this stuff hurts my brain
             System::uart_ui.nputs(ARRANDN(str));
-//            vTaskDelay(pdMS_TO_TICKS(10));
+//            if(_adcValue == 0)
+//                vTaskDelay(pdMS_TO_TICKS(1000));
         }
 
         System::uart_ui.nputs(ARRANDN(NEWLINE));
