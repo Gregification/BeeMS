@@ -18,6 +18,7 @@
 
 #include "Tasks/blink_task.hpp"
 #include "Tasks/Test_UART_Task.hpp"
+#include "Tasks/CAN_Task.hpp"
 #include "Tasks/fiddle.hpp"
 
 int main(){
@@ -35,6 +36,13 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
+//    xTaskCreate(Task::CAN_test,
+//                "UART_Task",
+//                configMINIMAL_STACK_SIZE * 10,
+//                NULL,
+//                tskIDLE_PRIORITY,
+//                NULL);
+
 //    xTaskCreate(Task::fiddle_task,
 //            "fiddle task",
 //            configMINIMAL_STACK_SIZE * 50,
@@ -42,12 +50,12 @@ int main(){
 //            tskIDLE_PRIORITY,
 //            NULL);
 
-    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
-                "BQ769x2_PROTOCOL_Test_V_Task",
-                configMINIMAL_STACK_SIZE * 50,
-                NULL,
-                tskIDLE_PRIORITY,
-                NULL);
+//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
+//                "BQ769x2_PROTOCOL_Test_V_Task",
+//                configMINIMAL_STACK_SIZE * 50,
+//                NULL,
+//                tskIDLE_PRIORITY,
+//                NULL);
 
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_Task,

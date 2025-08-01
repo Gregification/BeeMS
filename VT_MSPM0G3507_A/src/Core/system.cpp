@@ -211,7 +211,7 @@ void System::init() {
         //target 160Mhz VCO
         constexpr DL_SYSCTL_SYSPLLConfig pll_config = {
                 .rDivClk2x  = 0x3,
-                .rDivClk1   = 0x0,
+                .rDivClk1   = 0x9,
                 .rDivClk0   = 0x0, // unused
                 .enableCLK2x= DL_SYSCTL_SYSPLL_CLK2X_ENABLE,
                 .enableCLK1 = DL_SYSCTL_SYSPLL_CLK1_ENABLE,
