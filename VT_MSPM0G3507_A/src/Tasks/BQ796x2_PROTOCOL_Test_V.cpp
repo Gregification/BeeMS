@@ -165,9 +165,9 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
             uint16_t v = 0;
             BQ769X2_PROTOCOL::I2C_ReadReg(cmds[i], (uint8_t *)&v, BQ769X2_PROTOCOL::DIR_CMD_TYPE::W2);
 
-            snprintf(ARRANDN(str), "%d,", v);
+            snprintf(ARRANDN(str), "%6d,", v);
             System::uart_ui.nputs(ARRANDN(str));
-//            vTaskDelay(pdMS_TO_TICKS(10));
+            vTaskDelay(pdMS_TO_TICKS(50));
         }
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }

@@ -613,167 +613,68 @@ void System::I2C::I2C::_irq() {
     taskEXIT_CRITICAL_FROM_ISR(isr_status);
 }
 
-bool System::I2C::I2C::tx_blocking(uint8_t target_address, void * data, uint8_t size, TickType_t timeout) {
-    TickType_t timeoutTime = xTaskGetTickCount() + timeout;
-
-    //--- prep for tx ----------------------------------------
-    trxBuffer.init(data, size);
-
-    NVIC_EnableIRQ(I2C1_INT_IRQn);
-
-    bool ret = true;
-
-    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)){
-        vTaskDelay(0);
-        if(xTaskGetTickCount() > timeoutTime){ // check timeout
-            ret = false;
-            break;
-        }
-    }
-
-    if(ret) {
-        DL_I2C_disableInterrupt(reg,
-                        DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
-                    |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-                    |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-                );
-
-        trxBuffer.nxt_index += DL_I2C_fillControllerTXFIFO(
-                reg,
-                (uint8_t *)data,
-                trxBuffer.data_length - trxBuffer.nxt_index
-            );
-
-        DL_I2C_enableInterrupt(reg,
-                    DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
-                |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-                |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-                |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
-                |   DL_I2C_INTERRUPT_CONTROLLER_NACK
-                |   DL_I2C_INTERRUPT_CONTROLLER_START
-                |   DL_I2C_INTERRUPT_CONTROLLER_STOP
-            );
-
-
-        //--- tx -------------------------------------------------
-        DL_I2C_startControllerTransfer(
-                reg,
-                target_address,
-                DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
-                trxBuffer.data_length
-            );
-
-
-        //--- await notification from IRQ ------------------------
-        // IRQ will handle the data transfer in the meantime
-
-        // don't simplify this. will be pain to debug if someone screws up the notification indices.
-        if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeoutTime - xTaskGetTickCount())){
-            // timed out
-            ret = false;
-        } else {
-            // received a notification
-            ret = true;
-        }
-
-        trxBuffer.data_length = 0; // stop tx. this is cheese code but by gollie i cant get this to be safe otherwise
-        DL_I2C_flushControllerTXFIFO(reg);
-
-    }
-
-    DL_I2C_disableInterrupt(reg,
-                DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
-            |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-            |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-            |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
-            |   DL_I2C_INTERRUPT_CONTROLLER_NACK
-            |   DL_I2C_INTERRUPT_CONTROLLER_START
-            |   DL_I2C_INTERRUPT_CONTROLLER_STOP
-        );
-
-    NVIC_DisableIRQ(I2C1_INT_IRQn);
-
-    trxBuffer.clear(); // this must never be called when the interrupts are enabled
-
-    return ret;
-}
-
-bool System::I2C::I2C::rx_blocking(uint8_t target_address, void * data, uint8_t size, TickType_t timeout) {
-    TickType_t timeoutTime = xTaskGetTickCount() + timeout;
-
-    //--- prep for rx ----------------------------------------
-
-    DL_I2C_disableInterrupt(reg,
-                DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_EMPTY
-            |   DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-            |   DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-        );
+bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
 
     DL_I2C_flushControllerTXFIFO(reg);
-    trxBuffer.clear(); // this must never be called when the interrupts are enabled
 
-    DL_I2C_enableInterrupt(reg,
-                DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
-            |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-            |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-            |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
-            |   DL_I2C_INTERRUPT_CONTROLLER_NACK
-            |   DL_I2C_INTERRUPT_CONTROLLER_START
-            |   DL_I2C_INTERRUPT_CONTROLLER_STOP
+    size -= DL_I2C_fillControllerTXFIFO(reg, (uint8_t *)data, size);
+
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+        {}
+
+    DL_I2C_startControllerTransfer(
+            reg,
+            addr,
+            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
+            size
         );
 
-    bool ret = true;
+    while(size > 0){
+        size -= DL_I2C_fillControllerTXFIFO(reg, (uint8_t *)data, size);
 
-    // a chance of blocking here
-    while (!(DL_I2C_getControllerStatus(reg) & (DL_I2C_CONTROLLER_STATUS_IDLE | DL_I2C_CONTROLLER_STATUS_BUSY_BUS) )){
-        vTaskDelay(0);
-        if(xTaskGetTickCount() > timeoutTime){ // check timeout
-            ret = false;
+        if(DL_I2C_getControllerStatus(reg) & (
+                DL_I2C_CONTROLLER_STATUS_IDLE
+                | DL_I2C_CONTROLLER_STATUS_ERROR
+            ))
             break;
-        }
     }
 
-    if(ret){
-        DL_I2C_flushControllerRXFIFO(reg);
-        trxBuffer.init(data, size);
+    while (DL_I2C_getControllerStatus(reg) &
+               DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+            ;
 
-        //--- rx -------------------------------------------------
-        DL_I2C_startControllerTransfer(
+    // delay some
+    delay_cycles(80 * 60);
+
+    return true;
+}
+
+bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+            {}
+
+    DL_I2C_flushControllerTXFIFO(reg);
+
+    DL_I2C_startControllerTransfer(
                 reg,
-                target_address,
+                addr,
                 DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
-                trxBuffer.data_length
+                size
             );
-
-        //--- await notification from IRQ ------------------------
-        // IRQ will handle the data transfer in the meantime
-
-        bool ret = false;
-        // don't simplify this. will be pain to debug if someone screws up the notification indices.
-        if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeout)){
-            // timed out
-            ret = false;
-        } else {
-            // received a notification
-            ret = true;
+    for(uint8_t i = 0; i < size; i++){
+        while(DL_I2C_isControllerRXFIFOEmpty(reg)){
+            if(DL_I2C_getControllerStatus(reg) & (
+                    DL_I2C_CONTROLLER_STATUS_IDLE
+                    | DL_I2C_CONTROLLER_STATUS_ERROR
+                ))
+                break;
         }
-
-        trxBuffer.data_length = 0;
+        ((uint8_t *)data)[i] = DL_I2C_receiveControllerData(reg);
     }
 
-    DL_I2C_disableInterrupt(reg,
-                DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
-            |   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-            |   DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-            |   DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
-            |   DL_I2C_INTERRUPT_CONTROLLER_NACK
-            |   DL_I2C_INTERRUPT_CONTROLLER_START
-            |   DL_I2C_INTERRUPT_CONTROLLER_STOP
-        );
-
-    trxBuffer.clear(); // this must never be called when the interrupts are enabled
-
-    return ret;
+    // delay some
+    delay_cycles(80 * 60);
+    return true;
 }
 
 
