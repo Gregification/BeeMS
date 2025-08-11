@@ -46,7 +46,7 @@ int main(){
                 "BQ769x2_PROTOCOL_Test_V_Task",
                 configMINIMAL_STACK_SIZE * 50,
                 NULL,
-                tskIDLE_PRIORITY,
+                configMAX_PRIORITIES,
                 NULL);
 
 

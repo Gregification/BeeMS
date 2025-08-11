@@ -256,20 +256,6 @@ void System::init() {
 
     #ifdef PROJECT_ENABLE_I2C0
         // TODO: code to set this up. should look like I2C1's init code below
-
-        NVIC_EnableIRQ(I2C0_INT_IRQn);
-        DL_I2C_enableInterrupt(System::i2c0.reg,
-                  DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
-                | DL_I2C_INTERRUPT_CONTROLLER_NACK
-                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_FULL
-                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_FULL
-                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-                | DL_I2C_INTERRUPT_CONTROLLER_START
-                | DL_I2C_INTERRUPT_CONTROLLER_STOP
-            );
     #endif
     #ifdef PROJECT_ENABLE_I2C1
         DL_I2C_enablePower(System::i2c1.reg);
@@ -299,11 +285,11 @@ void System::init() {
         System::i2c1.setSCLTarget(100e3);
         DL_I2C_enableController(System::i2c1.reg);
 
-        NVIC_EnableIRQ(I2C1_INT_IRQn);
-        DL_I2C_disableInterrupt(System::i2c1.reg,
-                  DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
-                | DL_I2C_INTERRUPT_CONTROLLER_NACK
-            );
+//        NVIC_EnableIRQ(I2C1_INT_IRQn);
+//        DL_I2C_disableInterrupt(System::i2c1.reg,
+//                  DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+//                | DL_I2C_INTERRUPT_CONTROLLER_NACK
+//            );
     #endif
 
 }
@@ -555,62 +541,62 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 }
 
 void System::I2C::I2C::_irq() {
-    static UBaseType_t isr_status;
-    isr_status = taskENTER_CRITICAL_FROM_ISR();
-    switch(DL_I2C_getPendingInterrupt(reg)){
-        case DL_I2C_IIDX_CONTROLLER_TX_DONE:
-            if(trxBuffer.host_task != NULL){
-                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
-                trxBuffer.clear();
-            }
-            break;
-
-        case DL_I2C_IIDX_CONTROLLER_RX_DONE:
-            if(trxBuffer.host_task != NULL){
-                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
-                trxBuffer.clear();
-            }
-            break;
-
-        case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
-            while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
-                if(trxBuffer.isInUse()){
-                    ((uint8_t*)trxBuffer.data)[trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
-                } else {
-                    // ignore and flush
-                    DL_I2C_receiveControllerData(reg);
-                }
-            }
-            break;
-
-        case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
-            // fill TX fifo
-            if(trxBuffer.isInUse()){
-                trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
-                        reg,
-                        (uint8_t *)trxBuffer.data,
-                        trxBuffer.data_length - trxBuffer.nxt_index
-                    );
-            }
-            break;
-
-        case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
-        case DL_I2C_IIDX_CONTROLLER_NACK:
-            if(trxBuffer.isInUse())
-                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
-            break;
-
-        case DL_I2C_IIDX_CONTROLLER_RXFIFO_FULL:
-        case DL_I2C_IIDX_CONTROLLER_TXFIFO_EMPTY:
-        case DL_I2C_IIDX_CONTROLLER_START:
-        case DL_I2C_IIDX_CONTROLLER_STOP:
-        case DL_I2C_IIDX_CONTROLLER_EVENT1_DMA_DONE:
-        case DL_I2C_IIDX_CONTROLLER_EVENT2_DMA_DONE:
-        default:
-            break;
-
-    };
-    taskEXIT_CRITICAL_FROM_ISR(isr_status);
+//    static UBaseType_t isr_status;
+//    isr_status = taskENTER_CRITICAL_FROM_ISR();
+//    switch(DL_I2C_getPendingInterrupt(reg)){
+//        case DL_I2C_IIDX_CONTROLLER_TX_DONE:
+//            if(trxBuffer.host_task != NULL){
+//                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
+//                trxBuffer.clear();
+//            }
+//            break;
+//
+//        case DL_I2C_IIDX_CONTROLLER_RX_DONE:
+//            if(trxBuffer.host_task != NULL){
+//                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
+//                trxBuffer.clear();
+//            }
+//            break;
+//
+//        case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
+//            while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
+//                if(trxBuffer.isInUse()){
+//                    ((uint8_t*)trxBuffer.data)[trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
+//                } else {
+//                    // ignore and flush
+//                    DL_I2C_receiveControllerData(reg);
+//                }
+//            }
+//            break;
+//
+//        case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
+//            // fill TX fifo
+//            if(trxBuffer.isInUse()){
+//                trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
+//                        reg,
+//                        (uint8_t *)trxBuffer.data,
+//                        trxBuffer.data_length - trxBuffer.nxt_index
+//                    );
+//            }
+//            break;
+//
+//        case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
+//        case DL_I2C_IIDX_CONTROLLER_NACK:
+//            if(trxBuffer.isInUse())
+//                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
+//            break;
+//
+//        case DL_I2C_IIDX_CONTROLLER_RXFIFO_FULL:
+//        case DL_I2C_IIDX_CONTROLLER_TXFIFO_EMPTY:
+//        case DL_I2C_IIDX_CONTROLLER_START:
+//        case DL_I2C_IIDX_CONTROLLER_STOP:
+//        case DL_I2C_IIDX_CONTROLLER_EVENT1_DMA_DONE:
+//        case DL_I2C_IIDX_CONTROLLER_EVENT2_DMA_DONE:
+//        default:
+//            break;
+//
+//    };
+//    taskEXIT_CRITICAL_FROM_ISR(isr_status);
 }
 
 bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
@@ -644,7 +630,7 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
             ;
 
     // delay some
-    delay_cycles(80 * 60);
+    delay_cycles(80 * 600);
 
     return true;
 }
@@ -673,7 +659,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
     }
 
     // delay some
-    delay_cycles(80 * 60);
+    delay_cycles(80 * 600);
     return true;
 }
 
