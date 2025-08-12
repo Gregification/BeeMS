@@ -56,12 +56,6 @@
 /* Number of bytes to received from target */
 //#define I2C_RX_PACKET_SIZE (16)
 
-/* I2C Target address */
-#define I2C_TARGET_ADDRESS \
-    (0x08)  // BQ769x2 address is 0x10 including R/W bit or 0x8 as 7-bit address
-
-#define I2C_0_INST System::i2c1.reg
-
 
 #include "Core/system.hpp"
 #include "ti/battery_gauge/gauge_level2/Gauge_Type.h"
@@ -497,28 +491,28 @@ namespace BQ769X2_PROTOCOL {
 
     //bool crc_enabled;
 
-    void init(tGaugeApplication *pGaugeApp);
-    void readAlarmStatus();
-    void readSafetyStatus();
-    void readPFStatus();
-
-    /** reads a specific cells voltage
-     * @param command : eg :  CmdDrt::Cell1Voltage, CmdDrt::StackVoltage, CmdDrt::LDPinVoltage, ...
-     * @returns mV
-     * - 16b resolution, units of 1mV
-     * " –0.2 V to 5.5 V " - BQ769x2DS.10.1/35
-     */
-    uint16_t readVoltage(CmdDrt command);
-    void readSeriesCurrent();
-    float readTemperature(CmdDrt command);
-    void readCurrent();
-    void readPassQ();
-    void readFETStatus();
-    void readAllTemperatures();
-    void sendSubcommand(Cmd command, uint16_t data, DIR_CMD_TYPE type);
-    void sendCommandSubcommand(Cmd command);
-    void sendDirectCommand(CmdDrt command, uint16_t data, DIR_CMD_TYPE type);
-    void setRegister(uint16_t reg_addr, uint32_t reg_data, uint8_t datalen);
+//    void init(tGaugeApplication *pGaugeApp);
+//    void readAlarmStatus();
+//    void readSafetyStatus();
+//    void readPFStatus();
+//
+//    /** reads a specific cells voltage
+//     * @param command : eg :  CmdDrt::Cell1Voltage, CmdDrt::StackVoltage, CmdDrt::LDPinVoltage, ...
+//     * @returns mV
+//     * - 16b resolution, units of 1mV
+//     * " –0.2 V to 5.5 V " - BQ769x2DS.10.1/35
+//     */
+//    uint16_t readVoltage(CmdDrt command);
+//    void readSeriesCurrent();
+//    float readTemperature(CmdDrt command);
+//    void readCurrent();
+//    void readPassQ();
+//    void readFETStatus();
+//    void readAllTemperatures();
+    void sendSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command, uint16_t data, DIR_CMD_TYPE type);
+    void sendCommandSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command);
+    void sendDirectCommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, DIR_CMD_TYPE type);
+    void setRegister(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint16_t reg_addr, uint32_t reg_data, uint8_t datalen);
 
 
     /** there's a issue with the BQ76952 getting hung and clock stretching indefinitely,
@@ -527,9 +521,9 @@ namespace BQ769X2_PROTOCOL {
      * for safety we just enforce detection on the MCU side.
      */
     /** returns false if timed out */
-    bool I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
+    bool I2C_WriteReg(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
     /** returns false if timed out */
-    bool I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
+    bool I2C_ReadReg(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
 };
 
 #endif /* BQ769X2_PROTOCOL_HPP_ */

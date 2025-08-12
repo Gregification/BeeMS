@@ -14,6 +14,11 @@
 #include "Middleware/BQ769x2_PROTOCOL.hpp"
 #include "Core/system.hpp"
 
+#define I2C_0_INST System::i2c1.reg
+/* I2C Target address */
+#define I2C_TARGET_ADDRESS \
+    (0x08)  // BQ769x2 address is 0x10 including R/W bit or 0x8 as 7-bit address
+
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
 
@@ -142,7 +147,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     vTaskDelay(pdMS_TO_TICKS(8));
 
 //    System::i2c1.tx_ctrl_blocking(0x08, ARRANDN(((uint8_t[]){0x36, 0x72, 0x41, 0x4})));
-    const BQ769X2_PROTOCOL::CmdDrt cmds[16] = {
+    const BQ769X2_PROTOCOL::CmdDrt cmds[] = {
              BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage,
              BQ769X2_PROTOCOL::CmdDrt::Cell2Voltage,
              BQ769X2_PROTOCOL::CmdDrt::Cell3Voltage,
