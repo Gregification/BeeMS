@@ -167,7 +167,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
 
             snprintf(ARRANDN(str), "%6d,", v);
             System::uart_ui.nputs(ARRANDN(str));
-            vTaskDelay(pdMS_TO_TICKS(100));
+            vTaskDelay(pdMS_TO_TICKS(10));
         }
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
