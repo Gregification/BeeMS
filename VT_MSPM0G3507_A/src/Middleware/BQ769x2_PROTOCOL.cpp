@@ -503,35 +503,11 @@ void BQ769X2_PROTOCOL::readPassQ()
 
 bool BQ769X2_PROTOCOL::I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
 {
-    DL_I2C_fillControllerTXFIFO(I2C_0_INST, &reg_addr, count);
+    // tx read address
+    System::i2c1.tx_blocking(I2C_TARGET_ADDRESS, &reg_addr, 1, timeout);
 
-    /* Wait for I2C to be Idle */
-    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
-             DL_I2C_CONTROLLER_STATUS_IDLE))
-        ;
-
-    DL_I2C_startControllerTransfer(
-        I2C_0_INST, I2C_TARGET_ADDRESS, DL_I2C_CONTROLLER_DIRECTION_TX, 1);
-
-    while (DL_I2C_getControllerStatus(I2C_0_INST) &
-           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
-        ;
-    /* Wait for I2C to be Idle */
-    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
-             DL_I2C_CONTROLLER_STATUS_IDLE))
-        ;
-
-    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-
-    /* Send a read request to Target */
-    DL_I2C_startControllerTransfer(
-        I2C_0_INST, I2C_TARGET_ADDRESS, DL_I2C_CONTROLLER_DIRECTION_RX, count);
-
-    for (uint8_t i = 0; i < count; i++) {
-        while (DL_I2C_isControllerRXFIFOEmpty(I2C_0_INST))
-            ;
-        reg_data[i] = DL_I2C_receiveControllerData(I2C_0_INST);
-    }
+    // rx fetched
+    System::i2c1.rx_blocking(I2C_TARGET_ADDRESS, reg_data, count, timeout);
 
     return true;
 }
@@ -566,6 +542,49 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t 
 //    }
 //}
 
+//bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
+//{
+//    uint8_t I2Ctxbuff[8] = {0x00};
+//
+//    I2Ctxbuff[0] = reg_addr;
+//    uint8_t i, j = 1;
+//
+//    for (i = 0; i < count; i++) {
+//        I2Ctxbuff[j] = reg_data[i];
+//        j++;
+//    }
+//
+//    //    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+//    DL_I2C_fillControllerTXFIFO(I2C_0_INST, &I2Ctxbuff[0], count + 1);
+//
+//    /* Wait for I2C to be Idle */
+//    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
+//             DL_I2C_CONTROLLER_STATUS_IDLE))
+//        ;
+//
+//    DL_I2C_startControllerTransfer(I2C_0_INST, I2C_TARGET_ADDRESS,
+//        DL_I2C_CONTROLLER_DIRECTION_TX, count + 1);
+//
+//    while (DL_I2C_getControllerStatus(I2C_0_INST) &
+//           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+//        ;
+//    /* Wait for I2C to be Idle */
+//    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
+//             DL_I2C_CONTROLLER_STATUS_IDLE))
+//        ;
+//
+//    //Avoid BQ769x2 to stretch the SCLK too long and generate a timeout interrupt at 400kHz because of low power mode
+//    // if(DL_I2C_getRawInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT))
+//    // {
+//    //     DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+//    //     DL_I2C_clearInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT);
+//    //     I2C_WriteReg(reg_addr, reg_data, count);
+//    // }
+//    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+//
+//    return true;
+//}
+
 bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
 {
     uint8_t I2Ctxbuff[8] = {0x00};
@@ -578,62 +597,9 @@ bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t
         j++;
     }
 
-    //    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-    DL_I2C_fillControllerTXFIFO(I2C_0_INST, &I2Ctxbuff[0], count + 1);
-
-    /* Wait for I2C to be Idle */
-    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
-             DL_I2C_CONTROLLER_STATUS_IDLE))
-        ;
-
-    DL_I2C_startControllerTransfer(I2C_0_INST, I2C_TARGET_ADDRESS,
-        DL_I2C_CONTROLLER_DIRECTION_TX, count + 1);
-
-    while (DL_I2C_getControllerStatus(I2C_0_INST) &
-           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
-        ;
-    /* Wait for I2C to be Idle */
-    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
-             DL_I2C_CONTROLLER_STATUS_IDLE))
-        ;
-
-    //Avoid BQ769x2 to stretch the SCLK too long and generate a timeout interrupt at 400kHz because of low power mode
-    // if(DL_I2C_getRawInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT))
-    // {
-    //     DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-    //     DL_I2C_clearInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT);
-    //     I2C_WriteReg(reg_addr, reg_data, count);
-    // }
-    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+    System::i2c1.tx_blocking(I2C_TARGET_ADDRESS, I2Ctxbuff, count+1, timeout);
 
     return true;
 }
-
-//bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
-//{
-//    TickType_t timeoutTime = xTaskGetTickCount() + timeout;
-//
-//    uint8_t I2Ctxbuff[8] = {0x00};
-//
-//    I2Ctxbuff[0] = reg_addr;
-//    uint8_t i, j = 1;
-//
-//    for (i = 0; i < count; i++) {
-//        I2Ctxbuff[j] = reg_data[i];
-//        j++;
-//    }
-//
-//    if(System::i2c1.tx_blocking(
-//            I2C_TARGET_ADDRESS,
-//            I2Ctxbuff,
-//            count + 1,
-//            timeout
-//        )){
-//        return true;
-//    } else {
-//        return false;
-//    }
-//
-//}
 
 //************************************End of BQ769X2_PROTOCOL Measurement Commands******************************************

@@ -283,37 +283,23 @@ void System::init() {
         DL_GPIO_enableHiZ(IOMUX_PINCM38);
         System::i2c1.partialInitController();
         System::i2c1.setSCLTarget(100e3);
+//        DL_I2C_setTimeoutACount(System::i2c1.reg, ); // at least 45us.
+
         DL_I2C_enableController(System::i2c1.reg);
 
-//        NVIC_EnableIRQ(I2C1_INT_IRQn);
-//        DL_I2C_disableInterrupt(System::i2c1.reg,
+        NVIC_EnableIRQ(I2C1_INT_IRQn);
+        DL_I2C_enableInterrupt(System::i2c1.reg,
 //                  DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
 //                | DL_I2C_INTERRUPT_CONTROLLER_NACK
-//            );
+                 DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+//                | DL_I2C_INTERRUPT_TIMEOUT_A
+//                | DL_I2C_INTERRUPT_TIMEOUT_B
+            );
     #endif
 
-}
-
-void System::TRXBuffer::clear(){
-    data_length     = 0;
-    data            = NULL;
-    host_task       = NULL;
-    nxt_index       = 0;
-};
-
-void System::TRXBuffer::init(void * data, uint8_t length, TaskHandle_t hdl) {
-    host_task       = hdl;
-    data_length     = length;
-    nxt_index       = 0;
-    this->data      = data;
-}
-
-bool System::TRXBuffer::isInUse() const {
-    return  ( data_length > 0 )
-        &&  ( nxt_index < data_length )
-        &&  ( data != NULL )
-        &&  ( host_task != NULL )
-        ;
 }
 
 inline bool System::Lockable::takeResource(TickType_t timeout) {
@@ -541,125 +527,137 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 }
 
 void System::I2C::I2C::_irq() {
-//    static UBaseType_t isr_status;
-//    isr_status = taskENTER_CRITICAL_FROM_ISR();
-//    switch(DL_I2C_getPendingInterrupt(reg)){
-//        case DL_I2C_IIDX_CONTROLLER_TX_DONE:
+    switch(DL_I2C_getPendingInterrupt(reg)){
+        case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
+            while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
+                if(trxBuffer.data && (trxBuffer.nxt_index < trxBuffer.data_length)){
+                    trxBuffer.data[trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
+                } else {
+                    // ignore and flush
+                    DL_I2C_receiveControllerData(reg);
+                }
+            }
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
+            // fill TX fifo
+            if(trxBuffer.data && (trxBuffer.nxt_index < trxBuffer.data_length)){
+                trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
+                        reg,
+                        (uint8_t *)trxBuffer.data,
+                        trxBuffer.data_length - trxBuffer.nxt_index
+                    );
+            }
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_TX_DONE:
 //            if(trxBuffer.host_task != NULL){
 //                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
-//                trxBuffer.clear();
 //            }
-//            break;
-//
-//        case DL_I2C_IIDX_CONTROLLER_RX_DONE:
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_RX_DONE:
 //            if(trxBuffer.host_task != NULL){
 //                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
-//                trxBuffer.clear();
 //            }
-//            break;
-//
-//        case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
-//            while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
-//                if(trxBuffer.isInUse()){
-//                    ((uint8_t*)trxBuffer.data)[trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
-//                } else {
-//                    // ignore and flush
-//                    DL_I2C_receiveControllerData(reg);
-//                }
-//            }
-//            break;
-//
-//        case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
-//            // fill TX fifo
-//            if(trxBuffer.isInUse()){
-//                trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
-//                        reg,
-//                        (uint8_t *)trxBuffer.data,
-//                        trxBuffer.data_length - trxBuffer.nxt_index
-//                    );
-//            }
-//            break;
-//
-//        case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
-//        case DL_I2C_IIDX_CONTROLLER_NACK:
-//            if(trxBuffer.isInUse())
-//                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
-//            break;
-//
-//        case DL_I2C_IIDX_CONTROLLER_RXFIFO_FULL:
-//        case DL_I2C_IIDX_CONTROLLER_TXFIFO_EMPTY:
-//        case DL_I2C_IIDX_CONTROLLER_START:
-//        case DL_I2C_IIDX_CONTROLLER_STOP:
-//        case DL_I2C_IIDX_CONTROLLER_EVENT1_DMA_DONE:
-//        case DL_I2C_IIDX_CONTROLLER_EVENT2_DMA_DONE:
-//        default:
-//            break;
-//
-//    };
-//    taskEXIT_CRITICAL_FROM_ISR(isr_status);
+            break;
+
+        case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
+        case DL_I2C_IIDX_CONTROLLER_NACK:
+        case DL_I2C_IIDX_CONTROLLER_RXFIFO_FULL:
+        case DL_I2C_IIDX_CONTROLLER_TXFIFO_EMPTY:
+        case DL_I2C_IIDX_CONTROLLER_START:
+        case DL_I2C_IIDX_CONTROLLER_STOP:
+        case DL_I2C_IIDX_CONTROLLER_EVENT1_DMA_DONE:
+        case DL_I2C_IIDX_CONTROLLER_EVENT2_DMA_DONE:
+        case DL_I2C_IIDX_TIMEOUT_A:
+        case DL_I2C_IIDX_TIMEOUT_B:
+        default:
+            break;
+
+    };
 }
 
 bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
+    TickType_t stopTime = xTaskGetTickCount() + timeout;
+
+    trxBuffer.host_task = xTaskGetCurrentTaskHandle();
+    trxBuffer.data      = (uint8_t *)data;
+    trxBuffer.data_length = size;
+    trxBuffer.nxt_index = 0;
 
     DL_I2C_flushControllerTXFIFO(reg);
 
-    size -= DL_I2C_fillControllerTXFIFO(reg, (uint8_t *)data, size);
+    size -= DL_I2C_fillControllerTXFIFO(reg, trxBuffer.data, size);
 
-    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
-        {}
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)) {
+        vTaskDelay(0);
+//        if(xTaskGetTickCount() > stopTime){
+//            DL_I2C_flushControllerTXFIFO(reg);
+//            return false;
+//        }
+    }
 
     DL_I2C_startControllerTransfer(
             reg,
             addr,
             DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
-            size
+            trxBuffer.data_length
         );
 
-    while(size > 0){
-        size -= DL_I2C_fillControllerTXFIFO(reg, (uint8_t *)data, size);
-
-        if(DL_I2C_getControllerStatus(reg) & (
-                DL_I2C_CONTROLLER_STATUS_IDLE
-                | DL_I2C_CONTROLLER_STATUS_ERROR
-            ))
-            break;
-    }
+//    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeoutTime - xTaskGetTickCount())){
+//        // timed out
+//    }
 
     while (DL_I2C_getControllerStatus(reg) &
-               DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
-            ;
+           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+        vTaskDelay(0);
 
-    // delay some
-    delay_cycles(80 * 600);
+    while (!(DL_I2C_getControllerStatus(reg) &
+             DL_I2C_CONTROLLER_STATUS_IDLE))
+        vTaskDelay(0);
+
+    trxBuffer.host_task = NULL;
+    DL_I2C_flushControllerTXFIFO(reg);
 
     return true;
 }
 
 bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
-    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
-            {}
+    TickType_t stopTime = xTaskGetTickCount() + timeout;
+
+    trxBuffer.host_task = xTaskGetCurrentTaskHandle();
+    trxBuffer.data      = (uint8_t *)data;
+    trxBuffer.data_length = size;
+    trxBuffer.nxt_index = 0;
+
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)) {
+        vTaskDelay(0);
+//        if(xTaskGetTickCount() > stopTime){
+//            DL_I2C_flushControllerTXFIFO(reg);
+//            return false;
+//        }
+    }
 
     DL_I2C_flushControllerTXFIFO(reg);
 
     DL_I2C_startControllerTransfer(
-                reg,
-                addr,
-                DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
-                size
-            );
-    for(uint8_t i = 0; i < size; i++){
-        while(DL_I2C_isControllerRXFIFOEmpty(reg)){
-            if(DL_I2C_getControllerStatus(reg) & (
-                    DL_I2C_CONTROLLER_STATUS_IDLE
-                    | DL_I2C_CONTROLLER_STATUS_ERROR
-                ))
-                break;
-        }
-        ((uint8_t *)data)[i] = DL_I2C_receiveControllerData(reg);
-    }
+            reg,
+            addr,
+            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
+            trxBuffer.data_length
+        );
 
-    // delay some
-    delay_cycles(80 * 600);
+//    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeoutTime - xTaskGetTickCount())){
+//        // timed out
+//    }
+
+    while (trxBuffer.nxt_index < trxBuffer.data_length)
+        vTaskDelay(0);
+        ;
+
+    trxBuffer.host_task = NULL;
+
     return true;
 }
 

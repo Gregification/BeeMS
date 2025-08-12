@@ -152,19 +152,6 @@ namespace System {
 
     };
 
-    struct TRXBuffer {
-        TaskHandle_t host_task; // task to notify when TRX is complete
-
-        void * data;
-        uint8_t
-            data_length,    // total bytes of data
-            nxt_index;      // index next byte is read/written by
-
-        void clear();
-        void init(void * data, uint8_t length, TaskHandle_t = xTaskGetCurrentTaskHandle());
-        bool isInUse() const;     // returns true if host_task exists and buffer iteration is not complete
-    };
-
     /* see clock tree diagram ... and SysConfig's */
     namespace CLK {
         /* no constexpr's plz */
@@ -238,6 +225,8 @@ namespace System {
     }
 
     namespace I2C {
+
+
         /** I2C peripheral controller interface */
         struct I2C : Lockable {
 
@@ -261,7 +250,12 @@ namespace System {
             bool rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
 
 //        private:
-            TRXBuffer trxBuffer;
+            struct {
+                TaskHandle_t host_task;
+                uint8_t * data;
+                uint8_t data_length;    // total bytes of data
+                uint8_t nxt_index;      // index next byte is read/written by
+            } trxBuffer;
         };
     }
 
