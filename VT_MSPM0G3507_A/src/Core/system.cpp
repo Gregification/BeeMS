@@ -260,6 +260,10 @@ void System::init() {
     #ifdef PROJECT_ENABLE_I2C1
         DL_I2C_enablePower(System::i2c1.reg);
         delay_cycles(POWER_STARTUP_DELAY);
+        DL_I2C_setTimeoutACount(System::i2c1.reg, 154); // at most 50us for the BQ. 1 = 6.5uS @ 80e6 .  TDS.20.2.3.6/1520
+//        DL_I2C_setTimeoutBCount(System::i2c1.reg, 154); //      154 ~> 1mS @ 80e6
+        DL_I2C_enableTimeoutA(System::i2c1.reg); // SCL low timeout detection
+//        DL_I2C_enableTimeoutB(System::i2c1.reg); // SCL high timeout detection
 
         // PA15
         DL_GPIO_initPeripheralInputFunctionFeatures(
@@ -283,7 +287,6 @@ void System::init() {
         DL_GPIO_enableHiZ(IOMUX_PINCM38);
         System::i2c1.partialInitController();
         System::i2c1.setSCLTarget(100e3);
-//        DL_I2C_setTimeoutACount(System::i2c1.reg, ); // at least 45us.
 
         DL_I2C_enableController(System::i2c1.reg);
 
@@ -295,8 +298,8 @@ void System::init() {
                 | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
                 | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
                 | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-//                | DL_I2C_INTERRUPT_TIMEOUT_A
-//                | DL_I2C_INTERRUPT_TIMEOUT_B
+                | DL_I2C_INTERRUPT_TIMEOUT_A
+                | DL_I2C_INTERRUPT_TIMEOUT_B
             );
     #endif
 
@@ -551,27 +554,33 @@ void System::I2C::I2C::_irq() {
             break;
 
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
-//            if(trxBuffer.host_task != NULL){
-//                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
-//            }
+            xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
             break;
 
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
-//            if(trxBuffer.host_task != NULL){
-//                xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
-//            }
+            xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
             break;
 
-        case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
+        case DL_I2C_IIDX_TIMEOUT_A:
+            trxBuffer.data_length = 0;
+            xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
+            break;
+        case DL_I2C_IIDX_TIMEOUT_B:
+            trxBuffer.data_length = 0;
+            xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
+            break;
+
         case DL_I2C_IIDX_CONTROLLER_NACK:
+            trxBuffer.data_length = 0;
+            xTaskNotifyGiveIndexed(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ);
+            break;
+        case DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
         case DL_I2C_IIDX_CONTROLLER_RXFIFO_FULL:
         case DL_I2C_IIDX_CONTROLLER_TXFIFO_EMPTY:
         case DL_I2C_IIDX_CONTROLLER_START:
         case DL_I2C_IIDX_CONTROLLER_STOP:
         case DL_I2C_IIDX_CONTROLLER_EVENT1_DMA_DONE:
         case DL_I2C_IIDX_CONTROLLER_EVENT2_DMA_DONE:
-        case DL_I2C_IIDX_TIMEOUT_A:
-        case DL_I2C_IIDX_TIMEOUT_B:
         default:
             break;
 
@@ -592,10 +601,10 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
 
     while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)) {
         vTaskDelay(0);
-//        if(xTaskGetTickCount() > stopTime){
-//            DL_I2C_flushControllerTXFIFO(reg);
-//            return false;
-//        }
+        if(xTaskGetTickCount() > stopTime){
+            DL_I2C_flushControllerTXFIFO(reg);
+            return false;
+        }
     }
 
     DL_I2C_startControllerTransfer(
@@ -605,21 +614,13 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
             trxBuffer.data_length
         );
 
-//    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeoutTime - xTaskGetTickCount())){
-//        // timed out
-//    }
+    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
+        // timed out
+        DL_I2C_flushControllerTXFIFO(reg);
+        return false;
+    }
 
-    while (DL_I2C_getControllerStatus(reg) &
-           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
-        vTaskDelay(0);
-
-    while (!(DL_I2C_getControllerStatus(reg) &
-             DL_I2C_CONTROLLER_STATUS_IDLE))
-        vTaskDelay(0);
-
-    trxBuffer.host_task = NULL;
     DL_I2C_flushControllerTXFIFO(reg);
-
     return true;
 }
 
@@ -633,10 +634,10 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
 
     while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)) {
         vTaskDelay(0);
-//        if(xTaskGetTickCount() > stopTime){
-//            DL_I2C_flushControllerTXFIFO(reg);
-//            return false;
-//        }
+        if(xTaskGetTickCount() > stopTime){
+            DL_I2C_flushControllerTXFIFO(reg);
+            return false;
+        }
     }
 
     DL_I2C_flushControllerTXFIFO(reg);
@@ -648,15 +649,14 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
             trxBuffer.data_length
         );
 
-//    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeoutTime - xTaskGetTickCount())){
-//        // timed out
-//    }
+    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
+        DL_I2C_flushControllerTXFIFO(reg);
+        return false;
+    }
 
-    while (trxBuffer.nxt_index < trxBuffer.data_length)
-        vTaskDelay(0);
-        ;
-
-    trxBuffer.host_task = NULL;
+    if(trxBuffer.nxt_index != trxBuffer.data_length){
+        return false;
+    }
 
     return true;
 }

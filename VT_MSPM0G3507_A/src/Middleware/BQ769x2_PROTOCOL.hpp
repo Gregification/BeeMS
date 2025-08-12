@@ -527,9 +527,9 @@ namespace BQ769X2_PROTOCOL {
      * for safety we just enforce detection on the MCU side.
      */
     /** returns false if timed out */
-    bool I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(1000));
+    bool I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
     /** returns false if timed out */
-    bool I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(1000));
+    bool I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
 };
 
 #endif /* BQ769X2_PROTOCOL_HPP_ */
