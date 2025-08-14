@@ -9,16 +9,20 @@
 #define SRC_MIDDLEWARE_BQ76952_HPP_
 
 #include "Core/system.hpp"
-#include "Middleware/BQ769x2_PROTOCOL.hpp"
 
+#include <stdint.h>
+
+/*
+ * a wrapper Class over the C style protocol library
+ */
 class BQ76952 {
-using namespace BQ769X2_PROTOCOL;
 public:
-    System::I2C::I2C i2cBus;
-    BQ769X2_PROTOCOL::I2C_addr addr;
+    static constexpr TickType_t I2C_MIN_TIMEOUT = pdMS_TO_TICKS(4);
 
+    System::I2C::I2C * i2c_controller;
+    uint8_t i2c_addr;
 
-    void init(tGaug5eApplication *pGaugeApp);
+    void init();
     void readAlarmStatus();
     void readSafetyStatus();
     void readPFStatus();
@@ -29,13 +33,16 @@ public:
      * - 16b resolution, units of 1mV
      * " –0.2 V to 5.5 V " - BQ769x2DS.10.1/35
      */
-    uint16_t readVoltage(CmdDrt command);
-    void readSeriesCurrent();
-    float readTemperature(CmdDrt command);
-    void readCurrent();
-    void readPassQ();
-    void readFETStatus();
-    void readAllTemperatures();
+//    uint16_t readVoltage(BQ769X2_PROTOCOL::CmdDrt command);
+//    void readSeriesCurrent();
+//    float readTemperature(BQ769X2_PROTOCOL::CmdDrt command);
+//    int16_t readCurrent();
+//    void readPassQ();
+//    void readFETStatus();
+//    void readAllTemperatures();
+
+    bool I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout);
+    bool I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout);
 };
 
 

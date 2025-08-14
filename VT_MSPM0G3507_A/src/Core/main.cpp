@@ -43,11 +43,11 @@ int main(){
 //            NULL);
 
     xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
-                "BQ769x2_PROTOCOL_Test_V_Task",
-                configMINIMAL_STACK_SIZE * 50,
-                NULL,
-                configMAX_PRIORITIES,
-                NULL);
+            "BQ769x2_PROTOCOL_Test_V_Task",
+            configMINIMAL_STACK_SIZE * 50,
+            NULL,
+            configMAX_PRIORITIES,
+            NULL);
 
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_Task,

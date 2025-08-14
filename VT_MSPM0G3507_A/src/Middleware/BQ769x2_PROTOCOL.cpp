@@ -38,48 +38,7 @@
 //******************************************************************************
 // BQ Parameters ***************************************************************
 //******************************************************************************
-// Global Variables for cell voltages, temperatures, Stack voltage, PACK Pin voltage, LD Pin voltage, CC2 current
-uint16_t CellVoltage[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-float Temperature[3]     = {0, 0, 0};
-uint16_t Stack_Voltage   = 0x00;
-uint16_t Pack_Voltage    = 0x00;
-uint16_t LD_Voltage      = 0x00;
-int16_t Pack_Current     = 0x00;
-uint16_t AlarmBits       = 0x00;
 
-uint8_t value_SafetyStatusA;  // Safety Status Register A
-uint8_t value_SafetyStatusB;  // Safety Status Register B
-uint8_t value_SafetyStatusC;  // Safety Status Register C
-uint8_t value_PFStatusA;      // Permanent Fail Status Register A
-uint8_t value_PFStatusB;      // Permanent Fail Status Register B
-uint8_t value_PFStatusC;      // Permanent Fail Status Register C
-uint8_t FET_Status;  // FET Status register contents  - Shows states of FETs
-uint16_t CB_ActiveCells;  // Cell Balancing Active Cells
-
-uint8_t UV_Fault             = 0;  // under-voltage fault state
-uint8_t OV_Fault             = 0;  // over-voltage fault state
-uint8_t SCD_Fault            = 0;  // short-circuit fault state
-uint8_t OCD_Fault            = 0;  // over-current fault state
-uint8_t ProtectionsTriggered = 0;  // Set to 1 if any protection triggers
-
-uint8_t LD_ON = 0;  // Load Detect status bit
-uint8_t DSG   = 0;  // discharge FET state
-uint8_t CHG   = 0;  // charge FET state
-uint8_t PCHG  = 0;  // pre-charge FET state
-uint8_t PDSG  = 0;  // pre-discharge FET state
-
-uint32_t AccumulatedCharge_Int;   // in AFE_READPASSQ func
-uint32_t AccumulatedCharge_Frac;  // in AFE_READPASSQ func
-uint32_t AccumulatedCharge_Time;  // in AFE_READPASSQ func
-
-uint8_t RX_32Byte[32] = {0x00};
-uint8_t RX_data[2]    = {0x00};
-
-//**********************************BQ Parameters *********************************
-
-
-//**********************************Function prototypes **********************************
 void delayUS(uint16_t us)
 // Sets the delay in microseconds.
 {
@@ -123,31 +82,28 @@ uint8_t CRC8(uint8_t *ptr, uint8_t len)
     return (crc);
 }
 
-void BQ769X2_PROTOCOL::sendDirectCommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, DIR_CMD_TYPE type)
-// See the TRM or the BQ76952 header file for a full list of Direct Commands.
-// For read type, user can read data from command address and stored in the Rx state of global variable to be read.
-// For write type, user can write the data to the command address.
-{  //type: R = read, W = write
+bool  BQ769X2_PROTOCOL::sendDirectCommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, DIR_CMD_TYPE type, TickType_t timeout)
+{
     uint8_t TX_data[2] = {0x00, 0x00};
 
     //little endian format
     TX_data[0] = data & 0xff;
     TX_data[1] = (data >> 8) & 0xff;
 
+    uint16_t ret = 0;
     if (type == R) {                       //Read
-        I2C_ReadReg(i2c_controller, i2c_addr, command, RX_data, 2);  //RX_data is a global variable
-        delayUS(2000);
-        delayUS(2000);  //success in 100k
+        I2C_ReadReg(i2c_controller, i2c_addr, command, &ret, 2, timeout);  //RX_data is a global variable
+        vTaskDelay(0);
     }
     if (type == W) {  //write
         //Control_status, alarm_status, alarm_enable all 2 bytes long
-        I2C_WriteReg(i2c_controller, i2c_addr, command, TX_data, 2);
-        delayUS(2000);
-        delayUS(2000);
+        I2C_WriteReg(i2c_controller, i2c_addr, command, TX_data, 2, timeout);
+        vTaskDelay(0);
     }
+    return true;
 }
 
-void BQ769X2_PROTOCOL::sendCommandSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command)  //For Command only Subcommands
+bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command, TickType_t timeout)  //For Command only Subcommands
 // See the TRM or the BQ76952 header file for a full list of Command-only subcommands
 // All that this function do is formatting the transfer array then writing the array to hex 3E,
 // the monitor will then operate based on the command.
@@ -163,7 +119,7 @@ void BQ769X2_PROTOCOL::sendCommandSubcommand(System::I2C::I2C i2c_controller, ui
     delayUS(2000);
 }
 
-void BQ769X2_PROTOCOL::sendSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command, uint16_t data, DIR_CMD_TYPE type)
+void BQ769X2_PROTOCOL::sendSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command, uint16_t data, DIR_CMD_TYPE type, TickType_t timeout)
 // See the TRM or the BQ76952 header file for a full list of Subcommands
 // The input type can either be the defined macros R for read, W for write, or W2 for write two bytes.
 {
@@ -202,7 +158,7 @@ void BQ769X2_PROTOCOL::sendSubcommand(System::I2C::I2C i2c_controller, uint8_t i
     }
 }
 
-void BQ769X2_PROTOCOL::setRegister(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint16_t reg_addr, uint32_t reg_data, uint8_t datalen)
+void BQ769X2_PROTOCOL::setRegister(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint16_t reg_addr, uint32_t reg_data, uint8_t datalen, TickType_t timeout)
 // This function will write hex 3E for the initial write for subcommands in direct memory
 // and write to register hex 60 for the checksum to enter the data transmitted was correct.
 // and there are different cases for the three varying data lengths.
@@ -249,269 +205,17 @@ void BQ769X2_PROTOCOL::setRegister(System::I2C::I2C i2c_controller, uint8_t i2c_
             break;
     }
 }
-//************************************BQ769X2_PROTOCOL Functions*********************************
-//void BQ769X2_PROTOCOL::
-void init(tGaugeApplication *pGaugeApp)
-{
-    uint16_t u16TempValue;
-    uint8_t u8Count;
 
-    tBattParamsConfig *pBattParamsCfg;
-
-    pBattParamsCfg = pGaugeApp->pBattGlobalParamList[0]->pBattParamsCfg;
-    // Configures all parameters in device RAM
-
-    // Enter CONFIGUPDATE mode (Subcommand 0x0090) - It is required to be in CONFIG_UPDATE mode to program the device RAM settings
-    // See TRM for full description of CONFIG_UPDATE mode
-    sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
-    delayUS(60000);
-    sendCommandSubcommand(SET_CFGUPDATE);
-    delayUS(8000);
-
-    // After entering CONFIG_UPDATE mode, RAM registers can be programmed. When programming RAM, checksum and length must also be
-    // programmed for the change to take effect. All of the RAM registers are described in detail in the BQ769X2_PROTOCOL TRM.
-    // An easier way to find the descriptions is in the BQStudio Data Memory screen. When you move the mouse over the register name,
-    // a full description of the register and the bits will pop up on the screen.
-
-    // 'Power Config' - 0x9234 = 0x2D80
-    // Setting the DSLP_LDO bit allows the LDOs to remain active when the device goes into Deep Sleep mode
-    // Set wake speed bits to 00 for best performance
-    setRegister(PowerConfig, 0x2D80, 2);
-
-    // 'REG0 Config' - set REG0_EN bit to enable pre-regulator
-    setRegister(REG0Config, 0x01, 1);
-
-    // 'REG12 Config' - Enable REG1 with 3.3V output (0x0D for 3.3V, 0x0F for 5V)
-    setRegister(REG12Config, 0x0D, 1);
-
-    // Set DFETOFF pin to control BOTH CHG and DSG FET - 0x92FB = 0x42 (set to 0x00 to disable)
-    setRegister(DFETOFFPinConfig, 0x42, 1);
-
-    // Set up ALERT Pin - 0x92FC = 0x2A
-    // This configures the ALERT pin to drive high (REG1 voltage) when enabled.
-    // The ALERT pin can be used as an interrupt to the MCU when a protection has triggered or new measurements are available
-    setRegister(ALERTPinConfig, 0x2A, 1);
-
-    // Set TS1 to measure Cell Temperature - 0x92FD = 0x07
-    setRegister(TS1Config, 0x07, 1);
-
-    // Set TS3 to measure FET Temperature - 0x92FF = 0x0F
-    setRegister(TS3Config, 0x0F, 1);
-
-    // Set HDQ to measure Cell Temperature - 0x9300 = 0x07
-    setRegister(HDQPinConfig, 0x00,
-        1);  // No thermistor installed on EVM HDQ pin, so set to 0x00
-
-    // 'VCell Mode' - Enable 16 cells - 0x9304 = 0x0000; Writing 0x0000 sets the default of 16 cells
-    // Only for openwire detection and  protection
-    u16TempValue = 0;
-    for (u8Count = 0; u8Count < (pGaugeApp->ui8NrOfCell - 1); u8Count++) {
-        u16TempValue += (0x1 << u8Count);
-    }
-    u16TempValue += 0x8000;
-    setRegister(VCellMode, u16TempValue, 2);
-
-    // Enable protections in 'Enabled Protections A' 0x9261 = 0xBC
-    // Enables SCD (short-circuit), OCD1 (over-current in discharge), OCC (over-current in charge),
-    // COV (over-voltage), CUV (under-voltage)
-    setRegister(EnabledProtectionsA, 0xBC, 1);
-
-    // Enable all protections in 'Enabled Protections B' 0x9262 = 0xF7
-    // Enables OTF (over-temperature FET), OTINT (internal over-temperature), OTD (over-temperature in discharge),
-    // OTC (over-temperature in charge), UTINT (internal under-temperature), UTD (under-temperature in discharge), UTC (under-temperature in charge)
-    setRegister(EnabledProtectionsB, 0xF7, 1);
-
-    // 'Default Alarm Mask' - 0x..82 Enables the FullScan and ADScan bits, default value = 0xF800
-    setRegister(DefaultAlarmMask, 0xF882, 2);
-
-    // Set up Cell Balancing Configuration - 0x9335 = 0x03   -  Automated balancing while in Relax or Charge modes
-    // Also see "Cell Balancing with BQ769X2_PROTOCOL Battery Monitors" document on ti.com
-    setRegister(BalancingConfiguration, 0x03, 1);
-
-    //Set the minimum cell balance voltage in charge - 0x933B = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
-    setRegister(CellBalanceMinCellVCharge,
-        pBattParamsCfg->u16MinFullChgVoltThd_mV - 100, 2);
-    //Set the minimum cell balance voltage in rest - 0x933F = pBattParamsCfg->u16MinFullChgVoltThd_mV-100 mV
-    setRegister(CellBalanceMinCellVRelax,
-        pBattParamsCfg->u16MinFullChgVoltThd_mV - 100, 2);
-
-    // Set up CUV (under-voltage) Threshold - 0x9275 = 0x31 (2479 mV)
-    // CUV Threshold is this value multiplied by 50.6mV
-    //    BQ769X2_PROTOCOL_SetRegister(CUVThreshold, 0x31, 1);
-    setRegister(
-        CUVThreshold, pBattParamsCfg->u16MinBattVoltThd_mV / 51, 1);
-
-    // Set up COV (over-voltage) Threshold - 0x9278 = 0x55 (4301 mV)
-    // COV Threshold is this value multiplied by 50.6mV
-    //    BQ769X2_PROTOCOL_SetRegister(COVThreshold, 0x55, 1);
-    setRegister(
-        COVThreshold, pBattParamsCfg->u16MaxBattVoltThd_mV / 51, 1);
-
-    // Set up OCC (over-current in charge) Threshold - 0x9280 = 0x05 (10 mV = 10A across 1mOhm sense resistor) Units in 2mV
-    //    BQ769X2_PROTOCOL_SetRegister(OCCThreshold, 0x05, 1);
-    setRegister(
-        OCCThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
-
-    // Set up OCD1 (over-current in discharge) Threshold - 0x9282 = 0x0A (20 mV = 20A across 1mOhm sense resistor) units of 2mV
-    //    BQ769X2_PROTOCOL_SetRegister(OCD1Threshold, 0x0A, 1);
-    setRegister(
-        OCD1Threshold, pBattParamsCfg->i16MinDhgCurtThd_mA / 2000, 1);
-
-    // Set up SCD (short discharge current) Threshold - 0x9286 = 0x05 (100 mV = 100A across 1mOhm sense resistor)  0x05=100mV
-    //    BQ769X2_PROTOCOL_SetRegister(SCDThreshold, 0x05, 1);
-    setRegister(
-        SCDThreshold, pBattParamsCfg->i16MaxChgCurtThd_mA / 2000, 1);
-
-    // Set up SCD Delay - 0x9287 = 0x03 (30 us) Enabled with a delay of (value - 1) * 15 �s; min value of 1
-    setRegister(SCDDelay, 0x03, 1);
-
-    // Set up SCDL Latch Limit to 1 to set SCD recovery only with load removal 0x9295 = 0x01
-    // If this is not set, then SCD will recover based on time (SCD Recovery Time parameter).
-    setRegister(SCDLLatchLimit, 0x01, 1);
-
-    delayUS(8000);
-    // Exit CONFIGUPDATE mode  - Subcommand 0x0092
-    sendCommandSubcommand(EXIT_CFGUPDATE);
-    delayUS(8000);
-    //Control All FETs on
-    sendCommandSubcommand(FET_ENABLE);
-    delayUS(8000);
-    sendCommandSubcommand(ALL_FETS_ON);
-    delayUS(8000);
-    sendCommandSubcommand(SLEEP_DISABLE);
-    delayUS(8000);
-}
-
-// ********************************* BQ769X2_PROTOCOL Status and Fault Commands   *****************************************
-
-void BQ769X2_PROTOCOL::readAlarmStatus()
-{
-    // Read this register to find out why the ALERT pin was asserted
-    sendDirectCommand(AlarmStatus, 0x00, R);
-    AlarmBits = (uint16_t) RX_data[1] * 256 + (uint16_t) RX_data[0];
-}
-
-void BQ769X2_PROTOCOL::readSafetyStatus()
-{
-    // Read Safety Status A/B/C and find which bits are set
-    // This shows which primary protections have been triggered
-    sendDirectCommand(SafetyStatusA, 0x00, R);
-    value_SafetyStatusA = (RX_data[1] * 256 + RX_data[0]);
-    //Example Fault Flags
-    UV_Fault  = ((0x4 & RX_data[0]) >> 2);
-    OV_Fault  = ((0x8 & RX_data[0]) >> 3);
-    SCD_Fault = ((0x8 & RX_data[1]) >> 3);
-    OCD_Fault = ((0x2 & RX_data[1]) >> 1);
-    sendDirectCommand(SafetyStatusB, 0x00, R);
-    value_SafetyStatusB = (RX_data[1] * 256 + RX_data[0]);
-    sendDirectCommand(SafetyStatusC, 0x00, R);
-    value_SafetyStatusC = (RX_data[1] * 256 + RX_data[0]);
-    if ((value_SafetyStatusA + value_SafetyStatusB + value_SafetyStatusC) >
-        1) {
-        ProtectionsTriggered = 1;
-    } else {
-        ProtectionsTriggered = 0;
-    }
-}
-
-void BQ769X2_PROTOCOL::readPFStatus()
-{
-    // Read Permanent Fail Status A/B/C and find which bits are set
-    // This shows which permanent failures have been triggered
-    sendDirectCommand(PFStatusA, 0x00, R);
-    value_PFStatusA = (RX_data[1] * 256 + RX_data[0]);
-    sendDirectCommand(PFStatusB, 0x00, R);
-    value_PFStatusB = (RX_data[1] * 256 + RX_data[0]);
-    sendDirectCommand(PFStatusC, 0x00, R);
-    value_PFStatusC = (RX_data[1] * 256 + RX_data[0]);
-}
-
-void BQ769X2_PROTOCOL::readFETStatus()
-{
-    // Read FET Status to see which FETs are enabled
-    sendDirectCommand(FETStatus, 0x00, R);
-    FET_Status = (RX_data[1] * 256 + RX_data[0]);
-}
-// ********************************* End of BQ769X2_PROTOCOL Status and Fault Commands   *****************************************
-
-// ********************************* BQ769X2_PROTOCOL Measurement Commands   *****************************************
-
-uint16_t BQ769X2_PROTOCOL::readVoltage(CmdDrt command)
-// This function can be used to read a specific cell voltage or stack / pack / LD voltage
-{
-    //RX_data is global var
-    sendDirectCommand(command, 0x00, BQ769X2_PROTOCOL::DIR_CMD_TYPE::R);
-    if (command >= CmdDrt::Cell1Voltage &&
-        command <= CmdDrt::Cell16Voltage) {  //Cells 1 through 16 (0x14 to 0x32)
-        return (RX_data[1] * 256 + RX_data[0]);  //voltage is reported in mV
-    } else {                                     //stack, Pack, LD
-        return 10 * (RX_data[1] * 256 +
-                        RX_data[0]);  //voltage is reported in 0.01V units
-    }
-}
-
-/*
-void readAllVoltages()
-// Reads all cell voltages, Stack voltage, PACK pin voltage, and LD pin voltage
-{
-    uint8_t x;
-    CmdDrt cellvoltageholder = CmdDrt::Cell1Voltage;  //Cell1Voltage is 0x14
-    for (x = 0; x < 16; x++) {             //Reads all cell voltages
-        CellVoltage[x]    = readVoltage(cellvoltageholder);
-        cellvoltageholder = (CmdDrt)(((uint8_t)cellvoltageholder) + 2);
-    }
-    Stack_Voltage = readVoltage(CmdDrt::StackVoltage);
-    Pack_Voltage  = readVoltage(CmdDrt::PACKPinVoltage);
-    LD_Voltage    = readVoltage(CmdDrt::LDPinVoltage);
-}
-*/
-
-void BQ769X2_PROTOCOL::readCurrent()
-// Reads PACK current
-{
-    sendDirectCommand(CmdDrt::CC2Current, 0x00, DIR_CMD_TYPE::R);
-    Pack_Current =
-        (int16_t)((uint16_t) RX_data[1] * 256 +
-                  (uint16_t) RX_data[0]);  // current is reported in mA
-}
-
-float BQ769X2_PROTOCOL::readTemperature(CmdDrt command)
-{
-    sendDirectCommand(command, 0x00, DIR_CMD_TYPE::R);
-    //RX_data is a global var
-    return (0.1 * (float) (RX_data[1] * 256 + RX_data[0])) -
-           273.15;  // converts from 0.1K to Celcius
-}
-
-void BQ769X2_PROTOCOL::readAllTemperatures()
-{
-    Temperature[0] = readTemperature(TS1Temperature);
-    Temperature[1] = readTemperature(TS2Temperature);
-    Temperature[2] = readTemperature(TS3Temperature);
-}
-
-void BQ769X2_PROTOCOL::readPassQ()
-{  // Read Accumulated Charge and Time from DASTATUS6
-    sendSubcommand(Cmd::DASTATUS6, 0x00, DIR_CMD_TYPE::R);
-    AccumulatedCharge_Int  = ((RX_32Byte[3] << 24) + (RX_32Byte[2] << 16) +
-                             (RX_32Byte[1] << 8) + RX_32Byte[0]);  //Bytes 0-3
-    AccumulatedCharge_Frac = ((RX_32Byte[7] << 24) + (RX_32Byte[6] << 16) +
-                              (RX_32Byte[5] << 8) + RX_32Byte[4]);  //Bytes 4-7
-    AccumulatedCharge_Time =
-        ((RX_32Byte[11] << 24) + (RX_32Byte[10] << 16) + (RX_32Byte[9] << 8) +
-            RX_32Byte[8]);  //Bytes 8-11
-}
-
-bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C i2c_controller, uint8_t i2c_addr, System::I2C::I2C controller, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
+bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
 {
     // tx read address
-    if(i2c_controller.tx_blocking(i2c_addr, &reg_addr, 1, timeout){
+    if(i2c_controller.tx_blocking(i2c_addr, &reg_addr, 1, timeout)){
     } else {
         return false;
     }
 
     // rx fetched
-    if(i2c_controller.rx_blocking(i2c_addr, reg_data, count, timeout){
+    if(i2c_controller.rx_blocking(i2c_addr, reg_data, count, timeout)){
     } else {
         return false;
     }

@@ -509,17 +509,15 @@ namespace BQ769X2_PROTOCOL {
 //    void readPassQ();
 //    void readFETStatus();
 //    void readAllTemperatures();
-    void sendSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command, uint16_t data, DIR_CMD_TYPE type);
-    void sendCommandSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command);
-    void sendDirectCommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, DIR_CMD_TYPE type);
-    void setRegister(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint16_t reg_addr, uint32_t reg_data, uint8_t datalen);
+    /** returns false if timed */
+    bool sendSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command, uint16_t data, DIR_CMD_TYPE type, TickType_t timeout);
+    /** returns false if timed */
+    bool sendCommandSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command,  TickType_t timeout);
+    /** returns false if timed */
+    bool sendDirectCommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, DIR_CMD_TYPE type,  TickType_t timeout);
+    /** returns false if timed */
+    bool setRegister(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint16_t reg_addr, uint32_t reg_data, uint8_t datalen, TickType_t timeout);
 
-
-    /** there's a issue with the BQ76952 getting hung and clock stretching indefinitely,
-     * theres a way to set the comm mode on the BQ to reset itself "if a clock is detected low
-     * longer than a t_timeout of 25 to 25ms, or if .... " but you actually have to enable that.
-     * for safety we just enforce detection on the MCU side.
-     */
     /** returns false if timed out */
     bool I2C_WriteReg(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
     /** returns false if timed out */

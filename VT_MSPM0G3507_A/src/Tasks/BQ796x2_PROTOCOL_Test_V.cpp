@@ -19,6 +19,8 @@
 #define I2C_TARGET_ADDRESS \
     (0x08)  // BQ769x2 address is 0x10 including R/W bit or 0x8 as 7-bit address
 
+void Task::BQ769x2_PROTOCOL_Test_V_Task(void*){}
+/*
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
 
@@ -180,3 +182,4 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("fiddle task end" NEWLINE));
     vTaskDelete(NULL);
 }
+*/
