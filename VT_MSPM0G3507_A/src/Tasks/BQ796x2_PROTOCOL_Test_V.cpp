@@ -141,7 +141,6 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SLEEP_DISABLE);
     vTaskDelay(pdMS_TO_TICKS(8));
 
-//    System::i2c1.tx_ctrl_blocking(0x08, ARRANDN(((uint8_t[]){0x36, 0x72, 0x41, 0x4})));
     const BQ769X2_PROTOCOL::CmdDrt cmds[] = {
              BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage,
              BQ769X2_PROTOCOL::CmdDrt::Cell2Voltage,
@@ -166,7 +165,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
             uint16_t v = 0xBEEF;
             bq.I2C_ReadReg(cmds[i], (uint8_t *)&v, sizeof(v));
 
-            snprintf(ARRANDN(str), "%6d,", v);
+            snprintf(ARRANDN(str), "%6d," NEWLINE, v);
             System::uart_ui.nputs(ARRANDN(str));
             vTaskDelay(pdMS_TO_TICKS(10));
         }

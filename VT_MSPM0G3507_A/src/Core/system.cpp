@@ -671,10 +671,11 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
     }
 
     if(trxBuffer.nxt_index != trxBuffer.data_length){
-        System::uart_ui.nputs(ARRANDN("re " NEWLINE));
+        System::uart_ui.nputs(ARRANDN("rd " NEWLINE));
         return false;
     }
 
+    System::uart_ui.nputs(ARRANDN("re " NEWLINE));
     return true;
 }
 
