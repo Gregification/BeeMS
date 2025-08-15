@@ -481,47 +481,33 @@ namespace BQ769X2_PROTOCOL {
         MCR_REG              = 0x1228,
     };
 
-//BQ769x2 General Program Header File
-    enum DIR_CMD_TYPE : uint8_t {
-        R       = 0,         //Read
-        W       = 1,         //Write
-        W2      = 2,         //write data with two bytes
-    };
+    /** returns false if timed */
+    bool sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t readOut[32], TickType_t timeout);
 
+    /** returns false if timed */
+    bool sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data,        TickType_t timeout);
 
-    //bool crc_enabled;
+    /** returns false if timed */
+    bool sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data,       TickType_t timeout);
 
-//    void init(tGaugeApplication *pGaugeApp);
-//    void readAlarmStatus();
-//    void readSafetyStatus();
-//    void readPFStatus();
-//
-//    /** reads a specific cells voltage
-//     * @param command : eg :  CmdDrt::Cell1Voltage, CmdDrt::StackVoltage, CmdDrt::LDPinVoltage, ...
-//     * @returns mV
-//     * - 16b resolution, units of 1mV
-//     * " –0.2 V to 5.5 V " - BQ769x2DS.10.1/35
-//     */
-//    uint16_t readVoltage(CmdDrt command);
-//    void readSeriesCurrent();
-//    float readTemperature(CmdDrt command);
-//    void readCurrent();
-//    void readPassQ();
-//    void readFETStatus();
-//    void readAllTemperatures();
     /** returns false if timed */
-    bool sendSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command, uint16_t data, DIR_CMD_TYPE type, TickType_t timeout);
+    bool sendCommandSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command,  TickType_t timeout);
+
     /** returns false if timed */
-    bool sendCommandSubcommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, Cmd command,  TickType_t timeout);
+    bool sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut, TickType_t timeout);
+
     /** returns false if timed */
-    bool sendDirectCommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, DIR_CMD_TYPE type,  TickType_t timeout);
+    bool sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, TickType_t timeout);
+
     /** returns false if timed */
-    bool setRegister(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint16_t reg_addr, uint32_t reg_data, uint8_t datalen, TickType_t timeout);
+    bool setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, RegAddr reg_addr, uint32_t reg_data, uint8_t datalen, TickType_t timeout);
 
     /** returns false if timed out */
-    bool I2C_WriteReg(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
-    /** returns false if timed out */
-    bool I2C_ReadReg(System::I2C::I2C i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
+    bool I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
+
+    /** returns false if timed */
+    bool I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
+
 };
 
 #endif /* BQ769X2_PROTOCOL_HPP_ */
