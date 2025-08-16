@@ -163,11 +163,12 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     while(true){
         for(uint8_t i = 0; i < sizeof(cmds); i++){
             uint16_t v = 0xBEEF;
-            bq.I2C_ReadReg(cmds[i], (uint8_t *)&v, sizeof(v));
-
-            snprintf(ARRANDN(str), "%6d," NEWLINE, v);
+            bq.I2C_ReadReg(cmds[i], &v, sizeof(v));
+            if(bq.I2C_ReadReg(cmds[i], &v, sizeof(v)))
+                snprintf(ARRANDN(str), "%6d," NEWLINE, v);
+            else
+                snprintf(ARRANDN(str), "uhoh" NEWLINE);
             System::uart_ui.nputs(ARRANDN(str));
-            vTaskDelay(pdMS_TO_TICKS(10));
         }
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
@@ -175,4 +176,3 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task End" NEWLINE));
     vTaskDelete(NULL);
 }
-

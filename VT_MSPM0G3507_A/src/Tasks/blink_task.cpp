@@ -32,6 +32,6 @@ void Task::blink_task(void*) {
 
     for(;;){
         DL_GPIO_togglePins(GPIOPINPUX(led));
-        vTaskDelay(pdMS_TO_TICKS(10));
+        vTaskDelay(pdMS_TO_TICKS(300));
     }
 }
