@@ -112,6 +112,7 @@
 #define configUSE_QUEUE_SETS                    0
 #define configUSE_TASK_NOTIFICATIONS            1
 
+
 /* Constants that define which hook (callback) functions should be used. */
 #define configUSE_IDLE_HOOK                     0
 #define configUSE_TICK_HOOK                     0
@@ -268,7 +269,7 @@
  * startup_<device>_<compiler>.c file to 0xa5a5a5a5. The stack peak can then
  * be displayed in Runtime Object View.
  */
-#define configENABLE_ISR_STACK_INIT 1
+#define configENABLE_ISR_STACK_INIT 0
 
 #define configTASK_NOTIFICATION_ARRAY_ENTRIES 5
 

@@ -38,9 +38,9 @@ bool BQ76952::setRegister(RegAddr reg_addr, uint32_t reg_data, uint8_t datalen, 
     return BQ769X2_PROTOCOL::setRegister(*i2c_controller, i2c_addr, reg_addr, reg_data, datalen, timeout);
 }
 
-bool BQ76952::I2C_ReadReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout) {
-    return BQ769X2_PROTOCOL::I2C_ReadReg(*i2c_controller, i2c_addr, reg_addr, reg_data, count, timeout);
+bool BQ76952::I2C_ReadReg(uint8_t reg_addr, void *reg_data, uint8_t count, TickType_t timeout) {
+    return BQ769X2_PROTOCOL::I2C_ReadReg(*i2c_controller, i2c_addr, reg_addr, (uint8_t*)reg_data, count, timeout);
 }
-bool BQ76952::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout){
-    return BQ769X2_PROTOCOL::I2C_WriteReg(*i2c_controller, i2c_addr, reg_addr, reg_data, count, timeout);
+bool BQ76952::I2C_WriteReg(uint8_t reg_addr, void *reg_data, uint8_t count, TickType_t timeout){
+    return BQ769X2_PROTOCOL::I2C_WriteReg(*i2c_controller, i2c_addr, reg_addr, (uint8_t*)reg_data, count, timeout);
 }
