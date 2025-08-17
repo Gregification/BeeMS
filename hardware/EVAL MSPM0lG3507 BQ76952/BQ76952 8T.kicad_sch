@@ -2149,12 +2149,6 @@
 		(uuid "5e8a11b0-2a9e-4ef3-b26d-82db1b436e9c")
 	)
 	(junction
-		(at 208.28 85.09)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "5ea0858a-e690-4e93-961b-d035de47849f")
-	)
-	(junction
 		(at 90.17 50.8)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2213,12 +2207,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "88011e8a-f1be-46db-8c58-a704ec1891f3")
-	)
-	(junction
-		(at 208.28 104.14)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "89a9c487-cea0-4b3e-88b5-27ad19aff2c4")
 	)
 	(junction
 		(at 213.36 59.69)
@@ -2860,16 +2848,6 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 85.09) (xy 220.98 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2dc91d38-6734-46b0-bd75-c60d9fd97bd2")
-	)
-	(wire
-		(pts
 			(xy 46.99 100.33) (xy 59.69 100.33)
 		)
 		(stroke
@@ -2970,16 +2948,6 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 71.12) (xy 208.28 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "38b744c7-3b24-4b8b-95a1-d139b4057395")
-	)
-	(wire
-		(pts
 			(xy 80.01 133.35) (xy 90.17 133.35)
 		)
 		(stroke
@@ -3017,6 +2985,16 @@
 			(type default)
 		)
 		(uuid "3b8a3028-9733-43dc-8ca7-fa69a4bf7266")
+	)
+	(wire
+		(pts
+			(xy 153.67 34.29) (xy 165.1 34.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3cf1f05e-4ee1-4c45-bff8-3860f2d5c0fe")
 	)
 	(wire
 		(pts
@@ -3300,6 +3278,16 @@
 	)
 	(wire
 		(pts
+			(xy 208.28 71.12) (xy 208.28 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "56706600-d0fa-4d60-9393-5e80be25e966")
+	)
+	(wire
+		(pts
 			(xy 58.42 102.87) (xy 58.42 114.3)
 		)
 		(stroke
@@ -3530,16 +3518,6 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 85.09) (xy 213.36 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "732e15ab-4f77-4f8d-9455-013c5634386d")
-	)
-	(wire
-		(pts
 			(xy 80.01 95.25) (xy 90.17 95.25)
 		)
 		(stroke
@@ -3757,16 +3735,6 @@
 			(type default)
 		)
 		(uuid "8c91bc75-3f66-4817-b1d4-5403634bff72")
-	)
-	(wire
-		(pts
-			(xy 208.28 85.09) (xy 208.28 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8ebdc5c2-7036-40a2-b83b-74f364e57e85")
 	)
 	(wire
 		(pts
@@ -4270,7 +4238,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 34.29) (xy 165.1 34.29)
+			(xy 142.24 34.29) (xy 146.05 34.29)
 		)
 		(stroke
 			(width 0)
@@ -4847,16 +4815,6 @@
 			(justify left bottom)
 		)
 		(uuid "88427bc4-5117-43a1-b502-1df7d248be2f")
-	)
-	(label "GND"
-		(at 220.98 85.09 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b9dfccea-21e6-4806-91a4-eb297bf23510")
 	)
 	(label "GND"
 		(at 142.24 114.3 180)
@@ -5504,6 +5462,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x10" "0.056"
+			(at 76.2 69.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f2194407-f327-4ad9-9541-f97377653875")
 		)
@@ -5715,6 +5682,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 95.25 90)
 			(effects
 				(font
@@ -6077,207 +6053,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector:TestPoint")
-		(at 208.28 104.14 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "33f7a2bf-2441-4ab0-bdff-9bb96c09eed8")
-		(property "Reference" "TP2"
-			(at 213.36 104.1399 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "TestPoint"
-			(at 210.3121 106.68 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm_LowProfile"
-			(at 208.28 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 208.28 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "test point"
-			(at 208.28 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 208.28 104.14 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 208.28 104.14 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "c00e2ea4-c703-4bde-9911-11404374d1e2")
-		)
-		(instances
-			(project "EVAL MSPM0lG3507 BQ7962"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
-					(reference "TP2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 127 58.42 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "352f90ad-8c84-4b03-bdd4-f85664fafafb")
-		(property "Reference" "C56"
-			(at 125.222 56.896 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100n"
-			(at 125.222 59.436 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Walsin/1206B104K251CT?qs=fIkAfuXiAQKkmX5niKUTKw%3D%3D"
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "100nF, 250VDC, X7R, 10%, -55C, +125C"
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.062"
-			(at 127 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "3ab334ab-2b97-4bdb-83f0-c7ee267c64a1")
-		)
-		(pin "1"
-			(uuid "24d1e9c9-42ea-480f-bf4a-b978f18e058d")
-		)
-		(instances
-			(project "EVAL MSPM0lG3507 BQ7962"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
-					(reference "C56")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_US")
 		(at 76.2 82.55 90)
 		(unit 1)
@@ -6357,6 +6132,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 82.55 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 82.55 90)
 			(effects
 				(font
@@ -6496,120 +6280,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Small")
-		(at 215.9 85.09 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "3970dd0c-c691-4023-a50a-fda925ecd2ae")
-		(property "Reference" "C7"
-			(at 213.995 79.3812 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "10u"
-			(at 213.995 81.9212 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 215.9 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 215.9 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "50Vdc, 10%, +125C"
-			(at 215.9 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 215.9 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 215.9 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31A106KBHNNNE?qs=sGAEpiMZZMsh%252B1woXyUXjxqcB7t9naYpzWmpMbMJIKQ%3D"
-			(at 215.9 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "10uF, 50VDC, X5R, 10%, -55C, +85C"
-			(at 215.9 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.07"
-			(at 215.9 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "c588297f-f6eb-4f87-bac3-94e6ab093c43")
-		)
-		(pin "1"
-			(uuid "2be33712-181c-4259-ba33-9d6ac44f1203")
-		)
-		(instances
-			(project "EVAL MSPM0lG3507 BQ7962"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
-					(reference "C7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_US")
 		(at 76.2 107.95 90)
 		(unit 1)
@@ -6689,6 +6359,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 107.95 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 107.95 90)
 			(effects
 				(font
@@ -6993,6 +6672,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 44.45 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 44.45 90)
 			(effects
 				(font
@@ -7333,6 +7021,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x10" "0.056"
+			(at 76.2 63.5 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "e49acaaa-3b89-40f9-838c-97c16a9c1509")
 		)
@@ -7428,6 +7125,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 88.9 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 88.9 90)
 			(effects
 				(font
@@ -7770,6 +7476,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x10" "0.056"
+			(at 76.2 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "9b4f4915-f584-4f16-b1a4-1ddd25625686")
 		)
@@ -8103,6 +7818,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x10" "0.056"
+			(at 76.2 127 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "d7b14ef0-5278-4da8-b35f-7c384e1af7e9")
 		)
@@ -8198,6 +7922,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 76.2 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 76.2 90)
 			(effects
 				(font
@@ -9415,6 +9148,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x10" "0.056"
+			(at 76.2 139.7 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f6c81705-13d2-4c6d-b40e-45c7dd864706")
 		)
@@ -9607,6 +9349,33 @@
 			)
 		)
 		(property "Sim.Type" ""
+			(at 64.77 162.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AF1206FR-07100RL?qs=tggtontpCXO%252BcERgfMmKEg%3D%3D"
+			(at 64.77 162.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100Ohm, 250mW, 1%"
+			(at 64.77 162.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.035"
 			(at 64.77 162.56 90)
 			(effects
 				(font
@@ -9832,6 +9601,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x10" "0.056"
+			(at 76.2 57.15 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "6ea41f67-ea3f-4ed1-9b00-f8a587036c83")
 		)
@@ -9927,6 +9705,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 50.8 90)
 			(effects
 				(font
@@ -10181,6 +9968,121 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 127 58.42 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d229bd51-50ca-45ff-b172-a2e828d8139a")
+		(property "Reference" "C21"
+			(at 124.46 57.1562 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "220n"
+			(at 124.46 59.6962 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 127 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 127 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "50Vdc, 10%, +125C"
+			(at 127 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 127 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 127 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 127 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "50VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 127 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.05"
+			(at 127 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "014ec9f2-2298-4b46-80b6-8ae7535cb1a2")
+		)
+		(pin "1"
+			(uuid "68eb69b9-03cc-49b2-b4dc-37c4258cc143")
+		)
+		(instances
+			(project "EVAL MSPM0lG3507 BQ76952"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
+					(reference "C21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_US")
 		(at 76.2 133.35 90)
 		(unit 1)
@@ -10260,6 +10162,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 133.35 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 133.35 90)
 			(effects
 				(font
@@ -10486,6 +10397,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x10" "0.056"
+			(at 76.2 114.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "0ea4ecf7-1d24-4623-84e8-d0d8358e7aa0")
 		)
@@ -10565,6 +10485,33 @@
 			)
 		)
 		(property "Sim.Type" ""
+			(at 85.09 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/KYOCERA-AVX/12062A101FAT2A?qs=5tFuR1Ysb3lgAwICWHHk%252Bg%3D%3D"
+			(at 85.09 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100pF, 200Vdc, 1%, -55C, +125C"
+			(at 85.09 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.591"
 			(at 85.09 167.64 0)
 			(effects
 				(font
@@ -10991,6 +10938,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x10" "0.056"
+			(at 76.2 38.1 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "d83f2ab1-13f8-4f17-a42d-306abca1b0fa")
 		)
@@ -11191,6 +11147,33 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AF1206FR-07100RL?qs=tggtontpCXO%252BcERgfMmKEg%3D%3D"
+			(at 64.77 172.72 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100Ohm, 250mW, 1%"
+			(at 64.77 172.72 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.035"
+			(at 64.77 172.72 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "2b707afb-2b5e-45ea-bd39-70c62c90add1")
 		)
@@ -11286,6 +11269,15 @@
 			)
 		)
 		(property "specs" "51Ohms, 660mW, 1%, 500V, 100PPM, -55C, +155C"
+			(at 76.2 101.6 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.056"
 			(at 76.2 101.6 90)
 			(effects
 				(font
@@ -11533,6 +11525,120 @@
 			(project "EVAL MSPM0lG3507 BQ7962"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
 					(reference "C36")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 149.86 34.29 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f8a36f91-d029-45fd-a70c-8741743a71a5")
+		(property "Reference" "R12"
+			(at 151.765 32.385 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "150"
+			(at 151.765 29.845 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 150.114 33.274 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 149.86 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 149.86 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 149.86 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 149.86 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AC1206FR-7W150RL?qs=sGAEpiMZZMtlubZbdhIBICFms2LWLh%252Bq5GguBuup7BI%3D"
+			(at 149.86 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "150Ohm, 500mW, 1%, 200V, -55C, +155C"
+			(at 149.86 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.032"
+			(at 149.86 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f960d2ab-1744-4c95-9dea-6a8fabc34a6a")
+		)
+		(pin "2"
+			(uuid "a7c7ab94-38fc-4cc1-ac40-d20c15d2bc62")
+		)
+		(instances
+			(project "EVAL MSPM0lG3507 BQ76952"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ba45ce94-ada4-466b-9390-9916681e599d"
+					(reference "R12")
 					(unit 1)
 				)
 			)

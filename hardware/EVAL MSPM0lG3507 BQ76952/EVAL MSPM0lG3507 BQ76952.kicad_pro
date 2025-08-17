@@ -48,7 +48,7 @@
         "silk_text_thickness": 0.1,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.3
+          "min_clearance": 0.2
         }
       },
       "diff_pair_dimensions": [
@@ -58,7 +58,48 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "lib_footprint_issues|112800000|36932500|fdc8d009-dc9b-4153-a251-7e74e696b950|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_issues|156300000|106850000|0c8e8be9-610b-4711-9604-c647fc136942|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|137000000|108332500|37740cfe-efb9-4770-8567-fd1570c57d13|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|137935000|98900000|c0814356-ba7a-4c6e-bae4-b89471858c39|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|138320000|70660000|f9aa2fc2-0c6d-4428-ab5c-1d423827b579|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|145035000|98900000|1307a101-78ba-4f90-9ef3-8a6d18971ccb|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|155740000|99100000|782e503f-05d1-4161-886b-3aa00e741fa3|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|156310000|84760000|0e997050-965f-4a36-b2d1-7dd5ac9a8da6|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|165137500|114237500|48ee5ee6-923b-4081-8802-f991b1fe52f8|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "solder_mask_bridge|116469670|27816117|b5d31cf7-6648-4436-9395-d74b6b4ac64c|339e8f14-b707-4491-b6af-d1a1f434dd1f",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -76,9 +117,9 @@
         "duplicate_footprints": "warning",
         "extra_footprint": "warning",
         "footprint": "error",
-        "footprint_filters_mismatch": "ignore",
+        "footprint_filters_mismatch": "warning",
         "footprint_symbol_mismatch": "warning",
-        "footprint_type_mismatch": "ignore",
+        "footprint_type_mismatch": "warning",
         "hole_clearance": "error",
         "hole_to_hole": "warning",
         "holes_co_located": "warning",
@@ -92,13 +133,13 @@
         "malformed_courtyard": "error",
         "microvia_drill_out_of_range": "error",
         "mirrored_text_on_front_layer": "warning",
-        "missing_courtyard": "ignore",
+        "missing_courtyard": "warning",
         "missing_footprint": "warning",
         "net_conflict": "warning",
         "nonmirrored_text_on_back_layer": "warning",
-        "npth_inside_courtyard": "ignore",
+        "npth_inside_courtyard": "warning",
         "padstack": "warning",
-        "pth_inside_courtyard": "ignore",
+        "pth_inside_courtyard": "warning",
         "shorting_items": "error",
         "silk_edge_clearance": "warning",
         "silk_over_copper": "warning",
@@ -477,7 +518,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "EVAL MSPM0lG3507 BQ7962.kicad_pro",
+    "filename": "EVAL MSPM0lG3507 BQ76952.kicad_pro",
     "version": 3
   },
   "net_settings": {
@@ -513,7 +554,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "C:/Users/turtl/Downloads/",
+      "plot": "C:/Users/turtl/Downloads/2.1/fab/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "",
