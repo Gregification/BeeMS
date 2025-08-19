@@ -35,19 +35,19 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::fiddle_task,
-//            "fiddle task",
-//            configMINIMAL_STACK_SIZE * 50,
-//            NULL,
-//            tskIDLE_PRIORITY,
-//            NULL);
-
-    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
-            "BQ769x2_PROTOCOL_Test_V_Task",
-            configMINIMAL_STACK_SIZE * 2,
+    xTaskCreate(Task::fiddle_task,
+            "fiddle task",
+            configMINIMAL_STACK_SIZE * 50,
             NULL,
-            configMAX_PRIORITIES,
+            tskIDLE_PRIORITY,
             NULL);
+
+//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
+//            "BQ769x2_PROTOCOL_Test_V_Task",
+//            configMINIMAL_STACK_SIZE * 2,
+//            NULL,
+//            configMAX_PRIORITIES,
+//            NULL);
 
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_T_Task,

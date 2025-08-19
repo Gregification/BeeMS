@@ -17,9 +17,16 @@
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
 
+    // -----------------------------------------------------------------------------
+
     BQ76952 bq;
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
+
+    bq.i2c_controller->setSCLTarget(400e3);
+
+
+    // -----------------------------------------------------------------------------
 
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
     vTaskDelay(pdMS_TO_TICKS(60));
@@ -140,6 +147,8 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     vTaskDelay(pdMS_TO_TICKS(8));
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SLEEP_DISABLE);
     vTaskDelay(pdMS_TO_TICKS(8));
+
+    // -----------------------------------------------------------------------------
 
     const BQ769X2_PROTOCOL::CmdDrt cmds[] = {
              BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage,

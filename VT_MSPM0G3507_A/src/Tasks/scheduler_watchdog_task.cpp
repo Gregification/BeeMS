@@ -8,12 +8,10 @@
 #include "scheduler_watchdog_task.hpp"
 #include <ti/driverlib/driverlib.h>
 
-/*
- *
- * i couldnt get tis to work, dont use it until you fix it
- *
- */
 
+/*
+ * i couldnt get it to work, dont use it until you fix it
+ */
 void Task::scheduler_watchdog_task(void *){
 //    DL_WWDT_enablePower(WWDT1);
 //    delay_cycles(POWER_STARTUP_DELAY);

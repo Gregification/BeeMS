@@ -249,13 +249,13 @@ namespace System {
              */
             bool rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
 
-//        private:
+            // should be private but then you'll need to make a constructor and all that boiler plate.
             struct {
                 TaskHandle_t host_task;
                 uint8_t * data;
                 uint8_t data_length;    // total bytes of data
                 uint8_t nxt_index;      // index next byte is read/written by
-            } trxBuffer;
+            } _trxBuffer;
         };
     }
 

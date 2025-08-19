@@ -536,8 +536,8 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
 //            System::uart_ui.nputs(ARRANDN("irt " NEWLINE));
             while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
-                if(trxBuffer.nxt_index < trxBuffer.data_length){
-                    trxBuffer.data[trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
+                if(_trxBuffer.nxt_index < _trxBuffer.data_length){
+                    _trxBuffer.data[_trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
                 } else {
                     // ignore and flush
                     DL_I2C_receiveControllerData(reg);
@@ -548,40 +548,40 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
 //            System::uart_ui.nputs(ARRANDN("itt " NEWLINE));
             // fill TX fifo
-            if(trxBuffer.nxt_index < trxBuffer.data_length){
-                trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
+            if(_trxBuffer.nxt_index < _trxBuffer.data_length){
+                _trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
                         reg,
-                        (uint8_t *)trxBuffer.data,
-                        trxBuffer.data_length - trxBuffer.nxt_index
+                        (uint8_t *)_trxBuffer.data,
+                        _trxBuffer.data_length - _trxBuffer.nxt_index
                     );
             }
             break;
 
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
 //            System::uart_ui.nputs(ARRANDN("itd " NEWLINE));
-            xTaskNotifyIndexedFromISR(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEEA, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
+            xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEEA, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
             break;
 
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
 //            System::uart_ui.nputs(ARRANDN("ird " NEWLINE));
-            xTaskNotifyIndexedFromISR(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEEB, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
+            xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEEB, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
             break;
 
         case DL_I2C_IIDX_TIMEOUT_A:
-            trxBuffer.data_length = 0;
+            _trxBuffer.data_length = 0;
 //            System::uart_ui.nputs(ARRANDN("ioa " NEWLINE));
-            xTaskNotifyIndexedFromISR(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEEC, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
+            xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEEC, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
             break;
         case DL_I2C_IIDX_TIMEOUT_B:
 //            System::uart_ui.nputs(ARRANDN("iob " NEWLINE));
-            trxBuffer.data_length = 0;
-            xTaskNotifyIndexedFromISR(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEED, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
+            _trxBuffer.data_length = 0;
+            xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEED, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
             break;
 
         case DL_I2C_IIDX_CONTROLLER_NACK:
 //            System::uart_ui.nputs(ARRANDN("ion " NEWLINE));
-            trxBuffer.data_length = 0;
-            xTaskNotifyIndexedFromISR(trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEEE, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
+            _trxBuffer.data_length = 0;
+            xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0xBEEE, eSetValueWithOverwrite, &xHigherPriorityTaskWoken);
             break;
 
         default:
@@ -599,14 +599,14 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
 
 //    System::uart_ui.nputs(ARRANDN("ts " NEWLINE));
 
-    trxBuffer.host_task = xTaskGetCurrentTaskHandle();
-    trxBuffer.data      = (uint8_t *)data;
-    trxBuffer.data_length = size;
-    trxBuffer.nxt_index = 0;
+    _trxBuffer.host_task = xTaskGetCurrentTaskHandle();
+    _trxBuffer.data      = (uint8_t *)data;
+    _trxBuffer.data_length = size;
+    _trxBuffer.nxt_index = 0;
 
     DL_I2C_flushControllerTXFIFO(reg);
 
-    size -= DL_I2C_fillControllerTXFIFO(reg, trxBuffer.data, size);
+    size -= DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, size);
 
     while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)) {
         vTaskDelay(0);
@@ -621,7 +621,7 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
             reg,
             addr,
             DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
-            trxBuffer.data_length
+            _trxBuffer.data_length
         );
 
     if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
@@ -640,10 +640,10 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
 //    System::uart_ui.nputs(ARRANDN("rss " NEWLINE));
     TickType_t stopTime = xTaskGetTickCount() + timeout;
 
-    trxBuffer.host_task = xTaskGetCurrentTaskHandle();
-    trxBuffer.data      = (uint8_t *)data;
-    trxBuffer.data_length = size;
-    trxBuffer.nxt_index = 0;
+    _trxBuffer.host_task = xTaskGetCurrentTaskHandle();
+    _trxBuffer.data      = (uint8_t *)data;
+    _trxBuffer.data_length = size;
+    _trxBuffer.nxt_index = 0;
 
 //    System::uart_ui.nputs(ARRANDN("rs " NEWLINE));
 
@@ -662,7 +662,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
             reg,
             addr,
             DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
-            trxBuffer.data_length
+            _trxBuffer.data_length
         );
 
     if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
@@ -671,7 +671,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
         return false;
     }
 
-    if(trxBuffer.nxt_index != trxBuffer.data_length){
+    if(_trxBuffer.nxt_index != _trxBuffer.data_length){
 //        System::uart_ui.nputs(ARRANDN("rd " NEWLINE));
         return false;
     }
@@ -760,16 +760,11 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
     extern "C" void I2C1_IRQHandler(void){ System::i2c1._irq(); }
 #endif
 
+    // for ease of debugging. delete if needed
     extern "C" void NMI_Handler(void)
     { while(1){} }
-    extern "C" void HardFault_Handler(void)
+    extern "C" void HardFault_Handler(void) // if this is giving u a problem check if your using IRQ safe funcitons in your IRQ
     { while(1){} }
-//    extern "C" void SVC_Handler(void)
-//    { while(1){} }
-//    extern "C" void PendSV_Handler(void)
-//    { while(1){} }
-//    extern "C" void SysTick_Handler(void)
-//    { while(1){} }
     extern "C" void GROUP0_IRQHandler(void)
     { while(1){} }
     extern "C" void GROUP1_IRQHandler(void)

@@ -1,61 +1,14 @@
-/* george note :
- *  this all fuged up and what not.
- *
- *  - baselined from TI's c library, made it oop-ish so we can support
- *      multiple chips, also uses our DL wrappers
+/*
+ * baselined from TI's sample code found in the MSPM0 SDK.
+ *      mspm0_sdk_2_05_00_05\examples\nortos\LP_MSPM0G3507\battery_gauge\gauge_level2_bq76952\Driver
  */
 
 /*
- * Copyright (c) 2024, Texas Instruments Incorporated
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * *  Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * *  Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * *  Neither the name of Texas Instruments Incorporated nor the names of
- *    its contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
-/*
- * see BQ769x2TRM.3.1/13 for explanation of "Direct Commands and Subcommands"
+ * see BQ769x2.TRM.3.1/13 for explanation of "Direct Commands and Subcommands"
  */
 
 #ifndef BQ769X2_PROTOCOL_HPP_
 #define BQ769X2_PROTOCOL_HPP_
-
-/* Maximum size of TX packet */
-//#define I2C_TX_MAX_PACKET_SIZE (16)
-
-/* Number of bytes to send to target device */
-//#define I2C_TX_PACKET_SIZE (16)
-
-/* Maximum size of RX packet */
-//#define I2C_RX_MAX_PACKET_SIZE (16)
-
-/* Number of bytes to received from target */
-//#define I2C_RX_PACKET_SIZE (16)
-
 
 #include "Core/system.hpp"
 #include "ti/battery_gauge/gauge_level2/Gauge_Type.h"
