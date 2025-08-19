@@ -94,10 +94,26 @@
 // ti battery guage framework
 #include <ti/battery_gauge/gauge_level2/Gauge_Type.h>
 void Task::fiddle_task(void *){
-    System::uart_ui.nputs(ARRANDN("fiddle task: to battery guage framework start" NEWLINE));
+    System::uart_ui.nputs(ARRANDN("fiddle task start" NEWLINE));
 
-    tGaugeApplication app;
+//    tGaugeApplication app; // is CEDV?
 
-    System::uart_ui.nputs(ARRANDN("fiddle task: to battery guage framework end" NEWLINE));
+    /* measurements avialble
+     *  - pack current
+     *  - pack voltage
+     *  - cell voltage
+     *  - coulmb count average over 1.5ms(low res) or 250ms
+     *  - ~40 temp measurements
+     * abilities
+     *  - individual cell discharge
+     *  - individual cell charge? (can be done, but isnt yet)
+     *
+     *  yippie
+     *      - https://www.analog.com/en/resources/technical-articles/a-closer-look-at-state-of-charge-and-state-health-estimation-tech.html
+     */
+
+
+
+    System::uart_ui.nputs(ARRANDN("fiddle task end" NEWLINE));
     vTaskDelete(NULL);
 }
