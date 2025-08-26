@@ -55,7 +55,7 @@
 
 #define PROJECT_NAME            "Voltage Tap"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "0.0.0" // [project version].[hardware version].[software version]
+#define PROJECT_VERSION         "2.1" // [project version].[hardware version].[software version]
 
 
 /*--- shorthand ----------------------------------------*/
@@ -88,6 +88,10 @@
  * - index 0 is the default so avoid using that since it may get triggered by something else
  */
 #define TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ 1
+#define TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_SPI_IRQ 2
+#if configTASK_NOTIFICATION_ARRAY_ENTRIES < 2
+    #error "increase size of configTASK_NOTIFICATION_ARRAY_ENTRIES"
+#endif
 
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
@@ -180,7 +184,7 @@ namespace System {
     }
 
     namespace GPIO {
-        #define GPIOPINPUX(X) X.port,X.pin
+        #define GPIOPINPUX(X) (X).port,(X).pin
 
         struct GPIO {
             GPIO_Regs * port;   // eg: GPIOA
@@ -218,9 +222,19 @@ namespace System {
             /* see system.cpp top comments for example */
             void partialInit();
             void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
+            void _irq();
 
-            void tx_blocking(const void * data, uint16_t size, GPIO::GPIO * cs = NULL);
-            void rx_blocking(void * data, uint16_t size, GPIO::GPIO * cs = NULL);
+            bool tx_blocking(const void * data, uint16_t size, TickType_t timeout);
+            bool rx_blocking(void * data, uint16_t size, TickType_t timeout);
+
+            // should be private but eh
+            struct {
+                TaskHandle_t host_task;
+                uint8_t * data;
+                uint8_t data_length;
+                uint8_t nxt_index_tx;
+                uint8_t nxt_index_rx; // should always be <= nxt_index_tx
+            } _trxBuffer;
         };
     }
 

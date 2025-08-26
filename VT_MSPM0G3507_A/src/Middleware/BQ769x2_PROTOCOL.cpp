@@ -167,9 +167,15 @@ bool BQ769X2_PROTOCOL::sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t
     TX_Reg[0] = cmd & 0xff;
     TX_Reg[1] = (cmd >> 8) & 0xff;
 
-    I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 2, timeout);
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 2, timeout))
+        return false;
+
     vTaskDelay(pdMS_TO_TICKS(2));
-    I2C_ReadReg(i2c_controller, i2c_addr, 0x40, readOut, 32, timeout);
+
+    if(!I2C_ReadReg(i2c_controller, i2c_addr, 0x40, readOut, 32, timeout))
+        return false;
+
+    return true;
 }
 
 bool BQ769X2_PROTOCOL::sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data, TickType_t timeout) {
@@ -184,12 +190,16 @@ bool BQ769X2_PROTOCOL::sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t
 
     //FET_Control, REG12_Control
     TX_Reg[2] = data & 0xff;
-    I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 3, timeout);
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 3, timeout))
+        return false;
     vTaskDelay(pdMS_TO_TICKS(1));
     TX_Buffer[0] = Checksum(TX_Reg, 3);
     TX_Buffer[1] = 0x05;  //combined length of registers address and data
-    I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2, timeout);
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2, timeout))
+        return false;
     vTaskDelay(pdMS_TO_TICKS(1));
+
+    return true;
 }
 
 bool BQ769X2_PROTOCOL::sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data, TickType_t timeout) {
@@ -205,12 +215,16 @@ bool BQ769X2_PROTOCOL::sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t
     //CB_Active_Cells, CB_SET_LVL
     TX_Reg[2] = data & 0xff;
     TX_Reg[3] = (data >> 8) & 0xff;
-    I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 4, timeout);
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 4, timeout))
+        return false;
     vTaskDelay(pdMS_TO_TICKS(1));
     TX_Buffer[0] = Checksum(TX_Reg, 4);
     TX_Buffer[1] = 0x06;  //combined length of registers address and data
-    I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2, timeout);
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2, timeout))
+        return false;
     vTaskDelay(pdMS_TO_TICKS(1));
+
+    return true;
 }
 
 bool BQ769X2_PROTOCOL::setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, RegAddr reg_addr, uint32_t reg_data, uint8_t datalen, TickType_t timeout)
