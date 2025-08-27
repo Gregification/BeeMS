@@ -16,7 +16,6 @@ void Task::SPI_example_task(void *){
     System::uart_ui.nputs(ARRANDN("SPI example task start" NEWLINE));
 
 
-
     System::uart_ui.nputs(ARRANDN("SPI example task end" NEWLINE));
     vTaskDelete(NULL);
 }

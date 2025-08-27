@@ -210,12 +210,14 @@ namespace System {
     }
 
     namespace SPI {
+        /* transmitted when RX is needed but no TX is provided */
+        constexpr uint8_t TRANSFER_FILLER_BYTE = 0x0;
+
         /* - you must manually control CS
          * - for any transmission speeds worth a crap you will have to use DL
          * - functions here are general and are nowhere near peak performance
+         * - master only device
          */
-
-        /* TODO: missing a SPI "transfer" function because I don't feel like making it, you can make one */
         struct SPI : Lockable {
             SPI_Regs * const reg;
 
@@ -224,16 +226,14 @@ namespace System {
             void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 
-            bool tx_blocking(const void * data, uint16_t size, TickType_t timeout);
-            bool rx_blocking(void * data, uint16_t size, TickType_t timeout);
+            bool transfer(void * tx, void * rx, uint16_t len, TickType_t timeout);
 
             // should be private but eh
             struct {
                 TaskHandle_t host_task;
-                uint8_t * data;
-                uint8_t data_length;
-                uint8_t nxt_index_tx;
-                uint8_t nxt_index_rx; // should always be <= nxt_index_tx
+                uint8_t *tx, *rx;
+                uint8_t len;
+                uint8_t tx_i, rx_i;
             } _trxBuffer;
         };
     }
@@ -241,7 +241,8 @@ namespace System {
     namespace I2C {
 
 
-        /** I2C peripheral controller interface */
+        /** I2C peripheral controller interface
+         * - master only device */
         struct I2C : Lockable {
 
             I2C_Regs * const reg;

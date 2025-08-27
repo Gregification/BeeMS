@@ -11,8 +11,9 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
-#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
+//#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
 //#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
+#include <Tasks/SPI_example_task.hpp>
 
 #include "system.hpp"
 

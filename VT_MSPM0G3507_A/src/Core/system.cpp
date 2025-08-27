@@ -309,8 +309,8 @@ void System::init() {
 
         NVIC_EnableIRQ(SPI0_INT_IRQn);
         DL_SPI_enableInterrupt(System::spi0.reg,
-                   DL_SPI_INTERRUPT_RX
-                | DL_SPI_INTERRUPT_TX_EMPTY
+                  DL_SPI_INTERRUPT_RX
+                | DL_SPI_INTERRUPT_TX
             );
     #endif
 
@@ -441,26 +441,31 @@ void System::SPI::SPI::_irq() {
     switch(DL_SPI_getPendingInterrupt(reg)){
         case DL_SPI_IIDX::DL_SPI_IIDX_RX:
             while(!DL_SPI_isRXFIFOEmpty(reg)){
-                if(_trxBuffer.nxt_index_rx < _trxBuffer.data_length){
-                    _trxBuffer.data[_trxBuffer.nxt_index_rx++] = DL_SPI_receiveData8(reg);
-                    if(_trxBuffer.nxt_index_rx == _trxBuffer.data_length)
-                        xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_SPI_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
+                if(_trxBuffer.rx_i < _trxBuffer.len){
+                    _trxBuffer.rx[_trxBuffer.rx_i++] = DL_SPI_receiveData8(reg);
                 } else {
                     // ignore and flush
                     DL_SPI_receiveData8(reg);
                 }
             }
+
             break;
 
-        case DL_SPI_IIDX::DL_SPI_IIDX_TX_EMPTY:
-            if(_trxBuffer.nxt_index_tx < _trxBuffer.data_length){
-                _trxBuffer.nxt_index_tx +=  DL_SPI_fillTXFIFO8(
-                        reg,
-                        (uint8_t *)_trxBuffer.data,
-                        _trxBuffer.data_length - _trxBuffer.nxt_index_tx
-                    );
-            } else if(_trxBuffer.nxt_index_rx >= _trxBuffer.data_length)
-                xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_SPI_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
+            // transmit more stuff
+        case DL_SPI_IIDX::DL_SPI_IIDX_TX:
+            if(_trxBuffer.tx_i < _trxBuffer.len){ // anything left to TX?
+                if(_trxBuffer.tx) { // TX array contents
+                    _trxBuffer.tx_i +=  DL_SPI_fillTXFIFO8(
+                            reg,
+                            (uint8_t *)_trxBuffer.tx,
+                            _trxBuffer.len - _trxBuffer.tx_i
+                        );
+                } else { // TX bogus data
+                    for(; (_trxBuffer.tx_i < _trxBuffer.len) && !DL_SPI_isTXFIFOFull(reg); _trxBuffer.tx_i++){
+                        DL_SPI_transmitData8(reg, TRANSFER_FILLER_BYTE);
+                    }
+                }
+            }
 
             break;
 
@@ -469,13 +474,14 @@ void System::SPI::SPI::_irq() {
 
     };
 
+    // end condition
+    if((_trxBuffer.rx_i >= _trxBuffer.len) && (_trxBuffer.tx_i >= _trxBuffer.len))
+        xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_SPI_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
+
     portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 }
 
-bool System::SPI::SPI::tx_blocking(const void *data, uint16_t size, TickType_t timeout) {
-    if(!takeResource(timeout))
-        return false;
-
+bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t timeout){
     TickType_t stopTime = xTaskGetTickCount() + timeout;
 
     while(DL_SPI_isBusy(reg)){
@@ -484,30 +490,33 @@ bool System::SPI::SPI::tx_blocking(const void *data, uint16_t size, TickType_t t
             return false;
     }
 
-    _trxBuffer.data = data;
-    _trxBuffer.data_length = size;
-    _trxBuffer.nxt_index = DL_SPI_fillTXFIFO8(reg, ((uint8_t *)data) + i, size - i);
-
-    for(uint16_t i = 0; i < size; i++){
-        i += DL_SPI_fillTXFIFO8(reg, ((uint8_t *)data) + i, size - i);
-    }
-
-    releaseResource();
-    return true;
-}
-
-bool System::SPI::SPI::rx_blocking(void *data, uint16_t size, TickType_t timeout) {
     if(!takeResource(timeout))
         return false;
 
-    for(uint8_t c,i; c > 0 ;)
-        c = DL_SPI_drainRXFIFO8(reg, &i, 1);
+    _trxBuffer.tx = (uint8_t *) tx;
+    _trxBuffer.rx = (uint8_t *) rx;
+    _trxBuffer.rx_i = 0;
+    _trxBuffer.len = len;
 
-    for(uint16_t i = 0; i < size; i++){
-        DL_SPI_transmitDataBlocking8(reg, 0);
-       ((uint8_t *)data)[i] = DL_SPI_receiveData8(reg);
+    // sanitization
+    if(!_trxBuffer.rx)
+        _trxBuffer.rx_i = _trxBuffer.len;
+
+    // start IRQ handling by transmitting something
+    if(_trxBuffer.tx) {
+        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, _trxBuffer.tx, 1);
+    } else {
+        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, &TRANSFER_FILLER_BYTE, 1);
     }
 
+    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeout)){
+        // timed out
+        _trxBuffer.len = 0;
+        releaseResource();
+        return false;
+    }
+
+    _trxBuffer.len = 0;
     releaseResource();
     return true;
 }
