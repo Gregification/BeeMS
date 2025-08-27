@@ -15,6 +15,7 @@
  *  the chip.
  *
  *** NOTES *****************************************************************************************
+ * - THE CALLING FUNCTION MUST LOCK THE PERIPHERIAL RESOURCE BEFORE USINGIT
  * - all peripherals have wrappers. no matter how pointless it is. for semaphore control stuff
  *      - the semaphore is runtime so the compiler probably want to optimize it.
  *

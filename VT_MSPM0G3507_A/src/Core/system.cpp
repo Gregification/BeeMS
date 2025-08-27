@@ -348,6 +348,8 @@ void System::UART::UART::setBaudTarget(uint32_t target_baud, uint32_t clk) {
     fractional = ( (nume * 64) + 1 ) / deno;
 
     DL_UART_setBaudRateDivisor(reg, integer, fractional);
+
+    return true;
 }
 
 /**
@@ -501,6 +503,7 @@ bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t t
     // sanitization
     if(!_trxBuffer.rx)
         _trxBuffer.rx_i = _trxBuffer.len;
+    // tx is checked by the IRQ so its not needed here
 
     // start IRQ handling by transmitting something
     if(_trxBuffer.tx) {
