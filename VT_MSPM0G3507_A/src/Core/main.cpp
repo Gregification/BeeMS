@@ -35,12 +35,19 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-    xTaskCreate(Task::fiddle_task,
-            "fiddle task",
-            configMINIMAL_STACK_SIZE * 50,
-            NULL,
-            tskIDLE_PRIORITY,
-            NULL);
+//    xTaskCreate(Task::fiddle_task,
+//            "fiddle task",
+//            configMINIMAL_STACK_SIZE * 50,
+//            NULL,
+//            tskIDLE_PRIORITY,
+//            NULL);
+
+    xTaskCreate(Task::SPI_example_task,
+                "SPI_example_task",
+                configMINIMAL_STACK_SIZE * 50,
+                NULL,
+                tskIDLE_PRIORITY,
+                NULL);
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
 //            "BQ769x2_PROTOCOL_Test_V_Task",

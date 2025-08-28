@@ -181,7 +181,6 @@ namespace System {
             void nputs(char const * str, uint32_t n);
             void ngets(char * str, uint32_t n);
         };
-
     }
 
     namespace GPIO {
@@ -222,8 +221,6 @@ namespace System {
         struct SPI : Lockable {
             SPI_Regs * const reg;
 
-            /* see system.cpp top comments for example */
-            void partialInit();
             void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 

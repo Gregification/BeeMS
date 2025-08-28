@@ -258,6 +258,7 @@ void System::init() {
         // TODO: code to set this up. should look like I2C1's init code below
     #endif
     #ifdef PROJECT_ENABLE_I2C1
+    {
         DL_I2C_enablePower(System::i2c1.reg);
         delay_cycles(POWER_STARTUP_DELAY);
         /* timeout calculation. TDS.20.2.3.6/1520. or see the DL comments in their api.
@@ -301,17 +302,73 @@ void System::init() {
                 | DL_I2C_INTERRUPT_TIMEOUT_A
                 | DL_I2C_INTERRUPT_TIMEOUT_B
             );
+    }
     #endif
 
     #ifdef PROJECT_ENABLE_SPI0
+    {
+        // high speed SPI
+
         DL_SPI_enablePower(spi0.reg);
         delay_cycles(POWER_STARTUP_DELAY);
+
+        /*--- GPIO config ----------------*/
+
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    SCLK , PA12
+                IOMUX_PINCM34,
+                IOMUX_PINCM34_PF_SPI0_SCLK,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PA14
+                IOMUX_PINCM36,
+                IOMUX_PINCM36_PF_SPI0_PICO,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
+        DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO , PA13
+                IOMUX_PINCM35,
+                IOMUX_PINCM35_PF_SPI0_POCI,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+            );
+        DL_GPIO_enableHiZ(IOMUX_PINCM35);
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA12));
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA14));
+
+        /*--- SPI config -----------------*/
+
+        DL_SPI_ClockConfig clk_config = {
+                 .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
+                 .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
+            };
+        DL_SPI_setClockConfig(spi0.reg, &clk_config);
+        DL_SPI_Config config = {
+                .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
+                .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
+                .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
+                .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
+                .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_LSB_FIRST,
+                .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2,
+            };
+        DL_SPI_init(spi0.reg, &config);
+        DL_SPI_disablePacking(spi0.reg);
+        spi0.setSCLKTarget(125e3);
+        DL_SPI_enable(spi0.reg);
 
         NVIC_EnableIRQ(SPI0_INT_IRQn);
         DL_SPI_enableInterrupt(System::spi0.reg,
                   DL_SPI_INTERRUPT_RX
                 | DL_SPI_INTERRUPT_TX
             );
+    }
     #endif
 
 }
@@ -349,7 +406,7 @@ void System::UART::UART::setBaudTarget(uint32_t target_baud, uint32_t clk) {
 
     DL_UART_setBaudRateDivisor(reg, integer, fractional);
 
-    return true;
+    return;
 }
 
 /**
@@ -419,14 +476,6 @@ void System::UART::UART::ngets(char *str, uint32_t n) {
         else
             DL_UART_transmitDataBlocking(reg, data);
     }
-}
-
-void System::SPI::SPI::partialInit() {
-    DL_SPI_ClockConfig clk_config = {
-             .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
-             .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
-        };
-    DL_SPI_setClockConfig(reg, &clk_config);
 }
 
 void System::SPI::SPI::setSCLKTarget(uint32_t target, uint32_t clk){
