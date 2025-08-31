@@ -11,15 +11,11 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
-//#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
-//#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
-#include <Tasks/SPI_example_task.hpp>
 
 #include "system.hpp"
 
 #include "Tasks/blink_task.hpp"
-#include "Tasks/Test_UART_Task.hpp"
-#include "Tasks/fiddle.hpp"
+#include <Tasks/SPI_example_task.hpp>
 
 int main(){
     System::init();
