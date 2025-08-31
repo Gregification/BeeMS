@@ -347,14 +347,6 @@ void System::init() {
 
 }
 
-inline bool System::Lockable::takeResource(TickType_t timeout) {
-    return pdTRUE == xSemaphoreTakeRecursive(semph, timeout);
-}
-
-inline void System::Lockable::releaseResource() {
-    xSemaphoreGiveRecursive(semph);
-}
-
 void System::UART::UART::setBaudTarget(uint32_t target_baud, uint32_t clk) {
     // i remember seeing there was some function in DL that did exactly the same thing.
     // I cant find it anymore :(

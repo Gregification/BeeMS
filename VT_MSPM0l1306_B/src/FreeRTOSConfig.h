@@ -92,11 +92,11 @@
 #define configIDLE_TASK_STACK_DEPTH             (configMINIMAL_STACK_SIZE)
 
 /* Default stack size for TI-POSIX threads (in words) */
-#define configPOSIX_STACK_SIZE ((unsigned short) 256)
+//#define configPOSIX_STACK_SIZE ((unsigned short) 256)
 
 /* Constants that build features in or out. */
 #define configUSE_MUTEXES                       1
-#define configUSE_TICKLESS_IDLE                 0
+#define configUSE_TICKLESS_IDLE                 1
 #define configUSE_APPLICATION_TASK_TAG          0
 /*
  * Co-routines are intended for use on very small processes with severe RAM
@@ -114,7 +114,7 @@
 
 
 /* Constants that define which hook (callback) functions should be used. */
-#define configUSE_IDLE_HOOK                     1
+#define configUSE_IDLE_HOOK                     0
 #define configUSE_TICK_HOOK                     0
 #define configUSE_MALLOC_FAILED_HOOK            0
 
@@ -154,15 +154,15 @@
 
 #define configENABLE_BACKWARD_COMPATIBILITY     0
 
-#if defined(__TI_COMPILER_VERSION__) || defined(__ti_version__)
-#include <ti/posix/freertos/PTLS.h>
-#define traceTASK_DELETE(pxTCB) PTLS_taskDeleteHook(pxTCB)
-#elif defined(__IAR_SYSTEMS_ICC__)
-#ifndef __IAR_SYSTEMS_ASM__
-#include <ti/posix/freertos/Mtx.h>
-#define traceTASK_DELETE(pxTCB) Mtx_taskDeleteHook(pxTCB)
-#endif
-#endif
+//#if defined(__TI_COMPILER_VERSION__) || defined(__ti_version__)
+//#include <ti/posix/freertos/PTLS.h>
+//#define traceTASK_DELETE(pxTCB) PTLS_taskDeleteHook(pxTCB)
+//#elif defined(__IAR_SYSTEMS_ICC__)
+//#ifndef __IAR_SYSTEMS_ASM__
+//#include <ti/posix/freertos/Mtx.h>
+//#define traceTASK_DELETE(pxTCB) Mtx_taskDeleteHook(pxTCB)
+//#endif
+//#endif
 
 /*
  *  Enable thread local storage
@@ -175,11 +175,11 @@
 
 #define configNUM_THREAD_LOCAL_STORAGE_POINTERS 2
 
-#if defined(__TI_COMPILER_VERSION__) || defined(__ti_version__)
-#define PTLS_TLS_INDEX 0  /* ti.posix.freertos.PTLS */
-#elif defined(__IAR_SYSTEMS_ICC__)
-#define MTX_TLS_INDEX 0  /* ti.posix.freertos.Mtx */
-#endif
+//#if defined(__TI_COMPILER_VERSION__) || defined(__ti_version__)
+//#define PTLS_TLS_INDEX 0  /* ti.posix.freertos.PTLS */
+//#elif defined(__IAR_SYSTEMS_ICC__)
+//#define MTX_TLS_INDEX 0  /* ti.posix.freertos.Mtx */
+//#endif
 
 #define NDK_TLS_INDEX 1  /* Reserve an index for NDK TLS */
 
@@ -242,7 +242,7 @@
  * Interrupt priorities used by the kernel port layer itself.  These are generic
  * to all Cortex-M ports, and do not rely on any particular library functions.
  */
-#define configKERNEL_INTERRUPT_PRIORITY 0x03
+#define configKERNEL_INTERRUPT_PRIORITY (configLIBRARY_LOWEST_INTERRUPT_PRIORITY << (8 - configPRIO_BITS))
 
 /*
  * !!!! configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to zero !!!!
@@ -252,7 +252,7 @@
  * Priority 1 is the second highest priority.
  * Priority 0 is the highest priority.
  */
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY  0x0
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY  (configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS))
 
 /*
  * The trace facility is turned on to make some functions available for use in

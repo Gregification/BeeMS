@@ -100,11 +100,11 @@
 
 #define PROJECT_ENABLE_UART0        // LP
 
-#define PROJECT_ENABLE_SPI0         // up to 2Mhz
+//#define PROJECT_ENABLE_SPI0         // up to 2Mhz
 //#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
 
 //#define PROJECT_ENABLE_I2C0
-#define PROJECT_ENABLE_I2C1
+//#define PROJECT_ENABLE_I2C1
 
 
 /*--- common peripheral pins ---------------------------*/
@@ -137,45 +137,6 @@ namespace System {
 /*------------------------------------------------------*/
 
 namespace System {
-
-    /** wrapper for controlling access to limited hardware resource.
-     * purpose is to standardize resource access.
-     */
-    class Lockable { // Java gang
-        /* theres a design consideration between sharing a resource across multiple 'tasks' though
-         * locks or having a trx buffer they all reference and a single 'task' handle the resource.
-         * theres benefits to both but Im going with a locking design since its allows 'tasks' more
-         * detailed hardware control.
-         */
-
-        SemaphoreHandle_t semph = NULL;
-
-    public:
-
-        Lockable() {
-            semph = xSemaphoreCreateRecursiveMutex();
-            while(semph == NULL){
-                // ran out of memory
-
-                // TODO: handle this problem somehow, probably just restart the device. just
-                //      make sure the system is in a state where nothing dangerous is enabled
-                //      as this is happening.
-            }
-        }
-
-        /** takes the recursive lock.
-         * returns true if resource was acquired
-         */
-        bool takeResource(TickType_t timeout);
-
-        /** releases the recursive lock.
-         * returns true of the resource was successfully released
-         *      can fail in cases such as releasing a resource without taking it first.
-         */
-        void releaseResource();
-
-    };
-
     /* see clock tree diagram ... and SysConfig's */
     namespace CLK {
         // idc about power consumption
@@ -192,7 +153,7 @@ namespace System {
     }
 
     namespace UART {
-        struct UART : Lockable {
+        struct UART {
             UART_Regs * const reg;
 
             void setBaudTarget(uint32_t target_baud, uint32_t clk = System::CLK::MCLK);
@@ -232,7 +193,7 @@ namespace System {
          * - functions here are general and are nowhere near peak performance
          * - master only device
          */
-        struct SPI : Lockable {
+        struct SPI {
             SPI_Regs * const reg;
 
             void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
@@ -255,7 +216,7 @@ namespace System {
 
         /** I2C peripheral controller interface
          * - master only device */
-        struct I2C : Lockable {
+        struct I2C {
 
             I2C_Regs * const reg;
 

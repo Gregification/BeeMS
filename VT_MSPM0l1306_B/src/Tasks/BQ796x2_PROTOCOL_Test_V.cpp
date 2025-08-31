@@ -19,6 +19,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
 
     // -----------------------------------------------------------------------------
 
+#ifdef PROJECT_ENABLE_I2C1
     BQ76952 bq;
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
@@ -181,7 +182,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
         }
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
-
+#endif
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task End" NEWLINE));
     vTaskDelete(NULL);
 }

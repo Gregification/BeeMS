@@ -16,11 +16,12 @@
 
 #include "Tasks/blink_task.hpp"
 
-extern "C" void vApplicationIdleHook(void){
+    auto &bled = System::GPIO::PA27;
+    auto &rled = System::GPIO::PA0;
 
-}
+//extern "C" void vApplicationIdleHook(void){
+//}
 void thing( void * ){
-    auto &bled = System::GPIO::PA26;
     DL_GPIO_initDigitalOutputFeatures(
             bled.iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
@@ -46,12 +47,6 @@ int main(){
     System::uart_ui.nputs(ARRANDN("\033[2J\033[H"));
     System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
-    xTaskCreate(Task::blink_task,
-            "blink",
-            configMINIMAL_STACK_SIZE * 10,
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
 
     xTaskCreate(thing,
                 "blink",
@@ -59,6 +54,12 @@ int main(){
                 NULL,
                 tskIDLE_PRIORITY, //configMAX_PRIORITIES,
                 NULL);
+    xTaskCreate(Task::blink_task,
+               "asd",
+               configMINIMAL_STACK_SIZE,
+               NULL,
+               tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+               NULL);
 
     vTaskStartScheduler();
 
