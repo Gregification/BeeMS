@@ -16,20 +16,78 @@
 
 #include "Tasks/blink_task.hpp"
 
+    auto &bled = System::GPIO::PA27;
+    auto &rled = System::GPIO::PA0;
+
+extern "C" void vApplicationIdleHook(void){
+    static uint32_t counterabc = 0;
+    if(counterabc++ ==  32e3){
+        DL_GPIO_togglePins(GPIOPINPUX(rled));
+        counterabc = 0;
+    }
+}
+void thing( void * ){
+    for(;;){
+        DL_GPIO_togglePins(GPIOPINPUX(bled));
+        volatile uint32_t del = pdMS_TO_TICKS(1000);
+        vTaskDelay(del);
+//        delay_cycles(32e6);
+    }
+
+}
+
 
 int main(){
-    System::init();
+    DL_SYSCTL_setSYSOSCFreq(DL_SYSCTL_SYSOSC_FREQ::DL_SYSCTL_SYSOSC_FREQ_BASE); // SYSOSC 32Mhz
 
-    System::uart_ui.setBaudTarget(115200);
-    System::uart_ui.nputs(ARRANDN("\033[2J\033[H"));
-    System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
+        DL_SYSCTL_setMCLKDivider(DL_SYSCTL_MCLK_DIVIDER::DL_SYSCTL_MCLK_DIVIDER_DISABLE);
+        DL_SYSCTL_enableMFCLK();
 
-    xTaskCreate(Task::blink_task,
-            "blink",
-            configMINIMAL_STACK_SIZE * 10,
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    DL_GPIO_disablePower(GPIOA);
+    DL_GPIO_reset(GPIOA);
+    DL_GPIO_enablePower(GPIOA);
+    delay_cycles(POWER_STARTUP_DELAY);
+
+    volatile uint32_t del = pdMS_TO_TICKS(500);
+
+    DL_GPIO_initDigitalOutputFeatures(
+            rled.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+    DL_GPIO_setPins(GPIOPINPUX(rled));
+    DL_GPIO_enableOutput(GPIOPINPUX(rled));
+
+    DL_GPIO_initDigitalOutputFeatures(
+            bled.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+    DL_GPIO_clearPins(GPIOPINPUX(bled));
+    DL_GPIO_enableOutput(GPIOPINPUX(bled));
+
+//    System::init();
+
+//    System::uart_ui.setBaudTarget(115200);
+//    System::uart_ui.nputs(ARRANDN("\033[2J\033[H"));
+//    System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
+
+//    xTaskCreate(Task::blink_task,
+//            "blink",
+//            configMINIMAL_STACK_SIZE * 10,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
+    xTaskCreate(thing,
+                "blink",
+                configMINIMAL_STACK_SIZE,
+                NULL,
+                tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+                NULL);
 
     vTaskStartScheduler();
 

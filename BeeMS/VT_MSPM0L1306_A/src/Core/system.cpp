@@ -154,7 +154,7 @@ void System::init() {
     {
         // levels: 0:1V62, 1:2V23, 2:2V82, 3:2V95 . (see 7.6.1)
         // didn't notice anything about min-voltage for clock speeds
-        DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_2);
+        DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_1);
     }
 
 
@@ -165,6 +165,7 @@ void System::init() {
 
     #ifdef PROJECT_ENABLE_UART0
     {
+        DL_UART_disablePower(uart0.reg);
         DL_UART_reset(uart0.reg);
         DL_UART_enablePower(uart0.reg);
         delay_cycles(POWER_STARTUP_DELAY);
@@ -216,6 +217,7 @@ void System::init() {
     #endif
     #ifdef PROJECT_ENABLE_I2C1
     {
+        DL_I2C_disablePower(i2c1.reg);
         DL_I2C_reset(i2c1.reg);
         DL_I2C_enablePower(i2c1.reg);
         delay_cycles(POWER_STARTUP_DELAY);
@@ -265,22 +267,23 @@ void System::init() {
 
         DL_I2C_enableController(i2c1.reg);
 
-        NVIC_EnableIRQ(I2C1_INT_IRQn);
-        DL_I2C_enableInterrupt(i2c1.reg,
-                  DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-                | DL_I2C_INTERRUPT_TIMEOUT_A
-                | DL_I2C_INTERRUPT_TIMEOUT_B
-            );
+//        NVIC_DisableIRQ(I2C1_INT_IRQn);
+//        DL_I2C_enableInterrupt(i2c1.reg,
+//                  DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+//                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+//                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+//                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+//                | DL_I2C_INTERRUPT_TIMEOUT_A
+//                | DL_I2C_INTERRUPT_TIMEOUT_B
+//            );
     }
     #endif
 
     #ifdef PROJECT_ENABLE_SPI0
     {
         // high speed SPI
-
+        DL_SPI_disablePower(spi0.reg);
+        DL_SPI_reset(spi0.reg);
         DL_SPI_enablePower(spi0.reg);
         delay_cycles(POWER_STARTUP_DELAY);
 
@@ -335,11 +338,11 @@ void System::init() {
         spi0.setSCLKTarget(125e3);
         DL_SPI_enable(spi0.reg);
 
-        NVIC_EnableIRQ(SPI0_INT_IRQn);
-        DL_SPI_enableInterrupt(System::spi0.reg,
-                  DL_SPI_INTERRUPT_RX
-                | DL_SPI_INTERRUPT_TX
-            );
+//        NVIC_DisableIRQ(SPI0_INT_IRQn);
+//        DL_SPI_enableInterrupt(System::spi0.reg,
+//                  DL_SPI_INTERRUPT_RX
+//                | DL_SPI_INTERRUPT_TX
+//            );
     }
     #endif
 
@@ -463,7 +466,7 @@ void System::SPI::SPI::_irq() {
     };
 
     // end condition
-    if((_trxBuffer.rx_i >= _trxBuffer.len) && (_trxBuffer.tx_i >= _trxBuffer.len))
+    if((_trxBuffer.host_task) && (_trxBuffer.rx_i >= _trxBuffer.len) && (_trxBuffer.tx_i >= _trxBuffer.len))
         xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_SPI_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
 
     portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
@@ -587,7 +590,8 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
             _trxBuffer.data_length = 0;
-            xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
+            if(_trxBuffer.host_task)
+                xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
             break;
 
         default:
