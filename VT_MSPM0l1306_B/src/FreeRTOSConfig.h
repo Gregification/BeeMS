@@ -190,7 +190,7 @@
 #define NDK_TLS_INDEX 0  /* Reserve an index for NDK TLS */
 
 /* note: system locks required by newlib are not implemented */
-#define configUSE_NEWLIB_REENTRANT 1
+#define configUSE_NEWLIB_REENTRANT 0 // just do better, skill issue
 #endif
 
 /*

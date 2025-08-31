@@ -16,12 +16,8 @@
 
 #include "Tasks/blink_task.hpp"
 
-    auto &bled = System::GPIO::PA27;
-    auto &rled = System::GPIO::PA0;
-
-//extern "C" void vApplicationIdleHook(void){
-//}
 void thing( void * ){
+    auto &bled = System::GPIO::PA27;
     DL_GPIO_initDigitalOutputFeatures(
             bled.iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,

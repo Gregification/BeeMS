@@ -100,11 +100,11 @@
 
 #define PROJECT_ENABLE_UART0        // LP
 
-//#define PROJECT_ENABLE_SPI0         // up to 2Mhz
+#define PROJECT_ENABLE_SPI0         // up to 2Mhz
 //#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
 
 //#define PROJECT_ENABLE_I2C0
-//#define PROJECT_ENABLE_I2C1
+#define PROJECT_ENABLE_I2C1
 
 
 /*--- common peripheral pins ---------------------------*/
