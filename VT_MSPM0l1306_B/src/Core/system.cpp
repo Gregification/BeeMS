@@ -157,7 +157,6 @@ void System::init() {
         DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_1);
     }
 
-
     DL_GPIO_disablePower(GPIOA);
     DL_GPIO_reset(GPIOA);
     DL_GPIO_enablePower(GPIOA);
