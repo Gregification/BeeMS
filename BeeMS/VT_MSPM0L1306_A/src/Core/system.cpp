@@ -157,6 +157,7 @@ void System::init() {
         DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_2);
     }
 
+
     DL_GPIO_disablePower(GPIOA);
     DL_GPIO_reset(GPIOA);
     DL_GPIO_enablePower(GPIOA);
@@ -477,9 +478,6 @@ bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t t
             return false;
     }
 
-    if(!takeResource(timeout))
-        return false;
-
     _trxBuffer.tx = (uint8_t *) tx;
     _trxBuffer.rx = (uint8_t *) rx;
     _trxBuffer.rx_i = 0;
@@ -500,12 +498,10 @@ bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t t
     if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeout)){
         // timed out
         _trxBuffer.len = 0;
-        releaseResource();
         return false;
     }
 
     _trxBuffer.len = 0;
-    releaseResource();
     return true;
 }
 
@@ -604,8 +600,6 @@ void System::I2C::I2C::_irq() {
 
 bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
     TickType_t stopTime = xTaskGetTickCount() + timeout;
-    if(!takeResource(timeout))
-        return false;
 
     _trxBuffer.host_task = xTaskGetCurrentTaskHandle();
     _trxBuffer.data      = (uint8_t *)data;
@@ -620,7 +614,6 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
         vTaskDelay(0);
         if(xTaskGetTickCount() > stopTime){
             DL_I2C_flushControllerTXFIFO(reg);
-            releaseResource();
             return false;
         }
     }
@@ -635,19 +628,15 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
     if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
         // timed out
         DL_I2C_flushControllerTXFIFO(reg);
-        releaseResource();
         return false;
     }
 
     DL_I2C_flushControllerTXFIFO(reg);
-    releaseResource();
     return true;
 }
 
 bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
     TickType_t stopTime = xTaskGetTickCount() + timeout;
-    if(!takeResource(timeout))
-        return false;
 
     _trxBuffer.host_task = xTaskGetCurrentTaskHandle();
     _trxBuffer.data      = (uint8_t *)data;
@@ -658,7 +647,6 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
         vTaskDelay(0);
         if(xTaskGetTickCount() > stopTime){
             DL_I2C_flushControllerTXFIFO(reg);
-            releaseResource();
             return false;
         }
     }
@@ -674,16 +662,13 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
 
     if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
         DL_I2C_flushControllerTXFIFO(reg);
-        releaseResource();
         return false;
     }
 
     if(_trxBuffer.nxt_index != _trxBuffer.data_length){
-        releaseResource();
         return false;
     }
 
-    releaseResource();
     return true;
 }
 

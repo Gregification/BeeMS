@@ -46,7 +46,7 @@
 
 /* Constants related to the behaviour or the scheduler. */
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
-#define configTICK_RATE_HZ                      ((TickType_t) 1000)
+#define configTICK_RATE_HZ                      ((TickType_t) 500)
 #define configUSE_PREEMPTION                    1
 /*
  * Scheduler will run highest priority task in Ready state but won't switch
@@ -72,7 +72,7 @@
 /* Constants that describe the hardware and memory usage. */
 #define configCPU_CLOCK_HZ                      ((unsigned long) 32e6)
 /* Smallest stack size allowed in words */
-#define configMINIMAL_STACK_SIZE                ((unsigned short) 128)
+#define configMINIMAL_STACK_SIZE                ((unsigned short) 126)
 #define configMAX_TASK_NAME_LEN                 (12)
 #define configTOTAL_HEAP_SIZE                   ((size_t)(3072)) // leaves 1024B for statics TODO: trim it
 
@@ -96,7 +96,7 @@
 
 /* Constants that build features in or out. */
 #define configUSE_MUTEXES                       1
-#define configUSE_TICKLESS_IDLE                 1
+#define configUSE_TICKLESS_IDLE                 0
 #define configUSE_APPLICATION_TASK_TAG          0
 /*
  * Co-routines are intended for use on very small processes with severe RAM
@@ -271,7 +271,7 @@
  */
 #define configENABLE_ISR_STACK_INIT 0
 
-#define configTASK_NOTIFICATION_ARRAY_ENTRIES 5
+#define configTASK_NOTIFICATION_ARRAY_ENTRIES 2
 
 /*
  * Definitions that map the FreeRTOS port interrupt handlers to their CMSIS

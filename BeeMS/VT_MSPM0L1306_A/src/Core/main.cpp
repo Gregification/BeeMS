@@ -15,7 +15,7 @@
 #include "system.hpp"
 
 #include "Tasks/blink_task.hpp"
-#include <Tasks/SPI_example_task.hpp>
+
 
 int main(){
     System::init();
@@ -25,8 +25,8 @@ int main(){
     System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
     xTaskCreate(Task::blink_task,
-            "blink status",
-            configMINIMAL_STACK_SIZE,
+            "blink",
+            configMINIMAL_STACK_SIZE * 10,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
@@ -67,23 +67,6 @@ void vApplicationMallocFailedHook(void)
 }
 
 /*-----------------------------------------------------------*/
-
-void vApplicationIdleHook(void)
-{
-    /*
-     * vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
-     * to 1 in FreeRTOSConfig.h.  It will be called on each iteration of the
-     * idle task. It is essential that code added to this hook function never
-     * attempts to block in any way (for example, call xQueueReceive() with a
-     * block time specified, or call vTaskDelay()). If the application makes
-     * use of the vTaskDelete() API function (as this demo application does)
-     * then it is also important that vApplicationIdleHook() is permitted to
-     * return to its calling function, because it is the responsibility of the
-     * idle task to clean up memory allocated by the kernel to any task that
-     * has since been deleted.
-     */
-    System::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
-}
 
 /*-----------------------------------------------------------*/
 
