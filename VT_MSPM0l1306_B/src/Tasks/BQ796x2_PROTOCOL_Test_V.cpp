@@ -11,7 +11,7 @@
 #include <ti/driverlib/driverlib.h>
 #include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
 
-#include "Middleware/BQ76952.hpp"
+#include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/system.hpp"
 
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {

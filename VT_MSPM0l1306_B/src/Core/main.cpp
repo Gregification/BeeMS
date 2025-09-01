@@ -15,6 +15,7 @@
 #include "system.hpp"
 
 #include "Tasks/blink_task.hpp"
+#include "Tasks/ethernet_w5500_test.hpp"
 
 void thing( void * ){
     auto &bled = System::GPIO::PA27;
@@ -31,6 +32,10 @@ void thing( void * ){
     for(;;){
         DL_GPIO_togglePins(GPIOPINPUX(bled));
         vTaskDelay(pdMS_TO_TICKS(1000));
+
+        char str[10];
+        snprintf(ARRANDN(str),"%d" NEWLINE, (uint32_t)uxTaskGetStackHighWaterMark(NULL));
+        System::uart_ui.nputs(ARRANDN(str));
     }
 
 }
@@ -44,19 +49,27 @@ int main(){
     System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 
 
-    xTaskCreate(thing,
-                "blink",
-                configMINIMAL_STACK_SIZE,
-                NULL,
-                tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-                NULL);
-    xTaskCreate(Task::blink_task,
-               "asd",
-               configMINIMAL_STACK_SIZE,
-               NULL,
-               tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-               NULL);
-
+    xTaskCreate(Task::ethernetw5500_test,
+        "ethernet",
+        configMINIMAL_STACK_SIZE * 2,
+        NULL,
+        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+        NULL);
+//    xTaskCreate(thing,
+//                "blink",
+//                configMINIMAL_STACK_SIZE,
+//                NULL,
+//                tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//                NULL);
+//    xTaskCreate(Task::blink_task,
+//        "asd",
+//        configMINIMAL_STACK_SIZE,
+//        NULL,
+//        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//        NULL);
+//    thing(NULL);
+//    Task::ethernetw5500_test(NULL);
+//    Task::blink_task(NULL);
     vTaskStartScheduler();
 
     taskDISABLE_INTERRUPTS();

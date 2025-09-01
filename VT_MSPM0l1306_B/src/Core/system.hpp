@@ -104,7 +104,7 @@
 //#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
 
 //#define PROJECT_ENABLE_I2C0
-#define PROJECT_ENABLE_I2C1
+//#define PROJECT_ENABLE_I2C1
 
 
 /*--- common peripheral pins ---------------------------*/
@@ -177,7 +177,7 @@ namespace System {
         };
 
         // Port A (PA) pins
-        extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
+        extern GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
                      PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
                      PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
                      PA24, PA25, PA26, PA27;

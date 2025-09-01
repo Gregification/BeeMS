@@ -92,34 +92,34 @@ namespace System {
     namespace GPIO {
         // i got tired of fighting pin muxes
 
-        const GPIO PA0  = { .port = GPIOA, .pin = DL_GPIO_PIN_0,  .iomux = IOMUX_PINCM1  };
-        const GPIO PA1  = { .port = GPIOA, .pin = DL_GPIO_PIN_1,  .iomux = IOMUX_PINCM2  };
-        const GPIO PA2  = { .port = GPIOA, .pin = DL_GPIO_PIN_2,  .iomux = IOMUX_PINCM3  };
-        const GPIO PA3  = { .port = GPIOA, .pin = DL_GPIO_PIN_3,  .iomux = IOMUX_PINCM4  };
-        const GPIO PA4  = { .port = GPIOA, .pin = DL_GPIO_PIN_4,  .iomux = IOMUX_PINCM5  };
-        const GPIO PA5  = { .port = GPIOA, .pin = DL_GPIO_PIN_5,  .iomux = IOMUX_PINCM6  };
-        const GPIO PA6  = { .port = GPIOA, .pin = DL_GPIO_PIN_6,  .iomux = IOMUX_PINCM7  };
-        const GPIO PA7  = { .port = GPIOA, .pin = DL_GPIO_PIN_7,  .iomux = IOMUX_PINCM8  };
-        const GPIO PA8  = { .port = GPIOA, .pin = DL_GPIO_PIN_8,  .iomux = IOMUX_PINCM9  };
-        const GPIO PA9  = { .port = GPIOA, .pin = DL_GPIO_PIN_9,  .iomux = IOMUX_PINCM10 };
-        const GPIO PA10 = { .port = GPIOA, .pin = DL_GPIO_PIN_10, .iomux = IOMUX_PINCM11 };
-        const GPIO PA11 = { .port = GPIOA, .pin = DL_GPIO_PIN_11, .iomux = IOMUX_PINCM12 };
-        const GPIO PA12 = { .port = GPIOA, .pin = DL_GPIO_PIN_12, .iomux = IOMUX_PINCM13 };
-        const GPIO PA13 = { .port = GPIOA, .pin = DL_GPIO_PIN_13, .iomux = IOMUX_PINCM14 };
-        const GPIO PA14 = { .port = GPIOA, .pin = DL_GPIO_PIN_14, .iomux = IOMUX_PINCM15 };
-        const GPIO PA15 = { .port = GPIOA, .pin = DL_GPIO_PIN_15, .iomux = IOMUX_PINCM16 };
-        const GPIO PA16 = { .port = GPIOA, .pin = DL_GPIO_PIN_16, .iomux = IOMUX_PINCM17 };
-        const GPIO PA17 = { .port = GPIOA, .pin = DL_GPIO_PIN_17, .iomux = IOMUX_PINCM18 };
-        const GPIO PA18 = { .port = GPIOA, .pin = DL_GPIO_PIN_18, .iomux = IOMUX_PINCM19 };
-        const GPIO PA19 = { .port = GPIOA, .pin = DL_GPIO_PIN_19, .iomux = IOMUX_PINCM20 };
-        const GPIO PA20 = { .port = GPIOA, .pin = DL_GPIO_PIN_20, .iomux = IOMUX_PINCM21 };
-        const GPIO PA21 = { .port = GPIOA, .pin = DL_GPIO_PIN_21, .iomux = IOMUX_PINCM22 };
-        const GPIO PA22 = { .port = GPIOA, .pin = DL_GPIO_PIN_22, .iomux = IOMUX_PINCM23 };
-        const GPIO PA23 = { .port = GPIOA, .pin = DL_GPIO_PIN_23, .iomux = IOMUX_PINCM24 };
-        const GPIO PA24 = { .port = GPIOA, .pin = DL_GPIO_PIN_24, .iomux = IOMUX_PINCM25 };
-        const GPIO PA25 = { .port = GPIOA, .pin = DL_GPIO_PIN_25, .iomux = IOMUX_PINCM26 };
-        const GPIO PA26 = { .port = GPIOA, .pin = DL_GPIO_PIN_26, .iomux = IOMUX_PINCM27 };
-        const GPIO PA27 = { .port = GPIOA, .pin = DL_GPIO_PIN_27, .iomux = IOMUX_PINCM28 };
+        GPIO PA0  = { .port = GPIOA, .pin = DL_GPIO_PIN_0,  .iomux = IOMUX_PINCM1  };
+        GPIO PA1  = { .port = GPIOA, .pin = DL_GPIO_PIN_1,  .iomux = IOMUX_PINCM2  };
+        GPIO PA2  = { .port = GPIOA, .pin = DL_GPIO_PIN_2,  .iomux = IOMUX_PINCM3  };
+        GPIO PA3  = { .port = GPIOA, .pin = DL_GPIO_PIN_3,  .iomux = IOMUX_PINCM4  };
+        GPIO PA4  = { .port = GPIOA, .pin = DL_GPIO_PIN_4,  .iomux = IOMUX_PINCM5  };
+        GPIO PA5  = { .port = GPIOA, .pin = DL_GPIO_PIN_5,  .iomux = IOMUX_PINCM6  };
+        GPIO PA6  = { .port = GPIOA, .pin = DL_GPIO_PIN_6,  .iomux = IOMUX_PINCM7  };
+        GPIO PA7  = { .port = GPIOA, .pin = DL_GPIO_PIN_7,  .iomux = IOMUX_PINCM8  };
+        GPIO PA8  = { .port = GPIOA, .pin = DL_GPIO_PIN_8,  .iomux = IOMUX_PINCM9  };
+        GPIO PA9  = { .port = GPIOA, .pin = DL_GPIO_PIN_9,  .iomux = IOMUX_PINCM10 };
+        GPIO PA10 = { .port = GPIOA, .pin = DL_GPIO_PIN_10, .iomux = IOMUX_PINCM11 };
+        GPIO PA11 = { .port = GPIOA, .pin = DL_GPIO_PIN_11, .iomux = IOMUX_PINCM12 };
+        GPIO PA12 = { .port = GPIOA, .pin = DL_GPIO_PIN_12, .iomux = IOMUX_PINCM13 };
+        GPIO PA13 = { .port = GPIOA, .pin = DL_GPIO_PIN_13, .iomux = IOMUX_PINCM14 };
+        GPIO PA14 = { .port = GPIOA, .pin = DL_GPIO_PIN_14, .iomux = IOMUX_PINCM15 };
+        GPIO PA15 = { .port = GPIOA, .pin = DL_GPIO_PIN_15, .iomux = IOMUX_PINCM16 };
+        GPIO PA16 = { .port = GPIOA, .pin = DL_GPIO_PIN_16, .iomux = IOMUX_PINCM17 };
+        GPIO PA17 = { .port = GPIOA, .pin = DL_GPIO_PIN_17, .iomux = IOMUX_PINCM18 };
+        GPIO PA18 = { .port = GPIOA, .pin = DL_GPIO_PIN_18, .iomux = IOMUX_PINCM19 };
+        GPIO PA19 = { .port = GPIOA, .pin = DL_GPIO_PIN_19, .iomux = IOMUX_PINCM20 };
+        GPIO PA20 = { .port = GPIOA, .pin = DL_GPIO_PIN_20, .iomux = IOMUX_PINCM21 };
+        GPIO PA21 = { .port = GPIOA, .pin = DL_GPIO_PIN_21, .iomux = IOMUX_PINCM22 };
+        GPIO PA22 = { .port = GPIOA, .pin = DL_GPIO_PIN_22, .iomux = IOMUX_PINCM23 };
+        GPIO PA23 = { .port = GPIOA, .pin = DL_GPIO_PIN_23, .iomux = IOMUX_PINCM24 };
+        GPIO PA24 = { .port = GPIOA, .pin = DL_GPIO_PIN_24, .iomux = IOMUX_PINCM25 };
+        GPIO PA25 = { .port = GPIOA, .pin = DL_GPIO_PIN_25, .iomux = IOMUX_PINCM26 };
+        GPIO PA26 = { .port = GPIOA, .pin = DL_GPIO_PIN_26, .iomux = IOMUX_PINCM27 };
+        GPIO PA27 = { .port = GPIOA, .pin = DL_GPIO_PIN_27, .iomux = IOMUX_PINCM28 };
     }
 
 
@@ -266,15 +266,15 @@ void System::init() {
 
         DL_I2C_enableController(i2c1.reg);
 
-//        NVIC_DisableIRQ(I2C1_INT_IRQn);
-//        DL_I2C_enableInterrupt(i2c1.reg,
-//                  DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-//                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-//                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-//                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-//                | DL_I2C_INTERRUPT_TIMEOUT_A
-//                | DL_I2C_INTERRUPT_TIMEOUT_B
-//            );
+        NVIC_DisableIRQ(I2C1_INT_IRQn);
+        DL_I2C_enableInterrupt(i2c1.reg,
+                  DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+                | DL_I2C_INTERRUPT_TIMEOUT_A
+                | DL_I2C_INTERRUPT_TIMEOUT_B
+            );
     }
     #endif
 
@@ -319,12 +319,12 @@ void System::init() {
 
         /*--- SPI config -----------------*/
 
-        DL_SPI_ClockConfig clk_config = {
+        constexpr DL_SPI_ClockConfig clk_config = {
                  .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
                  .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
             };
         DL_SPI_setClockConfig(spi0.reg, &clk_config);
-        DL_SPI_Config config = {
+        constexpr DL_SPI_Config config = {
                 .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
                 .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
                 .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
@@ -334,14 +334,16 @@ void System::init() {
             };
         DL_SPI_init(spi0.reg, &config);
         DL_SPI_disablePacking(spi0.reg);
-        spi0.setSCLKTarget(125e3);
+
+        DL_SPI_setFIFOThreshold(spi0.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_ONE_FRAME, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_ONE_FRAME);
+
         DL_SPI_enable(spi0.reg);
 
-//        NVIC_DisableIRQ(SPI0_INT_IRQn);
-//        DL_SPI_enableInterrupt(System::spi0.reg,
-//                  DL_SPI_INTERRUPT_RX
-//                | DL_SPI_INTERRUPT_TX
-//            );
+        NVIC_EnableIRQ(SPI0_INT_IRQn);
+        DL_SPI_enableInterrupt(System::spi0.reg,
+                  DL_SPI_INTERRUPT_RX
+                | DL_SPI_INTERRUPT_TX
+            );
     }
     #endif
 

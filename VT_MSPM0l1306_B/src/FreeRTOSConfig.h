@@ -190,7 +190,7 @@
 #define NDK_TLS_INDEX 0  /* Reserve an index for NDK TLS */
 
 /* note: system locks required by newlib are not implemented */
-#define configUSE_NEWLIB_REENTRANT 0 // just do better, skill issue
+#define configUSE_NEWLIB_REENTRANT 1 // just do better, skill issue
 #endif
 
 /*
@@ -206,7 +206,7 @@
 #define INCLUDE_vTaskSuspend                    1
 #define INCLUDE_vTaskDelayUntil                 1
 #define INCLUDE_vTaskDelay                      1
-#define INCLUDE_uxTaskGetStackHighWaterMark     0
+#define INCLUDE_uxTaskGetStackHighWaterMark     1
 #define INCLUDE_xTaskGetIdleTaskHandle          0
 #define INCLUDE_eTaskGetState                   1
 #define INCLUDE_xTaskResumeFromISR              0
@@ -258,7 +258,7 @@
  * The trace facility is turned on to make some functions available for use in
  * CLI commands.
  */
-#define configUSE_TRACE_FACILITY        1
+#define configUSE_TRACE_FACILITY        0
 
 /*
  * Runtime Object View is a Texas Instrument host tool that helps visualize

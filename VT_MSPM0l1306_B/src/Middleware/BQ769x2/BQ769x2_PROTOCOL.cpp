@@ -6,21 +6,11 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-#include "Middleware/BQ769x2_PROTOCOL.hpp"
+#include "Middleware/BQ769x2/BQ769x2_PROTOCOL.hpp"
 
 //******************************************************************************
 // BQ Parameters ***************************************************************
 //******************************************************************************
-
-void delayUS(uint16_t us)
-// Sets the delay in microseconds.
-{
-//    uint16_t ms;
-//    char i;
-//    ms = us / 1000;
-//    for (i = 0; i < ms; i++) delay_cycles(32000);
-    vTaskDelay(pdMS_TO_TICKS(us / 1000) + 1);
-}
 
 uint8_t Checksum(uint8_t *ptr, uint8_t len)
 // Calculates the checksum when writing to a RAM register. The checksum is the inverse of the sum of the bytes.
