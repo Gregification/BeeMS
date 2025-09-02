@@ -452,7 +452,7 @@ void System::SPI::SPI::_irq() {
                     // TX array contents
                     _trxBuffer.tx_i +=  DL_SPI_fillTXFIFO8(
                             reg,
-                            (uint8_t *)_trxBuffer.tx,
+                            ((uint8_t *)_trxBuffer.tx) + _trxBuffer.tx_i,
                             _trxBuffer.len - _trxBuffer.tx_i
                         );
                 } else {
@@ -479,12 +479,12 @@ void System::SPI::SPI::transfer(void * tx, void * rx, buffsize_t len){
     _trxBuffer.rx_i = 0;
     _trxBuffer.len = len;
 
-    // start IRQ handling by transmitting something
     if(_trxBuffer.tx) {
         _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, _trxBuffer.tx, len);
     } else {
-        static uint8_t const arr[] = {TRANSFER_FILLER_BYTE,TRANSFER_FILLER_BYTE,TRANSFER_FILLER_BYTE,TRANSFER_FILLER_BYTE};
-        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, arr, sizeof(arr) > _trxBuffer.len ? _trxBuffer.len : sizeof(arr));
+        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, &TRANSFER_FILLER_BYTE, 1);
+        // force a TX trigger incase the FIFO trigger misses this
+        reg->CPU_INT.ISET |= BV(4); // TRM.23.3.12/1329
     }
 }
 

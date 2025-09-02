@@ -88,7 +88,23 @@ int main(){
     DL_GPIO_clearPins(GPIOPINPUX(wiz_cs));
     DL_GPIO_enableOutput(GPIOPINPUX(wiz_cs));
     wiz_cs.clear();
-    wiz_spi.setSCLKTarget(1.5e6);
+    wiz_spi.setSCLKTarget(1e6);
+
+//    {
+//        while(1){
+//            uint8_t arr1[] = {0xfe,0xfe,0xfe,0xfe,0x00,0x00,0x00,0x00,0x00,0x00};
+//            uint8_t arr2[] = {1,2,3,4,5,6,7,8,9,10};
+//            wiz_cs.set();
+//            wiz_spi.transfer_blocking(arr1, 0, sizeof(arr1));
+//            wiz_cs.clear();
+//            for(int i = 0; i < sizeof(arr1); i++){
+//                char str[10];
+//                snprintf(ARRANDN(str),"%d" NEWLINE, arr2[i]);
+//                System::uart_ui.nputs(ARRANDN(str));
+//            }
+//            delay_cycles(32e6/3);
+//        }
+//    }
 
     System::uart_ui.nputs(ARRANDN("start" NEWLINE));
     if(wizchip_init(0, 0))
@@ -129,8 +145,8 @@ int main(){
     delay_cycles(36e6);
     char arr[]    = "abcdefghijklmnop";
 //    uint8_t arr[]   = {0,1,2,3,4,5,6,7,8,9};
-    uint8_t ip[]    = {192,168,1,111};
-    if(sendto(sn, (uint8_t *)arr, sizeof(arr), ip, 42069)){
+    uint8_t ip[]    = {192,168,1,134};
+    if((error = sendto(sn, (uint8_t *)arr, sizeof(arr), ip, 42069)) != sizeof(arr)){
         System::uart_ui.nputs(ARRANDN("failed send-to" NEWLINE));
         System::uart_ui.nputs(ARRANDN("\t"));
         switch(error){
