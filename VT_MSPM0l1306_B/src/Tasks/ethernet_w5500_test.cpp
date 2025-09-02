@@ -32,23 +32,10 @@ void Task::ethernetw5500_test(void *){
     DL_GPIO_enableOutput(GPIOPINPUX(cs));
 
     cs.clear();
-    vTaskDelay(pdMS_TO_TICKS(10));
 
     uint8_t tx[4];
     uint8_t rx[] = {1,1,1,1};
 
-    {
-                    char str[10];
-                    snprintf(ARRANDN(str),"%d" NEWLINE, (uint32_t)uxTaskGetStackHighWaterMark(NULL));
-                    System::uart_ui.nputs(ARRANDN(str));
-                }
-    spi.transfer(NULL, rx, sizeof(rx), pdMS_TO_TICKS(100));
-    for(int i = 0; i < sizeof(rx); i++){
-        char str[5];
-        snprintf(ARRANDN(str), "%d", rx[i]);
-        System::uart_ui.nputs(ARRANDN(str));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-    }
 
 //    wizchip_init(100, 0);
 //    uint8_t sn = 0;
@@ -60,6 +47,5 @@ void Task::ethernetw5500_test(void *){
 
 
     System::uart_ui.nputs(ARRANDN("ethernetw5500_test end" NEWLINE));
-    vTaskDelete(NULL);
 }
 

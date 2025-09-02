@@ -85,6 +85,8 @@ extern "C" {
 // Add to
 //
 
+#define _WIZCHIP_IO_MODE_ _WIZCHIP_IO_MODE_SPI_
+
 #define _WIZCHIP_IO_MODE_BUS_DIR_      (_WIZCHIP_IO_MODE_BUS_ + 1) /**< BUS interface mode for direct  */
 #define _WIZCHIP_IO_MODE_BUS_INDIR_    (_WIZCHIP_IO_MODE_BUS_ + 2) /**< BUS interface mode for indirect */
 

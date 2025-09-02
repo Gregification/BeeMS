@@ -44,10 +44,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_INCLUDE_PATH}"/>
 									<listOptionValue builtIn="false" value="${TI_PRODUCTS_DIR}/mspm0_sdk_2_05_00_05/source"/>
 									<listOptionValue builtIn="false" value="${TI_PRODUCTS_DIR}/mspm0_sdk_2_05_00_05/source/third_party/CMSIS/Core/Include"/>
-									<listOptionValue builtIn="false" value="${TI_PRODUCTS_DIR}/mspm0_sdk_2_05_00_05/kernel/freertos/Source/include"/>
-									<listOptionValue builtIn="false" value="${TI_PRODUCTS_DIR}/mspm0_sdk_2_05_00_05/kernel/freertos/Source/portable/TI_ARM_CLANG/ARM_CM0"/>
 									<listOptionValue builtIn="false" value="${PROJECT_ROOT}/src"/>
-									<listOptionValue builtIn="false" value="${PROJECT_ROOT}/freertos"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.ASM_SPECIFIC_FLAGS.1548536671" name="Miscellaneous assembly source specific flags" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.ASM_SPECIFIC_FLAGS" useByScannerDiscovery="false" valueType="stringList">
 									<listOptionValue builtIn="false" value="[asm: -xti-asm]"/>
@@ -89,8 +86,23 @@
 							<tool id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.objcopy.357952227" name="Arm Objcopy Utility" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.objcopy"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.ti.ccstudio.buildDefinitions.TMS470.Debug.1530889668.1814003071" name="socket.c" rcbsApplicability="disable" resourcePath="src/Middleware/W5500/socket.c" toolsToInvoke="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.compilerDebug.1831929306.971056296">
+						<tool id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.compilerDebug.1831929306.971056296" name="Arm Compiler" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.compilerDebug.1831929306">
+							<option id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.OPT_LEVEL.1963197551" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.OPT_LEVEL" value="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.OPT_LEVEL.g" valueType="enumerated"/>
+							<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compiler.inputType__C_SRCS.588094612" name="C Sources" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compiler.inputType__C_SRCS"/>
+							<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compiler.inputType__CPP_SRCS.1515558639" name="C++ Sources" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compiler.inputType__CPP_SRCS"/>
+							<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compiler.inputType__ASM_SRCS.1044471076" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compiler.inputType__ASM_SRCS"/>
+							<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compiler.inputType__ASM2_SRCS.474680450" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compiler.inputType__ASM2_SRCS"/>
+						</tool>
+						<tool customBuildStep="true" id="org.eclipse.cdt.managedbuilder.ui.rcbs.1370108576" name="Resource Custom Build Step">
+							<inputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.inputtype.1371470476" name="Resource Custom Build Step Input Type">
+								<additionalInput kind="additionalinputdependency" paths=""/>
+							</inputType>
+							<outputType id="org.eclipse.cdt.managedbuilder.ui.rcbs.outputtype.101481591" name="Resource Custom Build Step Output Type"/>
+						</tool>
+					</fileInfo>
 					<sourceEntries>
-						<entry excluding="freertos/heap_5.c|freertos/heap_3.c|freertos/heap_2.c|freertos/heap_1.c|src/Tasks/BQ796x2_PROTOCOL_Test_T.cpp|src/Tasks/scheduler_watchdog_task.cpp|src/Tasks/BQ796x2_PROTOCOL_Test_V.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="src/Tasks/BQ796x2_PROTOCOL_Test_T.cpp|src/Tasks/scheduler_watchdog_task.cpp|src/Tasks/BQ796x2_PROTOCOL_Test_V.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

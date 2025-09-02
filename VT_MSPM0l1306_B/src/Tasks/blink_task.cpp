@@ -7,8 +7,6 @@
 
 #include "blink_task.hpp"
 
-#include <FreeRTOS.h>
-#include <task.h>
 #include "Core/system.hpp"
 
 auto &led = System::GPIO::PA0;
@@ -30,6 +28,6 @@ void Task::blink_task(void*) {
 
     for(;;){
         DL_GPIO_togglePins(GPIOPINPUX(led));
-        vTaskDelay(pdMS_TO_TICKS(100));
+        delay_cycles(32e6);
     }
 }

@@ -435,31 +435,31 @@ namespace BQ769X2_PROTOCOL {
     };
 
     /** returns false if timed */
-    bool sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t readOut[32], TickType_t timeout);
+    bool sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t readOut[32]);
 
     /** returns false if timed */
-    bool sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data,        TickType_t timeout);
+    bool sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data);
 
     /** returns false if timed */
-    bool sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data,       TickType_t timeout);
+    bool sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data);
 
     /** returns false if timed */
-    bool sendCommandSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command,  TickType_t timeout);
+    bool sendCommandSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command);
 
     /** returns false if timed */
-    bool sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut, TickType_t timeout);
+    bool sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut);
 
     /** returns false if timed */
-    bool sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, TickType_t timeout);
+    bool sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data);
 
     /** returns false if timed */
-    bool setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, RegAddr reg_addr, uint32_t reg_data, uint8_t datalen, TickType_t timeout);
+    bool setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, RegAddr reg_addr, uint32_t reg_data, uint8_t datalen);
 
     /** returns false if timed out */
-    bool I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
+    bool I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
 
     /** returns false if timed */
-    bool I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout = pdMS_TO_TICKS(4));
+    bool I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
 
 };
 

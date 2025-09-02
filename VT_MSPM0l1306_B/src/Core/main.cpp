@@ -5,41 +5,73 @@
  *      Author: FSAE
  *      https://cataas.com/cat/says/accumulating
  */
+// RTLinux when? idk how to work with that :(
+
 
 #include <stdio.h>
 #include <stdint.h>
 
-#include <FreeRTOS.h>
-#include <task.h>
-
 #include "system.hpp"
 
-#include "Tasks/blink_task.hpp"
-#include "Tasks/ethernet_w5500_test.hpp"
+#include "Middleware/W5500/wizchip_conf.h"
+#include "Middleware/W5500/socket.h"
 
 void thing( void * ){
-    auto &bled = System::GPIO::PA27;
+    auto &led = System::GPIO::PA27;
     DL_GPIO_initDigitalOutputFeatures(
-            bled.iomux,
+            led.iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
             DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
             DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
             DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
         );
-    DL_GPIO_clearPins(GPIOPINPUX(bled));
-    DL_GPIO_enableOutput(GPIOPINPUX(bled));
+    DL_GPIO_clearPins(GPIOPINPUX(led));
+    DL_GPIO_enableOutput(GPIOPINPUX(led));
 
     for(;;){
-        DL_GPIO_togglePins(GPIOPINPUX(bled));
-        vTaskDelay(pdMS_TO_TICKS(1000));
-
-        char str[10];
-        snprintf(ARRANDN(str),"%d" NEWLINE, (uint32_t)uxTaskGetStackHighWaterMark(NULL));
-        System::uart_ui.nputs(ARRANDN(str));
+        for(int i = 0; i < 1e3;i++){
+            led.set();
+            delay_cycles(10);
+            led.clear();
+            delay_cycles(1000);
+        }
+        delay_cycles(15e6);
     }
 
 }
 
+/*** wizchip setup *******************************************/
+auto& wiz_spi   = System::spi0;
+auto& wiz_cs    = System::GPIO::PA4;
+void wiz_select(void)       { wiz_cs.set();     }
+void wiz_deselect(void)     { wiz_cs.clear();   }
+uint8_t wiz_read_byte(void) {
+    uint8_t rx;
+    wiz_spi.transfer_blocking(NULL, &rx, 1);
+    return rx;
+//    DL_SPI_transmitDataBlocking8(wiz_spi.reg, 0);
+//    return DL_SPI_receiveDataBlocking8(wiz_spi.reg);
+}
+void wiz_write_byte(uint8_t b) {
+    wiz_spi.transfer_blocking(&b, NULL, 1);
+//    DL_SPI_transmitDataBlocking8(wiz_spi.reg, b);
+}
+void wiz_read_burst(uint8_t *buf, uint16_t len) {
+    wiz_spi.transfer_blocking(NULL, buf, len);
+//    for(uint16_t i = 0; i < len; i++){
+//        DL_SPI_transmitDataBlocking8(wiz_spi.reg, 0);
+//        buf[i] = DL_SPI_receiveDataBlocking8(wiz_spi.reg);
+//    }
+}
+void wiz_write_burst(uint8_t *buf, uint16_t len) {
+    wiz_spi.transfer_blocking(buf, NULL, len);
+//    for(uint16_t i = 0; i < len; i++)
+//        DL_SPI_transmitDataBlocking8(wiz_spi.reg, buf[i]);
+}
+void wiz_enter_critical(){}
+void wiz_exit_critical(){}
+
+/*************************************************************/
 
 int main(){
     System::init();
@@ -47,97 +79,62 @@ int main(){
     System::uart_ui.setBaudTarget(115200);
     System::uart_ui.nputs(ARRANDN("\033[2J\033[H"));
     System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
+    // wizz chip
+    reg_wizchip_spi_cbfunc(wiz_read_byte, wiz_write_byte);
+    reg_wizchip_spiburst_cbfunc(wiz_read_burst, wiz_write_burst);
+    reg_wizchip_cris_cbfunc(wiz_enter_critical, wiz_exit_critical);
+    reg_wizchip_cs_cbfunc(wiz_select, wiz_deselect);
 
+    int8_t error;
 
-    xTaskCreate(Task::ethernetw5500_test,
-        "ethernet",
-        configMINIMAL_STACK_SIZE * 2,
-        NULL,
-        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-        NULL);
-//    xTaskCreate(thing,
-//                "blink",
-//                configMINIMAL_STACK_SIZE,
-//                NULL,
-//                tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//                NULL);
-//    xTaskCreate(Task::blink_task,
-//        "asd",
-//        configMINIMAL_STACK_SIZE,
-//        NULL,
-//        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//        NULL);
-//    thing(NULL);
-//    Task::ethernetw5500_test(NULL);
-//    Task::blink_task(NULL);
-    vTaskStartScheduler();
+    DL_GPIO_initDigitalOutputFeatures(
+            wiz_cs.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+    DL_GPIO_clearPins(GPIOPINPUX(wiz_cs));
+    DL_GPIO_enableOutput(GPIOPINPUX(wiz_cs));
+    wiz_cs.clear();
+    wiz_spi.setSCLKTarget(1e6);
 
-    taskDISABLE_INTERRUPTS();
+    System::uart_ui.nputs(ARRANDN("start" NEWLINE));
+    if(wizchip_init(0, 0))
+        System::uart_ui.nputs(ARRANDN("failed init chip" NEWLINE));
+    else
+        System::uart_ui.nputs(ARRANDN("init-ed chip" NEWLINE));
+
+    SOCKET sn = 0;
+    if((error = socket(sn, Sn_MR_UDP, 2080, 0)) != sn){
+        System::uart_ui.nputs(ARRANDN("failed init socket" NEWLINE "\t"));
+        switch(error){
+            case SOCKERR_SOCKNUM:   System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKNUM")); break;
+            case SOCKERR_SOCKMODE:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKMODE")); break;
+            case SOCKERR_SOCKFLAG:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKFLAG")); break;
+            case SOCKERR_SOCKCLOSED:System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKCLOSED")); break;
+            case SOCKERR_SOCKINIT:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKINIT")); break;
+            case SOCKERR_SOCKOPT:   System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKOPT")); break;
+            case SOCKERR_SOCKSTATUS:System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKSTATUS")); break;
+            default:                System::uart_ui.nputs(ARRANDN("no switch case")); break;
+        }
+
+        System::uart_ui.nputs(ARRANDN(NEWLINE));
+    } else
+    System::uart_ui.nputs(ARRANDN("init-ed socket" NEWLINE));
+
+    char str[] = "meow";
+    uint8_t ip[] = {192,168,1,6};
+    if(sendto(sn, ARRANDN((uint8_t *)str), ip, 42069))
+        System::uart_ui.nputs(ARRANDN("failed send-to" NEWLINE));
+    else System::uart_ui.nputs(ARRANDN("send-to-ed" NEWLINE));
+
+    close(sn);
+
+    thing(0);
+
     while(true) {
         System::FailHard("reached end of main" NEWLINE);
-        delay_cycles(20e6);
     }
 }
-
-
-// HOOKS
-/*-----------------------------------------------------------*/
-
-void vApplicationMallocFailedHook(void)
-{
-    /*
-     * vApplicationMallocFailedHook() will only be called if
-     * configUSE_MALLOC_FAILED_HOOK is set to 1 in FreeRTOSConfig.h. It is a
-     * hook function that will get called if a call to pvPortMalloc() fails.
-     * pvPortMalloc() is called internally by the kernel whenever a task,
-     * queue, timer or semaphore is created. It is also called by various
-     * parts of the demo application. If heap_1.c or heap_2.c are used,
-     * then the size of the heap available to pvPortMalloc() is defined by
-     * configTOTAL_HEAP_SIZE in FreeRTOSConfig.h, and the
-     * xPortGetFreeHeapSize() API function can be used to query the size of
-     * free heap space that remains (although it does not provide information
-     * on how the remaining heap might be fragmented).
-     */
-    taskDISABLE_INTERRUPTS();
-    for (;;) {
-        System::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
-        delay_cycles(20e6);
-    }
-}
-
-/*-----------------------------------------------------------*/
-
-/*-----------------------------------------------------------*/
-
-#if (configCHECK_FOR_STACK_OVERFLOW)
-    /*
-     *  ======== vApplicationStackOverflowHook ========
-     *  When stack overflow checking is enabled the application must provide a
-     *  stack overflow hook function. This default hook function is declared as
-     *  weak, and will be used by default, unless the application specifically
-     *  provides its own hook function.
-     */
-#if defined(__IAR_SYSTEMS_ICC__)
-__weak void vApplicationStackOverflowHook(
-    TaskHandle_t pxTask, char *pcTaskName)
-#elif (defined(__TI_COMPILER_VERSION__))
-#pragma WEAK(vApplicationStackOverflowHook)
-void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
-#elif (defined(__GNUC__) || defined(__ti_version__))
-void __attribute__((weak))
-vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
-#endif
-{
-    taskDISABLE_INTERRUPTS();
-
-    char str[MAX_STR_ERROR_LEN];
-    snprintf(str,sizeof(str), "vApplicationStackOverflowHook: %s", pcTaskName);
-
-    for (;;){
-        System::uart_ui.nputs(ARRANDN(str));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-        delay_cycles(20e6);
-    }
-}
-#endif
 

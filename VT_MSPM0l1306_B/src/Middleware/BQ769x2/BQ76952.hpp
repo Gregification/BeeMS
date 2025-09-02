@@ -20,8 +20,6 @@
  */
 class BQ76952 {
 public:
-    static constexpr TickType_t I2C_MIN_TIMEOUT = pdMS_TO_TICKS(4);
-
     System::I2C::I2C * i2c_controller;
     uint8_t i2c_addr;
 
@@ -43,19 +41,19 @@ public:
 //    void readFETStatus();
 //    void readAllTemperatures();
 
-    bool sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd cmd, TickType_t timeout = I2C_MIN_TIMEOUT);
+    bool sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd cmd);
 
-    bool sendSubcommandR(BQ769X2_PROTOCOL::Cmd cmd, uint8_t readOut[32], TickType_t timeout = I2C_MIN_TIMEOUT);
-    bool sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint8_t data,        TickType_t timeout = I2C_MIN_TIMEOUT);
-    bool sendSubcommandW2(BQ769X2_PROTOCOL::Cmd cmd,uint16_t data,       TickType_t timeout = I2C_MIN_TIMEOUT);
+    bool sendSubcommandR(BQ769X2_PROTOCOL::Cmd cmd, uint8_t readOut[32]);
+    bool sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint8_t data);
+    bool sendSubcommandW2(BQ769X2_PROTOCOL::Cmd cmd,uint16_t data);
 
-    bool sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt command, uint16_t * readValue, TickType_t timeout = I2C_MIN_TIMEOUT);
-    bool sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, uint16_t data, TickType_t timeout = I2C_MIN_TIMEOUT);
+    bool sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt command, uint16_t * readValue);
+    bool sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, uint16_t data);
 
-    bool setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint32_t reg_data, uint8_t datalen, TickType_t timeout = I2C_MIN_TIMEOUT);
+    bool setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint32_t reg_data, uint8_t datalen);
 
-    bool I2C_ReadReg(uint8_t reg_addr, void *reg_data, uint8_t count, TickType_t timeout = I2C_MIN_TIMEOUT);
-    bool I2C_WriteReg(uint8_t reg_addr, void *reg_data, uint8_t count, TickType_t timeout = I2C_MIN_TIMEOUT);
+    bool I2C_ReadReg(uint8_t reg_addr, void *reg_data, uint8_t count);
+    bool I2C_WriteReg(uint8_t reg_addr, void *reg_data, uint8_t count);
 };
 
 

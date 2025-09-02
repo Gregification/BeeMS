@@ -9,8 +9,6 @@
 
 #include <cstdio>
 
-#include <FreeRTOS.h>
-#include <task.h>
 #include <ti/driverlib/driverlib.h>
 
 /*--- example intis' --- for intis that are too specialized to wrap --------------------*/
@@ -187,8 +185,8 @@ void System::init() {
         DL_UART_setOversampling(uart0.reg, DL_UART_OVERSAMPLING_RATE::DL_UART_OVERSAMPLING_RATE_16X);
 
         DL_UART_setRXFIFOThreshold(uart0.reg, DL_UART_RX_FIFO_LEVEL::DL_UART_RX_FIFO_LEVEL_ONE_ENTRY);
-        DL_UART_setTXFIFOThreshold(uart0.reg, DL_UART_TX_FIFO_LEVEL::DL_UART_TX_FIFO_LEVEL_3_4_EMPTY);
-        DL_UART_enableFIFOs(uart0.reg); // not required but very useful
+        DL_UART_setTXFIFOThreshold(uart0.reg, DL_UART_TX_FIFO_LEVEL::DL_UART_TX_FIFO_LEVEL_ONE_ENTRY);
+        DL_UART_enableFIFOs(uart0.reg);
 
         DL_GPIO_initPeripheralOutputFunctionFeatures( // PA8
                 IOMUX_PINCM9,
@@ -225,7 +223,7 @@ void System::init() {
          * formula -> "X / (1 / <clk> * 520 * 1e6) + 1"
          *      X: max wait in uS
          */
-        DL_I2C_setTimeoutACount(i2c1.reg, 50.0 * configCPU_CLOCK_HZ / 520.0e6 + 1);
+        DL_I2C_setTimeoutACount(i2c1.reg, 50.0 * System::CLK::CPUCLK / 520.0e6 + 1);
         DL_I2C_enableTimeoutA(i2c1.reg); // SCL low timeout detection
 
         // PA15
@@ -266,7 +264,11 @@ void System::init() {
 
         DL_I2C_enableController(i2c1.reg);
 
-        NVIC_DisableIRQ(I2C1_INT_IRQn);
+        i2c1._trxBuffer.data_length = 0;
+        i2c1._trxBuffer.data = 0;
+        i2c1._trxBuffer.error = I2C::I2C::ERROR::NONE;
+
+        NVIC_EnableIRQ(I2C1_INT_IRQn);
         DL_I2C_enableInterrupt(i2c1.reg,
                   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
                 | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
@@ -301,7 +303,7 @@ void System::init() {
                 IOMUX_PINCM6_PF_SPI0_PICO,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
         DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO , PA10
@@ -320,24 +322,28 @@ void System::init() {
         /*--- SPI config -----------------*/
 
         constexpr DL_SPI_ClockConfig clk_config = {
-                 .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
+                 .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK,
                  .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
             };
         DL_SPI_setClockConfig(spi0.reg, &clk_config);
         constexpr DL_SPI_Config config = {
                 .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
-                .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
+                .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO3_POL1_PHA1,
                 .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
                 .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
-                .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_LSB_FIRST,
-                .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2,
+                .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_MSB_FIRST,
+                .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_NONE,
             };
         DL_SPI_init(spi0.reg, &config);
         DL_SPI_disablePacking(spi0.reg);
 
-        DL_SPI_setFIFOThreshold(spi0.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_ONE_FRAME, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_ONE_FRAME);
+        DL_SPI_setFIFOThreshold(spi0.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_ONE_FRAME, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_EMPTY);
 
         DL_SPI_enable(spi0.reg);
+
+        spi0._trxBuffer.len = 0;
+        spi0._trxBuffer.rx  = 0;
+        spi0._trxBuffer.tx  = 0;
 
         NVIC_EnableIRQ(SPI0_INT_IRQn);
         DL_SPI_enableInterrupt(System::spi0.reg,
@@ -378,23 +384,26 @@ void System::UART::UART::setBaudTarget(uint32_t target_baud, uint32_t clk) {
 }
 
 void System::FailHard(const char *str) {
-    taskDISABLE_INTERRUPTS();
+    System::uart_ui.nputs(ARRANDN(NEWLINE "FAIL HARD" NEWLINE));
+
+    // turn stuff off or what not
+
     for(;;){
         System::uart_ui.nputs(ARRANDN(NEWLINE "fatal error: "));
         System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
+        for(uint16_t i = 0; i < 5*60; i++)
+            delay_cycles(System::CLK::CPUCLK);
     }
 }
 
-void System::UART::UART::nputs(const char *str, uint32_t n) {
-    for(uint32_t i = 0; (i < n) && (str[i] != '\0'); i++){
+void System::UART::UART::nputs(const char *str, buffsize_t n) {
+    for(buffsize_t i = 0; (i < n) && (str[i] != '\0'); i++){
         DL_UART_transmitDataBlocking(reg, str[i]);
     }
 }
 
-void System::UART::UART::ngets(char *str, uint32_t n) {
-    // do NOT make this a task, keep it simple. we'll make another function later that does it passively as a task
-
-    for(uint32_t i = 0; i < n; i++){
+void System::UART::UART::ngets(char *str, buffsize_t n) {
+    for(buffsize_t i = 0; i < n; i++){
         char data = DL_UART_receiveDataBlocking(reg);
 
         str[i] = data;
@@ -419,9 +428,6 @@ void System::SPI::SPI::setSCLKTarget(uint32_t target, uint32_t clk){
 }
 
 void System::SPI::SPI::_irq() {
-    static BaseType_t xHigherPriorityTaskWoken;
-    xHigherPriorityTaskWoken = pdFALSE;
-
     switch(DL_SPI_getPendingInterrupt(reg)){
         case DL_SPI_IIDX::DL_SPI_IIDX_RX:
             while(!DL_SPI_isRXFIFOEmpty(reg)){
@@ -435,16 +441,17 @@ void System::SPI::SPI::_irq() {
 
             break;
 
-            // transmit more stuff
         case DL_SPI_IIDX::DL_SPI_IIDX_TX:
-            if(_trxBuffer.tx_i < _trxBuffer.len){ // anything left to TX?
-                if(_trxBuffer.tx) { // TX array contents
+            if(_trxBuffer.tx_i < _trxBuffer.len){
+                if(_trxBuffer.tx) {
+                    // TX array contents
                     _trxBuffer.tx_i +=  DL_SPI_fillTXFIFO8(
                             reg,
                             (uint8_t *)_trxBuffer.tx,
                             _trxBuffer.len - _trxBuffer.tx_i
                         );
-                } else { // TX bogus data
+                } else {
+                    // TX bogus data
                     for(; (_trxBuffer.tx_i < _trxBuffer.len) && !DL_SPI_isTXFIFOFull(reg); _trxBuffer.tx_i++){
                         DL_SPI_transmitData8(reg, TRANSFER_FILLER_BYTE);
                     }
@@ -457,22 +464,11 @@ void System::SPI::SPI::_irq() {
             break;
 
     };
-
-    // end condition
-    if((_trxBuffer.host_task) && (_trxBuffer.rx_i >= _trxBuffer.len) && (_trxBuffer.tx_i >= _trxBuffer.len))
-        xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_SPI_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
-
-    portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 }
 
-bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t timeout){
-    TickType_t stopTime = xTaskGetTickCount() + timeout;
+void System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len){
 
-    while(DL_SPI_isBusy(reg)){
-        vTaskDelay(0);
-        if(xTaskGetTickCount() > stopTime)
-            return false;
-    }
+    while(isBusy()){}
 
     _trxBuffer.tx = (uint8_t *) tx;
     _trxBuffer.rx = (uint8_t *) rx;
@@ -482,7 +478,7 @@ bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t t
     // sanitization
     if(!_trxBuffer.rx)
         _trxBuffer.rx_i = _trxBuffer.len;
-    // tx is checked by the IRQ so its not needed here
+    // tx == NULL is checked is handled in the IRQ
 
     // start IRQ handling by transmitting something
     if(_trxBuffer.tx) {
@@ -490,15 +486,6 @@ bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t t
     } else {
         _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, &TRANSFER_FILLER_BYTE, 1);
     }
-
-    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeout)){
-        // timed out
-        _trxBuffer.len = 0;
-        return false;
-    }
-
-    _trxBuffer.len = 0;
-    return true;
 }
 
 void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
@@ -551,9 +538,6 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 }
 
 void System::I2C::I2C::_irq() {
-    static BaseType_t xHigherPriorityTaskWoken;
-    xHigherPriorityTaskWoken = pdFALSE;
-
     switch(DL_I2C_getPendingInterrupt(reg)){
         case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
             while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
@@ -579,41 +563,38 @@ void System::I2C::I2C::_irq() {
 
         case DL_I2C_IIDX_TIMEOUT_A:
         case DL_I2C_IIDX_TIMEOUT_B:
+            _trxBuffer.data_length = 0;
+            _trxBuffer.error = ERROR::TIMEOUT;
+            break;
+
         case DL_I2C_IIDX_CONTROLLER_NACK:
+            _trxBuffer.data_length = 0;
+            _trxBuffer.error = ERROR::NACK;
+            break;
+
         case DL_I2C_IIDX_CONTROLLER_TX_DONE:
         case DL_I2C_IIDX_CONTROLLER_RX_DONE:
             _trxBuffer.data_length = 0;
-            if(_trxBuffer.host_task)
-                xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
+            _trxBuffer.error = ERROR::NONE;
             break;
 
         default:
             break;
 
     };
-
-    portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 }
 
-bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
-    TickType_t stopTime = xTaskGetTickCount() + timeout;
-
-    _trxBuffer.host_task = xTaskGetCurrentTaskHandle();
-    _trxBuffer.data      = (uint8_t *)data;
-    _trxBuffer.data_length = size;
-    _trxBuffer.nxt_index = 0;
+void System::I2C::I2C::tx(uint8_t addr, void * data, buffsize_t size) {
+    while (isBusy())
+        {}
 
     DL_I2C_flushControllerTXFIFO(reg);
 
-    size -= DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, size);
+    _trxBuffer.data         = (uint8_t *)data;
+    _trxBuffer.data_length  = size;
+    _trxBuffer.nxt_index    = 0;
 
-    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)) {
-        vTaskDelay(0);
-        if(xTaskGetTickCount() > stopTime){
-            DL_I2C_flushControllerTXFIFO(reg);
-            return false;
-        }
-    }
+    _trxBuffer.data_length -= DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, _trxBuffer.data_length);
 
     DL_I2C_startControllerTransfer(
             reg,
@@ -621,34 +602,17 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
             DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
             _trxBuffer.data_length
         );
-
-    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
-        // timed out
-        DL_I2C_flushControllerTXFIFO(reg);
-        return false;
-    }
-
-    DL_I2C_flushControllerTXFIFO(reg);
-    return true;
 }
 
-bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
-    TickType_t stopTime = xTaskGetTickCount() + timeout;
+void System::I2C::I2C::rx(uint8_t addr, void * data, buffsize_t size) {
+    while(isBusy())
+        {}
 
-    _trxBuffer.host_task = xTaskGetCurrentTaskHandle();
+    DL_I2C_flushControllerTXFIFO(reg);
+
     _trxBuffer.data      = (uint8_t *)data;
     _trxBuffer.data_length = size;
     _trxBuffer.nxt_index = 0;
-
-    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)) {
-        vTaskDelay(0);
-        if(xTaskGetTickCount() > stopTime){
-            DL_I2C_flushControllerTXFIFO(reg);
-            return false;
-        }
-    }
-
-    DL_I2C_flushControllerTXFIFO(reg);
 
     DL_I2C_startControllerTransfer(
             reg,
@@ -656,17 +620,6 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
             DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
             _trxBuffer.data_length
         );
-
-    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
-        DL_I2C_flushControllerTXFIFO(reg);
-        return false;
-    }
-
-    if(_trxBuffer.nxt_index != _trxBuffer.data_length){
-        return false;
-    }
-
-    return true;
 }
 
 

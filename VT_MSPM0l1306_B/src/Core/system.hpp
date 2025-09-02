@@ -45,10 +45,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <task.h>
-
 #include <ti/driverlib/driverlib.h>
 
 
@@ -56,8 +52,7 @@
 
 #define PROJECT_NAME            "Voltage Tap MSPM0L1305"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "A.1.0" // [project version].[hardware version].[software version]
-
+#define PROJECT_VERSION         "B.2.0" // [project version].[hardware version].[software version]
 
 /*--- shorthand ----------------------------------------*/
 
@@ -85,15 +80,7 @@
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
 
-/* the System IRQ functions rely on notifications to sync with tasks, this is the specific index used as the notification
- * - the max index value is determined by the arbitrary value of "configTASK_NOTIFICATION_ARRAY_ENTRIES"
- * - index 0 is the default so avoid using that since it may get triggered by something else
- */
-#define TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ 1
-#define TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_SPI_IRQ 2
-#if configTASK_NOTIFICATION_ARRAY_ENTRIES < 2
-    #error "increase size of configTASK_NOTIFICATION_ARRAY_ENTRIES"
-#endif
+typedef uint16_t buffsize_t;
 
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
@@ -104,7 +91,7 @@
 //#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
 
 //#define PROJECT_ENABLE_I2C0
-//#define PROJECT_ENABLE_I2C1
+#define PROJECT_ENABLE_I2C1
 
 
 /*--- common peripheral pins ---------------------------*/
@@ -139,8 +126,6 @@ namespace System {
 namespace System {
     /* see clock tree diagram ... and SysConfig's */
     namespace CLK {
-        // idc about power consumption
-
         constexpr uint32_t FBUS  = 16e6;
 
         // values determined during init
@@ -159,8 +144,10 @@ namespace System {
             void setBaudTarget(uint32_t target_baud, uint32_t clk = System::CLK::MCLK);
 
             /** transmits - blocking - a string of at most size n */
-            void nputs(char const * str, uint32_t n);
-            void ngets(char * str, uint32_t n);
+            void nputs(char const * str, buffsize_t n);
+            void ngets(char * str, buffsize_t n);
+
+            // make your own irq's
         };
     }
 
@@ -172,7 +159,7 @@ namespace System {
             uint32_t    pin;    // eg: DL_GPIO_PIN_0
             uint32_t    iomux;  // eg: IOMUX_PINCM0
 
-            inline void set() { DL_GPIO_setPins(port, pin); }
+            inline void set()   { DL_GPIO_setPins(port, pin); }
             inline void clear() { DL_GPIO_clearPins(port, pin); }
         };
 
@@ -197,17 +184,22 @@ namespace System {
             SPI_Regs * const reg;
 
             void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
-            void _irq();
 
-            bool transfer(void * tx, void * rx, uint16_t len, TickType_t timeout);
+            void transfer(void * tx, void * rx, buffsize_t len);
+            inline void transfer_blocking(void * tx, void * rx, buffsize_t len){
+                transfer(tx, rx, len);
+                while(isBusy());
+            }
+
+            inline bool isBusy() { return DL_SPI_isBusy(reg); }
 
             // should be private but eh
             struct {
-                TaskHandle_t host_task;
                 uint8_t *tx, *rx;
-                uint8_t len;
-                uint8_t tx_i, rx_i;
+                buffsize_t len;
+                buffsize_t tx_i, rx_i;
             } _trxBuffer;
+            void _irq();
         };
     }
 
@@ -223,25 +215,43 @@ namespace System {
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 
+            inline bool isBusy() { return !(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE); }
+
             /** blocks the task calling this function until TX is complete or timeout.
              * uses IRQ+Notifications. other tasks can run while this is blocking
              * @return true if TX success. returns false if timed out, lost arbitration, or received NACK
              */
-            bool tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
+            void tx(uint8_t addr, void * data, buffsize_t size);
+            inline bool tx_blocking(uint8_t addr, void * data, buffsize_t size) {
+                tx(addr, data, size);
+                while(isBusy());
+                return _trxBuffer.error == ERROR::NONE;
+            }
 
             /** blocks the task calling this function until RX is complete or timeout.
              *  uses IRQ+Notifications. other tasks can run while this is blocking
              *  @return true if RX success. returns false if timed out, lost arbitration, received NACK,
              *      or received less than expected amount of bytes.
              */
-            bool rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
+            void rx(uint8_t addr, void * data, buffsize_t size);
+            inline bool rx_blocking(uint8_t addr, void * data, buffsize_t size) {
+                rx(addr, data, size);
+                while(isBusy());
+                return _trxBuffer.error == ERROR::NONE;
+            }
 
-            // should be private but then you'll need to make a constructor and all that boiler plate.
+
+            enum ERROR : uint8_t {
+                NONE,
+                NACK,
+                TIMEOUT
+            };
+
             struct {
-                TaskHandle_t host_task;
                 uint8_t * data;
-                uint8_t data_length;    // total bytes of data
-                uint8_t nxt_index;      // index next byte is read/written by
+                buffsize_t data_length;    // total bytes of data
+                buffsize_t nxt_index;      // index next byte is read/written by
+                ERROR error;
             } _trxBuffer;
         };
     }
@@ -279,17 +289,6 @@ namespace System {
     #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
     /* uart0 is used by the LP */
 #endif
-
-// i fear for the day this happens
-static_assert(pdTRUE == true,
-        "pdTRUE != true . the FreeRTOS definition of \"true\" is not the same value as c/c++s \
-        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
-    );
-static_assert(pdFALSE == false,
-        "pdFALSE != false . the FreeRTOS definition of \"false\" is not the same value as c/c++s \
-        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
-    );
-
 
 #endif /* SRC_CORE_SYSTEM_HPP_ */
 
