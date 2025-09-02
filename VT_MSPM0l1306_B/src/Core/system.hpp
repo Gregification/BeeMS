@@ -114,9 +114,9 @@ namespace System {
     #endif
 
     #ifdef PROJECT_ENABLE_SPI0
-        OCCUPY(PA10)
-        OCCUPY(PA11)
-        OCCUPY(PA5)
+        OCCUPY(PA10)// MISO
+        OCCUPY(PA11)// SCLK
+        OCCUPY(PA5) // MOSI
     #endif
 }
 
@@ -183,7 +183,7 @@ namespace System {
         struct SPI {
             SPI_Regs * const reg;
 
-            void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
+            void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::FBUS);
 
             void transfer(void * tx, void * rx, buffsize_t len);
             inline void transfer_blocking(void * tx, void * rx, buffsize_t len){
@@ -191,7 +191,7 @@ namespace System {
                 while(isBusy());
             }
 
-            inline bool isBusy() { return DL_SPI_isBusy(reg); }
+            bool isBusy() { return DL_SPI_isBusy(reg);}// && ((_trxBuffer.rx_i < _trxBuffer.len) || (_trxBuffer.tx_i < _trxBuffer.len)); }
 
             // should be private but eh
             struct {

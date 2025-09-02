@@ -337,7 +337,7 @@ void System::init() {
         DL_SPI_init(spi0.reg, &config);
         DL_SPI_disablePacking(spi0.reg);
 
-        DL_SPI_setFIFOThreshold(spi0.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_ONE_FRAME, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_EMPTY);
+        DL_SPI_setFIFOThreshold(spi0.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
 
         DL_SPI_enable(spi0.reg);
 
@@ -349,6 +349,7 @@ void System::init() {
         DL_SPI_enableInterrupt(System::spi0.reg,
                   DL_SPI_INTERRUPT_RX
                 | DL_SPI_INTERRUPT_TX
+                | DL_SPI_INTERRUPT_IDLE
             );
     }
     #endif
@@ -421,10 +422,13 @@ void System::UART::UART::ngets(char *str, buffsize_t n) {
 }
 
 void System::SPI::SPI::setSCLKTarget(uint32_t target, uint32_t clk){
+    if(!target) target++;
+    else if(target > clk) target = clk;
     uint32_t t = clk / target;
-    if(clk - t * target)
-        t++;
-    DL_SPI_setBitRateSerialClockDivider(reg, t+1); // eh
+    if(clk / t <= target)
+        t--;
+
+    DL_SPI_setBitRateSerialClockDivider(reg, t);
 }
 
 void System::SPI::SPI::_irq() {
@@ -466,8 +470,7 @@ void System::SPI::SPI::_irq() {
     };
 }
 
-void System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len){
-
+void System::SPI::SPI::transfer(void * tx, void * rx, buffsize_t len){
     while(isBusy()){}
 
     _trxBuffer.tx = (uint8_t *) tx;
@@ -475,16 +478,17 @@ void System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len){
     _trxBuffer.rx_i = 0;
     _trxBuffer.len = len;
 
-    // sanitization
     if(!_trxBuffer.rx)
         _trxBuffer.rx_i = _trxBuffer.len;
-    // tx == NULL is checked is handled in the IRQ
 
     // start IRQ handling by transmitting something
     if(_trxBuffer.tx) {
-        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, _trxBuffer.tx, 1);
+        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, _trxBuffer.tx, len);
     } else {
-        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, &TRANSFER_FILLER_BYTE, 1);
+//        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, &TRANSFER_FILLER_BYTE, 1);
+        for(; (_trxBuffer.tx_i < _trxBuffer.len) && !DL_SPI_isTXFIFOFull(reg); _trxBuffer.tx_i++){
+            DL_SPI_transmitData8(reg, TRANSFER_FILLER_BYTE);
+        }
     }
 }
 

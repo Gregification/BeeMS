@@ -33,9 +33,9 @@ void thing( void * ){
             led.set();
             delay_cycles(10);
             led.clear();
-            delay_cycles(1000);
+            delay_cycles(100);
         }
-        delay_cycles(15e6);
+        delay_cycles(16e6);
     }
 
 }
@@ -97,7 +97,25 @@ int main(){
     DL_GPIO_clearPins(GPIOPINPUX(wiz_cs));
     DL_GPIO_enableOutput(GPIOPINPUX(wiz_cs));
     wiz_cs.clear();
-    wiz_spi.setSCLKTarget(1e6);
+    wiz_spi.setSCLKTarget(1.5e6);
+
+    {
+        while(1)
+        {
+            uint8_t arr1[] = {1,2,3,4};
+            uint8_t arr2[] = {1,2,3,4};
+            wiz_cs.set();
+            wiz_spi.transfer_blocking(0, arr2, sizeof(arr1));
+            wiz_cs.clear();
+            char str[10];
+            for(int i = 0; i < sizeof(arr1); i++){
+                snprintf(ARRANDN(str), "%d" NEWLINE, arr2[i]);
+                System::uart_ui.nputs(ARRANDN(str));
+            }
+            delay_cycles(16e6);
+        }
+    }
+    thing(0);
 
     System::uart_ui.nputs(ARRANDN("start" NEWLINE));
     if(wizchip_init(0, 0))
@@ -127,10 +145,10 @@ int main(){
     uint8_t ip[] = {192,168,1,6};
     if(sendto(sn, ARRANDN((uint8_t *)str), ip, 42069))
         System::uart_ui.nputs(ARRANDN("failed send-to" NEWLINE));
-    else System::uart_ui.nputs(ARRANDN("send-to-ed" NEWLINE));
+    else
+        System::uart_ui.nputs(ARRANDN("send-to-ed" NEWLINE));
 
     close(sn);
-
     thing(0);
 
     while(true) {
