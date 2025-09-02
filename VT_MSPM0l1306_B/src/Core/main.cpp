@@ -49,24 +49,15 @@ uint8_t wiz_read_byte(void) {
     uint8_t rx;
     wiz_spi.transfer_blocking(NULL, &rx, 1);
     return rx;
-//    DL_SPI_transmitDataBlocking8(wiz_spi.reg, 0);
-//    return DL_SPI_receiveDataBlocking8(wiz_spi.reg);
 }
 void wiz_write_byte(uint8_t b) {
     wiz_spi.transfer_blocking(&b, NULL, 1);
-//    DL_SPI_transmitDataBlocking8(wiz_spi.reg, b);
 }
 void wiz_read_burst(uint8_t *buf, uint16_t len) {
     wiz_spi.transfer_blocking(NULL, buf, len);
-//    for(uint16_t i = 0; i < len; i++){
-//        DL_SPI_transmitDataBlocking8(wiz_spi.reg, 0);
-//        buf[i] = DL_SPI_receiveDataBlocking8(wiz_spi.reg);
-//    }
 }
 void wiz_write_burst(uint8_t *buf, uint16_t len) {
     wiz_spi.transfer_blocking(buf, NULL, len);
-//    for(uint16_t i = 0; i < len; i++)
-//        DL_SPI_transmitDataBlocking8(wiz_spi.reg, buf[i]);
 }
 void wiz_enter_critical(){}
 void wiz_exit_critical(){}
@@ -99,24 +90,6 @@ int main(){
     wiz_cs.clear();
     wiz_spi.setSCLKTarget(1.5e6);
 
-    {
-        while(1)
-        {
-            uint8_t arr1[] = {1,2,3,4};
-            uint8_t arr2[] = {1,2,3,4};
-            wiz_cs.set();
-            wiz_spi.transfer_blocking(0, arr2, sizeof(arr1));
-            wiz_cs.clear();
-            char str[10];
-            for(int i = 0; i < sizeof(arr1); i++){
-                snprintf(ARRANDN(str), "%d" NEWLINE, arr2[i]);
-                System::uart_ui.nputs(ARRANDN(str));
-            }
-            delay_cycles(16e6);
-        }
-    }
-    thing(0);
-
     System::uart_ui.nputs(ARRANDN("start" NEWLINE));
     if(wizchip_init(0, 0))
         System::uart_ui.nputs(ARRANDN("failed init chip" NEWLINE));
@@ -139,12 +112,42 @@ int main(){
 
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     } else
-    System::uart_ui.nputs(ARRANDN("init-ed socket" NEWLINE));
+        System::uart_ui.nputs(ARRANDN("init-ed socket" NEWLINE));
 
-    char str[] = "meow";
-    uint8_t ip[] = {192,168,1,6};
-    if(sendto(sn, ARRANDN((uint8_t *)str), ip, 42069))
+    {
+        wiz_NetInfo netinfo = {
+               .mac = {0x00,0x07,0x3e,0x00,0x00,0x00},
+               .ip  = {192,168,1,211},
+               .sn  = {255,255,255,0},
+               .gw  = {192,168,1,1},
+               .dns = {8,8,8,8},
+               .dhcp= NETINFO_STATIC
+        };
+        wizchip_setnetinfo(&netinfo);
+    }
+
+    delay_cycles(36e6);
+    char arr[]    = "abcdefghijklmnop";
+//    uint8_t arr[]   = {0,1,2,3,4,5,6,7,8,9};
+    uint8_t ip[]    = {192,168,1,111};
+    if(sendto(sn, (uint8_t *)arr, sizeof(arr), ip, 42069)){
         System::uart_ui.nputs(ARRANDN("failed send-to" NEWLINE));
+        System::uart_ui.nputs(ARRANDN("\t"));
+        switch(error){
+            case SOCKERR_SOCKNUM:   System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKNUM")); break;
+            case SOCKERR_SOCKMODE:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKMODE")); break;
+            case SOCKERR_SOCKFLAG:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKFLAG")); break;
+            case SOCKERR_SOCKCLOSED:System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKCLOSED")); break;
+            case SOCKERR_SOCKINIT:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKINIT")); break;
+            case SOCKERR_SOCKOPT:   System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKOPT")); break;
+            case SOCKERR_SOCKSTATUS:System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKSTATUS")); break;
+            case SOCKERR_DATALEN:   System::uart_ui.nputs(ARRANDN("SOCKERR_DATALEN")); break;
+            case SOCKERR_PORTZERO:  System::uart_ui.nputs(ARRANDN("SOCKERR_PORTZERO")); break;
+            case SOCKERR_TIMEOUT:   System::uart_ui.nputs(ARRANDN("SOCKERR_TIMEOUT")); break;
+            case SOCK_BUSY:         System::uart_ui.nputs(ARRANDN("SOCK_BUSY")); break;
+            default:                System::uart_ui.nputs(ARRANDN("no switch case")); break;
+        }
+    }
     else
         System::uart_ui.nputs(ARRANDN("send-to-ed" NEWLINE));
 
@@ -155,4 +158,3 @@ int main(){
         System::FailHard("reached end of main" NEWLINE);
     }
 }
-

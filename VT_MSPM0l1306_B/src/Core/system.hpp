@@ -191,7 +191,7 @@ namespace System {
                 while(isBusy());
             }
 
-            bool isBusy() { return DL_SPI_isBusy(reg);}// && ((_trxBuffer.rx_i < _trxBuffer.len) || (_trxBuffer.tx_i < _trxBuffer.len)); }
+            bool isBusy() { return ((_trxBuffer.tx_i < _trxBuffer.len) || (_trxBuffer.rx_i < _trxBuffer.len)) && DL_SPI_isBusy(reg); }
 
             // should be private but eh
             struct {

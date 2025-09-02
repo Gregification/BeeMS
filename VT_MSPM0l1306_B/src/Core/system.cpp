@@ -433,10 +433,11 @@ void System::SPI::SPI::setSCLKTarget(uint32_t target, uint32_t clk){
 
 void System::SPI::SPI::_irq() {
     switch(DL_SPI_getPendingInterrupt(reg)){
+        case DL_SPI_IIDX::DL_SPI_IIDX_IDLE:
         case DL_SPI_IIDX::DL_SPI_IIDX_RX:
             while(!DL_SPI_isRXFIFOEmpty(reg)){
-                if(_trxBuffer.rx_i < _trxBuffer.len){
-                    _trxBuffer.rx[_trxBuffer.rx_i++] = DL_SPI_receiveData8(reg);
+                if(_trxBuffer.rx_i < _trxBuffer.len && _trxBuffer.rx){
+                        _trxBuffer.rx[_trxBuffer.rx_i++] = DL_SPI_receiveData8(reg);
                 } else {
                     // ignore and flush
                     DL_SPI_receiveData8(reg);
@@ -478,17 +479,12 @@ void System::SPI::SPI::transfer(void * tx, void * rx, buffsize_t len){
     _trxBuffer.rx_i = 0;
     _trxBuffer.len = len;
 
-    if(!_trxBuffer.rx)
-        _trxBuffer.rx_i = _trxBuffer.len;
-
     // start IRQ handling by transmitting something
     if(_trxBuffer.tx) {
         _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, _trxBuffer.tx, len);
     } else {
-//        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, &TRANSFER_FILLER_BYTE, 1);
-        for(; (_trxBuffer.tx_i < _trxBuffer.len) && !DL_SPI_isTXFIFOFull(reg); _trxBuffer.tx_i++){
-            DL_SPI_transmitData8(reg, TRANSFER_FILLER_BYTE);
-        }
+        static uint8_t const arr[] = {TRANSFER_FILLER_BYTE,TRANSFER_FILLER_BYTE,TRANSFER_FILLER_BYTE,TRANSFER_FILLER_BYTE};
+        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, arr, sizeof(arr) > _trxBuffer.len ? _trxBuffer.len : sizeof(arr));
     }
 }
 
