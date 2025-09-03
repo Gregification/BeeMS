@@ -90,22 +90,6 @@ int main(){
     wiz_cs.clear();
     wiz_spi.setSCLKTarget(1e6);
 
-//    {
-//        while(1){
-//            uint8_t arr1[] = {0xfe,0xfe,0xfe,0xfe,0x00,0x00,0x00,0x00,0x00,0x00};
-//            uint8_t arr2[] = {1,2,3,4,5,6,7,8,9,10};
-//            wiz_cs.set();
-//            wiz_spi.transfer_blocking(arr1, 0, sizeof(arr1));
-//            wiz_cs.clear();
-//            for(int i = 0; i < sizeof(arr1); i++){
-//                char str[10];
-//                snprintf(ARRANDN(str),"%d" NEWLINE, arr2[i]);
-//                System::uart_ui.nputs(ARRANDN(str));
-//            }
-//            delay_cycles(32e6/3);
-//        }
-//    }
-
     System::uart_ui.nputs(ARRANDN("start" NEWLINE));
     if(wizchip_init(0, 0))
         System::uart_ui.nputs(ARRANDN("failed init chip" NEWLINE));
