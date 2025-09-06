@@ -276,6 +276,8 @@ void System::init() {
                 | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
                 | DL_I2C_INTERRUPT_TIMEOUT_A
                 | DL_I2C_INTERRUPT_TIMEOUT_B
+                | DL_I2C_INTERRUPT_CONTROLLER_START
+                | DL_I2C_INTERRUPT_CONTROLLER_STOP
             );
     }
     #endif
@@ -553,9 +555,9 @@ void System::I2C::I2C::_irq() {
         case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
             // fill TX fifo
             if(_trxBuffer.nxt_index < _trxBuffer.data_length){
-                _trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
+                _trxBuffer.nxt_index += DL_I2C_fillControllerTXFIFO(
                         reg,
-                        (uint8_t *)_trxBuffer.data,
+                        ((uint8_t *)_trxBuffer.data) + _trxBuffer.nxt_index,
                         _trxBuffer.data_length - _trxBuffer.nxt_index
                     );
             }
@@ -578,6 +580,19 @@ void System::I2C::I2C::_irq() {
             _trxBuffer.error = ERROR::NONE;
             break;
 
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_STOP:
+            switch(_trxBuffer.error){
+                case ERROR::IN_USE:
+                    _trxBuffer.error = ERROR::NONE;
+                    break;
+
+                default: break;
+            }
+            break;
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_START:
+            _trxBuffer.error = ERROR::IN_USE;
+            break;
+
         default:
             break;
 
@@ -592,9 +607,8 @@ void System::I2C::I2C::tx(uint8_t addr, void * data, buffsize_t size) {
 
     _trxBuffer.data         = (uint8_t *)data;
     _trxBuffer.data_length  = size;
-    _trxBuffer.nxt_index    = 0;
-
-    _trxBuffer.data_length -= DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, _trxBuffer.data_length);
+    _trxBuffer.error        = ERROR::IN_USE;
+    _trxBuffer.nxt_index    = DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, _trxBuffer.data_length);
 
     DL_I2C_startControllerTransfer(
             reg,
@@ -610,9 +624,10 @@ void System::I2C::I2C::rx(uint8_t addr, void * data, buffsize_t size) {
 
     DL_I2C_flushControllerTXFIFO(reg);
 
-    _trxBuffer.data      = (uint8_t *)data;
-    _trxBuffer.data_length = size;
-    _trxBuffer.nxt_index = 0;
+    _trxBuffer.data         = (uint8_t *)data;
+    _trxBuffer.data_length  = size;
+    _trxBuffer.nxt_index    = 0;
+    _trxBuffer.error        = ERROR::IN_USE;
 
     DL_I2C_startControllerTransfer(
             reg,
@@ -622,6 +637,9 @@ void System::I2C::I2C::rx(uint8_t addr, void * data, buffsize_t size) {
         );
 }
 
+void System::waitUS(uint32_t us) {
+    delay_cycles((System::CLK::CPUCLK / 1e6 * 0.9 + 1) * us);
+}
 
 /*--- Peripheral IRQ assignment --------------------------------------------------------*/
 /* most peripherals don't need a IRQ
