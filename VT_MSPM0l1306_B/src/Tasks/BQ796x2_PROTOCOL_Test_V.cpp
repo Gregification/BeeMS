@@ -5,8 +5,6 @@
  *      Author: FSAE
  */
 
-#include <FreeRTOS.h>
-#include <task.h>
 #include <stdio.h>
 #include <ti/driverlib/driverlib.h>
 #include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
@@ -19,7 +17,6 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
 
     // -----------------------------------------------------------------------------
 
-#ifdef PROJECT_ENABLE_I2C1
     BQ76952 bq;
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
@@ -30,11 +27,10 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     // -----------------------------------------------------------------------------
 
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
-    vTaskDelay(pdMS_TO_TICKS(60));
+    System::waitUS(60*1e3);
 
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE);
-    vTaskDelay(pdMS_TO_TICKS(8));
-
+    System::waitUS(8*1e3);
 
     // After entering CONFIG_UPDATE mode, RAM registers can be programmed. When programming RAM, checksum and length must also be
     // programmed for the change to take effect. All of the RAM registers are described in detail in the BQ769x2 TRM.
@@ -137,17 +133,17 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.setRegister(BQ769X2_PROTOCOL::RegAddr::SCDLLatchLimit, 0x01, 1);
 
 
-    vTaskDelay(pdMS_TO_TICKS(8));
+    System::waitUS(8*1e3);
     // Exit CONFIGUPDATE mode  - Subcommand 0x0092
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    System::waitUS(8*1e3);
     //Control All FETs on
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::FET_ENABLE);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    System::waitUS(8*1e3);
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::ALL_FETS_ON);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    System::waitUS(8*1e3);
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SLEEP_DISABLE);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    System::waitUS(8*1e3);
 
     // -----------------------------------------------------------------------------
 
@@ -178,11 +174,10 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
             snprintf(ARRANDN(str), "%6d,", v);
             System::uart_ui.nputs(ARRANDN(str));
 
-            vTaskDelay(pdMS_TO_TICKS(10));
+            System::waitUS(10*1e3);
         }
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
-#endif
+
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task End" NEWLINE));
-    vTaskDelete(NULL);
 }

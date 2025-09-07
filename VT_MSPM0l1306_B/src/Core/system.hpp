@@ -215,7 +215,7 @@ namespace System {
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 
-            inline bool isBusy() { return !(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE); }
+            inline bool isBusy() { return _trxBuffer.error == ERROR::IN_USE; }
 
             /** blocks the task calling this function until TX is complete or timeout.
              * uses IRQ+Notifications. other tasks can run while this is blocking
@@ -242,6 +242,7 @@ namespace System {
 
 
             enum ERROR : uint8_t {
+                IN_USE,
                 NONE,
                 NACK,
                 TIMEOUT
@@ -261,6 +262,7 @@ namespace System {
     /* bring system to immediate stop . requires chip reset to escape this */
     void FailHard(char const * str = nullptr);
 
+    void waitUS(uint32_t us);
 
     /*--- system globals -----------------------------------*/
 
