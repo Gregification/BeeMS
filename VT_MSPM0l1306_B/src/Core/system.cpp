@@ -120,9 +120,6 @@ namespace System {
         GPIO PA27 = { .port = GPIOA, .pin = DL_GPIO_PIN_27, .iomux = IOMUX_PINCM28 };
     }
 
-
-    // we should move to uboot one bright sunny day
-
     UART::UART &uart_ui = uart0;
 
     #ifdef PROJECT_ENABLE_UART0

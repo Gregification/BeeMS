@@ -293,7 +293,8 @@ void System::init() {
 
         DL_I2C_enableController(System::i2c1.reg);
 
-        NVIC_EnableIRQ(I2C1_INT_IRQn);
+//        NVIC_EnableIRQ(I2C1_INT_IRQn);
+        NVIC_DisableIRQ(I2C1_INT_IRQn);
         DL_I2C_enableInterrupt(System::i2c1.reg,
                   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
                 | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
@@ -363,7 +364,8 @@ void System::init() {
         spi0.setSCLKTarget(125e3);
         DL_SPI_enable(spi0.reg);
 
-        NVIC_EnableIRQ(SPI0_INT_IRQn);
+//        NVIC_EnableIRQ(SPI0_INT_IRQn);
+        NVIC_DisableIRQ(SPI0_INT_IRQn);
         DL_SPI_enableInterrupt(System::spi0.reg,
                   DL_SPI_INTERRUPT_RX
                 | DL_SPI_INTERRUPT_TX
@@ -544,10 +546,13 @@ bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t t
     if(!takeResource(timeout))
         return false;
 
+    _trxBuffer.host_task = xTaskGetCurrentTaskHandle();
     _trxBuffer.tx = (uint8_t *) tx;
     _trxBuffer.rx = (uint8_t *) rx;
     _trxBuffer.rx_i = 0;
     _trxBuffer.len = len;
+
+    NVIC_EnableIRQ(SPI0_INT_IRQn);
 
     // sanitization
     if(!_trxBuffer.rx)
@@ -562,12 +567,14 @@ bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t t
     }
 
     if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeout)){
+        NVIC_DisableIRQ(SPI0_INT_IRQn);
         // timed out
         _trxBuffer.len = 0;
         releaseResource();
         return false;
     }
 
+    NVIC_DisableIRQ(SPI0_INT_IRQn);
     _trxBuffer.len = 0;
     releaseResource();
     return true;
@@ -696,6 +703,8 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
 
     DL_I2C_flushControllerTXFIFO(reg);
 
+    NVIC_EnableIRQ(I2C1_INT_IRQn);
+
     size -= DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, size);
 
     while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE)) {
@@ -715,12 +724,14 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
         );
 
     if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, stopTime - xTaskGetTickCount())){
+        NVIC_DisableIRQ(I2C1_INT_IRQn);
         // timed out
         DL_I2C_flushControllerTXFIFO(reg);
         releaseResource();
         return false;
     }
 
+    NVIC_DisableIRQ(I2C1_INT_IRQn);
     DL_I2C_flushControllerTXFIFO(reg);
     releaseResource();
     return true;
