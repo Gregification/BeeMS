@@ -293,7 +293,6 @@ void System::init() {
 
         DL_I2C_enableController(System::i2c1.reg);
 
-//        NVIC_EnableIRQ(I2C1_INT_IRQn);
         NVIC_DisableIRQ(I2C1_INT_IRQn);
         DL_I2C_enableInterrupt(System::i2c1.reg,
                   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
@@ -364,7 +363,6 @@ void System::init() {
         spi0.setSCLKTarget(125e3);
         DL_SPI_enable(spi0.reg);
 
-//        NVIC_EnableIRQ(SPI0_INT_IRQn);
         NVIC_DisableIRQ(SPI0_INT_IRQn);
         DL_SPI_enableInterrupt(System::spi0.reg,
                   DL_SPI_INTERRUPT_RX
