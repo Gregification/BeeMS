@@ -93,27 +93,31 @@
 
 // ti battery guage framework
 #include <ti/battery_gauge/gauge_level2/Gauge_Type.h>
+#include "ti_msp_dl_config.h"
 void Task::fiddle_task(void *){
     System::uart_ui.nputs(ARRANDN("fiddle task start" NEWLINE));
 
-//    tGaugeApplication app; // is CEDV?
+    SYSCFG_DL_MCAN0_init();
 
-    /* measurements avialble
-     *  - pack current
-     *  - pack voltage
-     *  - cell voltage
-     *  - coulmb count average over 1.5ms(low res) or 250ms
-     *  - ~40 temp measurements
-     * abilities
-     *  - individual cell discharge
-     *  - individual cell charge? (can be done, but isnt yet)
-     *
-     *  yippie
-     *      - https://www.analog.com/en/resources/technical-articles/a-closer-look-at-state-of-charge-and-state-health-estimation-tech.html
-     */
+    DL_MCAN_TxBufElement txMsg = {0};
 
+    txMsg.id = (0x123 << 18);
+    txMsg.rtr = 0;
+    txMsg.xtd = 0;
+    txMsg.dlc = 0;
+    txMsg.data[0] = 0x11;
+    txMsg.data[1] = 0x22;
+    txMsg.data[2] = 0x33;
+    txMsg.data[3] = 0x44;
+    txMsg.data[4] = 0x55;
+    txMsg.data[5] = 0x66;
+    txMsg.data[6] = 0x77;
+    txMsg.data[7] = 0x88;
 
+    DL_MCAN_writeMsgRam(MCAN0_INST, DL_MCAN_MEM_TYPE_BUF, 0U, &txMsg);
+    DL_MCAN_TXBufAddReq(MCAN0_INST, 0U);
 
+    System::uart_ui.nputs(ARRANDN("CAN frame queued" NEWLINE));
     System::uart_ui.nputs(ARRANDN("fiddle task end" NEWLINE));
     vTaskDelete(NULL);
 }
