@@ -42,7 +42,7 @@ void thing( void * ){
 
 }
 
-int main(){
+int main() {
     System::init();
 
     System::uart_ui.setBaudTarget(115200);

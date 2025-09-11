@@ -211,7 +211,7 @@ void System::init() {
         //target 160Mhz VCO
         constexpr DL_SYSCTL_SYSPLLConfig pll_config = {
                 .rDivClk2x  = 0x3,
-                .rDivClk1   = 0x0,
+                .rDivClk1   = 0x3, // /8 160Mhz -> 20Mhz
                 .rDivClk0   = 0x0, // unused
                 .enableCLK2x= DL_SYSCTL_SYSPLL_CLK2X_ENABLE,
                 .enableCLK1 = DL_SYSCTL_SYSPLL_CLK1_ENABLE,
@@ -225,8 +225,8 @@ void System::init() {
         DL_SYSCTL_configSYSPLL(&pll_config);
         DL_SYSCTL_setMCLKDivider(DL_SYSCTL_MCLK_DIVIDER::DL_SYSCTL_MCLK_DIVIDER_DISABLE);
         DL_SYSCTL_setULPCLKDivider(DL_SYSCTL_ULPCLK_DIV::DL_SYSCTL_ULPCLK_DIV_2);
-
     }
+
     while ((DL_SYSCTL_getClockStatus() & (DL_SYSCTL_CLK_STATUS_SYSPLL_GOOD
              | DL_SYSCTL_CLK_STATUS_HSCLK_GOOD
              | DL_SYSCTL_CLK_STATUS_LFOSC_GOOD))
