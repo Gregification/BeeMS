@@ -133,11 +133,9 @@ vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 {
     taskDISABLE_INTERRUPTS();
 
-    char str[MAX_STR_ERROR_LEN];
-    snprintf(str,sizeof(str), "vApplicationStackOverflowHook: %s", pcTaskName);
-
     for (;;){
-        System::uart_ui.nputs(ARRANDN(str));
+        System::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
+        System::uart_ui.nputs(pcTaskName, MAX_STR_LEN_COMMON);
         System::uart_ui.nputs(ARRANDN(NEWLINE));
         delay_cycles(20e6);
     }

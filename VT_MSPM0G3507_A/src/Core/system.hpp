@@ -4,7 +4,7 @@
  *  Created on: Jun 6, 2025
  *      Author: FSAE
  *
- *  target MCU : MSPM0G3507         https://www.ti.com/product/MSPM0G3507
+ *  target MCU : MSPM0G3507         www.ti.com/product/MSPM0G3507
  *
  *  Intended for use with FreeRTOS
  */
@@ -15,28 +15,24 @@
  *  the chip.
  *
  *** NOTES *****************************************************************************************
- * - THE CALLING FUNCTION MUST LOCK THE PERIPHERIAL RESOURCE BEFORE USINGIT
- * - all peripherals have wrappers. no matter how pointless it is. for semaphore control stuff
- *      - the semaphore is runtime so the compiler probably want to optimize it.
+ * - THE CALLING FUNCTION MUST LOCK THE PERIPHERIAL RESOURCE BEFORE USING IT or just not share peripherals between tasks
  *
  * - citation formatting
  *      - always have the section
  *      - page number if possible
  *      - eg: family data sheet , section 19.2.1 - which is on page 1428
  *          - "FDS.19.2.1/1428" or omit the page "FDS.19.2.1"
- *      - "LP" : launch-pad                                  https://www.ti.com/tool/LP-MSPM0G3507
- *      - "LPDS" : launch pad user-guide/data-sheet          https://www.ti.com/lit/ug/slau873d/slau873d.pdf?ts=1749180414460&ref_url=https%253A%252F%252Fwww.ti.com%252Ftool%252FLP-MSPM0G3507
- *      - "FDS" : family specific data sheet                 https://www.ti.com/lit/ug/slau846b/slau846b.pdf?ts=1749245238762&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
- *      - "TDS" : chip specific technical data sheet         https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf?ts=1749166832439&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
+ *      - "LP" : launch-pad                                 www.ti.com/tool/LP-MSPM0G3507
+ *      - "LPDS" : launch pad user-guide/data-sheet         www.ti.com/lit/ug/slau873d/slau873d.pdf
+ *      - "FDS" : family specific data sheet                www.ti.com/lit/ug/slau846b/slau846b.pdf
+ *      - "TDS" : chip specific technical data sheet        www.ti.com/lit/ds/symlink/mspm0g3507.pdf
  *
- *      - "BQ" : evaluation-board                            https://www.ti.com/tool/BQ76952EVM
- *      - "BQDS" : BQ data sheet                   https://www.ti.com/lit/ds/symlink/bq76952.pdf?ts=1751601724825&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FBQ76952
- *      - "BQTRM" : BQ technical reference manual  https://www.ti.com/lit/ug/sluuby2b/sluuby2b.pdf?ts=1751657887923&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FBQ76952%253Futm_source%253Dgoogle%2526utm_medium%253Dcpc%2526utm_campaign%253Dapp-null-null-GPN_EN-cpc-pf-google-ww_en_cons%2526utm_content%253DBQ76952%2526ds_k%253DBQ76952+Datasheet%2526DCM%253Dyes%2526gad_source%253D1%2526gad_campaignid%253D1767856010%2526gbraid%253D0AAAAAC068F3kMVn5JB15cZNcLXZ2ysu0t%2526gclid%253DCj0KCQjw953DBhCyARIsANhIZoa8LrrvSAnWBtKYvyJsSyVJWRKfkSw7Zxzr4w8DOEBf7oJBMp3RtwcaAklgEALw_wcB%2526gclsrc%253Daw.ds
+ *      - "BQ" : evaluation-board                           www.ti.com/tool/BQ76952EVM
+ *      - "BQDS" : BQ data sheet                            www.ti.com/lit/ds/symlink/bq76952.pdf
+ *      - "BQTRM" : BQ technical reference manual           www.ti.com/lit/ug/sluuby2b/sluuby2b.pdf
  *
  * - default clock is MFCLK : this is factory set to 4Mhz on the MSPM0G3507
- * - the comment style is what ever I feel like. no Doxygen, no JavaDoc, we ball
- * - hardware resources are coordinated across 'tasks' using mutex's, even if we decide that a
- *      specific peripheral will only ever be used by a specific 'task' still use resource locking.
+ * - the comment style is what ever I feel like. no DOxygen, no JavaDoc, we ball
  */
 
 #ifndef SRC_CORE_SYSTEM_HPP_
@@ -77,6 +73,7 @@
     * physical pins will be in the "System" name space */
 #define OCCUPY(ID)                  constexpr int const __PROJECT_OCCUPY_##ID = 0;
 
+
 /*--- general configuration ----------------------------*/
 
 #define NEWLINE                     "\n\r"
@@ -93,6 +90,7 @@
 #if configTASK_NOTIFICATION_ARRAY_ENTRIES < 2
     #error "increase size of configTASK_NOTIFICATION_ARRAY_ENTRIES"
 #endif
+
 
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
@@ -213,11 +211,6 @@ namespace System {
         /* transmitted when RX is needed but no TX is provided */
         constexpr uint8_t TRANSFER_FILLER_BYTE = 0x0;
 
-        /* - you must manually control CS
-         * - for any transmission speeds worth a crap you will have to use DL
-         * - functions here are general and are nowhere near peak performance
-         * - master only device
-         */
         struct SPI : Lockable {
             SPI_Regs * const reg;
 
@@ -301,6 +294,7 @@ namespace System {
     #endif
 
 }
+
 
 /*--- idiot detection ------------------------------------------------------------------*/
 
