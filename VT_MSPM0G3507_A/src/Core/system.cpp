@@ -89,14 +89,6 @@
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
-    namespace CLK {
-        uint32_t LFCLK   = 32768;
-        uint32_t ULPCLK  = 40e6;
-        uint32_t &MCLK   = CPUCLK;
-        uint32_t CPUCLK  = configCPU_CLOCK_HZ;
-        uint32_t CANCLK  = 80e6;
-        uint32_t MFPCLK  = 4e6;
-    }
 
     namespace GPIO {
         // this may look redundant but the IOMUX and PIN numbers don't necessarily match and
@@ -211,7 +203,7 @@ void System::init() {
         //target 160Mhz VCO
         constexpr DL_SYSCTL_SYSPLLConfig pll_config = {
                 .rDivClk2x  = 0x3,
-                .rDivClk1   = 0x0,
+                .rDivClk1   = 0x1, // /8 160MHz -> 40MHz
                 .rDivClk0   = 0x0, // unused
                 .enableCLK2x= DL_SYSCTL_SYSPLL_CLK2X_ENABLE,
                 .enableCLK1 = DL_SYSCTL_SYSPLL_CLK1_ENABLE,
@@ -371,6 +363,10 @@ void System::init() {
                 | DL_SPI_INTERRUPT_TX
             );
     }
+    #endif
+
+    #ifdef PROJECT_ENABLE_MCAN0
+
     #endif
 
 }

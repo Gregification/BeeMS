@@ -26,9 +26,10 @@ void Task::fiddle_task(void *){
     DL_MCAN_enablePower(CANFD0);
     delay_cycles(POWER_STARTUP_DELAY);
 
+    static_assert(System::CLK::CANCLK == 40e6, "CAN peripheral clock misconfigured"); // adjust the dividers so that the clock is either 20MHz,40MHz, or 80MHz
     constexpr DL_MCAN_ClockConfig clkConfig = {
-       .clockSel= DL_MCAN_FCLK::DL_MCAN_FCLK_SYSPLLCLK1,    // assuming is 20MHz
-       .divider = DL_MCAN_FCLK_DIV::DL_MCAN_FCLK_DIV_1,     // need to reach 20MHz
+       .clockSel= DL_MCAN_FCLK::DL_MCAN_FCLK_SYSPLLCLK1,    // assuming is 40MHz
+       .divider = DL_MCAN_FCLK_DIV::DL_MCAN_FCLK_DIV_1,     // need to reach 40MHz
     };
 
     constexpr DL_MCAN_InitParams initparam = {
@@ -45,66 +46,42 @@ void Task::fiddle_task(void *){
       .wdcPreload        = 255,     // start value of message ram WDT
 
       /* Transmitter Delay Compensation parameters. tm.26.4.6/1439 */
-      .tdcEnable         = false,   // transmitter delay compensation
+      .tdcEnable         = true,    // transmitter delay compensation, oscilloscope the time diff between edges of TX->RX signals
       .tdcConfig.tdcf    = 10,      // filter length
       .tdcConfig.tdco    = 6,       // filter offset
     };
 
     constexpr DL_MCAN_MsgRAMConfigParams  ramConfig = {
-        /* Standard ID Filter List Start Address. */
-        .flssa                = 0,
-        /* List Size: Standard ID. */
-        .lss                  = 0,
-        /* Extended ID Filter List Start Address. */
-        .flesa                = 0,
-        /* List Size: Extended ID. */
-        .lse                  = 0,
-        /* Tx Buffers Start Address. */
-        .txStartAddr          = 12,
-        /* Number of Dedicated Transmit Buffers. */
-        .txBufNum             = 2,
+        .flssa                = 0,  /* Standard ID Filter List Start Address. */
+        .lss                  = 0,  /* List Size: Standard ID. */
+        .flesa                = 0,  /* Extended ID Filter List Start Address. */
+        .lse                  = 0,  /* List Size: Extended ID. */
+        .txStartAddr          = 12, /* Tx Buffers Start Address. */
+        .txBufNum             = 2,  /* Number of Dedicated Transmit Buffers. */
         .txFIFOSize           = 10,
-        /* Tx Buffer Element Size. */
-        .txBufMode            = 0,
+        .txBufMode            = 0,  /* Tx Buffer Element Size. */
         .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
-        /* Tx Event FIFO Start Address. */
-        .txEventFIFOStartAddr = 640,
-        /* Event FIFO Size. */
-        .txEventFIFOSize      = 2,
-        /* Level for Tx Event FIFO watermark interrupt. */
-        .txEventFIFOWaterMark = 0,
-        /* Rx FIFO0 Start Address. */
-        .rxFIFO0startAddr     = 0,
-        /* Number of Rx FIFO elements. */
-        .rxFIFO0size          = 0,
-        /* Rx FIFO0 Watermark. */
-        .rxFIFO0waterMark     = 0,
+        .txEventFIFOStartAddr = 640,/* Tx Event FIFO Start Address. */
+        .txEventFIFOSize      = 2,  /* Event FIFO Size. */
+        .txEventFIFOWaterMark = 0,  /* Level for Tx Event FIFO watermark interrupt. */
+        .rxFIFO0startAddr     = 0,  /* Rx FIFO0 Start Address. */
+        .rxFIFO0size          = 0,  /* Number of Rx FIFO elements. */
+        .rxFIFO0waterMark     = 0,  /* Rx FIFO0 Watermark. */
         .rxFIFO0OpMode        = 0,
-        /* Rx FIFO1 Start Address. */
-        .rxFIFO1startAddr     = 0,
-        /* Number of Rx FIFO elements. */
-        .rxFIFO1size          = 0,
-        /* Level for Rx FIFO 1 watermark interrupt. */
-        .rxFIFO1waterMark     = 0,
-        /* FIFO blocking mode. */
-        .rxFIFO1OpMode        = 0,
-        /* Rx Buffer Start Address. */
-        .rxBufStartAddr       = 0,
-        /* Rx Buffer Element Size. */
-        .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
-        /* Rx FIFO0 Element Size. */
-        .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,
-        /* Rx FIFO1 Element Size. */
-        .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,
+        .rxFIFO1startAddr     = 0,  /* Rx FIFO1 Start Address. */
+        .rxFIFO1size          = 0,  /* Number of Rx FIFO elements. */
+        .rxFIFO1waterMark     = 0,  /* Level for Rx FIFO 1 watermark interrupt. */
+        .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
+        .rxBufStartAddr       = 0,  /* Rx Buffer Start Address. */
+        .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx Buffer Element Size. */
+        .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx FIFO0 Element Size. */
+        .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx FIFO1 Element Size. */
     };
 
     static const DL_MCAN_BitTimingParams   bitTimeingParams = {
-        /* Arbitration Baud Rate Pre-scaler. */
-        .nomRatePrescalar   = 40-1, // 0-> /1 , CAN clk divider to bit time
-        /* Arbitration Time segment before sample point. */
-        .nomTimeSeg1        = 138,
-        /* Arbitration Time segment after sample point. */
-        .nomTimeSeg2        = 19,
+        .nomRatePrescalar   = 40-1,     /* Arbitration Baud Rate Pre-scaler. */
+        .nomTimeSeg1        = 138,      /* Arbitration Time segment before sample point. */
+        .nomTimeSeg2        = 19,       /* Arbitration Time segment after sample point. */
         /* Arbitration (Re)Synchronization Jump Width Range. */
         .nomSynchJumpWidth  = 19,
         /* Data Baud Rate Pre-scaler. */

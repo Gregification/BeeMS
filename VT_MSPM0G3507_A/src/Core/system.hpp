@@ -105,6 +105,8 @@
 //#define PROJECT_ENABLE_I2C0
 #define PROJECT_ENABLE_I2C1
 
+#define PROJECT_ENABLE_MCAN0
+
 
 /*--- common peripheral pins ---------------------------*/
 
@@ -159,15 +161,13 @@ namespace System {
 
     /* see clock tree diagram ... and SysConfig's */
     namespace CLK {
-        /* no constexpr's plz */
-
-        extern uint32_t LFCLK;
-        extern uint32_t ULPCLK;
-        extern uint32_t &MCLK;
-        extern uint32_t CPUCLK;
-        extern uint32_t CANCLK;
-        extern uint32_t MFPCLK;
-        constexpr uint32_t MFCLK = 4e6;
+        constexpr uint32_t LFCLK    = 32768;
+        constexpr uint32_t ULPCLK   = 40e6;
+        constexpr uint32_t CPUCLK   = configCPU_CLOCK_HZ;
+        constexpr uint32_t MCLK     = CPUCLK;
+        constexpr uint32_t CANCLK   = 40e6;
+        constexpr uint32_t MFPCLK   = 4e6;
+        constexpr uint32_t MFCLK    = 4e6;
     }
 
     namespace UART {
@@ -191,8 +191,8 @@ namespace System {
             uint32_t    pin;    // eg: DL_GPIO_PIN_0
             uint32_t    iomux;  // eg: IOMUX_PINCM0
 
-            inline void set() { DL_GPIO_setPins(port, pin); }
-            inline void clear() { DL_GPIO_clearPins(port, pin); }
+            void set() const { DL_GPIO_setPins(port, pin); }
+            void clear() const { DL_GPIO_clearPins(port, pin); }
         };
 
         // Port A (PA) pins
