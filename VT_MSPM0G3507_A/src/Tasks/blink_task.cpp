@@ -16,7 +16,8 @@ void Task::blink_task(void*) {
      * see schematic of exact version for correct pin.
      */
 //    auto &led = System::GPIO::PA14; // purple board
-    auto &led = System::GPIO::PB27; // blue board
+//    auto &led = System::GPIO::PB27; // blue board
+    auto &led = System::GPIO::PA14; // green board
 
     DL_GPIO_initDigitalOutputFeatures(
             led.iomux,
@@ -31,13 +32,7 @@ void Task::blink_task(void*) {
     DL_GPIO_enableOutput(GPIOPINPUX(led));
 
     for(;;){
-        for(int i = 0; i < 100; i++){
-            led.set();
-            vTaskDelay(pdMS_TO_TICKS(1));
-            led.clear();
-            vTaskDelay(pdMS_TO_TICKS(10));
-        }
-        led.clear();
-        vTaskDelay(pdMS_TO_TICKS(200));
+        DL_GPIO_togglePins(GPIOPINPUX(led));
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }

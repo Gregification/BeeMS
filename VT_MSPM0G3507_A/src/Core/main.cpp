@@ -21,27 +21,6 @@
 #include "Tasks/Test_UART_Task.hpp"
 #include "Tasks/fiddle.hpp"
 
-void thing( void * ){
-    auto led = System::GPIO::PB27;
-    DL_GPIO_initDigitalOutputFeatures(
-            led.iomux,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
-            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-        );
-    DL_GPIO_clearPins(GPIOPINPUX(led));
-    DL_GPIO_enableOutput(GPIOPINPUX(led));
-
-    for(;;){
-        led.set();
-        delay_cycles(30e6);
-        led.clear();
-        delay_cycles(30e6);
-    }
-
-}
-
 int main(){
     System::init();
 
