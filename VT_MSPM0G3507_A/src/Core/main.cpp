@@ -30,19 +30,19 @@ int main(){
     System::uart_ui.nputs(ARRANDN("\033[2J\033[H"));
     System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
 //
-    xTaskCreate(Task::blink_task,
-            "blink status",
-            configMINIMAL_STACK_SIZE,
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    xTaskCreate(Task::blink_task,
+//            "blink status",
+//            configMINIMAL_STACK_SIZE,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
-    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
-            "BQ769x2_PROTOCOL_Test_V_Task",
-            configMINIMAL_STACK_SIZE*10,
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
+//            "BQ769x2_PROTOCOL_Test_V_Task",
+//            configMINIMAL_STACK_SIZE*10,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
     xTaskCreate(Task::fiddle_task,
             "fiddle_task",
