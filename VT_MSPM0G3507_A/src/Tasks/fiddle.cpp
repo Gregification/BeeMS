@@ -22,6 +22,7 @@
 void Task::fiddle_task(void *){
     System::uart_ui.nputs(ARRANDN("fiddle task start" NEWLINE));
 
+    DL_MCAN_disablePower(CANFD0);
     DL_MCAN_reset(CANFD0);
     DL_MCAN_enablePower(CANFD0);
     delay_cycles(POWER_STARTUP_DELAY);
@@ -34,8 +35,8 @@ void Task::fiddle_task(void *){
     {
         static_assert(System::CLK::CANCLK == 40e6, "CAN peripheral clock misconfigured"); // adjust the dividers so that the clock is either 20MHz,40MHz, or 80MHz
         constexpr DL_MCAN_ClockConfig clkConfig = {
-           .clockSel= DL_MCAN_FCLK::DL_MCAN_FCLK_SYSPLLCLK1,    // assuming is 40MHz
-           .divider = DL_MCAN_FCLK_DIV::DL_MCAN_FCLK_DIV_1,     // need to reach 40MHz
+           .clockSel= DL_MCAN_FCLK::DL_MCAN_FCLK_SYSPLLCLK1,
+           .divider = DL_MCAN_FCLK_DIV::DL_MCAN_FCLK_DIV_1,
         };
         DL_MCAN_setClockConfig(CANFD0, &clkConfig);
     }
@@ -46,12 +47,15 @@ void Task::fiddle_task(void *){
     DL_MCAN_getRevisionId(CANFD0, &revId);
 
     /* Wait for Memory initialization to be completed. */
-    while(false == DL_MCAN_isMemInitDone(CANFD0));
+    while(false == DL_MCAN_isMemInitDone(CANFD0))
+    System::uart_ui.nputs(ARRANDN("wait" NEWLINE));
+        ;
+    System::uart_ui.nputs(ARRANDN("lkncaekaelknacelknacelnkacelklknnacenlkacelknaceknlcealk" NEWLINE));
 
     /* Put MCAN in SW initialization mode. */
     DL_MCAN_setOpMode(CANFD0, DL_MCAN_OPERATION_MODE_SW_INIT);
     while(DL_MCAN_OPERATION_MODE_SW_INIT != DL_MCAN_getOpMode(CANFD0))
-        vTaskDelay(pdMS_TO_TICKS(1));
+        ;
 
     { /* Initialize MCAN module. */
         constexpr DL_MCAN_InitParams initparam = {
@@ -62,13 +66,13 @@ void Task::fiddle_task(void *){
               .efbi              = false,   // edge filtering? 2 consecutive Tq to accept sync
               .pxhddisable       = false,   // do not Tx error frame on protocol error?
               .darEnable         = false,   // auto retransmission of failed frames?
-              .wkupReqEnable     = true,    // enable wake up request?
-              .autoWkupEnable    = true,    // enable auto-wakeup?
-              .emulationEnable   = true,
+              .wkupReqEnable     = false,   // enable wake up request?
+              .autoWkupEnable    = false,   // enable auto-wakeup?
+              .emulationEnable   = false,
               .wdcPreload        = 255,     // start value of message ram WDT
 
               /* Transmitter Delay Compensation parameters. tm.26.4.6/1439 */
-              .tdcEnable         = true,    // transmitter delay compensation, oscilloscope the time diff between edges of TX->RX signals
+              .tdcEnable         = false,   // transmitter delay compensation, oscilloscope the time diff between edges of TX->RX signals
               .tdcConfig.tdcf    = 10,      // filter length
               .tdcConfig.tdco    = 6,       // filter offset
             };
@@ -94,14 +98,14 @@ void Task::fiddle_task(void *){
 
     { /* Configure Bit timings. */
         static const DL_MCAN_BitTimingParams   bitTimeingParams = {
-                .nomRatePrescalar   = 40-1,     /* Arbitration Baud Rate Pre-scaler. */
-                .nomTimeSeg1        = 138,      /* Arbitration Time segment before sample point. */
-                .nomTimeSeg2        = 19,       /* Arbitration Time segment after sample point. */
-                .nomSynchJumpWidth  = 19,       /* Arbitration (Re)Synchronization Jump Width Range. */
-                .dataRatePrescalar  = 0,        /* Data Baud Rate Pre-scaler. */
-                .dataTimeSeg1       = 16,       /* Data Time segment before sample point. */
-                .dataTimeSeg2       = 1,        /* Data Time segment after sample point. */
-                .dataSynchJumpWidth = 1,        /* Data (Re)Synchronization Jump Width.   */
+                .nomRatePrescalar   = 3,    /* Arbitration Baud Rate Pre-scaler. */
+                .nomTimeSeg1        = 16,   /* Arbitration Time segment before sample point. */
+                .nomTimeSeg2        = 1,    /* Arbitration Time segment after sample point. */
+                .nomSynchJumpWidth  = 1,    /* Arbitration (Re)Synchronization Jump Width Range. */
+                .dataRatePrescalar  = 0,    /* Data Baud Rate Pre-scaler. */
+                .dataTimeSeg1       = 0,    /* Data Time segment before sample point. */
+                .dataTimeSeg2       = 0,    /* Data Time segment after sample point. */
+                .dataSynchJumpWidth = 0,    /* Data (Re)Synchronization Jump Width.   */
             };
         DL_MCAN_setBitTime(CANFD0, &bitTimeingParams);
     }

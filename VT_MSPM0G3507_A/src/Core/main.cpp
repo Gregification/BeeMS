@@ -46,12 +46,11 @@ int main(){
 
     xTaskCreate(Task::fiddle_task,
             "fiddle_task",
-            configMINIMAL_STACK_SIZE,
+            configMINIMAL_STACK_SIZE * 10,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    thing(0);
     vTaskStartScheduler();
 
     taskDISABLE_INTERRUPTS();

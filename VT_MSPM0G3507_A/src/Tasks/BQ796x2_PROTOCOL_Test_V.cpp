@@ -14,6 +14,7 @@
 #include "Middleware/BQ76952.hpp"
 #include "Core/system.hpp"
 
+#ifdef PROJECT_ENABLE_I2C0
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
 
@@ -188,3 +189,8 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task End" NEWLINE));
     vTaskDelete(NULL);
 }
+#else
+void Task::BQ769x2_PROTOCOL_Test_V_Task(void*){
+    vTaskDelete(NULL);
+};
+#endif

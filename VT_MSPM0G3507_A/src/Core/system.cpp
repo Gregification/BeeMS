@@ -191,42 +191,34 @@ void System::init() {
      */
     DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_0);
 
+    DL_SYSCTL_setFlashWaitState(DL_SYSCTL_FLASH_WAIT_STATE_2);
+
     // clock configuration
     {
         DL_SYSCTL_setSYSOSCFreq(DL_SYSCTL_SYSOSC_FREQ::DL_SYSCTL_SYSOSC_FREQ_BASE); // SYSOSC 32Mhz
 
         DL_SYSCTL_disableHFXT();
-        DL_SYSCTL_enableMFPCLK();
-        DL_SYSCTL_enableMFCLK();
         DL_SYSCTL_disableSYSPLL();
 
         //target 160Mhz VCO
         constexpr DL_SYSCTL_SYSPLLConfig pll_config = {
-                .rDivClk2x  = 0x3,
-                .rDivClk1   = 0x1, // /8 160MHz -> 40MHz
-                .rDivClk0   = 0x0, // unused
-                .enableCLK2x= DL_SYSCTL_SYSPLL_CLK2X_ENABLE,
+                .rDivClk2x  = 0x0,
+                .rDivClk1   = 0x1,
+                .rDivClk0   = 0x0,
+                .enableCLK2x= DL_SYSCTL_SYSPLL_CLK2X_DISABLE,
                 .enableCLK1 = DL_SYSCTL_SYSPLL_CLK1_ENABLE,
-                .enableCLK0 = DL_SYSCTL_SYSPLL_CLK0_DISABLE,
-                .sysPLLMCLK = DL_SYSCTL_SYSPLL_MCLK::DL_SYSCTL_SYSPLL_MCLK_CLK2X,
+                .enableCLK0 = DL_SYSCTL_SYSPLL_CLK0_ENABLE,
+                .sysPLLMCLK = DL_SYSCTL_SYSPLL_MCLK::DL_SYSCTL_SYSPLL_MCLK_CLK0,
                 .sysPLLRef  = DL_SYSCTL_SYSPLL_REF::DL_SYSCTL_SYSPLL_REF_SYSOSC,
-                .qDiv       = 0x04,
+                .qDiv       = 0x4,
                 .pDiv       = DL_SYSCTL_SYSPLL_PDIV::DL_SYSCTL_SYSPLL_PDIV_1,
                 .inputFreq  = DL_SYSCTL_SYSPLL_INPUT_FREQ::DL_SYSCTL_SYSPLL_INPUT_FREQ_32_48_MHZ
             };
         DL_SYSCTL_configSYSPLL(&pll_config);
-        DL_SYSCTL_setMCLKDivider(DL_SYSCTL_MCLK_DIVIDER::DL_SYSCTL_MCLK_DIVIDER_DISABLE);
         DL_SYSCTL_setULPCLKDivider(DL_SYSCTL_ULPCLK_DIV::DL_SYSCTL_ULPCLK_DIV_2);
-
+        DL_SYSCTL_enableMFCLK();
+        DL_SYSCTL_switchMCLKfromSYSOSCtoHSCLK(DL_SYSCTL_HSCLK_SOURCE::DL_SYSCTL_HSCLK_SOURCE_SYSPLL);
     }
-    while ((DL_SYSCTL_getClockStatus() & (DL_SYSCTL_CLK_STATUS_SYSPLL_GOOD
-             | DL_SYSCTL_CLK_STATUS_HSCLK_GOOD
-             | DL_SYSCTL_CLK_STATUS_LFOSC_GOOD))
-               != (DL_SYSCTL_CLK_STATUS_SYSPLL_GOOD
-             | DL_SYSCTL_CLK_STATUS_HSCLK_GOOD
-             | DL_SYSCTL_CLK_STATUS_LFOSC_GOOD))
-        {}
-    DL_SYSCTL_switchMCLKfromSYSOSCtoHSCLK(DL_SYSCTL_HSCLK_SOURCE::DL_SYSCTL_HSCLK_SOURCE_SYSPLL);
 
     // must be done after enabling PLL
 //    DL_FlashCTL_executeClearStatus(); // ERRNO thing
