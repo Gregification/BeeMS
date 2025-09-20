@@ -26,11 +26,9 @@ void Task::fiddle_task(void *){
     DL_MCAN_enablePower(CANFD0);
     delay_cycles(POWER_STARTUP_DELAY);
 
-    static_assert(System::CLK::CANCLK == 40e6, "CAN peripheral clock misconfigured"); // adjust the dividers so that the clock is either 20MHz,40MHz, or 80MHz
-    constexpr DL_MCAN_ClockConfig clkConfig = {
-       .clockSel= DL_MCAN_FCLK::DL_MCAN_FCLK_SYSPLLCLK1,    // assuming is 40MHz
-       .divider = DL_MCAN_FCLK_DIV::DL_MCAN_FCLK_DIV_1,     // need to reach 40MHz
-    };
+    DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM60, IOMUX_PINCM60_PF_CANFD0_CANRX); // CANRX, PA27
+    DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM59, IOMUX_PINCM59_PF_CANFD0_CANTX); // CANTX, PA26
+
 
     constexpr DL_MCAN_InitParams initparam = {
       /* Initialize MCAN Init parameters.    */
@@ -82,17 +80,31 @@ void Task::fiddle_task(void *){
         .nomRatePrescalar   = 40-1,     /* Arbitration Baud Rate Pre-scaler. */
         .nomTimeSeg1        = 138,      /* Arbitration Time segment before sample point. */
         .nomTimeSeg2        = 19,       /* Arbitration Time segment after sample point. */
-        /* Arbitration (Re)Synchronization Jump Width Range. */
-        .nomSynchJumpWidth  = 19,
-        /* Data Baud Rate Pre-scaler. */
-        .dataRatePrescalar  = 0,
-        /* Data Time segment before sample point. */
-        .dataTimeSeg1       = 16,
-        /* Data Time segment after sample point. */
-        .dataTimeSeg2       = 1,
-        /* Data (Re)Synchronization Jump Width.   */
-        .dataSynchJumpWidth = 1,
+        .nomSynchJumpWidth  = 19,       /* Arbitration (Re)Synchronization Jump Width Range. */
+        .dataRatePrescalar  = 0,        /* Data Baud Rate Pre-scaler. */
+        .dataTimeSeg1       = 16,       /* Data Time segment before sample point. */
+        .dataTimeSeg2       = 1,        /* Data Time segment after sample point. */
+        .dataSynchJumpWidth = 1,        /* Data (Re)Synchronization Jump Width.   */
     };
+
+    DL_MCAN_enableModuleClock(CANFD0);
+
+    {
+        static_assert(System::CLK::CANCLK == 40e6, "CAN peripheral clock misconfigured"); // adjust the dividers so that the clock is either 20MHz,40MHz, or 80MHz
+        constexpr DL_MCAN_ClockConfig clkConfig = {
+           .clockSel= DL_MCAN_FCLK::DL_MCAN_FCLK_SYSPLLCLK1,    // assuming is 40MHz
+           .divider = DL_MCAN_FCLK_DIV::DL_MCAN_FCLK_DIV_1,     // need to reach 40MHz
+        };
+        DL_MCAN_setClockConfig(CANFD0, &clkConfig);
+    }
+
+    // have no idea if this is required for the setup
+    DL_MCAN_RevisionId revId;
+    DL_MCAN_getRevisionId(CANFD0, &revId);
+
+    while(!DL_MCAN_isMemInitDone(CANFD0))
+        ;
+
 
     System::uart_ui.nputs(ARRANDN("fiddle task end" NEWLINE));
     vTaskDelete(NULL);

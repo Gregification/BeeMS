@@ -11,9 +11,11 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
-//#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
+
+
+#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
 //#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
-#include <Tasks/SPI_example_task.hpp>
+//#include <Tasks/SPI_example_task.hpp>
 
 #include "system.hpp"
 
@@ -35,9 +37,16 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
+    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
+            "BQ769x2_PROTOCOL_Test_V_Task",
+            configMINIMAL_STACK_SIZE*10,
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
+
     xTaskCreate(Task::fiddle_task,
             "fiddle_task",
-            configMINIMAL_STACK_SIZE *10,
+            configMINIMAL_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);

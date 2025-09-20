@@ -294,8 +294,7 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c
             &&  i2c_controller.rx_blocking(i2c_addr, reg_data, count, timeout)
         ;
 }
-
-//bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
+//bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
 //{
 //    uint8_t I2Ctxbuff[8] = {0x00};
 //
@@ -308,21 +307,21 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c
 //    }
 //
 //    //    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-//    DL_I2C_fillControllerTXFIFO(I2C_0_INST, &I2Ctxbuff[0], count + 1);
+//    DL_I2C_fillControllerTXFIFO(i2c_controller.reg, &I2Ctxbuff[0], count + 1);
 //
 //    /* Wait for I2C to be Idle */
-//    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
+//    while (!(DL_I2C_getControllerStatus(i2c_controller.reg) &
 //             DL_I2C_CONTROLLER_STATUS_IDLE))
 //        ;
 //
-//    DL_I2C_startControllerTransfer(I2C_0_INST, I2C_TARGET_ADDRESS,
+//    DL_I2C_startControllerTransfer(i2c_controller.reg, i2c_addr,
 //        DL_I2C_CONTROLLER_DIRECTION_TX, count + 1);
 //
-//    while (DL_I2C_getControllerStatus(I2C_0_INST) &
+//    while (DL_I2C_getControllerStatus(i2c_controller.reg) &
 //           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
 //        ;
 //    /* Wait for I2C to be Idle */
-//    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
+//    while (!(DL_I2C_getControllerStatus(i2c_controller.reg) &
 //             DL_I2C_CONTROLLER_STATUS_IDLE))
 //        ;
 //
@@ -333,10 +332,11 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c
 //    //     DL_I2C_clearInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT);
 //    //     I2C_WriteReg(reg_addr, reg_data, count);
 //    // }
-//    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
+//    DL_I2C_flushControllerTXFIFO(i2c_controller.reg);
 //
 //    return true;
 //}
+
 
 bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
 {
