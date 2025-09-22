@@ -1,0 +1,1421 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "9466a7d0-52f3-440d-a1f3-8f8723f9e44d")
+	(paper "A4")
+	(title_block
+		(title "UTA Racing BeeMS System Overview")
+		(date "2025-09-21")
+		(rev "1")
+		(company "UTA Racing")
+		(comment 1 "for visual understanding only, not representative of implimentation")
+	)
+	(lib_symbols
+		(symbol "Device:Battery"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "BT"
+				(at 2.54 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "Battery"
+				(at 2.54 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 1.524 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 1.524 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Multiple-cell battery"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "batt voltage-source cell"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Battery_0_1"
+				(rectangle
+					(start -2.286 1.778)
+					(end 2.286 1.524)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start -2.286 -1.27)
+					(end 2.286 -1.524)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start -1.524 1.016)
+					(end 1.524 0.508)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start -1.524 -2.032)
+					(end 1.524 -2.54)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.778) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 0.254)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -0.508) (xy 0 -0.254)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -1.016) (xy 0 -0.762)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 3.048) (xy 1.778 3.048)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 3.556) (xy 1.27 2.54)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Battery_1_1"
+				(pin passive line
+					(at 0 5.08 270)
+					(length 2.54)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 2.54)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(rectangle
+		(start 179.07 104.14)
+		(end 210.82 119.38)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 035fc6f8-c2e3-4e34-9406-1e06bc237f65)
+	)
+	(rectangle
+		(start 137.668 112.268)
+		(end 156.718 118.618)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 1cf7e782-d05f-424a-9d50-32422fa1d204)
+	)
+	(rectangle
+		(start 179.07 86.36)
+		(end 210.82 101.6)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 24ede3a7-0a01-473b-9b22-cebdebcf4886)
+	)
+	(rectangle
+		(start 69.215 74.93)
+		(end 94.996 90.043)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type color)
+			(color 255 255 194 1)
+		)
+		(uuid 5cd73299-8b4a-4362-8b5b-695844d7d627)
+	)
+	(rectangle
+		(start 181.61 109.22)
+		(end 200.66 115.57)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type color)
+			(color 255 255 194 1)
+		)
+		(uuid 6364e961-5884-4177-8139-5ccee9e7d3e4)
+	)
+	(rectangle
+		(start 141.605 55.753)
+		(end 152.273 62.23)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 740fcafe-ac68-42b6-bd4a-9edab287f1c6)
+	)
+	(rectangle
+		(start 175.768 50.038)
+		(end 201.803 64.77)
+		(stroke
+			(width 0.0127)
+			(type solid)
+			(color 132 132 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 89ce4546-a711-4d99-acd0-dd0f4636522f)
+	)
+	(rectangle
+		(start 179.07 75.565)
+		(end 205.74 83.82)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type color)
+			(color 255 255 194 1)
+		)
+		(uuid 99abed61-25d6-455c-9a4d-6ddac2286c3c)
+	)
+	(rectangle
+		(start 99.949 76.454)
+		(end 120.904 82.804)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type color)
+			(color 255 255 194 1)
+		)
+		(uuid bb6e55d5-cc5e-489a-90dd-ce0491aa0ebe)
+	)
+	(rectangle
+		(start 181.61 127)
+		(end 200.66 133.35)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type color)
+			(color 255 255 194 1)
+		)
+		(uuid c6f508f6-5d06-490a-b4a7-787ddd230351)
+	)
+	(rectangle
+		(start 133.35 107.315)
+		(end 159.385 120.65)
+		(stroke
+			(width 0.0127)
+			(type solid)
+			(color 132 132 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid cde9a1c5-ef74-4c53-8376-84028c2a8302)
+	)
+	(rectangle
+		(start 137.668 97.028)
+		(end 156.718 103.378)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid ddddc1a9-b9b6-403a-9217-11c7de635103)
+	)
+	(rectangle
+		(start 179.07 121.92)
+		(end 210.82 137.16)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid e6ab835e-935d-4480-bfad-11a69fea1c0c)
+	)
+	(rectangle
+		(start 170.815 69.85)
+		(end 218.44 140.97)
+		(stroke
+			(width 0.0127)
+			(type solid)
+			(color 132 132 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid eaf55f67-5432-4012-b61f-c0649553b114)
+	)
+	(rectangle
+		(start 133.35 85.09)
+		(end 159.385 105.41)
+		(stroke
+			(width 0.0127)
+			(type solid)
+			(color 132 132 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid f5596019-81f3-4aa8-b106-43d51ebe2ee9)
+	)
+	(rectangle
+		(start 178.943 55.753)
+		(end 197.993 62.103)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type color)
+			(color 255 255 194 1)
+		)
+		(uuid f97b98eb-540b-42f7-895d-a99f5f0c8949)
+	)
+	(rectangle
+		(start 181.61 91.44)
+		(end 200.66 97.79)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type color)
+			(color 255 255 194 1)
+		)
+		(uuid fd1b6edd-0bf8-4f5b-b2e6-2d66d0a8c3b5)
+	)
+	(rectangle
+		(start 137.668 89.408)
+		(end 156.718 95.758)
+		(stroke
+			(width 0)
+			(type default)
+			(color 194 0 0 1)
+		)
+		(fill
+			(type none)
+		)
+		(uuid fe6efb18-fcb4-41af-9ba2-3c1ea2cb1ee7)
+	)
+	(text "Motec"
+		(exclude_from_sim no)
+		(at 147.32 100.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "0568e829-4fef-42d9-b553-8dc7b22eae6a")
+	)
+	(text "TSBP (Tractive System Battery Pack)"
+		(exclude_from_sim no)
+		(at 171.45 71.374 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 132 132 0 1)
+			)
+			(justify left top)
+		)
+		(uuid "18a80c15-bb01-4bd6-94f8-eb63bc527372")
+	)
+	(text "Ethernet <-> CAN\ntranslator\n"
+		(exclude_from_sim no)
+		(at 110.49 80.01 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "2b2dd5c5-eae4-430f-8fc2-dfcbecfb548a")
+	)
+	(text "Charger"
+		(exclude_from_sim no)
+		(at 147.32 115.57 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "34041725-2790-48a4-b4c5-6818dc5cbe83")
+	)
+	(text "Human / non critical interfaces"
+		(exclude_from_sim no)
+		(at 125.222 35.052 0)
+		(effects
+			(font
+				(size 1.905 1.905)
+				(color 194 0 194 1)
+			)
+			(justify right top)
+		)
+		(uuid "371f3f3d-ae11-4f23-8ecf-62914edc330a")
+	)
+	(text "Invreter"
+		(exclude_from_sim no)
+		(at 147.32 92.71 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "58248ae0-f8cc-4fb2-96f1-ea7693acf117")
+	)
+	(text "TSBP Module 2"
+		(exclude_from_sim no)
+		(at 194.31 105.918 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "6c474309-e4fd-4052-b090-7e221d9b8a1f")
+	)
+	(text "BMS Master Board"
+		(exclude_from_sim no)
+		(at 190.5 80.01 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "6cd89b28-e251-4fde-ab2d-1dc03fbabe8d")
+	)
+	(text "Junction Box"
+		(exclude_from_sim no)
+		(at 176.276 50.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 132 132 0 1)
+			)
+			(justify left top)
+		)
+		(uuid "86b605e6-935f-405b-813c-3bcb730ad404")
+	)
+	(text "LV power \nsupply"
+		(exclude_from_sim no)
+		(at 147.066 58.928 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "96f027a8-ce8e-4b54-a192-6733e042b97e")
+	)
+	(text "Voltage Tap Board"
+		(exclude_from_sim no)
+		(at 191.262 112.522 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "98882edd-d0f1-4d29-b04e-77b5482515c6")
+	)
+	(text "Fault Latch Board"
+		(exclude_from_sim no)
+		(at 188.595 59.055 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "a2519375-20c4-41fc-b5b2-0ea0c165fbeb")
+	)
+	(text "Voltage Tap Board"
+		(exclude_from_sim no)
+		(at 191.262 94.742 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "b5318414-216a-492a-8541-16e5a1c6ac8c")
+	)
+	(text "On board systems"
+		(exclude_from_sim no)
+		(at 134.112 85.852 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 132 132 0 1)
+			)
+			(justify left top)
+		)
+		(uuid "b86d2aea-b74f-4405-b5d3-0fa1c29a0adf")
+	)
+	(text "TSBP Module N"
+		(exclude_from_sim no)
+		(at 194.31 88.138 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "c24d7748-e59f-4dab-8ac4-d0b9118e9ece")
+	)
+	(text "TSBP Module 1"
+		(exclude_from_sim no)
+		(at 194.31 123.698 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "c334e52d-f839-4971-895d-e3d9bfbbaf55")
+	)
+	(text "Real time \n& vehicle based \nsystems"
+		(exclude_from_sim no)
+		(at 127.762 34.798 0)
+		(effects
+			(font
+				(size 1.905 1.905)
+				(color 194 0 194 1)
+			)
+			(justify left top)
+		)
+		(uuid "ea310f54-0ccf-43c5-b45e-1710993ba4cb")
+	)
+	(text "Voltage Tap Board"
+		(exclude_from_sim no)
+		(at 191.262 130.302 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "ee9c4b88-a2fc-456e-9be5-09ae6a17da72")
+	)
+	(text "Off board systems"
+		(exclude_from_sim no)
+		(at 133.858 108.585 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 132 132 0 1)
+			)
+			(justify left top)
+		)
+		(uuid "eec5d81e-d245-44fc-bdb7-346771a35754")
+	)
+	(text "visualization & control\nsoftware"
+		(exclude_from_sim no)
+		(at 82.042 82.042 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 194 0 0 1)
+			)
+		)
+		(uuid "f6d831c6-a3d8-4138-ae31-0fc863f22894")
+	)
+	(junction
+		(at 175.26 111.76)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "09219085-be35-48dd-803e-0f8f91f78829")
+	)
+	(junction
+		(at 175.26 93.98)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1a39168c-7ffc-418b-8ec2-aa81572d5f74")
+	)
+	(junction
+		(at 165.1 92.71)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "26ba891d-5b44-4e3e-85f6-8da265d0fa3f")
+	)
+	(junction
+		(at 175.26 80.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a3834383-c585-47ad-9856-a04d1c5180a2")
+	)
+	(junction
+		(at 130.81 80.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ce790218-6062-4d09-807f-e9e6283bdf9f")
+	)
+	(junction
+		(at 165.1 100.33)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e7dd5cab-1600-4e9d-ab1f-b34f1b81dd14")
+	)
+	(junction
+		(at 165.1 80.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ea3bf19b-2979-4fdd-8a73-70ceeedfa826")
+	)
+	(bus
+		(pts
+			(xy 156.21 115.57) (xy 165.1 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0b7ee2bf-fb7e-4106-b946-b72f92a17bd6")
+	)
+	(wire
+		(pts
+			(xy 165.1 60.96) (xy 165.1 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a73b9ff-ac6a-4d40-bd32-5c602cfa9530")
+	)
+	(wire
+		(pts
+			(xy 179.07 78.74) (xy 163.83 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1a91351c-ac9a-40ca-a83f-03ec782c278b")
+	)
+	(wire
+		(pts
+			(xy 207.01 88.9) (xy 226.06 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "23ea3af9-43d9-46c7-949c-2ce94b7accb9")
+	)
+	(bus
+		(pts
+			(xy 165.1 80.01) (xy 175.26 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ae30dcc-fd77-411a-a202-8e90a9d1fc33")
+	)
+	(wire
+		(pts
+			(xy 213.36 99.06) (xy 213.36 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2b06fb28-99c2-477c-bf61-06d66662f5be")
+	)
+	(wire
+		(pts
+			(xy 179.07 60.96) (xy 165.1 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2bc450e6-3cec-424b-969e-ea40fcc6bd4a")
+	)
+	(polyline
+		(pts
+			(xy 126.365 33.655) (xy 126.365 142.875)
+		)
+		(stroke
+			(width 0.508)
+			(type dash)
+			(color 194 0 194 1)
+		)
+		(uuid "3268a7ed-989c-4445-9c17-76a23cc8cfec")
+	)
+	(wire
+		(pts
+			(xy 95.25 86.36) (xy 130.81 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3747e3aa-98a0-4ac2-94cb-0bc5b4dc0f09")
+	)
+	(wire
+		(pts
+			(xy 207.01 99.06) (xy 213.36 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "46676e24-20aa-45a9-b49b-39e68caf5751")
+	)
+	(bus
+		(pts
+			(xy 165.1 100.33) (xy 165.1 115.57)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4a7aeea9-76f5-47b4-b810-71d4fd186380")
+	)
+	(wire
+		(pts
+			(xy 207.01 116.84) (xy 213.36 116.84)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "58f6fe7a-3864-4ffa-9a1b-f42638e236b8")
+	)
+	(bus
+		(pts
+			(xy 175.26 129.54) (xy 181.61 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5c596305-745b-4384-ae6e-0bd5b06a68c8")
+	)
+	(wire
+		(pts
+			(xy 213.36 116.84) (xy 213.36 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5eb39b28-ffc8-4a50-8638-01927765e2cc")
+	)
+	(bus
+		(pts
+			(xy 175.26 129.54) (xy 175.26 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66ac5cc6-483a-46ab-9d6f-2abd055c0fef")
+	)
+	(wire
+		(pts
+			(xy 213.36 106.68) (xy 207.01 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7a333a6f-b247-417d-b156-1c29953a6b37")
+	)
+	(wire
+		(pts
+			(xy 213.36 124.46) (xy 207.01 124.46)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8773ca36-acd1-401c-95e7-c11cb075a3a8")
+	)
+	(bus
+		(pts
+			(xy 130.81 80.01) (xy 130.81 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b52791d-7b53-4310-8f58-58fb7b22a575")
+	)
+	(bus
+		(pts
+			(xy 156.21 92.71) (xy 165.1 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "918073a0-2c16-4034-a3f5-6dc874b61e15")
+	)
+	(bus
+		(pts
+			(xy 200.66 93.98) (xy 204.47 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "93c337b6-b96d-4057-97c6-e8d75ee1b384")
+	)
+	(wire
+		(pts
+			(xy 163.83 78.74) (xy 163.83 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "966f2da6-3e69-4d69-b09f-087235ad252d")
+	)
+	(bus
+		(pts
+			(xy 130.81 80.01) (xy 165.1 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a0f2502d-9714-4f0a-811a-54effe7ed36f")
+	)
+	(bus
+		(pts
+			(xy 165.1 92.71) (xy 165.1 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a6a6cff8-3aca-4363-8979-43d7393b760d")
+	)
+	(wire
+		(pts
+			(xy 95.25 80.01) (xy 100.33 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "aa24f91b-58ad-4194-a051-1afd8db0180f")
+	)
+	(bus
+		(pts
+			(xy 120.65 80.01) (xy 130.81 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac0a59cd-9229-4146-8756-d8b96d8dadaa")
+	)
+	(bus
+		(pts
+			(xy 156.21 100.33) (xy 165.1 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b12dc11d-d50b-456b-aa74-a13645b0b1ae")
+	)
+	(wire
+		(pts
+			(xy 165.1 77.47) (xy 179.07 77.47)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4961121-d9f4-411c-b646-ff4b26eff0cc")
+	)
+	(wire
+		(pts
+			(xy 152.4 60.96) (xy 163.83 60.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b7ab43c5-cb08-4fc2-8557-1b9eab2eda56")
+	)
+	(bus
+		(pts
+			(xy 200.66 111.76) (xy 204.47 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bc013802-02a1-4edf-9102-74b4191147be")
+	)
+	(bus
+		(pts
+			(xy 175.26 80.01) (xy 179.07 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c01b7d62-1cf1-40d2-bf60-bd7e102398e6")
+	)
+	(wire
+		(pts
+			(xy 138.43 100.33) (xy 130.81 100.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cf7cddf0-c038-4299-aba8-d4ee417b9d20")
+	)
+	(wire
+		(pts
+			(xy 207.01 134.62) (xy 224.79 134.62)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dc499640-fcc0-4297-b1e2-b5224585b95b")
+	)
+	(bus
+		(pts
+			(xy 165.1 80.01) (xy 165.1 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2885eef-6d68-4f02-a0a7-93fbfdfa55f3")
+	)
+	(bus
+		(pts
+			(xy 175.26 93.98) (xy 181.61 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e3e482d5-7bb2-4b26-a824-cdd331d5e369")
+	)
+	(bus
+		(pts
+			(xy 175.26 111.76) (xy 181.61 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e6d4787e-1b4f-4bce-8cae-a8f4a3c3dd21")
+	)
+	(bus
+		(pts
+			(xy 175.26 80.01) (xy 175.26 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eaa0355f-6d57-4d21-bfa6-224b38c6eed1")
+	)
+	(bus
+		(pts
+			(xy 200.66 129.54) (xy 204.47 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eec6494b-b959-4ce2-b987-ef47bfbbbf34")
+	)
+	(bus
+		(pts
+			(xy 95.25 85.09) (xy 130.81 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ef43a431-02ae-4fc0-89c2-b7e662347368")
+	)
+	(wire
+		(pts
+			(xy 130.81 100.33) (xy 130.81 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f95ddccd-c917-4a8f-a4c7-9668a15ad0b4")
+	)
+	(bus
+		(pts
+			(xy 175.26 111.76) (xy 175.26 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fcfd4130-70f1-47f1-a728-a1d4ef7cd620")
+	)
+	(label "TSBP HV+"
+		(at 226.06 88.9 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "11464903-b1db-4d0d-8e95-4380ebdff123")
+	)
+	(label "TSBP HV GND"
+		(at 224.79 134.62 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a60ef5bb-5513-4ee9-ad64-6777698a6aa5")
+	)
+	(label "LV PWR"
+		(at 154.94 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d7de52ab-f4ff-4563-99d4-71e910691394")
+	)
+	(label "CAN bus"
+		(at 157.48 80.01 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e47b708b-75f5-4cb8-84c2-1ba77cd4b2f4")
+	)
+	(label "Interlock"
+		(at 166.37 60.96 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "ecb8a858-99f3-4893-b824-d8f033354832")
+	)
+	(symbol
+		(lib_id "Device:Battery")
+		(at 207.01 93.98 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "26c5629f-01d7-4f80-9d44-cd75baffcbfa")
+		(property "Reference" "BT10"
+			(at 210.82 92.1384 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Value" "Battery"
+			(at 210.82 94.6784 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 207.01 92.456 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 207.01 92.456 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Multiple-cell battery"
+			(at 207.01 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4e83c89c-b9ae-4c99-98b9-0e242d580819")
+		)
+		(pin "2"
+			(uuid "261eaab9-d7e0-40c8-b5b4-b96f15d37431")
+		)
+		(instances
+			(project ""
+				(path "/9466a7d0-52f3-440d-a1f3-8f8723f9e44d"
+					(reference "BT10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Battery")
+		(at 207.01 111.76 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "70e75809-7ae4-4c7d-b66d-7cf3710211d9")
+		(property "Reference" "BT1"
+			(at 210.82 109.9184 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Value" "Battery"
+			(at 210.82 112.4584 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 207.01 110.236 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 207.01 110.236 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Multiple-cell battery"
+			(at 207.01 111.76 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "698e36d7-a65c-42fd-9cf2-d69825580b23")
+		)
+		(pin "2"
+			(uuid "537e7b86-fc19-4a4a-89e4-936aca913714")
+		)
+		(instances
+			(project "SystemBreakdown"
+				(path "/9466a7d0-52f3-440d-a1f3-8f8723f9e44d"
+					(reference "BT1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Battery")
+		(at 207.01 129.54 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7b42262f-31f1-4e4c-bcc8-2a261b8d3fcc")
+		(property "Reference" "BT2"
+			(at 210.82 127.6984 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Value" "Battery"
+			(at 210.82 130.2384 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 207.01 128.016 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 207.01 128.016 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Multiple-cell battery"
+			(at 207.01 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b5b9e688-479c-4c43-9ad8-b56326a6d0b1")
+		)
+		(pin "2"
+			(uuid "a5145084-e4bc-4499-96a1-b0f19438d499")
+		)
+		(instances
+			(project "SystemBreakdown"
+				(path "/9466a7d0-52f3-440d-a1f3-8f8723f9e44d"
+					(reference "BT2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)
