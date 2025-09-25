@@ -13,79 +13,6 @@
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
 
-/*--- example intis' --- for intis that are too specialized to wrap --------------------*/
-/*--- SPI ---------------------------------------------*/
-/* DL , note: auto CS
-     DL_SPI_enablePower(SPI0);
-    delay_cycles(POWER_STARTUP_DELAY);
-
-    DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM43, IOMUX_PINCM43_PF_SPI0_PICO);// MOSI , PB17
-    DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM45, IOMUX_PINCM45_PF_SPI0_POCI); // MISO , PB19
-    DL_GPIO_initPeripheralOutputFunctionFeatures(   // SCLK , PB18
-            IOMUX_PINCM44,
-            IOMUX_PINCM44_PF_SPI0_SCLK,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
-            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-        );
-    DL_GPIO_initPeripheralOutputFunctionFeatures(   // CS2  , PB20
-            IOMUX_PINCM48,
-            IOMUX_PINCM48_PF_SPI0_CS2_POCI2,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
-            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-        );
-
-    DL_SPI_setChipSelect(SPI0, DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2);
-
-    DL_GPIO_enableOutput(GPIOB, DL_GPIO_PIN_17 | DL_GPIO_PIN_18 | DL_GPIO_PIN_19 | DL_GPIO_PIN_20);
-    delay_cycles(32e6/1000 * 10); // optional. since the peripherals used immediately, wait for voltage to stabilize
-
-    DL_SPI_Config config = {
-            .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
-            .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
-            .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
-            .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
-            .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_LSB_FIRST,
-            .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2,
-        };
-    DL_SPI_ClockConfig clk_config = {
-             .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_MFCLK, // MFCLK is always 4Mhz on the G3507
-             .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
-        };
-    DL_SPI_setClockConfig(SPI0, &clk_config);
-    DL_SPI_init(SPI0, &config);
-    DL_SPI_setBitRateSerialClockDivider(SPI0, 19); // CLK / 20 , 4M->100k
-    DL_SPI_disablePacking(SPI0);
-    DL_SPI_enable(SPI0);
-    for(int a = 0; a < 3; a++){
-        DL_SPI_transmitDataBlocking8(SPI0, a);
-    }
- */
-/* name space System, note: auto CS
-     // same upper as DL version
-
-    System::spi0.partialInit();
-    DL_SPI_Config config = {
-            .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
-            .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
-            .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
-            .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
-            .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_LSB_FIRST,
-            .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2,
-        };
-    DL_SPI_init(System::spi0.reg, &config);
-    DL_SPI_setBitRateSerialClockDivider(System::spi0.reg, 19); // CLK / 20 , 4M->100k
-    DL_SPI_disablePacking(System::spi0.reg);
-    DL_SPI_enable(System::spi0.reg);
-
-    uint8_t tx[] = {1,2,3,4,5};
-    System::spi0.tx_blocking(ARRANDN(tx));
- */
-
-
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
@@ -182,6 +109,14 @@ namespace System {
 }
 
 void System::init() {
+    #ifdef PROJECT_ENABLE_MCAN0
+        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM60, IOMUX_PINCM60_PF_CANFD0_CANRX); // CANRX, PA27
+        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM59, IOMUX_PINCM59_PF_CANFD0_CANTX); // CANTX, PA26
+        // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
+        DL_MCAN_enablePower(CANFD0);
+        delay_cycles(POWER_STARTUP_DELAY);
+    #endif
+
     /*
      * BOR typical trigger level (v) (DS.7.6.1)
      *  0: 1.57
@@ -203,19 +138,20 @@ void System::init() {
         //target 160Mhz VCO
         constexpr DL_SYSCTL_SYSPLLConfig pll_config = {
                 .rDivClk2x  = 0x0,
-                .rDivClk1   = 0x1,
+                .rDivClk1   = 0x0,
                 .rDivClk0   = 0x0,
                 .enableCLK2x= DL_SYSCTL_SYSPLL_CLK2X_DISABLE,
                 .enableCLK1 = DL_SYSCTL_SYSPLL_CLK1_ENABLE,
                 .enableCLK0 = DL_SYSCTL_SYSPLL_CLK0_ENABLE,
                 .sysPLLMCLK = DL_SYSCTL_SYSPLL_MCLK::DL_SYSCTL_SYSPLL_MCLK_CLK0,
                 .sysPLLRef  = DL_SYSCTL_SYSPLL_REF::DL_SYSCTL_SYSPLL_REF_SYSOSC,
-                .qDiv       = 0x4,
-                .pDiv       = DL_SYSCTL_SYSPLL_PDIV::DL_SYSCTL_SYSPLL_PDIV_1,
-                .inputFreq  = DL_SYSCTL_SYSPLL_INPUT_FREQ::DL_SYSCTL_SYSPLL_INPUT_FREQ_32_48_MHZ
+                .qDiv       = 0x9,
+                .pDiv       = DL_SYSCTL_SYSPLL_PDIV::DL_SYSCTL_SYSPLL_PDIV_2,
+                .inputFreq  = DL_SYSCTL_SYSPLL_INPUT_FREQ::DL_SYSCTL_SYSPLL_INPUT_FREQ_16_32_MHZ,
             };
         DL_SYSCTL_configSYSPLL(&pll_config);
-        DL_SYSCTL_setULPCLKDivider(DL_SYSCTL_ULPCLK_DIV::DL_SYSCTL_ULPCLK_DIV_2);
+        DL_SYSCTL_setULPCLKDivider(DL_SYSCTL_ULPCLK_DIV::DL_SYSCTL_ULPCLK_DIV_1);
+        DL_SYSCTL_setMCLKDivider(DL_SYSCTL_MCLK_DIVIDER::DL_SYSCTL_MCLK_DIVIDER_DISABLE);
         DL_SYSCTL_enableMFCLK();
         DL_SYSCTL_switchMCLKfromSYSOSCtoHSCLK(DL_SYSCTL_HSCLK_SOURCE::DL_SYSCTL_HSCLK_SOURCE_SYSPLL);
     }
@@ -340,7 +276,7 @@ void System::init() {
                 .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
                 .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
                 .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_LSB_FIRST,
-                .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_2,
+                .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_NONE,
             };
         DL_SPI_init(spi0.reg, &config);
         DL_SPI_disablePacking(spi0.reg);
@@ -357,7 +293,125 @@ void System::init() {
     #endif
 
     #ifdef PROJECT_ENABLE_MCAN0
+    {
+        DL_MCAN_enableModuleClock(CANFD0);
 
+        {
+            static_assert(System::CLK::CANCLK == 80e6, "CAN peripheral clock misconfigured"); // adjust the dividers so that the clock is either 20MHz,40MHz, or 80MHz
+            static DL_MCAN_ClockConfig clkConfig = {
+               .clockSel= DL_MCAN_FCLK::DL_MCAN_FCLK_SYSPLLCLK1,
+               .divider = DL_MCAN_FCLK_DIV::DL_MCAN_FCLK_DIV_1,
+            };
+            DL_MCAN_setClockConfig(CANFD0, &clkConfig);
+
+        }
+
+        // have no idea if this is required for the setup
+        DL_MCAN_RevisionId revId;
+        /* Get MCANSS Revision ID. */
+        DL_MCAN_getRevisionId(CANFD0, &revId);
+
+        /* Wait for Memory initialization to be completed. */
+        while(false == DL_MCAN_isMemInitDone(CANFD0))
+            ;
+
+        /* Put MCAN in SW initialization mode. */
+        DL_MCAN_setOpMode(CANFD0, DL_MCAN_OPERATION_MODE_SW_INIT);
+        while(DL_MCAN_OPERATION_MODE_SW_INIT != DL_MCAN_getOpMode(CANFD0))
+            ;
+
+        { /* Initialize MCAN module. */
+            constexpr DL_MCAN_InitParams initparam = {
+                  /* Initialize MCAN Init parameters.    */
+                  .fdMode            = true,    // CAN FD mode?
+                  .brsEnable         = true,    // enable bit rate switching?
+                  .txpEnable         = true,    // pause for 2 bit times after successful transmission?
+                  .efbi              = false,   // edge filtering? 2 consecutive Tq to accept sync
+                  .pxhddisable       = false,   // do not Tx error frame on protocol error?
+                  .darEnable         = false,   // auto retransmission of failed frames?
+                  .wkupReqEnable     = false,   // enable wake up request?
+                  .autoWkupEnable    = false,   // enable auto-wakeup?
+                  .emulationEnable   = false,
+                  .wdcPreload        = 255,     // start value of message ram WDT
+
+                  /* Transmitter Delay Compensation parameters. tm.26.4.6/1439 */
+                  .tdcEnable         = false,   // transmitter delay compensation, oscilloscope the time diff between edges of TX->RX signals
+                  .tdcConfig.tdcf    = 10,      // filter length
+                  .tdcConfig.tdco    = 6,       // filter offset
+                };
+            DL_MCAN_init(CANFD0, &initparam);
+        }
+
+        { /* Configure MCAN module. */
+            constexpr DL_MCAN_ConfigParams config = {
+                    .monEnable         = false,     // bus monitoring mode
+                    .asmEnable         = false,     // restricted operation mode
+                    .tsPrescalar       = 15,        // timestamp counter prescalar
+                    .tsSelect          = 0,         // timestamp source selection
+                    .timeoutSelect     = DL_MCAN_TIMEOUT_SELECT_CONT, // timeout source select
+                    .timeoutPreload    = 65535,     // load value of timeout counter
+                    .timeoutCntEnable  = false,     // timeout counter enable
+                    .filterConfig.rrfe = true,      // reject remote frames extended
+                    .filterConfig.rrfs = true,      // reject remote frames standard
+                    .filterConfig.anfe = 1,         // accept non-matching frames extended
+                    .filterConfig.anfs = 1,         // accept non-matching frames standard
+                };
+            DL_MCAN_config(CANFD0, &config);
+        }
+
+        { /* Configure Bit timings. */
+            static const DL_MCAN_BitTimingParams   bitTimeingParams = {
+                    .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
+                    .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
+                    .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
+                    .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
+                    .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
+                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
+                    .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
+                    .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
+                };
+            DL_MCAN_setBitTime(CANFD0, &bitTimeingParams);
+        }
+
+        { /* Configure Message RAM Sections */
+            constexpr DL_MCAN_MsgRAMConfigParams  ramConfig = {
+                    .flssa                = 0,  /* Standard ID Filter List Start Address. */
+                    .lss                  = 0,  /* List Size: Standard ID. */
+                    .flesa                = 0,  /* Extended ID Filter List Start Address. */
+                    .lse                  = 0,  /* List Size: Extended ID. */
+                    .txStartAddr          = 12, /* Tx Buffers Start Address. */
+                    .txBufNum             = 2,  /* Number of Dedicated Transmit Buffers. */
+                    .txFIFOSize           = 10,
+                    .txBufMode            = 0,  /* Tx Buffer Element Size. */
+                    .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
+                    .txEventFIFOStartAddr = 640,/* Tx Event FIFO Start Address. */
+                    .txEventFIFOSize      = 2,  /* Event FIFO Size. */
+                    .txEventFIFOWaterMark = 0,  /* Level for Tx Event FIFO watermark interrupt. */
+                    .rxFIFO0startAddr     = 0,  /* Rx FIFO0 Start Address. */
+                    .rxFIFO0size          = 0,  /* Number of Rx FIFO elements. */
+                    .rxFIFO0waterMark     = 0,  /* Rx FIFO0 Watermark. */
+                    .rxFIFO0OpMode        = 0,
+                    .rxFIFO1startAddr     = 0,  /* Rx FIFO1 Start Address. */
+                    .rxFIFO1size          = 0,  /* Number of Rx FIFO elements. */
+                    .rxFIFO1waterMark     = 0,  /* Level for Rx FIFO 1 watermark interrupt. */
+                    .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
+                    .rxBufStartAddr       = 0,  /* Rx Buffer Start Address. */
+                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx Buffer Element Size. */
+                    .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx FIFO0 Element Size. */
+                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx FIFO1 Element Size. */
+                };
+            DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
+        }
+
+        /* Set Extended ID Mask. */
+        // is ANDed with 29b message id of frame
+        DL_MCAN_setExtIDAndMask(CANFD0, 0x1FFFFFFF);
+
+        /* Take MCAN out of the SW initialization mode */
+        DL_MCAN_setOpMode(CANFD0, DL_MCAN_OPERATION_MODE_NORMAL);
+        while(DL_MCAN_OPERATION_MODE_NORMAL != DL_MCAN_getOpMode(CANFD0))
+            ;
+    }
     #endif
 
 }

@@ -165,7 +165,7 @@ namespace System {
         constexpr uint32_t ULPCLK   = 40e6;
         constexpr uint32_t CPUCLK   = configCPU_CLOCK_HZ;
         constexpr uint32_t MCLK     = CPUCLK;
-        constexpr uint32_t CANCLK   = 40e6;
+        constexpr uint32_t CANCLK   = 80e6;
         constexpr uint32_t MFPCLK   = 4e6;
         constexpr uint32_t MFCLK    = 4e6;
     }
@@ -269,6 +269,17 @@ namespace System {
                 uint8_t data_length;    // total bytes of data
                 uint8_t nxt_index;      // index next byte is read/written by
             } _trxBuffer;
+        };
+    }
+
+    namespace CANFD {
+        /**
+         * useful reference : www.ti.com/lit/an/slaaet4/slaaet4.pdf
+         * god help who ever has to edit this code. i used sys config to get the timing values.
+         *  theres a document over the tm4c12x chips that goes over the exact calculations
+         */
+        struct CANFD : Lockable {
+            MCAN_Regs * const regs;
         };
     }
 
