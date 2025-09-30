@@ -328,7 +328,7 @@ void System::init() {
                   .txpEnable         = true,    // pause for 2 bit times after successful transmission?
                   .efbi              = false,   // edge filtering? 2 consecutive Tq to accept sync
                   .pxhddisable       = false,   // do not Tx error frame on protocol error?
-                  .darEnable         = false,   // auto retransmission of failed frames?
+                  .darEnable         = true,    // auto retransmission of failed frames?
                   .wkupReqEnable     = false,   // enable wake up request?
                   .autoWkupEnable    = false,   // enable auto-wakeup?
                   .emulationEnable   = false,
@@ -351,8 +351,8 @@ void System::init() {
                     .timeoutSelect     = DL_MCAN_TIMEOUT_SELECT_CONT, // timeout source select
                     .timeoutPreload    = 65535,     // load value of timeout counter
                     .timeoutCntEnable  = false,     // timeout counter enable
-                    .filterConfig.rrfe = true,      // reject remote frames extended
-                    .filterConfig.rrfs = true,      // reject remote frames standard
+                    .filterConfig.rrfe = false,      // reject remote frames extended
+                    .filterConfig.rrfs = false,      // reject remote frames standard
                     .filterConfig.anfe = 1,         // accept non-matching frames extended
                     .filterConfig.anfs = 1,         // accept non-matching frames standard
                 };
@@ -360,7 +360,7 @@ void System::init() {
         }
 
         { /* Configure Bit timings. */
-            static const DL_MCAN_BitTimingParams   bitTimeingParams = {
+            constexpr DL_MCAN_BitTimingParams   bitTimeingParams = {
                     .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
                     .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
                     .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
@@ -376,31 +376,41 @@ void System::init() {
         { /* Configure Message RAM Sections */
             constexpr DL_MCAN_MsgRAMConfigParams  ramConfig = {
                     .flssa                = 0,  /* Standard ID Filter List Start Address. */
-                    .lss                  = 0,  /* List Size: Standard ID. */
+                    .lss                  = 2,  /* List Size: Standard ID. */
                     .flesa                = 0,  /* Extended ID Filter List Start Address. */
                     .lse                  = 0,  /* List Size: Extended ID. */
-                    .txStartAddr          = 12, /* Tx Buffers Start Address. */
+                    .txStartAddr          = 148, /* Tx Buffers Start Address. */
                     .txBufNum             = 2,  /* Number of Dedicated Transmit Buffers. */
-                    .txFIFOSize           = 10,
-                    .txBufMode            = 0,  /* Tx Buffer Element Size. */
+                    .txFIFOSize           = 19, /* Tx Buffer Element Size. */
+                    .txBufMode            = 0,
                     .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
                     .txEventFIFOStartAddr = 640,/* Tx Event FIFO Start Address. */
                     .txEventFIFOSize      = 2,  /* Event FIFO Size. */
                     .txEventFIFOWaterMark = 0,  /* Level for Tx Event FIFO watermark interrupt. */
-                    .rxFIFO0startAddr     = 0,  /* Rx FIFO0 Start Address. */
-                    .rxFIFO0size          = 0,  /* Number of Rx FIFO elements. */
+                    .rxFIFO0startAddr     = 172,  /* Rx FIFO0 Start Address. */
+                    .rxFIFO0size          = 3,  /* Number of Rx FIFO elements. */
                     .rxFIFO0waterMark     = 0,  /* Rx FIFO0 Watermark. */
                     .rxFIFO0OpMode        = 0,
-                    .rxFIFO1startAddr     = 0,  /* Rx FIFO1 Start Address. */
-                    .rxFIFO1size          = 0,  /* Number of Rx FIFO elements. */
-                    .rxFIFO1waterMark     = 0,  /* Level for Rx FIFO 1 watermark interrupt. */
+                    .rxFIFO1startAddr     = 192,  /* Rx FIFO1 Start Address. */
+                    .rxFIFO1size          = 2,  /* Number of Rx FIFO elements. */
+                    .rxFIFO1waterMark     = 3,  /* Level for Rx FIFO 1 watermark interrupt. */
                     .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
-                    .rxBufStartAddr       = 0,  /* Rx Buffer Start Address. */
+                    .rxBufStartAddr       = 208,  /* Rx Buffer Start Address. */
                     .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx Buffer Element Size. */
                     .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx FIFO0 Element Size. */
                     .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx FIFO1 Element Size. */
                 };
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
+        }
+
+        {
+//            constexpr DL_MCAN_StdMsgIDFilterElement filtere = {
+//                   .sfid1   = 3,
+//                   .sfid2   = 4,
+//                   .sfec    = 0b100,
+//                   .sft     = 0b01,
+//                };
+//            DL_MCAN_addStdMsgIDFilter(CANFD0, 0, &filtere);
         }
 
         /* Set Extended ID Mask. */
@@ -502,22 +512,63 @@ void System::UART::UART::nputs(const char *str, uint32_t n) {
 }
 
 void System::UART::UART::ngets(char *str, uint32_t n) {
-    // do NOT make this a task, keep it simple. we'll make another function later that does it passively as a task
-
     for(uint32_t i = 0; i < n; i++){
-        char data = DL_UART_receiveDataBlocking(reg);
+        char c = DL_UART_receiveDataBlocking(reg);
 
-        str[i] = data;
+        str[i] = c;
 
-        if(data == '\0' || data == '\n' || data == '\r') {
-            if(i == n)
-                str[i] ='\0';
-            else
-                str[i+1] ='\0';
-            return;
+        switch(c){
+            case '\0':
+            case '\n':
+            case '\r':
+                if(i == n)
+                    str[i] ='\0';
+                else
+                    str[i+1] ='\0';
+                return;
+
+            case '\b':
+                i -= 2;
         }
-        else
-            DL_UART_transmitDataBlocking(reg, data);
+
+        DL_UART_transmitDataBlocking(reg, c);
+    }
+}
+
+void System::UART::UART::printu32d(uint32_t v) {
+    if(v == 0){
+        DL_UART_transmitDataBlocking(reg, '0');
+        return;
+    }
+
+    char str[10];
+    int i;
+    for(i = 0; v > 0; i++){
+        str[i] = '0' + (v % 10);
+        v /= 10;
+    }
+    i--;
+    for(; i >= 0; i--){
+        DL_UART_transmitDataBlocking(reg, str[i]);
+    }
+}
+
+void System::UART::UART::printu32h(uint32_t v) {
+    int started = 0;
+
+    int i;
+    DL_UART_transmitDataBlocking(reg, '0');
+    DL_UART_transmitDataBlocking(reg, 'x');
+    for (i = 28; i >= 0; i -= 4) {
+        uint8_t B = (v >> i) & 0xF;
+
+        if (B != 0 || started || i == 0) {
+            started = 1;
+            if (B < 10)
+                DL_UART_transmitDataBlocking(reg, '0' + B);
+            else
+                DL_UART_transmitDataBlocking(reg, 'A' + (B - 10));
+        }
     }
 }
 

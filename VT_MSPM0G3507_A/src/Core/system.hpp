@@ -80,6 +80,15 @@
 /*--- general configuration ----------------------------*/
 
 #define NEWLINE                     "\n\r"
+#define CLIERROR                    "\033[38;2;255;0;0m"
+#define CLIHIGHLIGHT                "\033[38;2;255;255;0m"
+#define CLIGOOD                     "\033[38;2;0;255;0m"
+#define CLIYES                      "\033[38;2;0;255;255m"
+#define CLINO                       "\033[38;2;255;0;255m"
+#define CLIWARN                     "\033[38;2;255;100;0m"
+#define CLIRESET                    "\033[0m"
+#define CLICLEAR                    "\033[2J\033[H\033[0m"
+
 #define MAX_STR_LEN_COMMON          125   // assumed max length of a string if not specified. to minimize the damage of overruns.
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
@@ -180,6 +189,9 @@ namespace System {
             /** transmits - blocking - a string of at most size n */
             void nputs(char const * str, uint32_t n);
             void ngets(char * str, uint32_t n);
+
+            void printu32d(uint32_t);
+            void printu32h(uint32_t);
         };
     }
 
@@ -274,13 +286,24 @@ namespace System {
 
     namespace CANFD {
         /**
-         * useful reference : www.ti.com/lit/an/slaaet4/slaaet4.pdf
-         * god help who ever has to edit this code. i used sys config to get the timing values.
+         * CAN peripheral : www.ti.com/lit/an/slaaet4/slaaet4.pdf
+         * J1939 : www.csselectronics.com/pages/j1939-explained-simple-intro-tutorial
+         *
+         * i used sys config to get the timing values.
          *  theres a document over the tm4c12x chips that goes over the exact calculations
+         *
+         * just use the DL funcitons, its good enough
          */
-        struct CANFD : Lockable {
-            MCAN_Regs * const regs;
+
+        struct __attribute__((__packed__)) CAN_ID_J1939 {
+            unsigned int src_addr       : 8;
+            unsigned int pdu_specific   : 8;
+            unsigned int pdu_format     : 8;
+            unsigned int data_page      : 1;
+            unsigned int                : 1;
+            unsigned int prioroty       : 3;
         };
+        static_assert(sizeof(CAN_ID_J1939) == sizeof(uint32_t));
     }
 
     void init();
