@@ -351,10 +351,10 @@ void System::init() {
                     .timeoutSelect     = DL_MCAN_TIMEOUT_SELECT_CONT, // timeout source select
                     .timeoutPreload    = 65535,     // load value of timeout counter
                     .timeoutCntEnable  = false,     // timeout counter enable
-                    .filterConfig.rrfe = false,      // reject remote frames extended
-                    .filterConfig.rrfs = false,      // reject remote frames standard
-                    .filterConfig.anfe = 1,         // accept non-matching frames extended
-                    .filterConfig.anfs = 1,         // accept non-matching frames standard
+                    .filterConfig.rrfe = 0,      // reject remote frames extended
+                    .filterConfig.rrfs = 0,      // reject remote frames standard
+                    .filterConfig.anfe = 0,         // accept non-matching frames extended
+                    .filterConfig.anfs = 0,         // accept non-matching frames standard
                 };
             DL_MCAN_config(CANFD0, &config);
         }
@@ -403,15 +403,15 @@ void System::init() {
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
         }
 
-        {
-            constexpr DL_MCAN_StdMsgIDFilterElement filtere = {
-                   .sfid2   = 3 << 18,
-                   .sfid1   = 3,
-                   .sfec    = 0b001,
-                   .sft     = 0b01,
-                };
-            DL_MCAN_addStdMsgIDFilter(CANFD0, 0, &filtere);
-        }
+//        {
+//            constexpr DL_MCAN_StdMsgIDFilterElement filtere = {
+//                   .sfid2   = 3 << 18,
+//                   .sfid1   = 3,
+//                   .sfec    = 0b001,
+//                   .sft     = 0b01,
+//                };
+//            DL_MCAN_addStdMsgIDFilter(CANFD0, 0, &filtere);
+//        }
 
         /* Set Extended ID Mask. */
         // is ANDed with 29b message id of frame

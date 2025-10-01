@@ -74,6 +74,8 @@ void Task::fiddle_task(void *){
             System::uart_ui.printu32d(id);
             System::uart_ui.nputs(ARRANDN("" NEWLINE));
         }
+
+        vTaskDelay(pdMS_TO_TICKS(400));
     } while(1);
 
     System::uart_ui.nputs(ARRANDN("fiddle task end" NEWLINE));
