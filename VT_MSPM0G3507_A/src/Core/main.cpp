@@ -27,8 +27,8 @@ int main(){
     System::init();
 
     System::uart_ui.setBaudTarget(115200);
-    System::uart_ui.nputs(ARRANDN("\033[2J\033[H"));
-    System::uart_ui.nputs(ARRANDN(" " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
+    System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
+    System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
 
     xTaskCreate(Task::blink_task,
             "blink status",
@@ -36,13 +36,6 @@ int main(){
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
-
-//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
-//            "BQ769x2_PROTOCOL_Test_V_Task",
-//            configMINIMAL_STACK_SIZE*10,
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
 
     xTaskCreate(Task::fiddle_task,
             "fiddle_task",

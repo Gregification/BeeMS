@@ -43,6 +43,7 @@ void Task::fiddle_task(void *){
         DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
 
         uint32_t bufferIndex = tf.putIdx;
+        System::uart_ui.nputs(ARRANDN("TX from buffer "));
         System::uart_ui.printu32d(bufferIndex);
         System::uart_ui.nputs(ARRANDN("" NEWLINE));
 
@@ -54,13 +55,13 @@ void Task::fiddle_task(void *){
 
     //--- RX --------------------------------------------------
 
-    System::uart_ui.nputs(ARRANDN("RX" NEWLINE));
+    System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "RX start" NEWLINE CLIRESET));
     do {
-        DL_MCAN_RxFIFOStatus rf;
+        static DL_MCAN_RxFIFOStatus rf;
         rf.num = DL_MCAN_RX_FIFO_NUM_0;
         DL_MCAN_getRxFIFOStatus(CANFD0, &rf);
 
-        if(rf.fillLvl) { // if not empty
+        if(rf.fillLvl != 0) { // if not empty
             DL_MCAN_RxBufElement e;
             DL_MCAN_readMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, 0, rf.num, &e);
             DL_MCAN_writeRxFIFOAck(CANFD0, rf.num, rf.getIdx);

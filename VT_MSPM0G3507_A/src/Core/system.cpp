@@ -384,7 +384,7 @@ void System::init() {
                     .txFIFOSize           = 19, /* Tx Buffer Element Size. */
                     .txBufMode            = 0,
                     .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
-                    .txEventFIFOStartAddr = 640,/* Tx Event FIFO Start Address. */
+                    .txEventFIFOStartAddr = 164,/* Tx Event FIFO Start Address. */
                     .txEventFIFOSize      = 2,  /* Event FIFO Size. */
                     .txEventFIFOWaterMark = 0,  /* Level for Tx Event FIFO watermark interrupt. */
                     .rxFIFO0startAddr     = 172,  /* Rx FIFO0 Start Address. */
@@ -396,21 +396,21 @@ void System::init() {
                     .rxFIFO1waterMark     = 3,  /* Level for Rx FIFO 1 watermark interrupt. */
                     .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
                     .rxBufStartAddr       = 208,  /* Rx Buffer Start Address. */
-                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx Buffer Element Size. */
-                    .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx FIFO0 Element Size. */
-                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,  /* Rx FIFO1 Element Size. */
+                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx Buffer Element Size. */
+                    .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO0 Element Size. */
+                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO1 Element Size. */
                 };
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
         }
 
         {
-//            constexpr DL_MCAN_StdMsgIDFilterElement filtere = {
-//                   .sfid1   = 3,
-//                   .sfid2   = 4,
-//                   .sfec    = 0b100,
-//                   .sft     = 0b01,
-//                };
-//            DL_MCAN_addStdMsgIDFilter(CANFD0, 0, &filtere);
+            constexpr DL_MCAN_StdMsgIDFilterElement filtere = {
+                   .sfid2   = 3 << 18,
+                   .sfid1   = 3,
+                   .sfec    = 0b001,
+                   .sft     = 0b01,
+                };
+            DL_MCAN_addStdMsgIDFilter(CANFD0, 0, &filtere);
         }
 
         /* Set Extended ID Mask. */
