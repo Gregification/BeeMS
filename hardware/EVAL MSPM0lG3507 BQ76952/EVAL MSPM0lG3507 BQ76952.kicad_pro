@@ -60,10 +60,6 @@
       ],
       "drc_exclusions": [
         [
-          "lib_footprint_mismatch|137000000|108332500|37740cfe-efb9-4770-8567-fd1570c57d13|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
           "lib_footprint_mismatch|137935000|98900000|c0814356-ba7a-4c6e-bae4-b89471858c39|00000000-0000-0000-0000-000000000000",
           ""
         ],
@@ -81,10 +77,6 @@
         ],
         [
           "lib_footprint_mismatch|156310000|84760000|0e997050-965f-4a36-b2d1-7dd5ac9a8da6|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "lib_footprint_mismatch|165137500|114237500|48ee5ee6-923b-4081-8802-f991b1fe52f8|00000000-0000-0000-0000-000000000000",
           ""
         ],
         [
@@ -498,6 +490,7 @@
       "single_global_label": "ignore",
       "unannotated": "error",
       "unconnected_wire_endpoint": "warning",
+      "undefined_netclass": "error",
       "unit_value_mismatch": "error",
       "unresolved_variable": "error",
       "wire_dangling": "error"
@@ -585,6 +578,12 @@
           "show": true
         },
         {
+          "group_by": false,
+          "label": "unit x10",
+          "name": "unit x10",
+          "show": true
+        },
+        {
           "group_by": true,
           "label": "Value",
           "name": "Value",
@@ -667,12 +666,6 @@
           "label": "specs",
           "name": "specs",
           "show": true
-        },
-        {
-          "group_by": false,
-          "label": "unit x10",
-          "name": "unit x10",
-          "show": true
         }
       ],
       "filter_string": "",
@@ -680,7 +673,7 @@
       "include_excluded_from_bom": true,
       "name": "",
       "sort_asc": true,
-      "sort_field": "Value"
+      "sort_field": "Reference"
     },
     "connection_grid_size": 50.0,
     "drawing": {
