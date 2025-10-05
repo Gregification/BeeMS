@@ -12,7 +12,7 @@ namespace Task {
     /**
      * performs the DAQ and comms required to operate as part of a BMS.
      *
-     * - does NOT handle board functions
+     * - handles minimal board functions
      * - uses CAN FIFO 0
      */
     void BMS_task(void *);

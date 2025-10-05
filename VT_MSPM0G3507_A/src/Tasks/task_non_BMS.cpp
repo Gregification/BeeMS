@@ -21,15 +21,16 @@ void Task::non_BMS_functions_task(void *){
      * {
      *      while(1){
      *
+     *          - check hardware configurations ...
+     *              - nothing for now
+     *
+     *          - TX up-time over can
+     *
      *          - check and respond to ...
      *              - UART UI
      *              - CAN
      *                  - negotiate a new CAN ID if theres a conflict
      *
-     *          - check hardware configurations ...
-     *              - nothing for now
-     *
-     *          - TX up-time over can
      *      }
      * }
      */
