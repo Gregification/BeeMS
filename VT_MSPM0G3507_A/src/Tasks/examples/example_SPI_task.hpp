@@ -5,8 +5,8 @@
  *      Author: turtl
  */
 
-#ifndef SRC_TASKS_SPI_EXAMPLE_TASK_HPP_
-#define SRC_TASKS_SPI_EXAMPLE_TASK_HPP_
+#ifndef SRC_TASKS_EXAMPLE_SPI_TASK_HPP_
+#define SRC_TASKS_EXAMPLE_SPI_TASK_HPP_
 
 #include "Core/system.hpp"
 
@@ -22,4 +22,4 @@ namespace Task {
 
 
 
-#endif /* SRC_TASKS_SPI_EXAMPLE_TASK_HPP_ */
+#endif /* SRC_TASKS_EXAMPLE_SPI_TASK_HPP_ */

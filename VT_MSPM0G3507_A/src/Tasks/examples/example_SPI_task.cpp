@@ -9,7 +9,7 @@
 #include <task.h>
 #include <stdio.h>
 #include <ti/driverlib/driverlib.h>
-#include <Tasks/SPI_example_task.hpp>
+#include <Tasks/examples/example_SPI_task.hpp>
 
 
 void Task::SPI_example_task(void *){

@@ -3,24 +3,13 @@
  *      mspm0_sdk_2_05_00_05\examples\nortos\LP_MSPM0G3507\battery_gauge\gauge_level2_bq76952\Driver
  */
 
-#include <FreeRTOS.h>
-#include <task.h>
+#include "Middleware/BQ769x2/BQ769x2_PROTOCOL.hpp"
 
-#include "Middleware/BQ769x2_PROTOCOL.hpp"
+#include <ti/driverlib/driverlib.h>
 
 //******************************************************************************
 // BQ Parameters ***************************************************************
 //******************************************************************************
-
-void delayUS(uint16_t us)
-// Sets the delay in microseconds.
-{
-//    uint16_t ms;
-//    char i;
-//    ms = us / 1000;
-//    for (i = 0; i < ms; i++) delay_cycles(32000);
-    vTaskDelay(pdMS_TO_TICKS(us / 1000) + 1);
-}
 
 uint8_t Checksum(uint8_t *ptr, uint8_t len)
 // Calculates the checksum when writing to a RAM register. The checksum is the inverse of the sum of the bytes.
@@ -76,16 +65,14 @@ uint8_t CRC8(uint8_t *ptr, uint8_t len)
 //    return true;
 //}
 
-bool BQ769X2_PROTOCOL::sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut, TickType_t timeout){
-    if(I2C_ReadReg(i2c_controller, i2c_addr, command, (uint8_t *)readOut, 2, timeout))
-        vTaskDelay(2);
+bool BQ769X2_PROTOCOL::sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut){
+    if(I2C_ReadReg(i2c_controller, i2c_addr, command, (uint8_t *)readOut, 2))
+        return true;
     else
         return false;
-
-    return true;
 }
 
-bool BQ769X2_PROTOCOL::sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, TickType_t timeout) {
+bool BQ769X2_PROTOCOL::sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data) {
     uint8_t TX_data[2] = {0x00, 0x00};
 
     //little endian format
@@ -93,15 +80,13 @@ bool BQ769X2_PROTOCOL::sendDirectCommandW(System::I2C::I2C &i2c_controller, uint
     TX_data[1] = (data >> 8) & 0xff;
 
     //Control_status, alarm_status, alarm_enable all 2 bytes long
-    if(I2C_WriteReg(i2c_controller, i2c_addr, command, TX_data, 2, timeout))
-        vTaskDelay(2);
+    if(I2C_WriteReg(i2c_controller, i2c_addr, command, TX_data, 2))
+        return true;
     else
         return false;
-
-    return true;
 }
 
-bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command, TickType_t timeout)  //For Command only Subcommands
+bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command)  //For Command only Subcommands
 // See the TRM or the BQ76952 header file for a full list of Command-only subcommands
 // All that this function do is formatting the transfer array then writing the array to hex 3E,
 // the monitor will then operate based on the command.
@@ -113,11 +98,10 @@ bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::I2C::I2C &i2c_controller, u
     TX_Reg[0] = command & 0xff;
     TX_Reg[1] = (command >> 8) & 0xff;
 
-    if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 2, timeout))
-        vTaskDelay(pdMS_TO_TICKS(2));
+    if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 2))
+        return true;
     else
         return false;
-    return true;
 }
 
 //bool BQ769X2_PROTOCOL::sendSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command, uint16_t data, DIR_CMD_TYPE type, TickType_t timeout)
@@ -159,7 +143,7 @@ bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::I2C::I2C &i2c_controller, u
 //    }
 //}
 
-bool BQ769X2_PROTOCOL::sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t readOut[32], TickType_t timeout) {
+bool BQ769X2_PROTOCOL::sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t readOut[32]) {
     //max readback size is 32 bytes i.e. DASTATUS, CUV/COV snapshot
     uint8_t TX_Reg[4]    = {0x00, 0x00, 0x00, 0x00};
 
@@ -167,18 +151,18 @@ bool BQ769X2_PROTOCOL::sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t
     TX_Reg[0] = cmd & 0xff;
     TX_Reg[1] = (cmd >> 8) & 0xff;
 
-    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 2, timeout))
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 2))
         return false;
 
-    vTaskDelay(pdMS_TO_TICKS(2));
+    delay_cycles(32e6/1000 * 2);
 
-    if(!I2C_ReadReg(i2c_controller, i2c_addr, 0x40, readOut, 32, timeout))
+    if(!I2C_ReadReg(i2c_controller, i2c_addr, 0x40, readOut, 32))
         return false;
 
     return true;
 }
 
-bool BQ769X2_PROTOCOL::sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data, TickType_t timeout) {
+bool BQ769X2_PROTOCOL::sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data) {
     //security keys and Manu_data writes dont work with this function (reading these commands works)
     //max readback size is 32 bytes i.e. DASTATUS, CUV/COV snapshot
     uint8_t TX_Reg[4]    = {0x00, 0x00, 0x00, 0x00};
@@ -190,19 +174,19 @@ bool BQ769X2_PROTOCOL::sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t
 
     //FET_Control, REG12_Control
     TX_Reg[2] = data & 0xff;
-    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 3, timeout))
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 3))
         return false;
-    vTaskDelay(pdMS_TO_TICKS(1));
+    delay_cycles(32e6/1000 * 1);
     TX_Buffer[0] = Checksum(TX_Reg, 3);
     TX_Buffer[1] = 0x05;  //combined length of registers address and data
-    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2, timeout))
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2))
         return false;
-    vTaskDelay(pdMS_TO_TICKS(1));
+    delay_cycles(32e6/1000 * 1);
 
     return true;
 }
 
-bool BQ769X2_PROTOCOL::sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data, TickType_t timeout) {
+bool BQ769X2_PROTOCOL::sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data) {
     //security keys and Manu_data writes dont work with this function (reading these commands works)
     //max readback size is 32 bytes i.e. DASTATUS, CUV/COV snapshot
     uint8_t TX_Reg[4]    = {0x00, 0x00, 0x00, 0x00};
@@ -215,19 +199,19 @@ bool BQ769X2_PROTOCOL::sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t
     //CB_Active_Cells, CB_SET_LVL
     TX_Reg[2] = data & 0xff;
     TX_Reg[3] = (data >> 8) & 0xff;
-    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 4, timeout))
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 4))
         return false;
-    vTaskDelay(pdMS_TO_TICKS(1));
+    delay_cycles(32e6/1000 * 1);
     TX_Buffer[0] = Checksum(TX_Reg, 4);
     TX_Buffer[1] = 0x06;  //combined length of registers address and data
-    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2, timeout))
+    if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2))
         return false;
-    vTaskDelay(pdMS_TO_TICKS(1));
+    delay_cycles(32e6/1000 * 1);
 
     return true;
 }
 
-bool BQ769X2_PROTOCOL::setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, RegAddr reg_addr, uint32_t reg_data, uint8_t datalen, TickType_t timeout)
+bool BQ769X2_PROTOCOL::setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, RegAddr reg_addr, uint32_t reg_data, uint8_t datalen)
 // This function will write hex 3E for the initial write for subcommands in direct memory
 // and write to register hex 60 for the checksum to enter the data transmitted was correct.
 // and there are different cases for the three varying data lengths.
@@ -243,26 +227,26 @@ bool BQ769X2_PROTOCOL::setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c
     switch (datalen) {
         case 1:  //1 byte datalength
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_RegData, 3))
-                vTaskDelay(pdMS_TO_TICKS(2));
+                delay_cycles(32e6/1000 * 2);
             else return false;
 
             TX_Buffer[0] = Checksum(TX_RegData, 3);
             TX_Buffer[1] = 0x05;  //combined length of register address and data
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2))  // Write the checksum and length
-                vTaskDelay(pdMS_TO_TICKS(2));
+                delay_cycles(32e6/1000 * 2);
             else return false;
 
             break;
         case 2:  //2 byte datalength
             TX_RegData[3] = (reg_data >> 8) & 0xff;
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_RegData, 4))
-                vTaskDelay(pdMS_TO_TICKS(2));
+                delay_cycles(32e6/1000 * 2);
             else return false;
 
             TX_Buffer[0] = Checksum(TX_RegData, 4);
             TX_Buffer[1] = 0x06;  //combined length of register address and data
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2))  // Write the checksum and length
-                vTaskDelay(pdMS_TO_TICKS(2));
+                delay_cycles(32e6/1000 * 2);
             else return false;
 
             break;
@@ -272,13 +256,13 @@ bool BQ769X2_PROTOCOL::setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c
             TX_RegData[4] = (reg_data >> 16) & 0xff;
             TX_RegData[5] = (reg_data >> 24) & 0xff;
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_RegData, 6))
-                vTaskDelay(pdMS_TO_TICKS(2));
+                delay_cycles(32e6/1000 * 2);
             else return false;
 
             TX_Buffer[0] = Checksum(TX_RegData, 6);
             TX_Buffer[1] = 0x08;  //combined length of register address and data
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2))  // Write the checksum and length
-                vTaskDelay(pdMS_TO_TICKS(2));
+                delay_cycles(32e6/1000 * 2);
             else return false;
 
             break;
@@ -287,14 +271,15 @@ bool BQ769X2_PROTOCOL::setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c
     return true;
 }
 
-bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
+bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count)
 {
     // tx read address then rx fetched
-    return      i2c_controller.tx_blocking(i2c_addr, &reg_addr, 1, timeout)
-            &&  i2c_controller.rx_blocking(i2c_addr, reg_data, count, timeout)
+    return      i2c_controller.tx_blocking(i2c_addr, &reg_addr, 1, pdMS_TO_TICKS(2))
+            &&  i2c_controller.rx_blocking(i2c_addr, reg_data, count, pdMS_TO_TICKS(2))
         ;
 }
-//bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
+
+//bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
 //{
 //    uint8_t I2Ctxbuff[8] = {0x00};
 //
@@ -307,21 +292,21 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c
 //    }
 //
 //    //    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-//    DL_I2C_fillControllerTXFIFO(i2c_controller.reg, &I2Ctxbuff[0], count + 1);
+//    DL_I2C_fillControllerTXFIFO(I2C_0_INST, &I2Ctxbuff[0], count + 1);
 //
 //    /* Wait for I2C to be Idle */
-//    while (!(DL_I2C_getControllerStatus(i2c_controller.reg) &
+//    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
 //             DL_I2C_CONTROLLER_STATUS_IDLE))
 //        ;
 //
-//    DL_I2C_startControllerTransfer(i2c_controller.reg, i2c_addr,
+//    DL_I2C_startControllerTransfer(I2C_0_INST, I2C_TARGET_ADDRESS,
 //        DL_I2C_CONTROLLER_DIRECTION_TX, count + 1);
 //
-//    while (DL_I2C_getControllerStatus(i2c_controller.reg) &
+//    while (DL_I2C_getControllerStatus(I2C_0_INST) &
 //           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
 //        ;
 //    /* Wait for I2C to be Idle */
-//    while (!(DL_I2C_getControllerStatus(i2c_controller.reg) &
+//    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
 //             DL_I2C_CONTROLLER_STATUS_IDLE))
 //        ;
 //
@@ -332,13 +317,12 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c
 //    //     DL_I2C_clearInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT);
 //    //     I2C_WriteReg(reg_addr, reg_data, count);
 //    // }
-//    DL_I2C_flushControllerTXFIFO(i2c_controller.reg);
+//    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
 //
 //    return true;
 //}
 
-
-bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
+bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count)
 {
     uint8_t I2Ctxbuff[8] = {0x00};
 
@@ -350,7 +334,7 @@ bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2
         j++;
     }
 
-    return i2c_controller.tx_blocking(i2c_addr, I2Ctxbuff, count+1, timeout);
+    return i2c_controller.tx_blocking(i2c_addr, I2Ctxbuff, count+1, pdMS_TO_TICKS(2));
 }
 
 //************************************End of BQ769X2_PROTOCOL Measurement Commands******************************************

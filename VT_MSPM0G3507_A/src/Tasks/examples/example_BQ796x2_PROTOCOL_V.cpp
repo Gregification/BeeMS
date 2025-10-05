@@ -9,9 +9,8 @@
 #include <task.h>
 #include <stdio.h>
 #include <ti/driverlib/driverlib.h>
-#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
-
-#include "Middleware/BQ76952.hpp"
+#include <Tasks/examples/example_BQ769x2_PROTOCOL_V.hpp>
+#include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/system.hpp"
 
 #ifdef PROJECT_ENABLE_I2C0

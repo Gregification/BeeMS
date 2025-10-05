@@ -5,11 +5,11 @@
  *      Author: FSAE
  */
 
-#include "blink_task.hpp"
+#include "Core/system.hpp"
 
 #include <FreeRTOS.h>
 #include <task.h>
-#include "Core/system.hpp"
+#include "Tasks/examples/example_blink_task.hpp"
 
 void Task::blink_task(void*) {
     /* different itterations of the board use different pins for the blink led

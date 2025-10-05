@@ -9,7 +9,7 @@
 #define SRC_CORE_FIDDLE_HPP_
 
 namespace Task {
-    void fiddle_task(void *);
+    void task_template(void *);
 }
 
 

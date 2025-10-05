@@ -6,22 +6,26 @@
  *      https://cataas.com/cat/says/accumulating
  */
 
+/*
+ * eventually once this code is working we need to go though and rewrite it using
+ *      something cool like ETL for safety & good practice. most worried about
+ *      dynamic allocations. end goal is to have absolutely no dynamic allocation,
+ *      all static. it is possible and is done as such on industry projects.
+ *
+ * good luck getting the CCS RTOS debugger working. I couldn't.
+ */
+
 #include <stdio.h>
 #include <stdint.h>
 
 #include <FreeRTOS.h>
 #include <task.h>
-
-
-#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
-//#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
-//#include <Tasks/SPI_example_task.hpp>
+#include <Tasks/task_off_board_comms.hpp>
 
 #include "system.hpp"
 
-#include "Tasks/blink_task.hpp"
-#include "Tasks/Test_UART_Task.hpp"
-#include "Tasks/fiddle.hpp"
+#include "Tasks/examples/example_blink_task.hpp"
+#include "Tasks/task_off_board_comms.hpp"
 
 int main(){
     System::init();
@@ -37,9 +41,9 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-    xTaskCreate(Task::fiddle_task,
-            "fiddle_task",
-            configMINIMAL_STACK_SIZE * 10,
+    xTaskCreate(Task::external_communications,
+            "external_communications",
+            configMINIMAL_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);

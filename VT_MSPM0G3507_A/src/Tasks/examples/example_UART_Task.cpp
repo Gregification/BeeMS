@@ -45,7 +45,7 @@
  *      Author: fsae
  */
 
-#include "Test_UART_Task.hpp"
+#include <Tasks/examples/example_UART_Task.hpp>
 #include "Core/system.hpp"
 
 namespace Task {

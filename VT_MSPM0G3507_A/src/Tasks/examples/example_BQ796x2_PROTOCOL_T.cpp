@@ -9,9 +9,8 @@
 #include <task.h>
 #include <stdio.h>
 #include <ti/driverlib/driverlib.h>
-#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
-
-#include "Middleware/BQ769x2_PROTOCOL.hpp"
+#include <Tasks/examples/example_BQ769x2_PROTOCOL_T.hpp>
+#include "Middleware/BQ769x2/BQ769x2_PROTOCOL.hpp"
 #include "Core/system.hpp"
 
 void Init(char * p_str);

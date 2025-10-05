@@ -5,8 +5,8 @@
  *      Author: fsae
  */
 
-#ifndef SRC_TASKS_TEST_UART_TASK_HPP_
-#define SRC_TASKS_TEST_UART_TASK_HPP_
+#ifndef SRC_TASKS_EXAMPLE_UART_TASK_HPP_
+#define SRC_TASKS_EXAMPLE_UART_TASK_HPP_
 
 
 #include "Core/system.hpp"
@@ -17,4 +17,4 @@ namespace Task {
     void UART_Task(void *);
 }
 
-#endif /* SRC_TASKS_TEST_UART_TASK_HPP_ */
+#endif /* SRC_TASKS_EXAMPLE_UART_TASK_HPP_ */

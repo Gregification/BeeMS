@@ -1,26 +1,15 @@
 /*
- * fiddle.cpp
+ * MCAN_test_task.cpp
  *
- *  Created on: Jun 6, 2025
- *      Author: FSAE
+ *  Created on: Oct 4, 2025
+ *      Author: turtl
  */
 
-/*
- * TODO: look at later : https://www.tij.co.jp/jp/lit/ml/slyp847/slyp847.pdf?ts=1749927951492&ref_url=https%253A%252F%252Fwww.google.com%252F
- */
-
-#include "fiddle.hpp"
-
-#include <FreeRTOS.h>
-#include <task.h>
-#include <ti/driverlib/driverlib.h>
-#include <stdio.h>
-
+#include <Tasks/examples/example_MCAN_task.hpp>
 #include "Core/system.hpp"
 
-
-void Task::fiddle_task(void *){
-    System::uart_ui.nputs(ARRANDN("fiddle task start" NEWLINE));
+void Task::MCAN_test_task(void *){
+    System::uart_ui.nputs(ARRANDN("MCAN_test_task start" NEWLINE));
 
     //--- TX --------------------------------------------------
     do {
@@ -78,6 +67,6 @@ void Task::fiddle_task(void *){
         vTaskDelay(pdMS_TO_TICKS(400));
     } while(1);
 
-    System::uart_ui.nputs(ARRANDN("fiddle task end" NEWLINE));
+    System::uart_ui.nputs(ARRANDN("MCAN_test_task end" NEWLINE));
     vTaskDelete(NULL);
 }
