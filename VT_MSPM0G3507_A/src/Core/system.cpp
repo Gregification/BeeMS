@@ -7,8 +7,6 @@
 
 #include "system.hpp"
 
-#include <cstdio>
-
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
@@ -535,7 +533,7 @@ void System::UART::UART::ngets(char *str, uint32_t n) {
     }
 }
 
-void System::UART::UART::printu32d(uint32_t v) {
+void System::UART::UART::putu32d(uint32_t v) {
     if(v == 0){
         DL_UART_transmitDataBlocking(reg, '0');
         return;
@@ -553,7 +551,7 @@ void System::UART::UART::printu32d(uint32_t v) {
     }
 }
 
-void System::UART::UART::printu32h(uint32_t v) {
+void System::UART::UART::putu32h(uint32_t v) {
     int started = 0;
 
     int i;

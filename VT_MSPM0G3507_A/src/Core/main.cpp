@@ -5,9 +5,14 @@
  *      Author: FSAE
  *      https://cataas.com/cat/says/accumulating
  */
+/*
+ * University of Texas at Arlington, FSAE Racing team , BMS code
+ * - intended for E27 vehicle
+ * - created as part of Senior Design (CSE 4316) starting Fall25
+ */
 
 /*
- * eventually once this code is working we need to go though and rewrite it using
+ * eventually someone needs to go though and rewrite this program using
  *      something cool like ETL for safety & good practice. most worried about
  *      dynamic allocations. end goal is to have absolutely no dynamic allocation,
  *      all static. it is possible and is done as such on industry projects.
@@ -15,17 +20,17 @@
  * good luck getting the CCS RTOS debugger working. I couldn't.
  */
 
-#include <stdio.h>
 #include <stdint.h>
 
 #include <FreeRTOS.h>
 #include <task.h>
-#include <Tasks/task_off_board_comms.hpp>
-
+#include <Tasks/task_BMS.hpp>
+#include <Tasks/task_non_BMS.hpp>
+#include <Tasks/task_non_BMS.hpp>
 #include "system.hpp"
+#include "Core/Networking/CANComm.hpp"
 
 #include "Tasks/examples/example_blink_task.hpp"
-#include "Tasks/task_off_board_comms.hpp"
 
 int main(){
     System::init();
@@ -34,15 +39,24 @@ int main(){
     System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
     System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
 
+    // don't have this task on release
+    // used a an sanity check
     xTaskCreate(Task::blink_task,
-            "blink status",
+            "blink_task",
             configMINIMAL_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-    xTaskCreate(Task::external_communications,
-            "external_communications",
+    xTaskCreate(Task::BMS_task,
+            "BMS_task",
+            configMINIMAL_STACK_SIZE,
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
+
+    xTaskCreate(Task::non_BMS_functions_task,
+            "non_BMS_functions_task",
             configMINIMAL_STACK_SIZE,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
@@ -125,12 +139,10 @@ vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 {
     taskDISABLE_INTERRUPTS();
 
-    char str[MAX_STR_ERROR_LEN];
-    snprintf(str,sizeof(str), "vApplicationStackOverflowHook: %s", pcTaskName);
-
     for (;;){
-        System::uart_ui.nputs(ARRANDN(str));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
+        System::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
+        System::uart_ui.nputs(ARRANDN(pcTaskName));
+        System::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE));
         delay_cycles(20e6);
     }
 }

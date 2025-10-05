@@ -9,7 +9,14 @@
 #define SRC_CORE_FIDDLE_HPP_
 
 namespace Task {
-    void external_communications(void *);
+
+    /**
+     * performs everything that isn't directly part of the BMS
+     * - fan control
+     * - uses CAN FIFO 1
+     * - UI UART
+     */
+    void non_BMS_functions_task(void *);
 }
 
 #endif /* SRC_CORE_FIDDLE_HPP_ */
