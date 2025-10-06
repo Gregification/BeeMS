@@ -8,6 +8,13 @@
 #ifndef SRC_TASKS_CANETHTRX_TASK_HPP_
 #define SRC_TASKS_CANETHTRX_TASK_HPP_
 
+#include "Core/system.hpp"
+
+namespace System{
+    OCCUPY(PA8);    // wiz chip CS
+    OCCUPY(PA15);   // wiz chip reset
+}
+
 namespace Task {
     void CAN_Eth_TRX_UI_task(void *);
 }

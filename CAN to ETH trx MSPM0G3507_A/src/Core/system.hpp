@@ -54,16 +54,16 @@
 
 /*--- meta ---------------------------------------------*/
 
-#define PROJECT_NAME            "Voltage Tap"
+#define PROJECT_NAME            "CAN --> Eth relay"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "2.1" // [project version].[hardware version].[software version]
+#define PROJECT_VERSION         "1.0" // [project version].[hardware version].[software version]
 
 /*--- IC footprint -------------------------------------*/
 
-//#define MSPM0G3507_LQFP64   // UG.6.1/6
+#define MSPM0G3507_LQFP64   // UG.6.1/6
 //#define MSPM0G3507_LQFP48   // UG.6.1/7
 //#define MSPM0G3507_VQFN48   // UG.6.1/8
-#define MSPM0G3507_VQFN32   // UG.6.1/9
+//#define MSPM0G3507_VQFN32   // UG.6.1/9
 //#define MSPM0G3507_VSSOP28  // UG.6.1/9
 
 /*--- shorthand ----------------------------------------*/
@@ -89,6 +89,7 @@
 #define NEWLINE                     "\n\r"
 #define CLIERROR                    "\033[38;2;255;0;0m"
 #define CLIHIGHLIGHT                "\033[38;2;255;255;0m"
+#define CLIBAD                      CLIERROR
 #define CLIGOOD                     "\033[38;2;0;255;0m"
 #define CLIYES                      "\033[38;2;0;255;255m"
 #define CLINO                       "\033[38;2;255;0;255m"
@@ -119,7 +120,7 @@
 //#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
 
 //#define PROJECT_ENABLE_I2C0
-#define PROJECT_ENABLE_I2C1
+//#define PROJECT_ENABLE_I2C1
 
 #define PROJECT_ENABLE_MCAN0
 
@@ -127,9 +128,16 @@
 /*--- common peripheral pins ---------------------------*/
 
 namespace System {
-    OCCUPY(UART0)   // UI
-    OCCUPY(PINCM21) //PA10
-    OCCUPY(PINCM22) //PA11
+    #ifdef PROJECT_ENABLE_UART0
+    OCCUPY(PA10)
+    OCCUPY(PA11)
+    #endif
+
+    #ifdef PROJECT_ENABLE_SPI0
+    OCCUPY(PA9)
+    OCCUPY(PA12)
+    OCCUPY(PA13)
+    #endif
 }
 
 
@@ -197,8 +205,8 @@ namespace System {
             void nputs(char const * str, uint32_t n);
             void ngets(char * str, uint32_t n);
 
-            void printu32d(uint32_t);
-            void printu32h(uint32_t);
+            void putu32d(uint32_t);
+            void putu32h(uint32_t);
         };
     }
 
@@ -250,9 +258,6 @@ namespace System {
     }
 
     namespace SPI {
-        /* transmitted when RX is needed but no TX is provided */
-        constexpr uint8_t TRANSFER_FILLER_BYTE = 0x0;
-
         /* - you must manually control CS
          * - for any transmission speeds worth a crap you will have to use DL
          * - functions here are general and are nowhere near peak performance
@@ -260,18 +265,23 @@ namespace System {
          */
         struct SPI : Lockable {
             SPI_Regs * const reg;
+            const IRQn_Type irq_type;
+
+            /* transmitted when RX is needed but no TX is provided */
+            uint8_t TRANSFER_FILLER_BYTE;
 
             void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 
-            bool transfer(void * tx, void * rx, uint16_t len, TickType_t timeout);
+            void transfer(void * tx, void * rx, uint16_t len, System::GPIO::GPIO const * cs = NULL);
+            bool isBusy();
 
             // should be private but eh
             struct {
-                TaskHandle_t host_task;
                 uint8_t *tx, *rx;
-                uint8_t len;
-                uint8_t tx_i, rx_i;
+                uint16_t len;
+                uint16_t tx_i, rx_i;
+                System::GPIO::GPIO const * cs;
             } _trxBuffer;
         };
     }

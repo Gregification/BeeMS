@@ -7,8 +7,6 @@
 
 #include "system.hpp"
 
-#include <cstdio>
-
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
@@ -16,78 +14,6 @@
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
-
-    namespace GPIO {
-        // this may look redundant but the IOMUX and PIN numbers don't necessarily match and
-        //      I got tired of proding the data sheet everytime I want a new pin
-        //      I dont really understand whats going on with the IOMUX thing but this probably
-        //          destroys all functionality of that. eh, I dont use it anyways
-
-        // Port A (PA) pins
-        const GPIO PA0  = { .port = GPIOA, .pin = DL_GPIO_PIN_0,  .iomux = IOMUX_PINCM1  };
-        const GPIO PA1  = { .port = GPIOA, .pin = DL_GPIO_PIN_1,  .iomux = IOMUX_PINCM2  };
-        const GPIO PA2  = { .port = GPIOA, .pin = DL_GPIO_PIN_2,  .iomux = IOMUX_PINCM7  };
-        const GPIO PA3  = { .port = GPIOA, .pin = DL_GPIO_PIN_3,  .iomux = IOMUX_PINCM8  };
-        const GPIO PA4  = { .port = GPIOA, .pin = DL_GPIO_PIN_4,  .iomux = IOMUX_PINCM9  };
-        const GPIO PA5  = { .port = GPIOA, .pin = DL_GPIO_PIN_5,  .iomux = IOMUX_PINCM10 };
-        const GPIO PA6  = { .port = GPIOA, .pin = DL_GPIO_PIN_6,  .iomux = IOMUX_PINCM11 };
-        const GPIO PA7  = { .port = GPIOA, .pin = DL_GPIO_PIN_7,  .iomux = IOMUX_PINCM14 };
-        const GPIO PA8  = { .port = GPIOA, .pin = DL_GPIO_PIN_8,  .iomux = IOMUX_PINCM19 };
-        const GPIO PA9  = { .port = GPIOA, .pin = DL_GPIO_PIN_9,  .iomux = IOMUX_PINCM20 };
-        const GPIO PA10 = { .port = GPIOA, .pin = DL_GPIO_PIN_10, .iomux = IOMUX_PINCM21 };
-        const GPIO PA11 = { .port = GPIOA, .pin = DL_GPIO_PIN_11, .iomux = IOMUX_PINCM22 };
-        const GPIO PA12 = { .port = GPIOA, .pin = DL_GPIO_PIN_12, .iomux = IOMUX_PINCM34 };
-        const GPIO PA13 = { .port = GPIOA, .pin = DL_GPIO_PIN_13, .iomux = IOMUX_PINCM35 };
-        const GPIO PA14 = { .port = GPIOA, .pin = DL_GPIO_PIN_14, .iomux = IOMUX_PINCM36 };
-        const GPIO PA15 = { .port = GPIOA, .pin = DL_GPIO_PIN_15, .iomux = IOMUX_PINCM37 };
-        const GPIO PA16 = { .port = GPIOA, .pin = DL_GPIO_PIN_16, .iomux = IOMUX_PINCM38 };
-        const GPIO PA17 = { .port = GPIOA, .pin = DL_GPIO_PIN_17, .iomux = IOMUX_PINCM39 };
-        const GPIO PA18 = { .port = GPIOA, .pin = DL_GPIO_PIN_18, .iomux = IOMUX_PINCM40 };
-        const GPIO PA19 = { .port = GPIOA, .pin = DL_GPIO_PIN_19, .iomux = IOMUX_PINCM41 };
-        const GPIO PA20 = { .port = GPIOA, .pin = DL_GPIO_PIN_20, .iomux = IOMUX_PINCM42 };
-        const GPIO PA21 = { .port = GPIOA, .pin = DL_GPIO_PIN_21, .iomux = IOMUX_PINCM46 };
-        const GPIO PA22 = { .port = GPIOA, .pin = DL_GPIO_PIN_22, .iomux = IOMUX_PINCM47 };
-        const GPIO PA23 = { .port = GPIOA, .pin = DL_GPIO_PIN_23, .iomux = IOMUX_PINCM53 };
-        const GPIO PA24 = { .port = GPIOA, .pin = DL_GPIO_PIN_24, .iomux = IOMUX_PINCM54 };
-        const GPIO PA25 = { .port = GPIOA, .pin = DL_GPIO_PIN_25, .iomux = IOMUX_PINCM55 };
-        const GPIO PA26 = { .port = GPIOA, .pin = DL_GPIO_PIN_26, .iomux = IOMUX_PINCM59 };
-        const GPIO PA27 = { .port = GPIOA, .pin = DL_GPIO_PIN_27, .iomux = IOMUX_PINCM60 };
-        const GPIO PA28 = { .port = GPIOA, .pin = DL_GPIO_PIN_28, .iomux = IOMUX_PINCM3  };
-        const GPIO PA29 = { .port = GPIOA, .pin = DL_GPIO_PIN_29, .iomux = IOMUX_PINCM4  };
-        const GPIO PA30 = { .port = GPIOA, .pin = DL_GPIO_PIN_30, .iomux = IOMUX_PINCM5  };
-        const GPIO PA31 = { .port = GPIOA, .pin = DL_GPIO_PIN_31, .iomux = IOMUX_PINCM6  };
-
-        // Port B (PB) pins
-        const GPIO PB0  = { .port = GPIOB, .pin = DL_GPIO_PIN_0,  .iomux = IOMUX_PINCM12 };
-        const GPIO PB1  = { .port = GPIOB, .pin = DL_GPIO_PIN_1,  .iomux = IOMUX_PINCM13 };
-        const GPIO PB2  = { .port = GPIOB, .pin = DL_GPIO_PIN_2,  .iomux = IOMUX_PINCM15 };
-        const GPIO PB3  = { .port = GPIOB, .pin = DL_GPIO_PIN_3,  .iomux = IOMUX_PINCM16 };
-        const GPIO PB4  = { .port = GPIOB, .pin = DL_GPIO_PIN_4,  .iomux = IOMUX_PINCM17 };
-        const GPIO PB5  = { .port = GPIOB, .pin = DL_GPIO_PIN_5,  .iomux = IOMUX_PINCM18 };
-        const GPIO PB6  = { .port = GPIOB, .pin = DL_GPIO_PIN_6,  .iomux = IOMUX_PINCM23 };
-        const GPIO PB7  = { .port = GPIOB, .pin = DL_GPIO_PIN_7,  .iomux = IOMUX_PINCM24 };
-        const GPIO PB8  = { .port = GPIOB, .pin = DL_GPIO_PIN_8,  .iomux = IOMUX_PINCM25 };
-        const GPIO PB9  = { .port = GPIOB, .pin = DL_GPIO_PIN_9,  .iomux = IOMUX_PINCM26 };
-        const GPIO PB10 = { .port = GPIOB, .pin = DL_GPIO_PIN_10, .iomux = IOMUX_PINCM27 };
-        const GPIO PB11 = { .port = GPIOB, .pin = DL_GPIO_PIN_11, .iomux = IOMUX_PINCM28 };
-        const GPIO PB12 = { .port = GPIOB, .pin = DL_GPIO_PIN_12, .iomux = IOMUX_PINCM29 };
-        const GPIO PB13 = { .port = GPIOB, .pin = DL_GPIO_PIN_13, .iomux = IOMUX_PINCM30 };
-        const GPIO PB14 = { .port = GPIOB, .pin = DL_GPIO_PIN_14, .iomux = IOMUX_PINCM31 };
-        const GPIO PB15 = { .port = GPIOB, .pin = DL_GPIO_PIN_15, .iomux = IOMUX_PINCM32 };
-        const GPIO PB16 = { .port = GPIOB, .pin = DL_GPIO_PIN_16, .iomux = IOMUX_PINCM33 };
-        const GPIO PB17 = { .port = GPIOB, .pin = DL_GPIO_PIN_17, .iomux = IOMUX_PINCM43 };
-        const GPIO PB18 = { .port = GPIOB, .pin = DL_GPIO_PIN_18, .iomux = IOMUX_PINCM44 };
-        const GPIO PB19 = { .port = GPIOB, .pin = DL_GPIO_PIN_19, .iomux = IOMUX_PINCM45 };
-        const GPIO PB20 = { .port = GPIOB, .pin = DL_GPIO_PIN_20, .iomux = IOMUX_PINCM48 };
-        const GPIO PB21 = { .port = GPIOB, .pin = DL_GPIO_PIN_21, .iomux = IOMUX_PINCM49 };
-        const GPIO PB22 = { .port = GPIOB, .pin = DL_GPIO_PIN_22, .iomux = IOMUX_PINCM50 };
-        const GPIO PB23 = { .port = GPIOB, .pin = DL_GPIO_PIN_23, .iomux = IOMUX_PINCM51 };
-        const GPIO PB24 = { .port = GPIOB, .pin = DL_GPIO_PIN_24, .iomux = IOMUX_PINCM52 };
-        const GPIO PB25 = { .port = GPIOB, .pin = DL_GPIO_PIN_25, .iomux = IOMUX_PINCM56 };
-        const GPIO PB26 = { .port = GPIOB, .pin = DL_GPIO_PIN_26, .iomux = IOMUX_PINCM57 };
-        const GPIO PB27 = { .port = GPIOB, .pin = DL_GPIO_PIN_27, .iomux = IOMUX_PINCM58 };
-    }
-
 
     // we should move to uboot one bright sunny day
 
@@ -499,10 +425,20 @@ void System::UART::UART::partialInit() {
 
 void System::FailHard(const char *str) {
     taskDISABLE_INTERRUPTS();
-    for(;;){
-        System::uart_ui.nputs(ARRANDN(NEWLINE "fatal error: "));
+
+    static uint32_t count = 0;
+    while(1) {
+        System::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
+        System::uart_ui.putu32d(count);
+        System::uart_ui.nputs(ARRANDN(" : " CLIRESET));
         System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
+
+        delay_cycles(System::CLK::CPUCLK * 10);
+        count++;
     }
+
+    // this will effectively stun lock the device and make the debugger throw a fit
+//    DL_SYSCTL_resetDevice(DL_SYSCTL_RESET_CAUSE_POR_SW_TRIGGERED);
 }
 
 void System::UART::UART::nputs(const char *str, uint32_t n) {
@@ -535,7 +471,7 @@ void System::UART::UART::ngets(char *str, uint32_t n) {
     }
 }
 
-void System::UART::UART::printu32d(uint32_t v) {
+void System::UART::UART::putu32d(uint32_t v) {
     if(v == 0){
         DL_UART_transmitDataBlocking(reg, '0');
         return;
@@ -553,7 +489,7 @@ void System::UART::UART::printu32d(uint32_t v) {
     }
 }
 
-void System::UART::UART::printu32h(uint32_t v) {
+void System::UART::UART::putu32h(uint32_t v) {
     int started = 0;
 
     int i;
@@ -949,4 +885,58 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, Tick
     { while(1){} }
     */
 
+/*--- idiot detection ------------------------------------------------------------------*/
 
+#if !defined(PROJECT_ENABLE_UART0)
+    #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
+    /* uart0 is used by the LP */
+#endif
+
+// i fear for the day this happens
+static_assert(pdTRUE == true,
+        "pdTRUE != true . the FreeRTOS definition of \"true\" is not the same value as c/c++s \
+        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
+    );
+static_assert(pdFALSE == false,
+        "pdFALSE != false . the FreeRTOS definition of \"false\" is not the same value as c/c++s \
+        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
+    );
+
+#ifdef MSPM0G3507_LQFP64
+    #define MSPM0G3507_FOOTPRINT_C0 1
+#else
+    #define MSPM0G3507_FOOTPRINT_C0 0
+#endif
+#ifdef MSPM0G3507_LQFP48
+    #define MSPM0G3507_FOOTPRINT_C1 1
+#else
+    #define MSPM0G3507_FOOTPRINT_C1 0
+#endif
+#ifdef MSPM0G3507_VQFN48
+    #define MSPM0G3507_FOOTPRINT_C2 1
+#else
+    #define MSPM0G3507_FOOTPRINT_C2 0
+#endif
+#ifdef MSPM0G3507_VQFN32
+    #define MSPM0G3507_FOOTPRINT_C3 1
+#else
+    #define MSPM0G3507_FOOTPRINT_C3 0
+#endif
+#ifdef MSPM0G3507_VSSOP28
+    #define MSPM0G3507_FOOTPRINT_C4 1
+#else
+    #define MSPM0G3507_FOOTPRINT_C4 0
+#endif
+// Total number of footprints selected
+#define MSPM0G3507_FOOTPRINT_TOTAL ( \
+    MSPM0G3507_FOOTPRINT_C0 + \
+    MSPM0G3507_FOOTPRINT_C1 + \
+    MSPM0G3507_FOOTPRINT_C2 + \
+    MSPM0G3507_FOOTPRINT_C3 + \
+    MSPM0G3507_FOOTPRINT_C4 )
+#if MSPM0G3507_FOOTPRINT_TOTAL == 0
+    #error "No MSPM0G3507 variant defined. Must define exactly one."
+#elif MSPM0G3507_FOOTPRINT_TOTAL > 1
+    #error "Multiple MSPM0G3507 variants defined. Can only define one."
+    // macros are at top of the header file
+#endif

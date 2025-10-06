@@ -58,6 +58,13 @@
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
 #define PROJECT_VERSION         "2.1" // [project version].[hardware version].[software version]
 
+/*--- IC footprint -------------------------------------*/
+
+#define MSPM0G3507_LQFP64   // UG.6.1/6
+//#define MSPM0G3507_LQFP48   // UG.6.1/7
+//#define MSPM0G3507_VQFN48   // UG.6.1/8
+//#define MSPM0G3507_VQFN32   // UG.6.1/9
+//#define MSPM0G3507_VSSOP28  // UG.6.1/9
 
 /*--- shorthand ----------------------------------------*/
 
@@ -82,6 +89,7 @@
 #define NEWLINE                     "\n\r"
 #define CLIERROR                    "\033[38;2;255;0;0m"
 #define CLIHIGHLIGHT                "\033[38;2;255;255;0m"
+#define CLIBAD                      CLIERROR
 #define CLIGOOD                     "\033[38;2;0;255;0m"
 #define CLIYES                      "\033[38;2;0;255;255m"
 #define CLINO                       "\033[38;2;255;0;255m"
@@ -190,8 +198,8 @@ namespace System {
             void nputs(char const * str, uint32_t n);
             void ngets(char * str, uint32_t n);
 
-            void printu32d(uint32_t);
-            void printu32h(uint32_t);
+            void putu32d(uint32_t);
+            void putu32h(uint32_t);
         };
     }
 
@@ -207,17 +215,38 @@ namespace System {
             void clear() const { DL_GPIO_clearPins(port, pin); }
         };
 
+//#define MSPM0G3507_LQFP64   // UG.6.1/6
+//#define MSPM0G3507_LQFP48   // UG.6.1/7
+//#define MSPM0G3507_VQFN48   // UG.6.1/8
+//#define MSPM0G3507_VQFN32   // UG.6.1/9
+//#define MSPM0G3507_VSSOP28  // UG.6.1/9
+
         // Port A (PA) pins
-        extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
-                     PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
-                     PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
-                     PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31;
+        #ifdef  MSPM0G3507_LQFP64
+            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
+                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
+                 PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31;
+        #elif defined MSPM0G3507_VQFN32
+            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
+                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
+                 PA24, PA25, PA26, PA27;
+        #else
+            #error "forgot to setup the avilable pins for this footprint"
+        #endif
 
         // Port B (PB) pins
-        extern const GPIO PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7,
-                     PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
-                     PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23,
-                     PB24, PB25, PB26, PB27;
+        #ifdef  MSPM0G3507_LQFP64
+            extern const GPIO PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7,
+                         PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
+                         PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23,
+                         PB24, PB25, PB26, PB27;
+        #elif defined MSPM0G3507_VQFN32
+            // no port B
+        #else
+            #error "forgot to setup the avilable pins for this footprint"
+        #endif
 
     }
 
@@ -335,24 +364,6 @@ namespace System {
     #endif
 
 }
-
-/*--- idiot detection ------------------------------------------------------------------*/
-
-#if !defined(PROJECT_ENABLE_UART0)
-    #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
-    /* uart0 is used by the LP */
-#endif
-
-// i fear for the day this happens
-static_assert(pdTRUE == true,
-        "pdTRUE != true . the FreeRTOS definition of \"true\" is not the same value as c/c++s \
-        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
-    );
-static_assert(pdFALSE == false,
-        "pdFALSE != false . the FreeRTOS definition of \"false\" is not the same value as c/c++s \
-        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
-    );
-
 
 #endif /* SRC_CORE_SYSTEM_HPP_ */
 

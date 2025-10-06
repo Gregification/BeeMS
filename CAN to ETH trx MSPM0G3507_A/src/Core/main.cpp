@@ -12,16 +12,10 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-
-#include <Tasks/BQ769x2_PROTOCOL_Test_V.hpp>
-//#include <Tasks/BQ769x2_PROTOCOL_Test_T.hpp>
-//#include <Tasks/SPI_example_task.hpp>
-
 #include "system.hpp"
 
 #include "Tasks/blink_task.hpp"
-#include "Tasks/Test_UART_Task.hpp"
-#include "Tasks/fiddle.hpp"
+#include "Tasks/CANEthTRX_task.hpp"
 
 void task_UI_and_watchdog(void*); // also has blink
 void task_CAN_ETH_TRX(void*);
@@ -31,22 +25,20 @@ int main(){
 
     System::uart_ui.setBaudTarget(115200);
     System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
-    System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
+    System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " CLIRESET CLIHIGHLIGHT PROJECT_VERSION NEWLINE CLIRESET "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
 
-    TaskHandle_t taskHandleToWatch;
+//    xTaskCreate(Task::blink_task,
+//            "blink_task",
+//            configMINIMAL_STACK_SIZE,
+//            NULL,
+//            tskIDLE_PRIORITY,
+//            NULL);
 
-    xTaskCreate(task_CAN_ETH_TRX,
+    xTaskCreate(Task::CAN_Eth_TRX_UI_task,
             "task_CAN_ETH_TRX",
             configMINIMAL_STACK_SIZE * 10, // eye-balled
             NULL,
             tskIDLE_PRIORITY,
-            &taskHandleToWatch);
-
-    xTaskCreate(task_UI_and_watchdog,
-            "task_UI_and_watchdog",
-            configMINIMAL_STACK_SIZE,
-            &taskHandleToWatch,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
     vTaskStartScheduler();
@@ -135,11 +127,9 @@ vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 {
     taskDISABLE_INTERRUPTS();
 
-    char str[MAX_STR_ERROR_LEN];
-    snprintf(str,sizeof(str), "vApplicationStackOverflowHook: %s", pcTaskName);
-
     for (;;){
-        System::uart_ui.nputs(ARRANDN(str));
+        System::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
+        System::uart_ui.nputs(pcTaskName, MAX_STR_ERROR_LEN);
         System::uart_ui.nputs(ARRANDN(NEWLINE));
         delay_cycles(20e6);
     }
