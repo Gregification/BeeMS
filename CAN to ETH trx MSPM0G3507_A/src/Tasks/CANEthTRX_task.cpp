@@ -77,7 +77,7 @@ void Task::CAN_Eth_TRX_UI_task(void *){
 
     /*** wizchip init ***********************************************/
 
-    wiz_spi.setSCLKTarget(10e6);
+    wiz_spi.setSCLKTarget(5e6);
 
     reg_wizchip_spi_cbfunc(wiz_read_byte, wiz_write_byte);
     reg_wizchip_spiburst_cbfunc(wiz_read_burst, wiz_write_burst);
@@ -90,7 +90,7 @@ void Task::CAN_Eth_TRX_UI_task(void *){
             wiz_cs.iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
             DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
             DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
         );
     DL_GPIO_clearPins(GPIOPINPUX(wiz_cs));
@@ -102,7 +102,7 @@ void Task::CAN_Eth_TRX_UI_task(void *){
             wiz_reset.iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
             DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
             DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
         );
     DL_GPIO_enableOutput(GPIOPINPUX(wiz_reset));
