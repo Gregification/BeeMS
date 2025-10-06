@@ -361,170 +361,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Device:C_Polarized_Small_US"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0.254)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "C"
-				(at 0.254 1.778 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "C_Polarized_Small_US"
-				(at 0.254 -2.032 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Polarized capacitor, small US symbol"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "cap capacitor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "CP_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "C_Polarized_Small_US_0_1"
-				(polyline
-					(pts
-						(xy -1.524 0.508) (xy 1.524 0.508)
-					)
-					(stroke
-						(width 0.3048)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 1.524) (xy -0.762 1.524)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.016 1.27) (xy -1.016 1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start -1.524 -0.762)
-					(mid 0 -0.3734)
-					(end 1.524 -0.762)
-					(stroke
-						(width 0.3048)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "C_Polarized_Small_US_1_1"
-				(pin passive line
-					(at 0 2.54 270)
-					(length 2.032)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -2.54 90)
-					(length 2.032)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Device:C_Small"
 			(pin_numbers
 				(hide yes)
@@ -1792,7 +1628,7 @@
 	)
 	(text "5v"
 		(exclude_from_sim no)
-		(at 58.928 86.614 0)
+		(at 58.928 72.644 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1826,7 +1662,7 @@
 	)
 	(text "3v3"
 		(exclude_from_sim no)
-		(at 83.566 86.614 0)
+		(at 83.566 72.644 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1853,6 +1689,12 @@
 		(uuid "062ee1bb-c633-4da8-b69b-7be8b5c9600c")
 	)
 	(junction
+		(at 96.52 73.66)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "068fe1dc-7382-4e21-870f-3c1799fdc99a")
+	)
+	(junction
 		(at 109.22 90.17)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1865,16 +1707,16 @@
 		(uuid "3f3a3241-91d0-4ab2-bc42-05a64bace698")
 	)
 	(junction
-		(at 96.52 90.17)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "42470acd-155b-402d-bde1-dadfc4dfaa25")
-	)
-	(junction
 		(at 135.89 120.65)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "45175217-511c-4c37-9e97-30ed370c09a3")
+	)
+	(junction
+		(at 85.09 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5c5ae530-be43-4f75-b705-74ccff202735")
 	)
 	(junction
 		(at 59.69 120.65)
@@ -1901,16 +1743,16 @@
 		(uuid "76a8ac84-4b77-4851-a1b9-8e7793c560c8")
 	)
 	(junction
-		(at 86.36 120.65)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7a87ceff-9ff7-42ea-be70-3a804e386e99")
-	)
-	(junction
-		(at 57.15 87.63)
+		(at 57.15 73.66)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7db7492a-11c0-4e82-80bb-43df83ee5586")
+	)
+	(junction
+		(at 82.55 120.65)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7e3c07d4-5a55-4d82-aff3-4f2ecfd37a49")
 	)
 	(junction
 		(at 171.45 83.82)
@@ -1925,10 +1767,10 @@
 		(uuid "82870bdf-a2d2-4d1a-ac7a-3191a6d53205")
 	)
 	(junction
-		(at 86.36 96.52)
+		(at 93.98 90.17)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "94207106-9245-4329-b7ea-0aac4f71a193")
+		(uuid "82e4f234-c263-4c25-9385-08cd5e22a0b8")
 	)
 	(junction
 		(at 49.53 111.76)
@@ -1937,22 +1779,28 @@
 		(uuid "942e083d-d300-4a59-b802-a9a526a38ddd")
 	)
 	(junction
+		(at 82.55 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b7185487-a1a2-4f8c-96fe-bc132b6714a0")
+	)
+	(junction
 		(at 140.97 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "cf36ebaf-e28e-41eb-9a7d-b392adbf9133")
 	)
 	(junction
-		(at 86.36 90.17)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d320ea6d-c0fe-403f-bef6-7b007ffb7ee9")
-	)
-	(junction
 		(at 109.22 120.65)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d4c7a0ed-16e6-4cb2-a333-eea8a7bd7944")
+	)
+	(junction
+		(at 96.52 90.17)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f571f5ef-739a-4754-9a3c-103053359598")
 	)
 	(no_connect
 		(at 120.65 105.41)
@@ -1979,12 +1827,22 @@
 		(uuid "52a53fe9-456e-4adc-a5fb-f78a8fed9730")
 	)
 	(no_connect
-		(at 60.96 95.25)
+		(at 60.96 81.28)
 		(uuid "ec29ba2f-dd54-40f4-8920-54f1e08120f8")
 	)
 	(no_connect
 		(at 36.83 107.95)
 		(uuid "fad90b1e-690b-4670-9d34-f0e03c691361")
+	)
+	(wire
+		(pts
+			(xy 96.52 73.66) (xy 96.52 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "051ec351-eb06-4cc4-9cdd-72f577e82818")
 	)
 	(wire
 		(pts
@@ -2005,6 +1863,16 @@
 			(type default)
 		)
 		(uuid "0d7e0bbb-3195-4559-98c9-dde00d946215")
+	)
+	(wire
+		(pts
+			(xy 85.09 90.17) (xy 93.98 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "13310e45-67da-4a05-8109-fdac0eb236fe")
 	)
 	(wire
 		(pts
@@ -2048,16 +1916,6 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 95.25) (xy 86.36 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1f06fab3-4631-47cb-9298-15710b05b149")
-	)
-	(wire
-		(pts
 			(xy 59.69 111.76) (xy 59.69 113.03)
 		)
 		(stroke
@@ -2078,6 +1936,16 @@
 	)
 	(wire
 		(pts
+			(xy 93.98 90.17) (xy 96.52 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c454a47-8a23-40fe-a751-ef4b3fe45be3")
+	)
+	(wire
+		(pts
 			(xy 49.53 113.03) (xy 49.53 111.76)
 		)
 		(stroke
@@ -2095,6 +1963,16 @@
 			(type default)
 		)
 		(uuid "2e36bd4d-60f3-4c57-b150-a7a5bbe1f46a")
+	)
+	(wire
+		(pts
+			(xy 82.55 95.25) (xy 85.09 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3ad4ca7b-2742-4a41-b4b8-b63c6cb876c6")
 	)
 	(wire
 		(pts
@@ -2178,7 +2056,7 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 91.44) (xy 82.55 91.44)
+			(xy 82.55 77.47) (xy 81.28 77.47)
 		)
 		(stroke
 			(width 0)
@@ -2218,16 +2096,6 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 96.52) (xy 86.36 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5cc635bb-9237-4015-81d3-d8efae3a74b3")
-	)
-	(wire
-		(pts
 			(xy 204.47 91.44) (xy 204.47 113.03)
 		)
 		(stroke
@@ -2258,7 +2126,7 @@
 	)
 	(wire
 		(pts
-			(xy 60.96 87.63) (xy 57.15 87.63)
+			(xy 60.96 73.66) (xy 57.15 73.66)
 		)
 		(stroke
 			(width 0)
@@ -2268,7 +2136,7 @@
 	)
 	(wire
 		(pts
-			(xy 49.53 87.63) (xy 49.53 92.71)
+			(xy 49.53 73.66) (xy 49.53 92.71)
 		)
 		(stroke
 			(width 0)
@@ -2306,16 +2174,6 @@
 			(type default)
 		)
 		(uuid "6c7407f1-5670-40d2-9911-27d7dd168e6f")
-	)
-	(wire
-		(pts
-			(xy 86.36 90.17) (xy 96.52 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6d14d1f2-f7b2-49fa-90ef-3a198a291a52")
 	)
 	(wire
 		(pts
@@ -2376,16 +2234,6 @@
 			(type default)
 		)
 		(uuid "8257a9cf-7732-42f9-8378-46e6f9c56433")
-	)
-	(wire
-		(pts
-			(xy 96.52 73.66) (xy 96.52 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "83cc9024-ff3d-4502-b2d8-9413ac8d9dee")
 	)
 	(wire
 		(pts
@@ -2479,16 +2327,6 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 87.63) (xy 86.36 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9ce32047-ed51-4836-8ae1-2f6aa38fd2df")
-	)
-	(wire
-		(pts
 			(xy 49.53 92.71) (xy 49.53 111.76)
 		)
 		(stroke
@@ -2509,7 +2347,17 @@
 	)
 	(wire
 		(pts
-			(xy 60.96 91.44) (xy 57.15 91.44)
+			(xy 85.09 95.25) (xy 93.98 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a9695a4b-e363-4f14-916f-0f41d7b6a0a9")
+	)
+	(wire
+		(pts
+			(xy 60.96 77.47) (xy 57.15 77.47)
 		)
 		(stroke
 			(width 0)
@@ -2560,7 +2408,7 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 91.44) (xy 82.55 96.52)
+			(xy 82.55 77.47) (xy 82.55 95.25)
 		)
 		(stroke
 			(width 0)
@@ -2640,7 +2488,7 @@
 	)
 	(wire
 		(pts
-			(xy 59.69 120.65) (xy 86.36 120.65)
+			(xy 59.69 120.65) (xy 82.55 120.65)
 		)
 		(stroke
 			(width 0)
@@ -2660,7 +2508,7 @@
 	)
 	(wire
 		(pts
-			(xy 81.28 87.63) (xy 86.36 87.63)
+			(xy 81.28 73.66) (xy 96.52 73.66)
 		)
 		(stroke
 			(width 0)
@@ -2730,17 +2578,7 @@
 	)
 	(wire
 		(pts
-			(xy 86.36 120.65) (xy 109.22 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e689767d-f699-453f-8159-507ec655fe35")
-	)
-	(wire
-		(pts
-			(xy 57.15 87.63) (xy 49.53 87.63)
+			(xy 57.15 73.66) (xy 49.53 73.66)
 		)
 		(stroke
 			(width 0)
@@ -2750,7 +2588,7 @@
 	)
 	(wire
 		(pts
-			(xy 82.55 96.52) (xy 86.36 96.52)
+			(xy 82.55 120.65) (xy 109.22 120.65)
 		)
 		(stroke
 			(width 0)
@@ -2790,7 +2628,17 @@
 	)
 	(wire
 		(pts
-			(xy 57.15 91.44) (xy 57.15 87.63)
+			(xy 82.55 95.25) (xy 82.55 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f7c56e37-902e-4a13-820e-af910813505a")
+	)
+	(wire
+		(pts
+			(xy 57.15 77.47) (xy 57.15 73.66)
 		)
 		(stroke
 			(width 0)
@@ -3102,6 +2950,121 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 93.98 92.71 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "182a2527-cacc-4f66-a1c1-78a632e28d00")
+		(property "Reference" "C8"
+			(at 91.44 91.4462 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10u"
+			(at 91.44 93.9862 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 93.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 93.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "50Vdc, 10%, +125C"
+			(at 93.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 93.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 93.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31A106KBHNNNE?qs=sGAEpiMZZMsh%252B1woXyUXjxqcB7t9naYpzWmpMbMJIKQ%3D"
+			(at 93.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "10uF, 50VDC, X5R, 10%, -55C, +85C"
+			(at 93.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.07"
+			(at 93.98 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "70fe4c75-8299-4574-842c-b146b24cf8e0")
+		)
+		(pin "1"
+			(uuid "79c907c1-5c54-497f-86a2-38b5f9dbf7fd")
+		)
+		(instances
+			(project "EVAL MSPM0lG3507 BQ76952"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/1c14d83e-4410-4167-900a-156beb56e266"
+					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:USB_B_Micro")
 		(at 39.37 97.79 0)
 		(unit 1)
@@ -3209,17 +3172,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Polarized_Small_US")
-		(at 86.36 92.71 0)
+		(lib_id "Device:C_Small")
+		(at 85.09 92.71 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4eb70b34-56e5-4e67-9579-0ef48c4136ac")
-		(property "Reference" "C8"
-			(at 88.9 91.0081 0)
+		(uuid "487103fc-b757-49ce-a880-5baf15763443")
+		(property "Reference" "C24"
+			(at 82.55 91.4462 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3227,8 +3190,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "33uF"
-			(at 88.9 93.5481 0)
+		(property "Value" "10u"
+			(at 82.55 93.9862 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3236,8 +3199,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_1206_3216Metric_Pad1.42x1.75mm_HandSolder"
-			(at 86.36 92.71 0)
+		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
+			(at 85.09 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3245,8 +3208,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.mouser.com/datasheet/2/40/TCJ-2887130.pdf"
-			(at 86.36 92.71 0)
+		(property "Datasheet" ""
+			(at 85.09 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3254,8 +3217,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "33uF, 20%, 6v3dc, 200mESR"
-			(at 86.36 92.71 0)
+		(property "Description" "50Vdc, 10%, +125C"
+			(at 85.09 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3263,8 +3226,8 @@
 				(hide yes)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KYOCERA-AVX/TCJA336M006R0200?qs=sGAEpiMZZMsh%252B1woXyUXj%252Byw%2F5rdItB1AghZJter5Qs%3D"
-			(at 86.36 92.71 0)
+		(property "Sim.Device" ""
+			(at 85.09 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3272,8 +3235,8 @@
 				(hide yes)
 			)
 		)
-		(property "unit x10" "0.37"
-			(at 86.36 92.71 0)
+		(property "Sim.Type" ""
+			(at 85.09 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3281,8 +3244,8 @@
 				(hide yes)
 			)
 		)
-		(property "specs" "33uF, 20%, 200mESRm, 6.3Vdc, 20.8uA, -55C, +15C"
-			(at 86.36 92.71 0)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31A106KBHNNNE?qs=sGAEpiMZZMsh%252B1woXyUXjxqcB7t9naYpzWmpMbMJIKQ%3D"
+			(at 85.09 92.71 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3290,16 +3253,34 @@
 				(hide yes)
 			)
 		)
-		(pin "1"
-			(uuid "6f154a40-c2d8-414e-a69b-b4d3d87772d5")
+		(property "specs" "10uF, 50VDC, X5R, 10%, -55C, +85C"
+			(at 85.09 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.07"
+			(at 85.09 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
 		(pin "2"
-			(uuid "feae0ffb-d62e-42a5-b021-d30fcb5e824b")
+			(uuid "aff3bc04-53a3-40cc-a989-9b6fa7580bdf")
+		)
+		(pin "1"
+			(uuid "c25b1487-6899-4184-a249-7f6512d9b9da")
 		)
 		(instances
-			(project ""
+			(project "EVAL MSPM0lG3507 BQ76952"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/1c14d83e-4410-4167-900a-156beb56e266"
-					(reference "C8")
+					(reference "C24")
 					(unit 1)
 				)
 			)
@@ -3735,7 +3716,7 @@
 	)
 	(symbol
 		(lib_id "zzLocalLibrary:S-19255A33A-M5T1U4")
-		(at 71.12 90.17 0)
+		(at 71.12 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -3744,7 +3725,7 @@
 		(fields_autoplaced yes)
 		(uuid "a87c97cd-1a82-454a-b60c-9ceb3332a5cf")
 		(property "Reference" "U3"
-			(at 71.12 81.28 0)
+			(at 71.12 67.31 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3752,7 +3733,7 @@
 			)
 		)
 		(property "Value" "19255A33A"
-			(at 71.12 83.82 0)
+			(at 71.12 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3760,7 +3741,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5_HandSoldering"
-			(at 71.12 90.17 0)
+			(at 71.12 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3769,7 +3750,7 @@
 			)
 		)
 		(property "Datasheet" "www.ablic.com/en/doc/datasheet/automotive_voltage_regulator/S19255_E.pdf"
-			(at 71.12 90.17 0)
+			(at 71.12 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3778,7 +3759,7 @@
 			)
 		)
 		(property "Description" "voltage regulator"
-			(at 71.12 90.17 0)
+			(at 71.12 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3787,7 +3768,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/ABLIC/S-19255A33A-M5T1U4?qs=HoCaDK9Nz5cxZiX7%252BEFYdQ%3D%3D"
-			(at 71.12 90.17 0)
+			(at 71.12 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3796,7 +3777,7 @@
 			)
 		)
 		(property "specs" "1.5V-5.5V in,3.3V out, -40C, +125C, 300mA out"
-			(at 71.12 90.17 0)
+			(at 71.12 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3805,7 +3786,7 @@
 			)
 		)
 		(property "unit x10" "0.554"
-			(at 71.12 90.17 0)
+			(at 71.12 76.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
