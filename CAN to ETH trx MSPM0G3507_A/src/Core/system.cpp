@@ -24,10 +24,10 @@ namespace System {
     #endif
 
     #ifdef PROJECT_ENABLE_SPI0
-        SPI::SPI spi0 = {.reg = SPI0};
+        SPI::SPI spi0 = {.reg = SPI0, .irq_type = IRQn_Type::SPI0_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
     #endif
     #ifdef PROJECT_ENABLE_SPI1
-        SPI::SPI spi1 = {.reg = SPI1};
+        SPI::SPI spi1 = {.reg = SPI1, .irq_type = IRQn_Type::SPI1_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
     #endif
     #ifdef PROJECT_ENABLE_I2C1
         I2C::I2C i2c1 = {.reg = I2C1};
@@ -168,9 +168,9 @@ void System::init() {
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
-        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PA14
-                IOMUX_PINCM36,
-                IOMUX_PINCM36_PF_SPI0_PICO,
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PA9
+                IOMUX_PINCM20,
+                IOMUX_PINCM20_PF_SPI0_PICO,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
@@ -187,7 +187,7 @@ void System::init() {
         DL_GPIO_enableHiZ(IOMUX_PINCM35);
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA12));
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
-        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA14));
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA9));
 
         /*--- SPI config -----------------*/
 
@@ -201,19 +201,22 @@ void System::init() {
                 .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
                 .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
                 .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
-                .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_LSB_FIRST,
+                .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_MSB_FIRST,
                 .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_NONE,
             };
         DL_SPI_init(spi0.reg, &config);
+        DL_SPI_setFIFOThreshold(spi0.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
         DL_SPI_disablePacking(spi0.reg);
         spi0.setSCLKTarget(125e3);
         DL_SPI_enable(spi0.reg);
 
-//        NVIC_EnableIRQ(SPI0_INT_IRQn);
-        NVIC_DisableIRQ(SPI0_INT_IRQn);
+        spi0._trxBuffer.rx_i = -1;
+
+        NVIC_EnableIRQ(SPI0_INT_IRQn);
         DL_SPI_enableInterrupt(System::spi0.reg,
                   DL_SPI_INTERRUPT_RX
                 | DL_SPI_INTERRUPT_TX
+                | DL_SPI_INTERRUPT_IDLE
             );
     }
     #endif
@@ -426,12 +429,19 @@ void System::UART::UART::partialInit() {
 void System::FailHard(const char *str) {
     taskDISABLE_INTERRUPTS();
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "fatal error: "));
-    System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
+    static uint32_t count = 0;
+    while(1) {
+        System::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
+        System::uart_ui.putu32d(count);
+        System::uart_ui.nputs(ARRANDN(" : " CLIRESET));
+        System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
 
-    delay_cycles(System::CLK::CPUCLK);
+        delay_cycles(System::CLK::CPUCLK * 10);
+        count++;
+    }
 
-    DL_SYSCTL_resetDevice(DL_SYSCTL_RESET_CAUSE_POR_SW_TRIGGERED);
+    // this will effectively stun lock the device and make the debugger throw a fit
+//    DL_SYSCTL_resetDevice(DL_SYSCTL_RESET_CAUSE_POR_SW_TRIGGERED);
 }
 
 void System::UART::UART::nputs(const char *str, uint32_t n) {
@@ -464,7 +474,7 @@ void System::UART::UART::ngets(char *str, uint32_t n) {
     }
 }
 
-void System::UART::UART::printu32d(uint32_t v) {
+void System::UART::UART::putu32d(uint32_t v) {
     if(v == 0){
         DL_UART_transmitDataBlocking(reg, '0');
         return;
@@ -482,7 +492,7 @@ void System::UART::UART::printu32d(uint32_t v) {
     }
 }
 
-void System::UART::UART::printu32h(uint32_t v) {
+void System::UART::UART::putu32h(uint32_t v) {
     int started = 0;
 
     int i;
@@ -509,18 +519,29 @@ void System::SPI::SPI::setSCLKTarget(uint32_t target, uint32_t clk){
 }
 
 void System::SPI::SPI::_irq() {
-    static BaseType_t xHigherPriorityTaskWoken;
-    xHigherPriorityTaskWoken = pdFALSE;
-
-    switch(DL_SPI_getPendingInterrupt(reg)){
+    DL_SPI_IIDX intr = DL_SPI_getPendingInterrupt(reg);
+    switch(intr){
+        case DL_SPI_IIDX::DL_SPI_IIDX_IDLE:
         case DL_SPI_IIDX::DL_SPI_IIDX_RX:
             while(!DL_SPI_isRXFIFOEmpty(reg)){
                 if(_trxBuffer.rx_i < _trxBuffer.len){
-                    _trxBuffer.rx[_trxBuffer.rx_i++] = DL_SPI_receiveData8(reg);
+                    if(_trxBuffer.rx)
+                        _trxBuffer.rx[_trxBuffer.rx_i] = DL_SPI_receiveData8(reg);
+                    else
+                        DL_SPI_receiveData8(reg);
+                    _trxBuffer.rx_i++;
                 } else {
                     // ignore and flush
                     DL_SPI_receiveData8(reg);
                 }
+            }
+
+            if(_trxBuffer.cs && !DL_SPI_isBusy(reg) && (
+                    (!_trxBuffer.tx || (_trxBuffer.tx_i >= _trxBuffer.len))
+                &&  (!_trxBuffer.rx || (_trxBuffer.rx_i >= _trxBuffer.len))
+              )) {
+                _trxBuffer.cs->clear();
+                _trxBuffer.cs = NULL;
             }
 
             break;
@@ -547,60 +568,37 @@ void System::SPI::SPI::_irq() {
             break;
 
     };
-
-    // end condition
-    if((_trxBuffer.rx_i >= _trxBuffer.len) && (_trxBuffer.tx_i >= _trxBuffer.len))
-        xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_SPI_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
-
-    portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 }
 
-bool System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, TickType_t timeout){
-    TickType_t stopTime = xTaskGetTickCount() + timeout;
-
-    while(DL_SPI_isBusy(reg)){
+void System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, System::GPIO::GPIO const * cs){
+    while(isBusy()) {
         vTaskDelay(0);
-        if(xTaskGetTickCount() > stopTime)
-            return false;
     }
 
-    if(!takeResource(timeout))
-        return false;
-
-    _trxBuffer.host_task = xTaskGetCurrentTaskHandle();
     _trxBuffer.tx = (uint8_t *) tx;
     _trxBuffer.rx = (uint8_t *) rx;
-    _trxBuffer.rx_i = 0;
     _trxBuffer.len = len;
+    _trxBuffer.cs = cs;
+    _trxBuffer.tx_i = 0;
 
-    NVIC_EnableIRQ(SPI0_INT_IRQn);
+    if(_trxBuffer.cs)
+        _trxBuffer.cs->set();
 
-    // sanitization
-    if(!_trxBuffer.rx)
-        _trxBuffer.rx_i = _trxBuffer.len;
-    // tx is checked by the IRQ so its not needed here
+    if(_trxBuffer.rx)
+        _trxBuffer.rx_i = 0;
+    else
+        _trxBuffer.rx_i = _trxBuffer.tx_i;
 
-    // start IRQ handling by transmitting something
-    if(_trxBuffer.tx) {
-        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, _trxBuffer.tx, 1);
-    } else {
-        _trxBuffer.tx_i = DL_SPI_fillTXFIFO8(reg, &TRANSFER_FILLER_BYTE, 1);
-    }
-
-    if(0 == ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, pdTRUE, timeout)){
-        NVIC_DisableIRQ(SPI0_INT_IRQn);
-        // timed out
-        _trxBuffer.len = 0;
-        releaseResource();
-        return false;
-    }
-
-    NVIC_DisableIRQ(SPI0_INT_IRQn);
-    _trxBuffer.len = 0;
-    releaseResource();
-    return true;
+    // start IRQ handlers
+    reg->CPU_INT.ISET |= SPI_CPU_INT_ISET_TX_SET;
+    NVIC_SetPendingIRQ(irq_type);
 }
 
+bool System::SPI::SPI::isBusy() {
+    return      (_trxBuffer.tx && (_trxBuffer.tx_i < _trxBuffer.len))
+            ||  (_trxBuffer.rx && (_trxBuffer.rx_i < _trxBuffer.len))
+            ||  DL_SPI_isBusy(reg);
+}
 
 void System::I2C::I2C::partialInitController(){
     DL_I2C_ClockConfig clk_config = {

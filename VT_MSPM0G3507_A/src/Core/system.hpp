@@ -6,8 +6,7 @@
  *
  *  target MCU : MSPM0G3507         https://www.ti.com/product/MSPM0G3507
  *
- *  using FreeRTOS.
- *  using MSPM0 SKD 2.05.00.05
+ *  Intended for use with FreeRTOS
  */
 
 /*** OVERVIEW **************************************************************************************
@@ -17,6 +16,8 @@
  *
  *** NOTES *****************************************************************************************
  * - THE CALLING FUNCTION MUST LOCK THE PERIPHERIAL RESOURCE BEFORE USINGIT
+ * - all peripherals have wrappers. no matter how pointless it is. for semaphore control stuff
+ *      - the semaphore is runtime so the compiler probably want to optimize it.
  *
  * - citation formatting
  *      - always have the section
@@ -26,14 +27,16 @@
  *      - "LP" : launch-pad                                  https://www.ti.com/tool/LP-MSPM0G3507
  *      - "LPDS" : launch pad user-guide/data-sheet          https://www.ti.com/lit/ug/slau873d/slau873d.pdf?ts=1749180414460&ref_url=https%253A%252F%252Fwww.ti.com%252Ftool%252FLP-MSPM0G3507
  *      - "FDS" : family specific data sheet                 https://www.ti.com/lit/ug/slau846b/slau846b.pdf?ts=1749245238762&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
- *      - "TDS" "TRM" : chip specific technical data sheet   https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf?ts=1749166832439&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
+ *      - "TDS" : chip specific technical data sheet         https://www.ti.com/lit/ds/symlink/mspm0g3507.pdf?ts=1749166832439&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSPM0G3507
  *
  *      - "BQ" : evaluation-board                            https://www.ti.com/tool/BQ76952EVM
  *      - "BQDS" : BQ data sheet                   https://www.ti.com/lit/ds/symlink/bq76952.pdf?ts=1751601724825&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FBQ76952
  *      - "BQTRM" : BQ technical reference manual  https://www.ti.com/lit/ug/sluuby2b/sluuby2b.pdf?ts=1751657887923&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FBQ76952%253Futm_source%253Dgoogle%2526utm_medium%253Dcpc%2526utm_campaign%253Dapp-null-null-GPN_EN-cpc-pf-google-ww_en_cons%2526utm_content%253DBQ76952%2526ds_k%253DBQ76952+Datasheet%2526DCM%253Dyes%2526gad_source%253D1%2526gad_campaignid%253D1767856010%2526gbraid%253D0AAAAAC068F3kMVn5JB15cZNcLXZ2ysu0t%2526gclid%253DCj0KCQjw953DBhCyARIsANhIZoa8LrrvSAnWBtKYvyJsSyVJWRKfkSw7Zxzr4w8DOEBf7oJBMp3RtwcaAklgEALw_wcB%2526gclsrc%253Daw.ds
  *
- * - if possible use MFCLK for things, it's factory set to 4Mhz
- * - the comment style is what ever the writer feels like. no Doxygen, no JavaDoc, we ball
+ * - default clock is MFCLK : this is factory set to 4Mhz on the MSPM0G3507
+ * - the comment style is what ever I feel like. no Doxygen, no JavaDoc, we ball
+ * - hardware resources are coordinated across 'tasks' using mutex's, even if we decide that a
+ *      specific peripheral will only ever be used by a specific 'task' still use resource locking.
  */
 
 #ifndef SRC_CORE_SYSTEM_HPP_
@@ -55,22 +58,19 @@
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
 #define PROJECT_VERSION         "2.1" // [project version].[hardware version].[software version]
 
+/*--- IC footprint -------------------------------------*/
+
+#define MSPM0G3507_LQFP64   // UG.6.1/6
+//#define MSPM0G3507_LQFP48   // UG.6.1/7
+//#define MSPM0G3507_VQFN48   // UG.6.1/8
+//#define MSPM0G3507_VQFN32   // UG.6.1/9
+//#define MSPM0G3507_VSSOP28  // UG.6.1/9
 
 /*--- shorthand ----------------------------------------*/
 
 #define BV(X) (1 << (X))
 #define STRINGIFY(X) #X
 #define TOSTRING(X) STRINGIFY(X)
-
-#define NEWLINE                     "\n\r"
-#define CLIERROR                    "\033[38;2;255;0;0m"
-#define CLIHIGHLIGHT                "\033[38;2;255;255;0m"
-#define CLIGOOD                     "\033[38;2;0;255;0m"
-#define CLIYES                      "\033[38;2;0;255;255m"
-#define CLINO                       "\033[38;2;255;0;255m"
-#define CLIWARN                     "\033[38;2;255;100;0m"
-#define CLIRESET                    "\033[0m"
-#define CLICLEAR                    "\033[2J\033[H\033[0m"
 
 /* if fails BMS will immediately trigger a shutdown */
 #define ASSERT_FATAL(X, STR)        if(!(X)) System::FailHard(STR " @assert:line" TOSTRING(__LINE__) "," __FILE__);
@@ -85,6 +85,17 @@
 #define OCCUPY(ID)                  constexpr int const __PROJECT_OCCUPY_##ID = 0;
 
 /*--- general configuration ----------------------------*/
+
+#define NEWLINE                     "\n\r"
+#define CLIERROR                    "\033[38;2;255;0;0m"
+#define CLIHIGHLIGHT                "\033[38;2;255;255;0m"
+#define CLIBAD                      CLIERROR
+#define CLIGOOD                     "\033[38;2;0;255;0m"
+#define CLIYES                      "\033[38;2;0;255;255m"
+#define CLINO                       "\033[38;2;255;0;255m"
+#define CLIWARN                     "\033[38;2;255;100;0m"
+#define CLIRESET                    "\033[0m"
+#define CLICLEAR                    "\033[2J\033[H\033[0m"
 
 #define MAX_STR_LEN_COMMON          125   // assumed max length of a string if not specified. to minimize the damage of overruns.
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
@@ -116,7 +127,6 @@
 
 /*--- common peripheral pins ---------------------------*/
 
-// TODO update this once project finalized
 namespace System {
     OCCUPY(UART0)   // UI
     OCCUPY(PINCM21) //PA10
@@ -205,17 +215,38 @@ namespace System {
             void clear() const { DL_GPIO_clearPins(port, pin); }
         };
 
+//#define MSPM0G3507_LQFP64   // UG.6.1/6
+//#define MSPM0G3507_LQFP48   // UG.6.1/7
+//#define MSPM0G3507_VQFN48   // UG.6.1/8
+//#define MSPM0G3507_VQFN32   // UG.6.1/9
+//#define MSPM0G3507_VSSOP28  // UG.6.1/9
+
         // Port A (PA) pins
-        extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
-                     PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
-                     PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
-                     PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31;
+        #ifdef  MSPM0G3507_LQFP64
+            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
+                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
+                 PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31;
+        #elif defined MSPM0G3507_VQFN32
+            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
+                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
+                 PA24, PA25, PA26, PA27;
+        #else
+            #error "forgot to setup the avilable pins for this footprint"
+        #endif
 
         // Port B (PB) pins
-        extern const GPIO PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7,
-                     PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
-                     PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23,
-                     PB24, PB25, PB26, PB27;
+        #ifdef  MSPM0G3507_LQFP64
+            extern const GPIO PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7,
+                         PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
+                         PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23,
+                         PB24, PB25, PB26, PB27;
+        #elif defined MSPM0G3507_VQFN32
+            // no port B
+        #else
+            #error "forgot to setup the avilable pins for this footprint"
+        #endif
 
     }
 
@@ -285,12 +316,23 @@ namespace System {
     namespace CANFD {
         /**
          * CAN peripheral : www.ti.com/lit/an/slaaet4/slaaet4.pdf
+         * J1939 : www.csselectronics.com/pages/j1939-explained-simple-intro-tutorial
          *
          * i used sys config to get the timing values.
          *  theres a document over the tm4c12x chips that goes over the exact calculations
          *
          * just use the DL funcitons, its good enough
          */
+
+        struct __attribute__((__packed__)) CAN_ID_J1939 {
+            unsigned int src_addr       : 8;
+            unsigned int pdu_specific   : 8;
+            unsigned int pdu_format     : 8;
+            unsigned int data_page      : 1;
+            unsigned int                : 1;
+            unsigned int prioroty       : 3;
+        };
+        static_assert(sizeof(CAN_ID_J1939) == sizeof(uint32_t));
     }
 
     void init();
@@ -322,24 +364,6 @@ namespace System {
     #endif
 
 }
-
-/*--- idiot detection ------------------------------------------------------------------*/
-
-#if !defined(PROJECT_ENABLE_UART0)
-    #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
-    /* uart0 is used by the LP */
-#endif
-
-// i fear for the day this happens
-static_assert(pdTRUE == true,
-        "pdTRUE != true . the FreeRTOS definition of \"true\" is not the same value as c/c++s \
-        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
-    );
-static_assert(pdFALSE == false,
-        "pdFALSE != false . the FreeRTOS definition of \"false\" is not the same value as c/c++s \
-        definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
-    );
-
 
 #endif /* SRC_CORE_SYSTEM_HPP_ */
 
