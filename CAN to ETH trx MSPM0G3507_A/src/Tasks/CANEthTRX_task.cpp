@@ -8,6 +8,7 @@
 #include <Tasks/CANEthTRX_task.hpp>
 
 #include <stdint.h>
+#include <string.h>
 
 #include "Core/system.hpp"
 #include "Middleware/W5500/socket.h"
@@ -107,20 +108,12 @@ void Task::CAN_Eth_TRX_UI_task(void *){
         );
     DL_GPIO_enableOutput(GPIOPINPUX(wiz_reset));
     wiz_reset.clear();
-    delay_cycles(System::CLK::CPUCLK / 10);
+    delay_cycles(System::CLK::CPUCLK / 100);
     wiz_reset.set();
-    delay_cycles(System::CLK::CPUCLK / 10);
+    delay_cycles(System::CLK::CPUCLK / 100);
     wiz_reset.clear();
-    delay_cycles(System::CLK::CPUCLK / 10);
+    delay_cycles(System::CLK::CPUCLK / 100);
 
-//    while(1){
-//        wiz_select();
-//        wiz_write_byte(1);
-//        wiz_write_byte(2);
-//        wiz_write_byte(3);
-//        uint8_t ret = wiz_read_byte();
-//        wiz_deselect();
-//    }
 
     if(wizchip_init(NULL,NULL))
         System::uart_ui.nputs(ARRANDN("failed wizchip init chip" NEWLINE));
@@ -156,33 +149,50 @@ void Task::CAN_Eth_TRX_UI_task(void *){
 
     /****************************************************************/
 
-    DL_MCAN_RxFIFOStatus rx_can;
     while(1){
-        // RX CAN
-        rx_can.num = DL_MCAN_RX_FIFO_NUM_0;
-        DL_MCAN_getRxFIFOStatus(CANFD0, &rx_can);
+        // CAN -> ETH
+        {
+            static DL_MCAN_RxFIFOStatus rx_can;
 
-        if(rx_can.fillLvl != 0) { // if not empty
-            DL_MCAN_RxBufElement e;
-            DL_MCAN_readMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, 0, rx_can.num, &e);
-            DL_MCAN_writeRxFIFOAck(CANFD0, rx_can.num, rx_can.getIdx);
+            static struct {
+                uint32_t canid;
+                uint8_t len;
+                uint8_t data[DL_MCAN_MAX_PAYLOAD_BYTES];
+            } tx_eth;
 
-            uint32_t id;
-            if(e.xtd)   id = e.id;
-            else        id = (e.id & 0x1FFC'0000) >> 18;
+            rx_can.num = DL_MCAN_RX_FIFO_NUM_0;
+            DL_MCAN_getRxFIFOStatus(CANFD0, &rx_can);
 
-            System::uart_ui.nputs(ARRANDN("rx CAN-ID: "));
-            System::uart_ui.putu32d(id);
-            System::uart_ui.nputs(ARRANDN(" ... "));
+            if(rx_can.fillLvl != 0) { // if not empty
+                DL_MCAN_RxBufElement e;
+                DL_MCAN_readMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, 0, rx_can.num, &e);
+                DL_MCAN_writeRxFIFOAck(CANFD0, rx_can.num, rx_can.getIdx);
 
-            if((error = sendto(sn, e.data, e.dlc, tx_target_IP, 33512)) != e.dlc){
-                System::uart_ui.nputs(ARRANDN("failed TX to wizchip. \t"));
-                wiz_print_sockerror(error);
+                if(e.xtd)   tx_eth.canid = e.id;
+                else        tx_eth.canid = (e.id & 0x1FFC'0000) >> 18;
+
+                tx_eth.len = e.dlc;
+
+                memcpy(tx_eth.data,e.data,e.dlc);
+
+                System::uart_ui.nputs(ARRANDN("rx can id : "));
+                System::uart_ui.putu32d(tx_eth.canid);
+                System::uart_ui.nputs(ARRANDN(" ... "));
+
+                if((error = sendto(sn, (uint8_t *)&tx_eth, sizeof(tx_eth), tx_target_IP, 33512)) != e.dlc){
+                    System::uart_ui.nputs(ARRANDN("eth tx fail \t"));
+                    wiz_print_sockerror(error);
+                }
+                else
+                    System::uart_ui.nputs(ARRANDN("eth tx success"));
+
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
             }
-            else
-                System::uart_ui.nputs(ARRANDN("success TX"));
+        }
 
-            System::uart_ui.nputs(ARRANDN(NEWLINE));
+        // ETH -> CAN
+        {
+            // not a requirement. TODO later
         }
 
     }
