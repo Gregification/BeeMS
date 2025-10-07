@@ -33,7 +33,7 @@ void Task::MCAN_test_task(void *){
 
         uint32_t bufferIndex = tf.putIdx;
         System::uart_ui.nputs(ARRANDN("TX from buffer "));
-        System::uart_ui.printu32d(bufferIndex);
+        System::uart_ui.putu32d(bufferIndex);
         System::uart_ui.nputs(ARRANDN("" NEWLINE));
 
         DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
@@ -60,7 +60,7 @@ void Task::MCAN_test_task(void *){
             else        id = (e.id & 0x1FFC'0000) >> 18;
 
             System::uart_ui.nputs(ARRANDN("ID: "));
-            System::uart_ui.printu32d(id);
+            System::uart_ui.putu32d(id);
             System::uart_ui.nputs(ARRANDN("" NEWLINE));
         }
 

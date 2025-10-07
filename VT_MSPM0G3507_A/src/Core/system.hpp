@@ -56,7 +56,7 @@
 
 #define PROJECT_NAME            "Voltage Tap"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "2.1" // [project version].[hardware version].[software version]
+#define PROJECT_VERSION         "2.2" // [project version].[hardware version].[software version]
 
 /*--- IC footprint -------------------------------------*/
 
@@ -128,9 +128,16 @@
 /*--- common peripheral pins ---------------------------*/
 
 namespace System {
-    OCCUPY(UART0)   // UI
-    OCCUPY(PINCM21) //PA10
-    OCCUPY(PINCM22) //PA11
+    #ifdef PROJECT_ENABLE_UART0
+    OCCUPY(PA10)
+    OCCUPY(PA11)
+    #endif
+
+    #ifdef PROJECT_ENABLE_SPI0
+    OCCUPY(PA9)
+    OCCUPY(PA12)
+    OCCUPY(PA13)
+    #endif
 }
 
 
@@ -251,9 +258,6 @@ namespace System {
     }
 
     namespace SPI {
-        /* transmitted when RX is needed but no TX is provided */
-        constexpr uint8_t TRANSFER_FILLER_BYTE = 0x0;
-
         /* - you must manually control CS
          * - for any transmission speeds worth a crap you will have to use DL
          * - functions here are general and are nowhere near peak performance
@@ -261,18 +265,23 @@ namespace System {
          */
         struct SPI : Lockable {
             SPI_Regs * const reg;
+            const IRQn_Type irq_type;
+
+            /* transmitted when RX is needed but no TX is provided */
+            uint8_t TRANSFER_FILLER_BYTE;
 
             void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 
-            bool transfer(void * tx, void * rx, uint16_t len, TickType_t timeout);
+            void transfer(void * tx, void * rx, uint16_t len, System::GPIO::GPIO const * cs = NULL);
+            bool isBusy();
 
             // should be private but eh
             struct {
-                TaskHandle_t host_task;
                 uint8_t *tx, *rx;
-                uint8_t len;
-                uint8_t tx_i, rx_i;
+                uint16_t len;
+                uint16_t tx_i, rx_i;
+                System::GPIO::GPIO const * cs;
             } _trxBuffer;
         };
     }
