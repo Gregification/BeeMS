@@ -4710,6 +4710,17 @@
 		)
 		(uuid "9174ac81-d856-435b-855c-e0f9dbeda73e")
 	)
+	(text "TODO.\n somehow support negative voltage range,\n like 2 inputs that support it, the rest \n can get shoved thoruhg the ADC's.\n\n probably a external adc IC"
+		(exclude_from_sim no)
+		(at 182.372 95.504 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "a5563b75-051d-4515-bd61-763aaaad8e45")
+	)
 	(text "On Board PWR\n	- (8,90]Vdc input (limited by connector)"
 		(exclude_from_sim no)
 		(at 13.97 64.77 0)
@@ -4985,7 +4996,7 @@
 		(uuid "85f3ff64-4ddd-4a8b-bb0c-a9722cf2ebc2")
 	)
 	(junction
-		(at 185.42 123.19)
+		(at 167.64 82.55)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "87561d11-0a3d-4463-a773-c902fb78e5d5")
@@ -5251,16 +5262,8 @@
 		(uuid "97635c98-088f-4da0-988a-3d001e2bdb19")
 	)
 	(no_connect
-		(at 231.14 62.23)
-		(uuid "b7cfd8a9-4f4f-4056-a54f-d8d9efb69994")
-	)
-	(no_connect
 		(at 231.14 97.79)
 		(uuid "bc1197dd-bfae-44d3-969a-da6c6509e09c")
-	)
-	(no_connect
-		(at 231.14 59.69)
-		(uuid "d3f9ce6d-b701-4eff-8c0a-3cec1fc7912e")
 	)
 	(wire
 		(pts
@@ -5424,7 +5427,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 102.87) (xy 218.44 118.11)
+			(xy 200.66 62.23) (xy 200.66 77.47)
 		)
 		(stroke
 			(width 0)
@@ -5684,7 +5687,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 102.87) (xy 231.14 102.87)
+			(xy 200.66 62.23) (xy 213.36 62.23)
 		)
 		(stroke
 			(width 0)
@@ -5754,7 +5757,7 @@
 	)
 	(wire
 		(pts
-			(xy 218.44 118.11) (xy 215.9 118.11)
+			(xy 200.66 77.47) (xy 198.12 77.47)
 		)
 		(stroke
 			(width 0)
@@ -6394,7 +6397,7 @@
 	)
 	(wire
 		(pts
-			(xy 184.15 118.11) (xy 195.58 118.11)
+			(xy 166.37 77.47) (xy 177.8 77.47)
 		)
 		(stroke
 			(width 0)
@@ -6434,7 +6437,7 @@
 	)
 	(wire
 		(pts
-			(xy 185.42 113.03) (xy 185.42 123.19)
+			(xy 167.64 72.39) (xy 167.64 82.55)
 		)
 		(stroke
 			(width 0)
@@ -6554,7 +6557,7 @@
 	)
 	(wire
 		(pts
-			(xy 215.9 100.33) (xy 231.14 100.33)
+			(xy 198.12 59.69) (xy 213.36 59.69)
 		)
 		(stroke
 			(width 0)
@@ -6724,7 +6727,7 @@
 	)
 	(wire
 		(pts
-			(xy 185.42 123.19) (xy 187.96 123.19)
+			(xy 167.64 82.55) (xy 170.18 82.55)
 		)
 		(stroke
 			(width 0)
@@ -6834,7 +6837,7 @@
 	)
 	(wire
 		(pts
-			(xy 215.9 113.03) (xy 215.9 100.33)
+			(xy 198.12 72.39) (xy 198.12 59.69)
 		)
 		(stroke
 			(width 0)
@@ -7184,7 +7187,7 @@
 	)
 	(wire
 		(pts
-			(xy 187.96 113.03) (xy 185.42 113.03)
+			(xy 170.18 72.39) (xy 167.64 72.39)
 		)
 		(stroke
 			(width 0)
@@ -7843,7 +7846,7 @@
 		(uuid "b547afff-0478-416b-a290-fa421c0ca0da")
 	)
 	(label "LED_GREEN"
-		(at 231.14 102.87 180)
+		(at 213.36 62.23 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7923,7 +7926,7 @@
 		(uuid "d979a92a-cddb-4b77-a713-4bb331c3fae2")
 	)
 	(label "LED_RED_N"
-		(at 231.14 100.33 180)
+		(at 213.36 59.69 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8688,7 +8691,7 @@
 	)
 	(symbol
 		(lib_id "power:+3.3V")
-		(at 223.52 123.19 270)
+		(at 205.74 82.55 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -8697,7 +8700,7 @@
 		(fields_autoplaced yes)
 		(uuid "115bd518-351b-4cce-9a58-3e2fd4ae7a29")
 		(property "Reference" "#PWR014"
-			(at 219.71 123.19 0)
+			(at 201.93 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8706,7 +8709,7 @@
 			)
 		)
 		(property "Value" "+3.3V"
-			(at 227.33 123.1899 90)
+			(at 209.55 82.5499 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8715,7 +8718,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 223.52 123.19 0)
+			(at 205.74 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8724,7 +8727,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 223.52 123.19 0)
+			(at 205.74 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8733,7 +8736,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 223.52 123.19 0)
+			(at 205.74 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11066,7 +11069,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 219.71 123.19 90)
+		(at 201.93 82.55 90)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -11075,7 +11078,7 @@
 		(dnp no)
 		(uuid "3d129741-b7df-400c-973e-d161c4da4b32")
 		(property "Reference" "R4"
-			(at 219.456 125.222 90)
+			(at 201.676 84.582 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11083,7 +11086,7 @@
 			)
 		)
 		(property "Value" "220"
-			(at 219.456 127.762 90)
+			(at 201.676 87.122 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11091,7 +11094,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 219.964 124.206 90)
+			(at 202.184 83.566 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11100,7 +11103,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 219.71 123.19 0)
+			(at 201.93 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11109,7 +11112,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 219.71 123.19 0)
+			(at 201.93 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11118,7 +11121,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 219.71 123.19 90)
+			(at 201.93 82.55 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11127,7 +11130,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 219.71 123.19 90)
+			(at 201.93 82.55 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11136,7 +11139,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P06J221V?qs=sGAEpiMZZMvdGkrng054t59%2FMXCyyixetKGpXQ7TwBs%3D"
-			(at 219.71 123.19 90)
+			(at 201.93 82.55 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11145,7 +11148,7 @@
 			)
 		)
 		(property "unit x10" "0.038"
-			(at 219.71 123.19 90)
+			(at 201.93 82.55 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11343,7 +11346,7 @@
 	)
 	(symbol
 		(lib_id "Device:LED")
-		(at 191.77 123.19 0)
+		(at 173.99 82.55 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -11351,7 +11354,7 @@
 		(dnp no)
 		(uuid "44ecf470-83ce-4b0e-89fb-00fc34690a2a")
 		(property "Reference" "D5"
-			(at 189.992 126.746 0)
+			(at 172.212 86.106 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11360,7 +11363,7 @@
 			)
 		)
 		(property "Value" "GREEN"
-			(at 189.992 129.286 0)
+			(at 172.212 88.646 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11369,7 +11372,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
-			(at 191.77 123.19 0)
+			(at 173.99 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11378,7 +11381,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 191.77 123.19 0)
+			(at 173.99 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11387,7 +11390,7 @@
 			)
 		)
 		(property "Description" "Light emitting diode"
-			(at 191.77 123.19 0)
+			(at 173.99 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11396,7 +11399,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=K 2=A"
-			(at 191.77 123.19 0)
+			(at 173.99 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11405,7 +11408,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/LITEON/LTST-S220GKT?qs=NUb82WqeCyoiEaTE8OXgMg%3D%3D"
-			(at 191.77 123.19 0)
+			(at 173.99 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11414,7 +11417,7 @@
 			)
 		)
 		(property "specs" "20mA, 2.1V, green LED"
-			(at 191.77 123.19 0)
+			(at 173.99 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13409,7 +13412,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 180.34 118.11 270)
+		(at 162.56 77.47 270)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -13418,7 +13421,7 @@
 		(dnp no)
 		(uuid "7c610b32-c902-4ce2-8b0e-df7a640e31a2")
 		(property "Reference" "R3"
-			(at 180.086 113.792 90)
+			(at 162.306 73.152 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13426,7 +13429,7 @@
 			)
 		)
 		(property "Value" "220"
-			(at 180.086 116.332 90)
+			(at 162.306 75.692 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13434,7 +13437,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 180.086 117.094 90)
+			(at 162.306 76.454 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13443,7 +13446,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 180.34 118.11 0)
+			(at 162.56 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13452,7 +13455,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 180.34 118.11 0)
+			(at 162.56 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13461,7 +13464,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 180.34 118.11 90)
+			(at 162.56 77.47 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13470,7 +13473,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 180.34 118.11 90)
+			(at 162.56 77.47 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13479,7 +13482,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P06J221V?qs=sGAEpiMZZMvdGkrng054t59%2FMXCyyixetKGpXQ7TwBs%3D"
-			(at 180.34 118.11 90)
+			(at 162.56 77.47 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13488,7 +13491,7 @@
 			)
 		)
 		(property "unit x10" "0.038"
-			(at 180.34 118.11 90)
+			(at 162.56 77.47 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14295,7 +14298,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 185.42 123.19 0)
+		(at 167.64 82.55 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14303,7 +14306,7 @@
 		(dnp no)
 		(uuid "9120eff4-88cd-4d9f-9bc7-c19db336bf7b")
 		(property "Reference" "#PWR013"
-			(at 185.42 129.54 0)
+			(at 167.64 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14312,7 +14315,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 185.42 128.27 90)
+			(at 167.64 87.63 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14320,7 +14323,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 185.42 123.19 0)
+			(at 167.64 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14329,7 +14332,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 185.42 123.19 0)
+			(at 167.64 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14338,7 +14341,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 185.42 123.19 0)
+			(at 167.64 82.55 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14652,7 +14655,7 @@
 	)
 	(symbol
 		(lib_id "Device:LED")
-		(at 191.77 113.03 0)
+		(at 173.99 72.39 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14660,7 +14663,7 @@
 		(dnp no)
 		(uuid "9f9e69f3-6958-4ef3-9b3b-6c7bb575fdf0")
 		(property "Reference" "D6"
-			(at 189.484 107.188 0)
+			(at 171.704 66.548 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14669,7 +14672,7 @@
 			)
 		)
 		(property "Value" "RED"
-			(at 189.484 109.728 0)
+			(at 171.704 69.088 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14678,7 +14681,7 @@
 			)
 		)
 		(property "Footprint" "Diode_SMD:D_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
-			(at 191.77 113.03 0)
+			(at 173.99 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14687,7 +14690,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 191.77 113.03 0)
+			(at 173.99 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14696,7 +14699,7 @@
 			)
 		)
 		(property "Description" "Light emitting diode"
-			(at 191.77 113.03 0)
+			(at 173.99 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14705,7 +14708,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=K 2=A"
-			(at 191.77 113.03 0)
+			(at 173.99 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14714,7 +14717,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/LITEON/LTST-S220KRKT?qs=OJGQYwtSA6MkzI4IzyWf3g%3D%3D"
-			(at 191.77 113.03 0)
+			(at 173.99 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14723,7 +14726,7 @@
 			)
 		)
 		(property "specs" "20mA, 2V, red LED"
-			(at 191.77 113.03 0)
+			(at 173.99 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15995,7 +15998,7 @@
 	)
 	(symbol
 		(lib_id "zzLocalLibrary:HBDM60V600X")
-		(at 213.36 110.49 0)
+		(at 195.58 69.85 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -16004,7 +16007,7 @@
 		(dnp no)
 		(uuid "c5d98ad7-e437-4537-9199-366e213494a9")
 		(property "Reference" "U7"
-			(at 205.74 106.68 0)
+			(at 187.96 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16012,7 +16015,7 @@
 			)
 		)
 		(property "Value" "HBDM60V600X"
-			(at 205.74 109.22 0)
+			(at 187.96 68.58 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16020,7 +16023,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6_Handsoldering"
-			(at 213.36 110.49 0)
+			(at 195.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16029,7 +16032,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 110.49 0)
+			(at 195.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16038,7 +16041,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 213.36 110.49 0)
+			(at 195.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16047,7 +16050,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Diodes-Incorporated/HBDM60V600X-7?qs=doiCPypUmgHAlny9AZ6%2FDQ%3D%3D"
-			(at 213.36 110.49 0)
+			(at 195.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16056,7 +16059,7 @@
 			)
 		)
 		(property "unit x10" "0.367"
-			(at 213.36 110.49 0)
+			(at 195.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16065,7 +16068,7 @@
 			)
 		)
 		(property "unit x1" "0.60"
-			(at 213.36 110.49 0)
+			(at 195.58 69.85 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16658,7 +16661,7 @@
 	)
 	(symbol
 		(lib_id "power:+3.3V")
-		(at 176.53 118.11 90)
+		(at 158.75 77.47 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -16667,7 +16670,7 @@
 		(fields_autoplaced yes)
 		(uuid "dc5eeb48-8b95-4da5-bf38-3792043c2152")
 		(property "Reference" "#PWR015"
-			(at 180.34 118.11 0)
+			(at 162.56 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16676,7 +16679,7 @@
 			)
 		)
 		(property "Value" "+3.3V"
-			(at 172.72 118.1099 90)
+			(at 154.94 77.4699 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16685,7 +16688,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 176.53 118.11 0)
+			(at 158.75 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16694,7 +16697,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 176.53 118.11 0)
+			(at 158.75 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16703,7 +16706,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 176.53 118.11 0)
+			(at 158.75 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)
