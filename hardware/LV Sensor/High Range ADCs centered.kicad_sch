@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "c6f4d83a-0178-4362-9f4f-86c2b7be0652")
+	(uuid "f7d0ce79-cfb7-483e-a951-4ea1a8b6bd71")
 	(paper "A4")
 	(lib_symbols
 		(symbol "Analog_ADC:MCP3421A0T-ECH"
@@ -500,20 +500,43 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "power:+3V3"
-			(power)
-			(pin_numbers
-				(hide yes)
-			)
+		(symbol "Diode:BAT54S"
 			(pin_names
 				(offset 0)
-				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
+			(property "Reference" "D"
+				(at 2.54 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "BAT54S"
+				(at -6.35 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+				(at 1.905 3.175 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.diodes.com/assets/Datasheets/ds11005.pdf"
+				(at -3.048 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -521,15 +544,7 @@
 					(hide yes)
 				)
 			)
-			(property "Value" "+3V3"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
+			(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
 				(at 0 0 0)
 				(effects
 					(font
@@ -538,7 +553,7 @@
 					(hide yes)
 				)
 			)
-			(property "Datasheet" ""
+			(property "ki_keywords" "schottky diode"
 				(at 0 0 0)
 				(effects
 					(font
@@ -547,7 +562,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(property "ki_fp_filters" "SOT?23*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -556,19 +571,10 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "+3V3_0_1"
+			(symbol "BAT54S_0_1"
 				(polyline
 					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
+						(xy -4.445 1.27) (xy -4.445 -1.27) (xy -2.54 0) (xy -4.445 1.27)
 					)
 					(stroke
 						(width 0)
@@ -580,7 +586,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
+						(xy -3.81 0) (xy -1.27 0)
 					)
 					(stroke
 						(width 0)
@@ -592,7 +598,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 2.54)
+						(xy -3.175 -1.27) (xy -3.175 -1.016)
 					)
 					(stroke
 						(width 0)
@@ -602,119 +608,69 @@
 						(type none)
 					)
 				)
-			)
-			(symbol "+3V3_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "power:-3V3"
-			(power)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Value" "-3V3"
-				(at 0 3.556 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"-3V3\""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "-3V3_0_0"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(name "~"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(symbol "-3V3_0_1"
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 1.27) (xy 0.762 1.27) (xy 0 2.54) (xy -0.762 1.27) (xy 0 1.27)
+						(xy -2.54 1.27) (xy -1.905 1.27)
 					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 -1.27) (xy -3.175 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 -1.27) (xy -2.54 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.905 1.27) (xy -1.905 1.016)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.905 0) (xy 1.905 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 0 0)
+					(radius 0.254)
 					(stroke
 						(width 0)
 						(type default)
@@ -723,57 +679,288 @@
 						(type outline)
 					)
 				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 3.81 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.905 1.27) (xy 1.905 -1.27) (xy 3.81 0) (xy 1.905 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.175 -1.27) (xy 3.175 -1.016)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 1.27) (xy 4.445 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 -1.27) (xy 3.175 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 -1.27) (xy 3.81 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 4.445 1.27) (xy 4.445 1.016)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "BAT54S_1_1"
+				(pin passive line
+					(at -7.62 0 0)
+					(length 3.81)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 5.08)
+					(name "COM"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 7.62 0 180)
+					(length 3.81)
+					(name "K"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
 			)
 			(embedded_fonts no)
 		)
 	)
-	(hierarchical_label "SCL"
-		(shape input)
-		(at 128.27 82.55 0)
+	(text "TODO: set up 8 of these dogs (see datasheet about model number to I2C addr correlation).\n- 4 for +-20V\n- 1 for +-50V\n- 3 for +-5v\n"
+		(exclude_from_sim no)
+		(at 120.65 68.072 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify left top)
+		)
+		(uuid "0568ced7-560c-4e1a-b0b2-310e033de75d")
+	)
+	(label "SDA"
+		(at 21.59 15.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "25b64b13-20b2-4105-bded-ee8e9cc3abf1")
+	)
+	(label "-3v3"
+		(at 21.59 20.32 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "78ee36ad-d201-4c72-9dc6-3802028f5473")
+	)
+	(label "SCL"
+		(at 81.28 38.1 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9b3dfd2a-a64d-486b-acaa-ce1e58dd4324")
+	)
+	(label "SCL"
+		(at 21.59 17.78 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a579a2c1-3ffa-4640-bb89-694488ec7b2f")
+	)
+	(label "+3v3"
+		(at 21.59 22.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "a9032a09-79a0-4852-9622-fba8231878c3")
+	)
+	(label "-3v3"
+		(at 68.58 50.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d8cc4e1e-9b98-4834-8ceb-8df685b785ef")
+	)
+	(label "+3v3"
+		(at 68.58 30.48 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "fb10591c-3760-47c3-95dd-a8f23d24ffad")
+	)
+	(label "SDA"
+		(at 81.28 40.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fd61193a-8abd-4403-986e-032a83851c66")
+	)
+	(hierarchical_label "SCL"
+		(shape input)
+		(at 21.59 17.78 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
 		)
 		(uuid "13945dfe-508d-4d3a-ac77-412106fbe83a")
 	)
 	(hierarchical_label "+3v3"
 		(shape input)
-		(at 128.27 77.47 0)
+		(at 21.59 22.86 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
 		(uuid "40ca359a-5937-461e-bfbb-13c8ab082ae4")
 	)
 	(hierarchical_label "-3v3"
 		(shape input)
-		(at 128.27 80.01 0)
+		(at 21.59 20.32 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
 		(uuid "4e03b8de-ef14-4a2e-9146-08fa15b4b835")
 	)
 	(hierarchical_label "SDA"
 		(shape input)
-		(at 128.27 85.09 0)
+		(at 21.59 15.24 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left)
+			(justify right)
 		)
 		(uuid "711c9915-2ad0-4c66-a624-cc3185b43a4b")
 	)
 	(symbol
 		(lib_id "Analog_ADC:MCP3421A0T-ECH")
-		(at 54.61 40.64 0)
+		(at 68.58 40.64 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -782,7 +969,7 @@
 		(fields_autoplaced yes)
 		(uuid "03e35a0f-e6eb-4737-a769-21cc96502f97")
 		(property "Reference" "U8"
-			(at 56.7533 29.21 0)
+			(at 70.7233 29.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -791,7 +978,7 @@
 			)
 		)
 		(property "Value" "MCP3421A0T-ECH"
-			(at 56.7533 31.75 0)
+			(at 70.7233 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -800,7 +987,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-6"
-			(at 71.12 48.26 0)
+			(at 85.09 48.26 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -810,7 +997,7 @@
 			)
 		)
 		(property "Datasheet" "http://ww1.microchip.com/downloads/en/DeviceDoc/22003e.pdf"
-			(at 54.61 27.94 0)
+			(at 68.58 27.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -819,7 +1006,7 @@
 			)
 		)
 		(property "Description" "Single Delta-Sigma 18bit Analog to Digital Converter, I2C Interface, SOT-23-6"
-			(at 54.61 40.64 0)
+			(at 68.58 40.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -923,17 +1110,44 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+3V3")
-		(at 54.61 30.48 0)
+		(lib_id "Diode:BAT54S")
+		(at 48.26 25.4 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "45b40d1b-cd77-4e62-aeb2-f77dc2fe9ff5")
-		(property "Reference" "#PWR022"
-			(at 54.61 34.29 0)
+		(uuid "24108df1-11f1-4864-b745-e2f94974069b")
+		(property "Reference" "D16"
+			(at 41.656 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "BAT54S"
+			(at 50.8 22.606 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-3"
+			(at 50.165 22.225 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/ds11005.pdf"
+			(at 45.212 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -941,16 +1155,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3V3"
-			(at 54.61 25.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 54.61 30.48 0)
+		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
+			(at 48.26 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -958,8 +1164,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" ""
-			(at 54.61 30.48 0)
+		(property "mouser" "https://www.mouser.com/ProductDetail/STMicroelectronics/BAT54SFILMY?qs=aA7MvVR8Lz9WP7KctxVz6g%3D%3D"
+			(at 48.26 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -967,8 +1173,17 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 54.61 30.48 0)
+		(property "unit x10" "0.136"
+			(at 48.26 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.24"
+			(at 48.26 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -977,78 +1192,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "b0e72689-ca85-42ff-8519-c9438a692896")
+			(uuid "56efcdfb-3cf8-4302-8ffc-6fa56df893f0")
+		)
+		(pin "2"
+			(uuid "4112327c-06f8-4ac3-91b9-97485a1b7af5")
+		)
+		(pin "3"
+			(uuid "e67da3d0-882b-4ad5-9fc4-6cb492b90d43")
 		)
 		(instances
 			(project "LV Sensor"
 				(path "/617142b8-749b-4adf-acb1-12b002688f76/068f2358-e2e0-4a56-8a28-ef1be94f6204"
-					(reference "#PWR022")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:-3V3")
-		(at 54.61 50.8 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "9197b6b9-70bc-49db-837e-3b02613f1712")
-		(property "Reference" "#PWR023"
-			(at 54.61 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "-3V3"
-			(at 54.61 55.88 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 54.61 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 54.61 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"-3V3\""
-			(at 54.61 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "7c16f828-7a9f-4f98-b78f-8de5d31995ec")
-		)
-		(instances
-			(project "LV Sensor"
-				(path "/617142b8-749b-4adf-acb1-12b002688f76/068f2358-e2e0-4a56-8a28-ef1be94f6204"
-					(reference "#PWR023")
+					(reference "D16")
 					(unit 1)
 				)
 			)
@@ -1237,6 +1392,106 @@
 			(project "LV Sensor"
 				(path "/617142b8-749b-4adf-acb1-12b002688f76/068f2358-e2e0-4a56-8a28-ef1be94f6204"
 					(reference "R25")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Diode:BAT54S")
+		(at 45.72 59.69 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "bb3b30d0-ebfb-4b66-89f5-b03eb0e68f19")
+		(property "Reference" "D15"
+			(at 39.116 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "BAT54S"
+			(at 48.26 56.896 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-3"
+			(at 47.625 56.515 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.diodes.com/assets/Datasheets/ds11005.pdf"
+			(at 42.672 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Vr 30V, If 200mA, Dual schottky barrier diode, in series, SOT-323"
+			(at 45.72 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/STMicroelectronics/BAT54SFILMY?qs=aA7MvVR8Lz9WP7KctxVz6g%3D%3D"
+			(at 45.72 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.136"
+			(at 45.72 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.24"
+			(at 45.72 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7faf2f5b-8d42-4359-999a-8029808b0a75")
+		)
+		(pin "2"
+			(uuid "21415f87-594e-403e-904a-de6b8eb2fef6")
+		)
+		(pin "3"
+			(uuid "5b144343-bccd-4664-a796-0df9355cb9d0")
+		)
+		(instances
+			(project "LV Sensor"
+				(path "/617142b8-749b-4adf-acb1-12b002688f76/068f2358-e2e0-4a56-8a28-ef1be94f6204"
+					(reference "D15")
 					(unit 1)
 				)
 			)
