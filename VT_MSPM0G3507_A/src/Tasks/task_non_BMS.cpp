@@ -35,6 +35,8 @@ void Task::non_BMS_functions_task(void *){
      * }
      */
 
+    while(1);
+
     System::FailHard("non_BMS_functions_task ended" NEWLINE);
     vTaskDelete(NULL);
 }

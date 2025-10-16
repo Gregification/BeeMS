@@ -37,7 +37,7 @@ void Task::BMS_task(void *){
      *      }
      * }
      */
-
+    while(1){};
     System::FailHard("BMS_task ended" NEWLINE);
     vTaskDelete(NULL);
 }
