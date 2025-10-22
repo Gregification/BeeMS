@@ -36,8 +36,8 @@ namespace System {
 
 void System::init() {
     #ifdef PROJECT_ENABLE_MCAN0
-        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM60, IOMUX_PINCM60_PF_CANFD0_CANRX); // CANRX, PA27
-        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM59, IOMUX_PINCM59_PF_CANFD0_CANTX); // CANTX, PA26
+        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANRX, PA12
+        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANTX, PA13
         // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
         DL_MCAN_enablePower(CANFD0);
         delay_cycles(POWER_STARTUP_DELAY);

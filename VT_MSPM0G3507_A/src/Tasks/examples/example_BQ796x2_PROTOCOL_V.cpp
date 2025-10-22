@@ -13,7 +13,7 @@
 #include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/system.hpp"
 
-#ifdef PROJECT_ENABLE_I2C0
+#ifdef PROJECT_ENABLE_I2C1
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
 
@@ -172,7 +172,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     while(true){
         for(uint8_t i = 0; i < sizeof(cmds); i++){
             uint16_t v = 0xBEEF;
-            if(bq.I2C_ReadReg(cmds[i], &v, sizeof(v),pdMS_TO_TICKS(100))){
+            if(bq.I2C_ReadReg(cmds[i], &v, sizeof(v))){
                 snprintf(ARRANDN(str), "%6d,", v);
             } else {
                 snprintf(ARRANDN(str), "?%5d,", v);
