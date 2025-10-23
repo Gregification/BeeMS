@@ -48,19 +48,19 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::BMS_task,
-//            "BMS_task",
-//            configMINIMAL_STACK_SIZE,
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
-//
-//    xTaskCreate(Task::non_BMS_functions_task,
-//            "non_BMS_functions_task",
-//            configMINIMAL_STACK_SIZE,
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
+    xTaskCreate(Task::BMS_task,
+            "BMS_task",
+            configMINIMAL_STACK_SIZE*10,
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
+
+    xTaskCreate(Task::non_BMS_functions_task,
+            "non_BMS_functions_task",
+            configMINIMAL_STACK_SIZE,
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
 
     vTaskStartScheduler();
 

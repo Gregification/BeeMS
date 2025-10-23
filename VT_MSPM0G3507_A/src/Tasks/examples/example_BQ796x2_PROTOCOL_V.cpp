@@ -169,6 +169,17 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
         };
 
     char str[MAX_STR_LEN_COMMON];
+    {
+    uint16_t v = 0xBEEF;
+
+    bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::StackVoltage, &v, sizeof(v));
+    snprintf(ARRANDN(str), "%6d,", v);
+    System::uart_ui.nputs(ARRANDN(str));
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+    while(1);
+    }
+
+
     while(true){
         for(uint8_t i = 0; i < sizeof(cmds); i++){
             uint16_t v = 0xBEEF;
