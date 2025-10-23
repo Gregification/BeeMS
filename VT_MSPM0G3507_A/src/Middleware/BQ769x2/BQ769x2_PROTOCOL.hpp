@@ -21,6 +21,8 @@ namespace BQ769X2_PROTOCOL {
 
     //Data  Memory  registers   Name in TRM
     enum RegAddr : uint16_t {
+        SECURITY_KEY_ENTRY_1          = 0x003E,
+        SECURITY_KEY_ENTRY_2          = 0x003F,
         Cell1Gain                     = 0x9180,   //Calibration:Voltage:Cell 1 Gain
         Cell2Gain                     = 0x9182,   //Calibration:Voltage:Cell 2 Gain
         Cell3Gain                     = 0x9184,   //Calibration:Voltage:Cell 3 Gain

@@ -13,9 +13,13 @@
 #include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/system.hpp"
 
+void printBattStatus(uint16_t);
+
 #ifdef PROJECT_ENABLE_I2C1
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     System::uart_ui.nputs(ARRANDN("BQ769x2_PROTOCOL_Test_V_Task Start" NEWLINE));
+
+    char str[MAX_STR_LEN_COMMON];
 
     // -----------------------------------------------------------------------------
 
@@ -23,7 +27,61 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
 
-    bq.i2c_controller->setSCLTarget(100e3);
+    bq.i2c_controller->setSCLTarget(70e3);
+
+    // -----------------------------------------------------------------------------
+
+    // unseal the BQ
+    {
+        uint16_t v = 0xBEEF;
+
+        // dump battery status
+        bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+        snprintf(ARRANDN(str), "battery status 0x%x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+        printBattStatus(v);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+    {
+        //bqTM.13.8.2/197
+        int a = 0;
+
+        uint8_t
+            sk1 = 0x0414,
+            sk2 = 0x3672;
+        a += bq.I2C_WriteReg(0x3E, 0x04);
+        a += bq.I2C_WriteReg(0x3F, 0x14);
+        a += bq.I2C_WriteReg(0x3E, 0x36);
+        a += bq.I2C_WriteReg(0x3F, 0x72);
+
+        snprintf(ARRANDN(str), "unlock TX status? %d" NEWLINE, a);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+    {
+        uint16_t v = 0xBEEF;
+
+        // dump battery status
+        bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+        snprintf(ARRANDN(str), "battery status 0x%x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+        printBattStatus(v);
+
+        vTaskDelay(pdMS_TO_TICKS(10e3));
+    }
+
+
+
+
+
+    while(1);
+
 
 
     // -----------------------------------------------------------------------------
@@ -168,15 +226,17 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
              BQ769X2_PROTOCOL::CmdDrt::Cell16Voltage
         };
 
-    char str[MAX_STR_LEN_COMMON];
+//    while(1)
     {
-    uint16_t v = 0xBEEF;
+        uint16_t v = 0xBEEF;
 
-    bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::StackVoltage, &v, sizeof(v));
-    snprintf(ARRANDN(str), "%6d,", v);
-    System::uart_ui.nputs(ARRANDN(str));
-    System::uart_ui.nputs(ARRANDN(NEWLINE));
-    while(1);
+        // dump battery status
+        bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+        snprintf(ARRANDN(str), "battery status 0x%x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+        printBattStatus(v);
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
 
@@ -191,7 +251,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
 
             System::uart_ui.nputs(ARRANDN(str));
 
-            vTaskDelay(pdMS_TO_TICKS(10));
+            vTaskDelay(pdMS_TO_TICKS(200));
         }
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
@@ -204,3 +264,67 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*){
     vTaskDelete(NULL);
 };
 #endif
+
+void printBattStatus(uint16_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "CFG_UPDATE mode ? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(0)) ? "yes" : "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "PCHG_UPDATE mode ? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(1)) ? "yes" : "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "SLEEP_en ? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(2)) ? "yes" : "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "POR ? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(3)) ? "1" : "0"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "WD : "));
+    System::uart_ui.nputs(ARRANDN((v & BV(4)) ? "previous reset caused by WD" : "previous reset normal"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "COW_CHK (Cell Open Wire Check active)? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(5)) ? "yes" : "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "OTPW (OTP write pending)? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(6)) ? "yes" : "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "OTPB (OTP write blocked)? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(7)) ? "yes" : "no"));
+
+    // SEC bits (9:8)
+    uint8_t sec = (v >> 8) & 0x03;
+    System::uart_ui.nputs(ARRANDN(NEWLINE "Security mode: "));
+    switch (sec) {
+        case 0:
+            System::uart_ui.nputs(ARRANDN("Not initialized"));
+            break;
+        case 1:
+            System::uart_ui.nputs(ARRANDN("FULLACCESS"));
+            break;
+        case 2:
+            System::uart_ui.nputs(ARRANDN("UNSEALED"));
+            break;
+        case 3:
+            System::uart_ui.nputs(ARRANDN("SEALED"));
+            break;
+    }
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "FUSE pin asserted? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(10)) ? "yes" : "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "Safety fault (SS)? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(11)) ? "triggered" : "none"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "Permanent Fail (PF)? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(12)) ? "triggered" : "none"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "Shutdown pending (SDM)? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(13)) ? "yes" : "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "Reserved bit (14): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(14)) ? "1" : "0"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE "Device in SLEEP mode? "));
+    System::uart_ui.nputs(ARRANDN((v & BV(15)) ? "yes" : "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}

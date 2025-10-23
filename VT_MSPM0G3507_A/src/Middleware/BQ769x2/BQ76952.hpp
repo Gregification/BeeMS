@@ -54,6 +54,7 @@ public:
 
     bool I2C_ReadReg(uint8_t reg_addr, void *reg_data, uint8_t count);
     bool I2C_WriteReg(uint8_t reg_addr, void *reg_data, uint8_t count);
+    bool I2C_WriteReg(uint8_t reg_addr, uint8_t data);
 };
 
 
