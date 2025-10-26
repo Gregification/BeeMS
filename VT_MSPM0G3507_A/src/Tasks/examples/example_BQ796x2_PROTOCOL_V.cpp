@@ -27,7 +27,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
 
-    bq.i2c_controller->setSCLTarget(70e3);
+    bq.i2c_controller->setSCLTarget(100e3);
 
     // -----------------------------------------------------------------------------
 
@@ -53,10 +53,11 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
         uint8_t
             sk1 = 0x0414,
             sk2 = 0x3672;
-        a += bq.I2C_WriteReg(0x3E, 0x04);
-        a += bq.I2C_WriteReg(0x3F, 0x14);
-        a += bq.I2C_WriteReg(0x3E, 0x36);
-        a += bq.I2C_WriteReg(0x3F, 0x72);
+        a += bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::UnsealKeyStep1, 0x04);
+        a += bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::UnsealKeyStep2, 0x14);
+        a += bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::UnsealKeyStep1, 0x36);
+        a += bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::UnsealKeyStep2, 0x72);
+//        bq.sendSubcommandW(cmd, data)
 
         snprintf(ARRANDN(str), "unlock TX status? %d" NEWLINE, a);
         System::uart_ui.nputs(ARRANDN(str));
@@ -74,13 +75,15 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
         printBattStatus(v);
 
         vTaskDelay(pdMS_TO_TICKS(10e3));
+        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE NEWLINE));
+
     }
 
 
 
 
 
-    while(1);
+//    while(1);
 
 
 

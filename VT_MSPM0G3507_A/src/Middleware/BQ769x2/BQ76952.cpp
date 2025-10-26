@@ -45,5 +45,5 @@ bool BQ76952::I2C_WriteReg(uint8_t reg_addr, void *reg_data, uint8_t count){
 }
 
 bool BQ76952::I2C_WriteReg(uint8_t reg_addr, uint8_t data){
-    return I2C_WriteReg(reg_addr, &data, 1);
+    return BQ769X2_PROTOCOL::I2C_WriteReg(*i2c_controller, i2c_addr, reg_addr, &data, 1);
 }
