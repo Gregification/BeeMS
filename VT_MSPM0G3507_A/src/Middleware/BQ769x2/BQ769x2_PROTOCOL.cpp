@@ -11,7 +11,7 @@
 // BQ Parameters ***************************************************************
 //******************************************************************************
 
-uint8_t Checksum(uint8_t *ptr, uint8_t len)
+uint8_t BQ769X2_PROTOCOL::Checksum(uint8_t *ptr, uint8_t len)
 // Calculates the checksum when writing to a RAM register. The checksum is the inverse of the sum of the bytes.
 {
     uint8_t i;
@@ -24,7 +24,7 @@ uint8_t Checksum(uint8_t *ptr, uint8_t len)
     return (checksum);
 }
 
-uint8_t CRC8(uint8_t *ptr, uint8_t len)
+uint8_t BQ769X2_PROTOCOL::CRC8(uint8_t *ptr, uint8_t len)
 //Calculates CRC8 for passed bytes. Used in i2c read and write functions
 {
     uint8_t i;
@@ -154,7 +154,7 @@ bool BQ769X2_PROTOCOL::sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t
     if(!I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 2))
         return false;
 
-    delay_cycles(System::CLK::CPUCLK/1000 * 2);
+    vTaskDelay(pdMS_TO_TICKS(2));
 
     if(!I2C_ReadReg(i2c_controller, i2c_addr, 0x40, readOut, 32))
         return false;
@@ -227,26 +227,26 @@ bool BQ769X2_PROTOCOL::setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c
     switch (datalen) {
         case 1:  //1 byte datalength
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_RegData, 3))
-                delay_cycles(System::CLK::CPUCLK/1000 * 2);
+                vTaskDelay(pdMS_TO_TICKS(2));
             else return false;
 
             TX_Buffer[0] = Checksum(TX_RegData, 3);
             TX_Buffer[1] = 0x05;  //combined length of register address and data
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2))  // Write the checksum and length
-                delay_cycles(System::CLK::CPUCLK/1000 * 2);
+                vTaskDelay(pdMS_TO_TICKS(2));
             else return false;
 
             break;
         case 2:  //2 byte datalength
             TX_RegData[3] = (reg_data >> 8) & 0xff;
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_RegData, 4))
-                delay_cycles(System::CLK::CPUCLK/1000 * 2);
+                vTaskDelay(pdMS_TO_TICKS(2));
             else return false;
 
             TX_Buffer[0] = Checksum(TX_RegData, 4);
             TX_Buffer[1] = 0x06;  //combined length of register address and data
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2))  // Write the checksum and length
-                delay_cycles(System::CLK::CPUCLK/1000 * 2);
+                vTaskDelay(pdMS_TO_TICKS(2));
             else return false;
 
             break;
@@ -256,13 +256,13 @@ bool BQ769X2_PROTOCOL::setRegister(System::I2C::I2C &i2c_controller, uint8_t i2c
             TX_RegData[4] = (reg_data >> 16) & 0xff;
             TX_RegData[5] = (reg_data >> 24) & 0xff;
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_RegData, 6))
-                delay_cycles(System::CLK::CPUCLK/1000 * 2);
+                vTaskDelay(pdMS_TO_TICKS(2));
             else return false;
 
             TX_Buffer[0] = Checksum(TX_RegData, 6);
             TX_Buffer[1] = 0x08;  //combined length of register address and data
             if(I2C_WriteReg(i2c_controller, i2c_addr, 0x60, TX_Buffer, 2))  // Write the checksum and length
-                delay_cycles(System::CLK::CPUCLK/1000 * 2);
+                vTaskDelay(pdMS_TO_TICKS(2));
             else return false;
 
             break;
@@ -275,12 +275,12 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c
 {
     // tx read address then rx fetched
     do {
-        if(! i2c_controller.tx_blocking(i2c_addr, &reg_addr, 1, pdMS_TO_TICKS(2)))
+        if(! i2c_controller.tx_blocking(i2c_addr, &reg_addr, 1, pdMS_TO_TICKS(4)))
             break;
 
-        delay_cycles(System::CLK::CPUCLK/1000 * 2);
+        vTaskDelay(pdMS_TO_TICKS(2));
 
-        if(! i2c_controller.rx_blocking(i2c_addr, reg_data, count, pdMS_TO_TICKS(2)))
+        if(! i2c_controller.rx_blocking(i2c_addr, reg_data, count, pdMS_TO_TICKS(4)))
             break;
 
         return true;
@@ -344,7 +344,7 @@ bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2
         j++;
     }
 
-    return i2c_controller.tx_blocking(i2c_addr, I2Ctxbuff, count+1, pdMS_TO_TICKS(2));
+    return i2c_controller.tx_blocking(i2c_addr, I2Ctxbuff, count+1, pdMS_TO_TICKS(10));
 }
 
 //************************************End of BQ769X2_PROTOCOL Measurement Commands******************************************

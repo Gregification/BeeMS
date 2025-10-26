@@ -19,7 +19,7 @@ namespace BQ769X2_PROTOCOL {
         uint8_t write;
     };
 
-    //Data  Memory  registers   Name in TRM
+    //Data  Memory  registers   Name in TRM.13.9/13-37/197
     enum RegAddr : uint16_t {
         SECURITY_KEY_ENTRY_1          = 0x003E,
         SECURITY_KEY_ENTRY_2          = 0x003F,
@@ -462,6 +462,10 @@ namespace BQ769X2_PROTOCOL {
 
     /** returns false if timed */
     bool I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
+
+    uint8_t Checksum(uint8_t *ptr, uint8_t len);
+
+    uint8_t CRC8(uint8_t *ptr, uint8_t len);
 
 };
 

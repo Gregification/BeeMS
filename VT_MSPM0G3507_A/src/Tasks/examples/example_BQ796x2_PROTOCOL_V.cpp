@@ -14,6 +14,14 @@
 #include "Core/system.hpp"
 
 void printBattStatus(uint16_t);
+void printSafteyStatusA(uint8_t);
+void printSafteyStatusB(uint8_t);
+void printSafteyStatusC(uint8_t);
+void printPFStatusA(uint8_t); // permanent failure alert
+void printPFStatusB(uint8_t); // permanent failure alert
+void printPFStatusC(uint8_t); // permanent failure alert
+void printPFStatusD(uint8_t); // permanent failure alert
+void printVCellMode(uint16_t);
 
 #ifdef PROJECT_ENABLE_I2C1
 void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
@@ -27,55 +35,201 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
 
-    bq.i2c_controller->setSCLTarget(100e3);
+    bq.i2c_controller->setSCLTarget(10e3);
+
+    vTaskDelay(pdMS_TO_TICKS(500));
 
     // -----------------------------------------------------------------------------
 
-    // unseal the BQ
+    { // reset device
+        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "resetting device ... "));
+        if(bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx succes"));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail"));
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
+
+    { // dump cell config
+        uint16_t v;
+
+        v = 0xFFFF;
+        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "VCellMode ... "));
+        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::VCellMode, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::VCellMode, &v, sizeof(v))){
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+                printVCellMode(v);
+        }
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+    }
+
+    { // disable & dump Permanent Failure register masks
+        uint8_t v;
+        v = 0x00;
+        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFA ... "));
+        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFA, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFA, &v, sizeof(v))){
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+                snprintf(ARRANDN(str), "0x%02x", v);
+                System::uart_ui.nputs(ARRANDN(str));
+        }
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+
+        v = 0x00;
+        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFB ... "));
+        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFB, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFB, &v, sizeof(v))){
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+                snprintf(ARRANDN(str), "0x%02x", v);
+                System::uart_ui.nputs(ARRANDN(str));
+        }
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+
+        v = 0x00;
+        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFC ... "));
+        if(bq.I2C_WriteReg((uint8_t)BQ769X2_PROTOCOL::RegAddr::EnabledPFC, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFC, &v, sizeof(v))){
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+                snprintf(ARRANDN(str), "0x%02x", v);
+                System::uart_ui.nputs(ARRANDN(str));
+        }
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+
+        v = 0x00;
+        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFD ... "));
+        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFD, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFD, &v, sizeof(v))){
+                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+                snprintf(ARRANDN(str), "0x%02x", v);
+                System::uart_ui.nputs(ARRANDN(str));
+        }
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+
+        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+    }
+
+    { // dump status regs
+        uint8_t v;
+
+        v = 0xbe;
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusA, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+        printSafteyStatusA(v);
+        v = 0xbe;
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusB, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+        printSafteyStatusB(v);
+        v = 0xbe;
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusC, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+        printSafteyStatusC(v);
+        v = 0xbe;
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusA, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+        printPFStatusA(v); // permanent failure alert
+        v = 0xbe;
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusB, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+        printPFStatusB(v); // permanent failure alert
+        v = 0xbe;
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusC, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+        printPFStatusC(v); // permanent failure alert
+        v = 0xbe;
+        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusD, &v, sizeof(v)))
+                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+        printPFStatusD(v); // permanent failure alert
+
+        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE));
+    }
+
+//    if(0)
     {
         uint16_t v = 0xBEEF;
 
         // dump battery status
-        bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
-        snprintf(ARRANDN(str), "battery status 0x%x", v);
-        System::uart_ui.nputs(ARRANDN(str));
+        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
         printBattStatus(v);
+        System::uart_ui.nputs(ARRANDN(CLIRESET));
 
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(pdMS_TO_TICKS(1e3));
+        System::uart_ui.nputs(ARRANDN(NEWLINE));
+
     }
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE));
-
+//    if(0)
     {
+        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SLEEP_DISABLE);
+    }
+
+    while(1);
+
+//    if(0)
+    { // SEAL -> UNSEAL
         //bqTM.13.8.2/197
-        int a = 0;
 
-        uint8_t
-            sk1 = 0x0414,
-            sk2 = 0x3672;
-        a += bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::UnsealKeyStep1, 0x04);
-        a += bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::UnsealKeyStep2, 0x14);
-        a += bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::UnsealKeyStep1, 0x36);
-        a += bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::UnsealKeyStep2, 0x72);
-//        bq.sendSubcommandW(cmd, data)
+        /* bqTM.8.1/71
+         *  """
+         *      each transition requires that a unique set of keys be sent to the device
+         *      through the sub-command address (0x3E and 0x3F). The keys must be sent
+         *      consecutively to 0x3E and 0x3F, with no other data written between the
+         *      keys. Do not set the two keys to identical values
+         *  """
+         */
 
-        snprintf(ARRANDN(str), "unlock TX status? %d" NEWLINE, a);
-        System::uart_ui.nputs(ARRANDN(str));
+        uint32_t usk = 0x3672'0414; // un-seal key
+//        uint32_t usk = 0x3672'0414; // un-seal key : factory default
+
+        uint8_t sk1[] = {0x3E, (uint8_t)((usk & 0x0000'00FF) >> 00), (uint8_t)((usk & 0x0000'FF00) >> 8)};
+        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk1, sizeof(sk1), pdMS_TO_TICKS(10));
+
+        uint8_t sk2[] = {0x3E, (uint8_t)((usk & 0x00FF'0000) >> 16), (uint8_t)((usk & 0xFF00'0000) >> 24)};
+        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk2, sizeof(sk2), pdMS_TO_TICKS(10));
+    }
+
+    if(0)
+    { // TODO: DOES NOT WORK!!!!!!!!!    UNSEAL -> FULL-ACCESS
+        uint32_t fak = 0xFFFF'FFFF; // full access key
+//        uint32_t fak = 0xFFFF'FFFF'; // full access key : factory default
+
+        uint8_t sk1[] = {0x3E, (uint8_t)((fak & 0x0000'00FF) >> 00), (uint8_t)((fak & 0x0000'FF00) >> 8)};
+        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk1, sizeof(sk1), pdMS_TO_TICKS(10));
+
+        uint8_t sk2[] = {0x3E, (uint8_t)((fak & 0x00FF'0000) >> 16), (uint8_t)((fak & 0xFF00'0000) >> 24)};
+        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk2, sizeof(sk2), pdMS_TO_TICKS(10));
     }
 
     System::uart_ui.nputs(ARRANDN(NEWLINE));
 
+//    if(0)
     {
         uint16_t v = 0xBEEF;
 
         // dump battery status
-        bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
-        snprintf(ARRANDN(str), "battery status 0x%x", v);
-        System::uart_ui.nputs(ARRANDN(str));
+        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
         printBattStatus(v);
+        System::uart_ui.nputs(ARRANDN(CLIRESET));
 
         vTaskDelay(pdMS_TO_TICKS(10e3));
-        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE NEWLINE));
+        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE));
 
     }
 
@@ -84,6 +238,8 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
 
 
 //    while(1);
+
+
 
 
 
@@ -234,25 +390,26 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
         uint16_t v = 0xBEEF;
 
         // dump battery status
-        bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
-        snprintf(ARRANDN(str), "battery status 0x%x", v);
-        System::uart_ui.nputs(ARRANDN(str));
+        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
         printBattStatus(v);
+        System::uart_ui.nputs(ARRANDN(CLIRESET));
 
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(pdMS_TO_TICKS(5e3));
+        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE NEWLINE));
     }
 
 
     while(true){
         for(uint8_t i = 0; i < sizeof(cmds); i++){
             uint16_t v = 0xBEEF;
-            if(bq.I2C_ReadReg(cmds[i], &v, sizeof(v))){
-                snprintf(ARRANDN(str), "%6d,", v);
-            } else {
-                snprintf(ARRANDN(str), "?%5d,", v);
-            }
+            bool success = bq.I2C_ReadReg(cmds[i], &v, sizeof(v));
 
+            snprintf(ARRANDN(str), "%6d,", v);
+
+            System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
             System::uart_ui.nputs(ARRANDN(str));
+            System::uart_ui.nputs(ARRANDN(CLIRESET));
 
             vTaskDelay(pdMS_TO_TICKS(200));
         }
@@ -269,33 +426,47 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*){
 #endif
 
 void printBattStatus(uint16_t v) {
-    System::uart_ui.nputs(ARRANDN(NEWLINE "CFG_UPDATE mode ? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(0)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printBattStatus: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%04x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "PCHG_UPDATE mode ? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(1)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "CFG_UPDATE mode ? "));
+    if((v & BV(0)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "SLEEP_en ? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(2)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"PCHG_UPDATE mode ? "));
+    if((v & BV(1)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "POR ? "));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"SLEEP_en ? "));
+    if((v & BV(2)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"POR ? "));
     System::uart_ui.nputs(ARRANDN((v & BV(3)) ? "1" : "0"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "WD : "));
-    System::uart_ui.nputs(ARRANDN((v & BV(4)) ? "previous reset caused by WD" : "previous reset normal"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"WD : "));
+    if((v & BV(4)))    System::uart_ui.nputs(ARRANDN("previous reset caused by WD"));
+    else               System::uart_ui.nputs(ARRANDN("previous reset normal"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "COW_CHK (Cell Open Wire Check active)? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(5)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"COW_CHK (Cell Open Wire Check active)? "));
+    if((v & BV(5)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "OTPW (OTP write pending)? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(6)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"OTPW (OTP write pending)? "));
+    if((v & BV(6)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "OTPB (OTP write blocked)? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(7)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"OTPB (OTP write blocked)? "));
+    if((v & BV(7)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
 
     // SEC bits (9:8)
     uint8_t sec = (v >> 8) & 0x03;
-    System::uart_ui.nputs(ARRANDN(NEWLINE "Security mode: "));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Security mode: "));
     switch (sec) {
         case 0:
             System::uart_ui.nputs(ARRANDN("Not initialized"));
@@ -311,23 +482,439 @@ void printBattStatus(uint16_t v) {
             break;
     }
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "FUSE pin asserted? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(10)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"FUSE pin asserted? "));
+    if((v & BV(10)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "Safety fault (SS)? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(11)) ? "triggered" : "none"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Safety fault (SS)? "));
+    if((v & BV(11)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "none"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "Permanent Fail (PF)? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(12)) ? "triggered" : "none"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Permanent Fail (PF)? "));
+    if((v & BV(12)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "none"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "Shutdown pending (SDM)? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(13)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Shutdown pending (SDM)? "));
+    if((v & BV(13)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "Reserved bit (14): "));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Reserved bit (14): "));
     System::uart_ui.nputs(ARRANDN((v & BV(14)) ? "1" : "0"));
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE "Device in SLEEP mode? "));
-    System::uart_ui.nputs(ARRANDN((v & BV(15)) ? "yes" : "no"));
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Device in SLEEP mode? "));
+    if((v & BV(15)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}
+
+void printSafteyStatusA(uint8_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printSafteyStatusA: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%02x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    // --- Bit 7: SCD (Short Circuit in Discharge) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Short Circuit in Discharge (SCD) fault? "));
+    if((v & BV(7)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 6: OCD2 (Overcurrent in Discharge 2nd Tier) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Overcurrent in Discharge 2nd Tier (OCD2) fault? "));
+    if((v & BV(6)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 5: OCD1 (Overcurrent in Discharge 1st Tier) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Overcurrent in Discharge 1st Tier (OCD1) fault? "));
+    if((v & BV(5)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 4: OCC (Overcurrent in Charge) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Overcurrent in Charge (OCC) fault? "));
+    if((v & BV(4)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 3: COV (Cell Overvoltage Protection) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Cell Overvoltage (COV) fault? "));
+    if((v & BV(3)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 2: CUV (Cell Undervoltage Protection) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Cell Undervoltage (CUV) fault? "));
+    if((v & BV(2)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 1: Reserved bit (1) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Reserved bit (1): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(1)) ? "1" : "0"));
+
+    // --- Bit 0: Reserved bit (0) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Reserved bit (0): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(0)) ? "1" : "0"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}
+
+void printSafteyStatusB(uint8_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printSafteyStatusB: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%02x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    // --- Bit 7: OTF (FET Overtemperature) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"FET Overtemperature (OTF) fault? "));
+    if((v & BV(7)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 6: OTINT (Internal Overtemperature) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET"Internal Overtemperature (OTINT) fault? "));
+    if((v & BV(6)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 5: OTD (Overtemperature in Discharge) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Overtemperature in Discharge (OTD) fault? "));
+    if((v & BV(5)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 4: OTC (Overtemperature in Charge) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Overtemperature in Charge (OTC) fault? "));
+    if((v & BV(4)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 3: Reserved bit (3) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Reserved bit (3): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(3)) ? "1" : "0"));
+
+    // --- Bit 2: UTINT (Internal Undertemperature) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Internal Undertemperature (UTINT) fault? "));
+    if((v & BV(2)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 1: UTD (Undertemperature in Discharge) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Undertemperature in Discharge (UTD) fault? "));
+    if((v & BV(1)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 0: UTC (Undertemperature in Charge) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Undertemperature in Charge (UTC) fault? "));
+    if((v & BV(0)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}
+
+void printSafteyStatusC(uint8_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printSafteyStatusC: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%02x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    // --- Bit 7: OCD3 (Overcurrent in Discharge 3rd Tier) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Overcurrent in Discharge 3rd Tier (OCD3) fault? "));
+    if((v & BV(7)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 6: SCDL (Short Circuit in Discharge Latch) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Short Circuit in Discharge (SCDL) latch fault? "));
+    if((v & BV(6)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 5: OCDL (Overcurrent in Discharge Latch) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Overcurrent in Discharge (OCDL) latch fault? "));
+    if((v & BV(5)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 4: COVL (Cell Overvoltage Latch) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell Overvoltage (COVL) latch fault? "));
+    if((v & BV(4)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 3: Reserved bit (3) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Reserved bit (3): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(3)) ? "1" : "0"));
+
+    // --- Bit 2: PTO (Precharge Timeout) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Precharge Timeout (PTO) fault? "));
+    if((v & BV(2)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 1: HWDF (Host Watchdog Fault) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Host Watchdog (HWDF) fault? "));
+    if((v & BV(1)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 0: Reserved bit (0) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Reserved bit (0): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(0)) ? "1" : "0"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}
+
+// permanent failure alert
+void printPFStatusA(uint8_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printPFStatusA: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%02x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    // --- Bit 7: CUDEP (Copper Deposition Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Copper Deposition (CUDEP) permanent fail? "));
+    if((v & BV(7)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 6: SOTF (Safety Overtemperature FET Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Safety Overtemperature FET (SOTF) permanent fail? "));
+    if((v & BV(6)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 5: Reserved bit (5) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Reserved bit (5): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(5)) ? "1" : "0"));
+
+    // --- Bit 4: SOT (Safety Overtemperature Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Safety Overtemperature (SOT) permanent fail? "));
+    if((v & BV(4)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 3: SOCD (Safety Overcurrent in Discharge Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Safety Overcurrent in Discharge (SOCD) permanent fail? "));
+    if((v & BV(3)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 2: SOCC (Safety Overcurrent in Charge Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Safety Overcurrent in Charge (SOCC) permanent fail? "));
+    if((v & BV(2)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 1: SOV (Safety Cell Overvoltage Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Safety Cell Overvoltage (SOV) permanent fail? "));
+    if((v & BV(1)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 0: SUV (Safety Cell Undervoltage Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Safety Cell Undervoltage (SUV) permanent fail? "));
+    if((v & BV(0)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}
+
+// permanent failure alert
+void printPFStatusB(uint8_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printPFStatusB: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%02x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    // --- Bit 7: SCDL (Short Circuit in Discharge Latch Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Short Circuit Discharge Latch (SCDL) permanent fail? "));
+    if((v & BV(7)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 6: Reserved bit (6) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Reserved bit (6): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(6)) ? "1" : "0"));
+
+    // --- Bit 5: Reserved bit (5) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Reserved bit (5): "));
+    System::uart_ui.nputs(ARRANDN((v & BV(5)) ? "1" : "0"));
+
+    // --- Bit 4: VIMA (Voltage Imbalance Active Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Voltage Imbalance Active (VIMA) permanent fail? "));
+    if((v & BV(4)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 3: VIMR (Voltage Imbalance at Rest Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Voltage Imbalance at Rest (VIMR) permanent fail? "));
+    if((v & BV(3)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 2: 2LVL (Second Level Protector Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Second Level Protector (2LVL) permanent fail? "));
+    if((v & BV(2)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 1: DFETF (Discharge FET Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Discharge FET (DFETF) permanent fail? "));
+    if((v & BV(1)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 0: CFETF (Charge FET Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Charge FET (CFETF) permanent fail? "));
+    if((v & BV(0)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}
+
+// permanent failure alert
+void printPFStatusC(uint8_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printPFStatusC: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%02x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    // --- Bit 7: CMDF (Commanded Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Commanded Permanent Fail (CMDF)? "));
+    if((v & BV(7)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 6: HWMX (Hardware Mux Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Hardware Mux (HWMX) permanent fail? "));
+    if((v & BV(6)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 5: VSSF (Internal VSS Measurement Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Internal VSS Measurement (VSSF) permanent fail? "));
+    if((v & BV(5)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 4: VREF (Internal Voltage Reference Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Internal Voltage Reference (VREF) permanent fail? "));
+    if((v & BV(4)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 3: LFOF (Internal LFO Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Internal LFO (LFOF) permanent fail? "));
+    if((v & BV(3)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 2: IRMF (Instruction ROM Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Instruction ROM (IRMF) permanent fail? "));
+    if((v & BV(2)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 1: DRMF (Data ROM Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Data ROM (DRMF) permanent fail? "));
+    if((v & BV(1)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    // --- Bit 0: OTPF (OTP Memory Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "OTP Memory (OTPF) permanent fail? "));
+    if((v & BV(0)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}
+
+// permanent failure alert
+void printPFStatusD(uint8_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printPFStatusD: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%02x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    // bits 7:1 reserved
+
+    // --- Bit 0: TOSF (Top of Stack vs Cell Sum Permanent Fail) ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Top of Stack vs Cell Sum (TOSF) permanent fail? "));
+    if((v & BV(0)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+    else               System::uart_ui.nputs(ARRANDN(CLINO "none"));
+
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
+}
+
+void printVCellMode(uint16_t v) {
+    System::uart_ui.nputs(ARRANDN(NEWLINE "printVCellMode: "));
+    {
+        char str[10];
+        snprintf(ARRANDN(str), "0x%02x", v);
+        System::uart_ui.nputs(ARRANDN(str));
+    }
+
+    // --- Bit 15: Cell 16 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 16 Mode: "));
+    if((v & BV(15)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 14: Cell 15 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 15 Mode: "));
+    if((v & BV(14)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 13: Cell 14 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 14 Mode: "));
+    if((v & BV(13)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 12: Cell 13 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 13 Mode: "));
+    if((v & BV(12)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 11: Cell 12 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 12 Mode: "));
+    if((v & BV(11)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 10: Cell 11 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 11 Mode: "));
+    if((v & BV(10)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 9: Cell 10 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 10 Mode: "));
+    if((v & BV(9)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 8: Cell 9 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 9 Mode: "));
+    if((v & BV(8)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 7: Cell 8 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 8 Mode: "));
+    if((v & BV(7)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 6: Cell 7 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 7 Mode: "));
+    if((v & BV(6)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 5: Cell 6 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 6 Mode: "));
+    if((v & BV(5)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 4: Cell 5 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 5 Mode: "));
+    if((v & BV(4)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 3: Cell 4 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 4 Mode: "));
+    if((v & BV(3)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 2: Cell 3 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 3 Mode: "));
+    if((v & BV(2)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 1: Cell 2 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 2 Mode: "));
+    if((v & BV(1)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
+
+    // --- Bit 0: Cell 1 Mode ---
+    System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell 1 Mode: "));
+    if((v & BV(0)))    System::uart_ui.nputs(ARRANDN(CLIYES "enabled"));
+    else                System::uart_ui.nputs(ARRANDN(CLINO "disabled"));
 
     System::uart_ui.nputs(ARRANDN(NEWLINE));
 }
