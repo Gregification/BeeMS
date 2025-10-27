@@ -111,6 +111,8 @@
     #error "increase size of configTASK_NOTIFICATION_ARRAY_ENTRIES"
 #endif
 
+typedef uint16_t buffsize_t;
+
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
 
@@ -273,7 +275,7 @@ namespace System {
             void setSCLKTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 
-            void transfer(void * tx, void * rx, uint16_t len, System::GPIO::GPIO const * cs = NULL);
+            void transfer(void * tx, void * rx, buffersize_t len, System::GPIO::GPIO const * cs = NULL);
             bool isBusy();
 
             // should be private but eh
@@ -295,7 +297,6 @@ namespace System {
 
             I2C_Regs * const reg;
 
-            void partialInitController();
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 
@@ -303,21 +304,27 @@ namespace System {
              * uses IRQ+Notifications. other tasks can run while this is blocking
              * @return true if TX success. returns false if timed out, lost arbitration, or received NACK
              */
-            bool tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
+            bool tx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t timeout);
 
             /** blocks the task calling this function until RX is complete or timeout.
              *  uses IRQ+Notifications. other tasks can run while this is blocking
              *  @return true if RX success. returns false if timed out, lost arbitration, received NACK,
              *      or received less than expected amount of bytes.
              */
-            bool rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout);
+            bool rx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t timeout);
 
-            // should be private but then you'll need to make a constructor and all that boiler plate.
+            enum ERROR : uint8_t {
+                IN_USE,
+                NONE,
+                NACK,
+                TIMEOUT
+            };
+
             struct {
-                TaskHandle_t host_task;
                 uint8_t * data;
-                uint8_t data_length;    // total bytes of data
-                uint8_t nxt_index;      // index next byte is read/written by
+                buffsize_t data_length;    // total bytes of data
+                buffsize_t nxt_index;      // index next byte is read/written by
+                ERROR error;
             } _trxBuffer;
         };
     }

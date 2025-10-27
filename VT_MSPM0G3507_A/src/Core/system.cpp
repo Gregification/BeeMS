@@ -134,19 +134,40 @@ void System::init() {
             );
         DL_GPIO_enableHiZ(IOMUX_PINCM37);
         DL_GPIO_enableHiZ(IOMUX_PINCM38);
-        System::i2c1.partialInitController();
-        System::i2c1.setSCLTarget(100e3);
 
-        DL_I2C_enableController(System::i2c1.reg);
+        DL_I2C_ClockConfig clk_config = {
+                 .clockSel      = DL_I2C_CLOCK::DL_I2C_CLOCK_BUSCLK,
+                 .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2
+            };
+        DL_I2C_setClockConfig(i2c1.reg, &clk_config);
+        DL_I2C_enableAnalogGlitchFilter(i2c1.reg);
+        DL_I2C_setControllerAddressingMode(i2c1.reg, DL_I2C_CONTROLLER_ADDRESSING_MODE::DL_I2C_CONTROLLER_ADDRESSING_MODE_7_BIT);
+
+        // as controller
+        DL_I2C_resetControllerTransfer(i2c1.reg);
+
+        DL_I2C_setControllerTXFIFOThreshold(i2c1.reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_BYTES_1);
+        DL_I2C_setControllerRXFIFOThreshold(i2c1.reg, DL_I2C_RX_FIFO_LEVEL::DL_I2C_RX_FIFO_LEVEL_BYTES_1);
+        DL_I2C_enableControllerClockStretching(i2c1.reg);
+
+        i2c1.setSCLTarget(100e3);
+
+        DL_I2C_enableController(i2c1.reg);
+
+        i2c1._trxBuffer.data_length = 0;
+        i2c1._trxBuffer.data = 0;
+        i2c1._trxBuffer.error = I2C::I2C::ERROR::NONE;
 
         NVIC_EnableIRQ(I2C1_INT_IRQn);
         DL_I2C_enableInterrupt(System::i2c1.reg,
-                  DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-                | DL_I2C_INTERRUPT_TIMEOUT_A
-                | DL_I2C_INTERRUPT_TIMEOUT_B
+                   DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+                 | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+                 | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
+                 | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
+                 | DL_I2C_INTERRUPT_TIMEOUT_A
+                 | DL_I2C_INTERRUPT_TIMEOUT_B
+                 | DL_I2C_INTERRUPT_CONTROLLER_START
+                 | DL_I2C_INTERRUPT_CONTROLLER_STOP
             );
     }
     #endif
@@ -570,7 +591,7 @@ void System::SPI::SPI::_irq() {
     };
 }
 
-void System::SPI::SPI::transfer(void * tx, void * rx, uint16_t len, System::GPIO::GPIO const * cs){
+void System::SPI::SPI::transfer(void * tx, void * rx, buffersize_t len, System::GPIO::GPIO const * cs){
     while(isBusy()) {
         vTaskDelay(0);
     }
@@ -598,23 +619,6 @@ bool System::SPI::SPI::isBusy() {
     return      (_trxBuffer.tx && (_trxBuffer.tx_i < _trxBuffer.len))
             ||  (_trxBuffer.rx && (_trxBuffer.rx_i < _trxBuffer.len))
             ||  DL_SPI_isBusy(reg);
-}
-
-void System::I2C::I2C::partialInitController(){
-    DL_I2C_ClockConfig clk_config = {
-             .clockSel      = DL_I2C_CLOCK::DL_I2C_CLOCK_BUSCLK,
-             .divideRatio   = DL_I2C_CLOCK_DIVIDE::DL_I2C_CLOCK_DIVIDE_2
-        };
-    DL_I2C_setClockConfig(reg, &clk_config);
-    DL_I2C_enableAnalogGlitchFilter(reg);
-    DL_I2C_setControllerAddressingMode(reg, DL_I2C_CONTROLLER_ADDRESSING_MODE::DL_I2C_CONTROLLER_ADDRESSING_MODE_7_BIT);
-
-    // as controller
-    DL_I2C_resetControllerTransfer(reg);
-
-    DL_I2C_setControllerTXFIFOThreshold(reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_BYTES_1);
-    DL_I2C_setControllerRXFIFOThreshold(reg, DL_I2C_RX_FIFO_LEVEL::DL_I2C_RX_FIFO_LEVEL_BYTES_1);
-    DL_I2C_enableControllerClockStretching(reg);
 }
 
 void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
@@ -667,11 +671,8 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 }
 
 void System::I2C::I2C::_irq() {
-    static BaseType_t xHigherPriorityTaskWoken;
-    xHigherPriorityTaskWoken = pdFALSE;
-
     switch(DL_I2C_getPendingInterrupt(reg)){
-        case DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
             while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
                 if(_trxBuffer.nxt_index < _trxBuffer.data_length){
                     _trxBuffer.data[_trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
@@ -682,37 +683,53 @@ void System::I2C::I2C::_irq() {
             }
             break;
 
-        case DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
             // fill TX fifo
             if(_trxBuffer.nxt_index < _trxBuffer.data_length){
-                _trxBuffer.nxt_index +=  DL_I2C_fillControllerTXFIFO(
+                _trxBuffer.nxt_index += DL_I2C_fillControllerTXFIFO(
                         reg,
-                        (uint8_t *)_trxBuffer.data,
+                        ((uint8_t *)_trxBuffer.data) + _trxBuffer.nxt_index,
                         _trxBuffer.data_length - _trxBuffer.nxt_index
                     );
             }
             break;
 
-        case DL_I2C_IIDX_CONTROLLER_TX_DONE:
-        case DL_I2C_IIDX_CONTROLLER_RX_DONE:
-            _trxBuffer.nxt_index = 0;
-        case DL_I2C_IIDX_TIMEOUT_A:
-        case DL_I2C_IIDX_TIMEOUT_B:
-        case DL_I2C_IIDX_CONTROLLER_NACK:
+        case DL_I2C_IIDX::DL_I2C_IIDX_TIMEOUT_A:
+        case DL_I2C_IIDX::DL_I2C_IIDX_TIMEOUT_B:
             _trxBuffer.data_length = 0;
-            if(_trxBuffer.host_task)
-                xTaskNotifyIndexedFromISR(_trxBuffer.host_task, TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_I2C_IRQ, 0, eNotifyAction::eIncrement, &xHigherPriorityTaskWoken);
+            _trxBuffer.error = ERROR::TIMEOUT;
+            break;
+
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_NACK:
+            _trxBuffer.data_length = 0;
+            _trxBuffer.error = ERROR::NACK;
+            break;
+
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_TX_DONE:
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_RX_DONE:
+            _trxBuffer.data_length = 0;
+            _trxBuffer.error = ERROR::NONE;
+            break;
+
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_STOP:
+            switch(_trxBuffer.error){
+                case ERROR::IN_USE:
+                    _trxBuffer.error = ERROR::NONE;
+                    break;
+
+                default: break;
+            }
+            break;
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_START:
+            _trxBuffer.error = ERROR::IN_USE;
             break;
 
         default:
             break;
-
     };
-
-    portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 }
 
-bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
+bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t timeout) {
     TickType_t stopTime = xTaskGetTickCount() + timeout;
     if(!takeResource(timeout))
         return false;
@@ -760,7 +777,7 @@ bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, uint8_t size, Tick
     return true;
 }
 
-bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, uint8_t size, TickType_t timeout) {
+bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t timeout) {
     TickType_t stopTime = xTaskGetTickCount() + timeout;
     if(!takeResource(timeout))
         return false;

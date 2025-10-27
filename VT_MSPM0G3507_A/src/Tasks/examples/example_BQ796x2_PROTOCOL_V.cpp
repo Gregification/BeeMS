@@ -35,221 +35,464 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
 
-    bq.i2c_controller->setSCLTarget(10e3);
+    bq.i2c_controller->setSCLTarget(50e3);
 
     vTaskDelay(pdMS_TO_TICKS(500));
 
     // -----------------------------------------------------------------------------
 
-    { // reset device
-        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "resetting device ... "));
-        if(bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx succes"));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail"));
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
-
-    { // dump cell config
-        uint16_t v;
-
-        v = 0xFFFF;
-        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "VCellMode ... "));
-        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::VCellMode, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::VCellMode, &v, sizeof(v))){
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
-                printVCellMode(v);
-        }
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
-    }
-
-    { // disable & dump Permanent Failure register masks
-        uint8_t v;
-        v = 0x00;
-        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFA ... "));
-        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFA, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFA, &v, sizeof(v))){
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
-                snprintf(ARRANDN(str), "0x%02x", v);
-                System::uart_ui.nputs(ARRANDN(str));
-        }
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
-
-        v = 0x00;
-        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFB ... "));
-        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFB, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFB, &v, sizeof(v))){
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
-                snprintf(ARRANDN(str), "0x%02x", v);
-                System::uart_ui.nputs(ARRANDN(str));
-        }
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
-
-        v = 0x00;
-        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFC ... "));
-        if(bq.I2C_WriteReg((uint8_t)BQ769X2_PROTOCOL::RegAddr::EnabledPFC, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFC, &v, sizeof(v))){
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
-                snprintf(ARRANDN(str), "0x%02x", v);
-                System::uart_ui.nputs(ARRANDN(str));
-        }
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
-
-        v = 0x00;
-        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFD ... "));
-        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFD, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFD, &v, sizeof(v))){
-                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
-                snprintf(ARRANDN(str), "0x%02x", v);
-                System::uart_ui.nputs(ARRANDN(str));
-        }
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
-
-        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
-    }
-
-    { // dump status regs
-        uint8_t v;
-
-        v = 0xbe;
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusA, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
-        printSafteyStatusA(v);
-        v = 0xbe;
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusB, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
-        printSafteyStatusB(v);
-        v = 0xbe;
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusC, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
-        printSafteyStatusC(v);
-        v = 0xbe;
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusA, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
-        printPFStatusA(v); // permanent failure alert
-        v = 0xbe;
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusB, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
-        printPFStatusB(v); // permanent failure alert
-        v = 0xbe;
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusC, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
-        printPFStatusC(v); // permanent failure alert
-        v = 0xbe;
-        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusD, &v, sizeof(v)))
-                System::uart_ui.nputs(ARRANDN(CLIGOOD));
-        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
-        printPFStatusD(v); // permanent failure alert
-
-        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE));
-    }
-
+//    { // reset device
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "resetting device ... "));
+//        if(bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success"));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail"));
+//        System::uart_ui.nputs(ARRANDN(NEWLINE));
+//        vTaskDelay(pdMS_TO_TICKS(100));
+//    }
+//
+//    { // dump control status
+//        uint16_t v = 0xbeef;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "dumping control status ... "));
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::ControlStatus, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                System::uart_ui.nputs(ARRANDN(NEWLINE "print control status: "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//
+//                System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "[15:3] reserved"));
+//
+//                // --- Bit 2: DEEPSLEEP ---
+//                System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Device DEEPSLEEP mode? "));
+//                if((v & BV(2)))     System::uart_ui.nputs(ARRANDN(CLIYES "in DEEPSLEEP"));
+//                else                System::uart_ui.nputs(ARRANDN(CLINO "not in DEEPSLEEP"));
+//
+//                // --- Bit 1: LD_TIMEOUT (Load Detect Timeout) ---
+//                System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Load Detect (LD) timeout? "));
+//                if((v & BV(1)))     System::uart_ui.nputs(ARRANDN(CLIYES "timed out/deactivated"));
+//                else                System::uart_ui.nputs(ARRANDN(CLINO "not timed out/active"));
+//
+//                // --- Bit 0: LD_ON (Load Detect Pullup Status) ---
+//                System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "LD pullup active? "));
+//                if((v & BV(0)))     System::uart_ui.nputs(ARRANDN(CLIYES "active"));
+//                else                System::uart_ui.nputs(ARRANDN(CLINO "not active"));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        System::uart_ui.nputs(ARRANDN(NEWLINE));
+//    }
+//
+//    { // enable 16 cell mode & dump cell config
+//        uint16_t v;
+//
+//        v = 0xFF; // enable all cells
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "VCellMode ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::VCellMode, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbeef;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::VCellMode, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                printVCellMode(v);
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//    }
+//
+//    { // configure pins as thermistor connections
+//        /*ALERT, CFETOFF, DFETOFF, TS1, TS2, TS3, HDQ, DCHG, DDSG*/
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Configuring to thermistor inputs ... "));
+//
+//        uint8_t v;
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tALERT  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::ALERTPinConfig, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::ALERTPinConfig, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tCFETOFF  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::CFETOFFPinConfig, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::CFETOFFPinConfig, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tDFETOFF  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::DFETOFFPinConfig, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::DFETOFFPinConfig, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tTS1  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::TS1Config, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::TS1Config, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tTS2  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::TS2Config, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::TS2Config, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tTS3  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::TS3Config, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::TS3Config, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tHDQ  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::HDQPinConfig, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::HDQPinConfig, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tDCHG  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::DCHGPinConfig, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::DCHGPinConfig, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0b11;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "\tDDSG  ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::DDSGPinConfig, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::DDSGPinConfig, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        System::uart_ui.nputs(ARRANDN(NEWLINE));
+//    }
+//
+//    { // disable & dump Permanent Failure register masks
+//        uint8_t v;
+//        v = 0x00;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFA ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFA, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFA, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0x00;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFB ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFB, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFB, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0x00;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFC ... "));
+//        if(bq.I2C_WriteReg((uint8_t)BQ769X2_PROTOCOL::RegAddr::EnabledPFC, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFC, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        v = 0x00;
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "disabling PFD ... "));
+//        if(bq.I2C_WriteReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFD, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "tx success . "));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "tx fail . "));
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::EnabledPFD, &v, sizeof(v))){
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD "rx success "));
+//                snprintf(ARRANDN(str), "0x%02x", v);
+//                System::uart_ui.nputs(ARRANDN(str));
+//        }
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD "rx fail"));
+//
+//        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+//    }
+//
+//    { // dump status regs
+//        uint8_t v;
+//
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusA, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+//        printSafteyStatusA(v);
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusB, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+//        printSafteyStatusB(v);
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::SafetyStatusC, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+//        printSafteyStatusC(v);
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusA, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+//        printPFStatusA(v); // permanent failure alert
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusB, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+//        printPFStatusB(v); // permanent failure alert
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusC, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+//        printPFStatusC(v); // permanent failure alert
+//        v = 0xbe;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::PFStatusD, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+//        printPFStatusD(v); // permanent failure alert
+//
+//        System::uart_ui.nputs(ARRANDN(NEWLINE));
+//    }
+//
+//    { // raw alarm status
+//        uint16_t v;
+//
+//        v = 0xbeef;
+//        if(bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::AlarmRawStatus, &v, sizeof(v)))
+//                System::uart_ui.nputs(ARRANDN(CLIGOOD));
+//        else    System::uart_ui.nputs(ARRANDN(CLIBAD));
+//
+//        System::uart_ui.nputs(ARRANDN("AlarmRawStatus: "));
+//        snprintf(ARRANDN(str), "0x%04x", v);
+//        System::uart_ui.nputs(ARRANDN(str));
+//
+//        // --- Bit 15: SSBC (Safety Status B/C Set) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Safety Status B/C set (SSBC)? "));
+//        if((v & BV(15)))    System::uart_ui.nputs(ARRANDN(CLIYES "SET"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "not set"));
+//
+//        // --- Bit 14: SSA (Safety Status A Set) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Safety Status A set (SSA)? "));
+//        if((v & BV(14)))    System::uart_ui.nputs(ARRANDN(CLIYES "SET"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "not set"));
+//
+//        // --- Bit 13: PF (Permanent Fail Triggered) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Permanent Fail fault (PF)? "));
+//        if((v & BV(13)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "none"));
+//
+//        // --- Bit 12: MSK_SFALERT (Masked Safety Alert) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Masked Safety Alert (MSK_SFALERT)? "));
+//        if((v & BV(12)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "none"));
+//
+//        // --- Bit 11: MSK_PFALERT (Masked Permanent Fail Alert) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Masked PF Alert (MSK_PFALERT)? "));
+//        if((v & BV(11)))    System::uart_ui.nputs(ARRANDN(CLIYES "triggered"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "none"));
+//
+//        // --- Bit 10: INITSTART (Initialization started) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Initialization started (INITSTART)? "));
+//        if((v & BV(10)))    System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
+//
+//        // --- Bit 9: INITCOMP (Initialization completed) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Initialization completed (INITCOMP)? "));
+//        if((v & BV(9)))     System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
+//
+//        // --- Bit 8: RSVD (Reserved/Undefined) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Reserved bit (8): "));
+//        if((v & BV(8)))     System::uart_ui.nputs(ARRANDN(CLIYES "1"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "0"));
+//
+//        // --- Bit 7: FULLSCAN (Full Voltage Scan Complete) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Full Voltage Scan Complete (FULLSCAN)? "));
+//        if((v & BV(7)))     System::uart_ui.nputs(ARRANDN(CLIYES "complete"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "in progress"));
+//
+//        // --- Bit 6: XCHG (Charge FET Off) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "CHG FET Off (XCHG)? "));
+//        if((v & BV(6)))     System::uart_ui.nputs(ARRANDN(CLIYES "off"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "on"));
+//
+//        // --- Bit 5: XDSG (Discharge FET Off) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "DSG FET Off (XDSG)? "));
+//        if((v & BV(5)))     System::uart_ui.nputs(ARRANDN(CLIYES "off"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "on"));
+//
+//        // --- Bit 4: SHUTV (Stack voltage too low) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Stack voltage below shutdown threshold (SHUTV)? "));
+//        if((v & BV(4)))     System::uart_ui.nputs(ARRANDN(CLIYES "LOW"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "OK"));
+//
+//        // --- Bit 3: FUSE (FUSE Pin Driven) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "FUSE Pin Driven (FUSE)? "));
+//        if((v & BV(3)))     System::uart_ui.nputs(ARRANDN(CLIYES "driven"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "not driven"));
+//
+//        // --- Bit 2: CB (Cell Balancing Active) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Cell Balancing (CB) active? "));
+//        if((v & BV(2)))     System::uart_ui.nputs(ARRANDN(CLIYES "active"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "inactive"));
+//
+//        // --- Bit 1: ADSCAN (Voltage ADC Scan Complete) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Voltage ADC Scan Complete (ADSCAN)? "));
+//        if((v & BV(1)))     System::uart_ui.nputs(ARRANDN(CLIYES "complete"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "in progress"));
+//
+//        // --- Bit 0: WAKE (Wake from SLEEP) ---
+//        System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "Device WOKE from SLEEP (WAKE)? "));
+//        if((v & BV(0)))     System::uart_ui.nputs(ARRANDN(CLIYES "yes"));
+//        else                System::uart_ui.nputs(ARRANDN(CLINO "no"));
+//
+//        System::uart_ui.nputs(ARRANDN(NEWLINE));
+//
+//    }
+//
+//    {
+//        uint16_t v = 0xBEEF;
+//
+//        // dump battery status
+//        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+//        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
+//        printBattStatus(v);
+//        System::uart_ui.nputs(ARRANDN(CLIRESET));
+//
+//        vTaskDelay(pdMS_TO_TICKS(1e3));
+//        System::uart_ui.nputs(ARRANDN(NEWLINE));
+//
+//    }
+//
 //    if(0)
-    {
-        uint16_t v = 0xBEEF;
-
-        // dump battery status
-        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
-        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
-        printBattStatus(v);
-        System::uart_ui.nputs(ARRANDN(CLIRESET));
-
-        vTaskDelay(pdMS_TO_TICKS(1e3));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-    }
-
+//    {
+//        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SLEEP_DISABLE);
+//    }
+//
+//
+//    { // SEAL -> UNSEAL
+//        //bqTM.13.8.2/197
+//
+//        /* bqTM.8.1/71
+//         *  """
+//         *      each transition requires that a unique set of keys be sent to the device
+//         *      through the sub-command address (0x3E and 0x3F). The keys must be sent
+//         *      consecutively to 0x3E and 0x3F, with no other data written between the
+//         *      keys. Do not set the two keys to identical values
+//         *  """
+//         */
+//
+//        uint32_t usk = 0x3672'0414; // un-seal key
+////        uint32_t usk = 0x3672'0414; // un-seal key : factory default
+//
+//        uint8_t sk1[] = {0x3E, (uint8_t)((usk & 0x0000'00FF) >> 00), (uint8_t)((usk & 0x0000'FF00) >> 8)};
+//        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk1, sizeof(sk1), pdMS_TO_TICKS(10));
+//
+//        uint8_t sk2[] = {0x3E, (uint8_t)((usk & 0x00FF'0000) >> 16), (uint8_t)((usk & 0xFF00'0000) >> 24)};
+//        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk2, sizeof(sk2), pdMS_TO_TICKS(10));
+//    }
+//
+//
 //    if(0)
-    {
-        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SLEEP_DISABLE);
-    }
-
-    while(1);
-
-//    if(0)
-    { // SEAL -> UNSEAL
-        //bqTM.13.8.2/197
-
-        /* bqTM.8.1/71
-         *  """
-         *      each transition requires that a unique set of keys be sent to the device
-         *      through the sub-command address (0x3E and 0x3F). The keys must be sent
-         *      consecutively to 0x3E and 0x3F, with no other data written between the
-         *      keys. Do not set the two keys to identical values
-         *  """
-         */
-
-        uint32_t usk = 0x3672'0414; // un-seal key
-//        uint32_t usk = 0x3672'0414; // un-seal key : factory default
-
-        uint8_t sk1[] = {0x3E, (uint8_t)((usk & 0x0000'00FF) >> 00), (uint8_t)((usk & 0x0000'FF00) >> 8)};
-        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk1, sizeof(sk1), pdMS_TO_TICKS(10));
-
-        uint8_t sk2[] = {0x3E, (uint8_t)((usk & 0x00FF'0000) >> 16), (uint8_t)((usk & 0xFF00'0000) >> 24)};
-        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk2, sizeof(sk2), pdMS_TO_TICKS(10));
-    }
-
-    if(0)
-    { // TODO: DOES NOT WORK!!!!!!!!!    UNSEAL -> FULL-ACCESS
-        uint32_t fak = 0xFFFF'FFFF; // full access key
-//        uint32_t fak = 0xFFFF'FFFF'; // full access key : factory default
-
-        uint8_t sk1[] = {0x3E, (uint8_t)((fak & 0x0000'00FF) >> 00), (uint8_t)((fak & 0x0000'FF00) >> 8)};
-        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk1, sizeof(sk1), pdMS_TO_TICKS(10));
-
-        uint8_t sk2[] = {0x3E, (uint8_t)((fak & 0x00FF'0000) >> 16), (uint8_t)((fak & 0xFF00'0000) >> 24)};
-        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk2, sizeof(sk2), pdMS_TO_TICKS(10));
-    }
-
-    System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-//    if(0)
-    {
-        uint16_t v = 0xBEEF;
-
-        // dump battery status
-        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
-        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
-        printBattStatus(v);
-        System::uart_ui.nputs(ARRANDN(CLIRESET));
-
-        vTaskDelay(pdMS_TO_TICKS(10e3));
-        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE));
-
-    }
-
-
-
-
-
-//    while(1);
-
-
-
+//    { // TODO: DOES NOT WORK!!!!!!!!!    UNSEAL -> FULL-ACCESS
+//        uint32_t fak = 0xFFFF'FFFF; // full access key
+////        uint32_t fak = 0xFFFF'FFFF'; // full access key : factory default
+//
+//        uint8_t sk1[] = {0x3E, (uint8_t)((fak & 0x0000'00FF) >> 00), (uint8_t)((fak & 0x0000'FF00) >> 8)};
+//        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk1, sizeof(sk1), pdMS_TO_TICKS(10));
+//
+//        uint8_t sk2[] = {0x3E, (uint8_t)((fak & 0x00FF'0000) >> 16), (uint8_t)((fak & 0xFF00'0000) >> 24)};
+//        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk2, sizeof(sk2), pdMS_TO_TICKS(10));
+//    }
+//
+//    System::uart_ui.nputs(ARRANDN(NEWLINE));
+//
+//    {
+//        uint16_t v = 0xBEEF;
+//
+//        // dump battery status
+//        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+//        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
+//        printBattStatus(v);
+//        System::uart_ui.nputs(ARRANDN(CLIRESET));
+//
+//        vTaskDelay(pdMS_TO_TICKS(10e3));
+//        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE));
+//
+//    }
 
 
     // -----------------------------------------------------------------------------
 
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
-    vTaskDelay(pdMS_TO_TICKS(60));
+    vTaskDelay(pdMS_TO_TICKS(61));
 
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    vTaskDelay(pdMS_TO_TICKS(9));
 
 
     // After entering CONFIG_UPDATE mode, RAM registers can be programmed. When programming RAM, checksum and length must also be
@@ -353,51 +596,51 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.setRegister(BQ769X2_PROTOCOL::RegAddr::SCDLLatchLimit, 0x01, 1);
 
 
-    vTaskDelay(pdMS_TO_TICKS(8));
+    vTaskDelay(pdMS_TO_TICKS(9));
     // Exit CONFIGUPDATE mode  - Subcommand 0x0092
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    vTaskDelay(pdMS_TO_TICKS(9));
     //Control All FETs on
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::FET_ENABLE);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    vTaskDelay(pdMS_TO_TICKS(9));
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::ALL_FETS_ON);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    vTaskDelay(pdMS_TO_TICKS(9));
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SLEEP_DISABLE);
-    vTaskDelay(pdMS_TO_TICKS(8));
+    vTaskDelay(pdMS_TO_TICKS(9));
 
     // -----------------------------------------------------------------------------
 
     const BQ769X2_PROTOCOL::CmdDrt cmds[] = {
              BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell2Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell3Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell4Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell5Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell6Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell7Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell8Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell9Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell10Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell12Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell13Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell14Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell15Voltage,
-             BQ769X2_PROTOCOL::CmdDrt::Cell16Voltage
+//             BQ769X2_PROTOCOL::CmdDrt::Cell2Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell3Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell4Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell5Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell6Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell7Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell8Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell9Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell10Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell12Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell13Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell14Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell15Voltage,
+//             BQ769X2_PROTOCOL::CmdDrt::Cell16Voltage
         };
 
 //    while(1)
-    {
-        uint16_t v = 0xBEEF;
-
-        // dump battery status
-        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
-        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
-        printBattStatus(v);
-        System::uart_ui.nputs(ARRANDN(CLIRESET));
-
-        vTaskDelay(pdMS_TO_TICKS(5e3));
-        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE NEWLINE));
-    }
+//    {
+//        uint16_t v = 0xBEEF;
+//
+//        // dump battery status
+//        bool success = bq.I2C_ReadReg(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, &v, sizeof(v));
+//        System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
+//        printBattStatus(v);
+//        System::uart_ui.nputs(ARRANDN(CLIRESET));
+//
+//        vTaskDelay(pdMS_TO_TICKS(5e3));
+//        System::uart_ui.nputs(ARRANDN(NEWLINE NEWLINE NEWLINE));
+//    }
 
 
     while(true){
@@ -411,7 +654,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
             System::uart_ui.nputs(ARRANDN(str));
             System::uart_ui.nputs(ARRANDN(CLIRESET));
 
-            vTaskDelay(pdMS_TO_TICKS(200));
+            vTaskDelay(pdMS_TO_TICKS(1e3));
         }
         System::uart_ui.nputs(ARRANDN(NEWLINE));
     }

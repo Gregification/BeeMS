@@ -278,7 +278,7 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c
         if(! i2c_controller.tx_blocking(i2c_addr, &reg_addr, 1, pdMS_TO_TICKS(4)))
             break;
 
-        vTaskDelay(pdMS_TO_TICKS(2));
+        vTaskDelay(pdMS_TO_TICKS(3));
 
         if(! i2c_controller.rx_blocking(i2c_addr, reg_data, count, pdMS_TO_TICKS(4)))
             break;
