@@ -35,14 +35,18 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
 
-    bq.i2c_controller->setSCLTarget(50e3);
+    bq.i2c_controller->setSCLTarget(100e3);
 
     vTaskDelay(pdMS_TO_TICKS(500));
 
     while(1){
-        uint8_t arr[] = {1,2,3,4,5,6,7};
-        bq.i2c_controller->tx_blocking(0x08, ARRANDN(arr), 0);
-        vTaskDelay(pdMS_TO_TICKS(200));
+        static uint8_t i = 0;
+        uint8_t arr[] = {0xF,0xF,0xF,0xF,0xF,0xF,0xF};
+        arr[i] = i;
+        i++;
+        i = i%sizeof(arr);
+        bq.i2c_controller->tx(0x08, arr, sizeof(arr));
+//        vTaskDelay(pdMS_TO_TICKS(1e3));
     }
 
     // -----------------------------------------------------------------------------

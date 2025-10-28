@@ -132,8 +132,8 @@ void System::init() {
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
-//        DL_GPIO_enableHiZ(IOMUX_PINCM37);
-//        DL_GPIO_enableHiZ(IOMUX_PINCM38);
+        DL_GPIO_enableHiZ(IOMUX_PINCM37);
+        DL_GPIO_enableHiZ(IOMUX_PINCM38);
 
         DL_I2C_ClockConfig clk_config = {
                  .clockSel      = DL_I2C_CLOCK::DL_I2C_CLOCK_BUSCLK,
@@ -674,7 +674,7 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 void System::I2C::I2C::_irq() {
     switch(DL_I2C_getPendingInterrupt(reg)){
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
-            uart_ui.nputs(ARRANDN(" R "));
+//            uart_ui.nputs(ARRANDN(" R "));
             while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
                 if(_trxBuffer.nxt_index < _trxBuffer.data_length){
                     _trxBuffer.data[_trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
@@ -686,9 +686,9 @@ void System::I2C::I2C::_irq() {
             break;
 
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
-            uart_ui.nputs(ARRANDN(" T "));
+//            uart_ui.nputs(ARRANDN(" T "));
             // fill TX fifo
-            if(_trxBuffer.nxt_index < _trxBuffer.data_length){
+            if(_trxBuffer.data && (_trxBuffer.nxt_index < _trxBuffer.data_length)){
                 _trxBuffer.nxt_index += DL_I2C_fillControllerTXFIFO(
                         reg,
                         ((uint8_t *)_trxBuffer.data) + _trxBuffer.nxt_index,
@@ -699,42 +699,41 @@ void System::I2C::I2C::_irq() {
 
         case DL_I2C_IIDX::DL_I2C_IIDX_TIMEOUT_A:
         case DL_I2C_IIDX::DL_I2C_IIDX_TIMEOUT_B:
-            uart_ui.nputs(ARRANDN(" O "));
+//            uart_ui.nputs(ARRANDN(" O "));
             _trxBuffer.data_length = 0;
-            _trxBuffer.error = ERROR::TIMEOUT;
+            _trxBuffer.error = I2C::ERROR::TIMEOUT;
             break;
 
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_NACK:
-            uart_ui.nputs(ARRANDN(" N "));
+//            uart_ui.nputs(ARRANDN(" N "));
             _trxBuffer.data_length = 0;
-            _trxBuffer.error = ERROR::NACK;
+            _trxBuffer.error = I2C::ERROR::NACK;
             break;
 
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_TX_DONE:
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_RX_DONE:
-            uart_ui.nputs(ARRANDN(" D "));
-            _trxBuffer.data_length = 0;
-            _trxBuffer.error = ERROR::NONE;
+//            uart_ui.nputs(ARRANDN(" D "));
+            _trxBuffer.error = I2C::ERROR::NONE;
             break;
 
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_STOP:
-            uart_ui.nputs(ARRANDN(" E "));
-            switch(_trxBuffer.error){
-                case ERROR::IN_USE:
-                    _trxBuffer.error = ERROR::NONE;
-                    break;
-
-                default: break;
-            }
+            _trxBuffer.data_length = 0;
+//            uart_ui.nputs(ARRANDN(" E "));
             break;
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_START:
-            uart_ui.nputs(ARRANDN(" B "));
-            _trxBuffer.error = ERROR::IN_USE;
+//            uart_ui.nputs(ARRANDN(" B "));
+            _trxBuffer.error = I2C::ERROR::IN_USE;
             break;
 
         default:
+            uart_ui.nputs(ARRANDN(" z " NEWLINE));
             break;
     };
+}
+
+bool System::I2C::I2C::isBusy() {
+    return  (_trxBuffer.error == I2C::ERROR::IN_USE)
+        ;
 }
 
 void System::I2C::I2C::tx(uint8_t addr, void * data, buffersize_t size) {
@@ -745,7 +744,7 @@ void System::I2C::I2C::tx(uint8_t addr, void * data, buffersize_t size) {
 
     _trxBuffer.data         = (uint8_t *)data;
     _trxBuffer.data_length  = size;
-    _trxBuffer.error        = ERROR::IN_USE;
+    _trxBuffer.error        = I2C::ERROR::IN_USE;
     _trxBuffer.nxt_index    = DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, _trxBuffer.data_length);
 
     DL_I2C_startControllerTransfer(
