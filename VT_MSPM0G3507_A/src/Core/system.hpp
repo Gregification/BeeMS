@@ -111,7 +111,7 @@
     #error "increase size of configTASK_NOTIFICATION_ARRAY_ENTRIES"
 #endif
 
-typedef uint16_t buffsize_t;
+typedef uint16_t buffersize_t;
 
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
@@ -300,6 +300,8 @@ namespace System {
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
             void _irq();
 
+            inline bool isBusy() {return _trxBuffer.error == ERROR::IN_USE; }
+
             /** blocks the task calling this function until TX is complete or timeout.
              * uses IRQ+Notifications. other tasks can run while this is blocking
              * @return true if TX success. returns false if timed out, lost arbitration, or received NACK
@@ -313,6 +315,9 @@ namespace System {
              */
             bool rx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t timeout);
 
+            void tx(uint8_t addr, void * data, buffersize_t size);
+            void rx(uint8_t addr, void * data, buffersize_t size);
+
             enum ERROR : uint8_t {
                 IN_USE,
                 NONE,
@@ -322,8 +327,8 @@ namespace System {
 
             struct {
                 uint8_t * data;
-                buffsize_t data_length;    // total bytes of data
-                buffsize_t nxt_index;      // index next byte is read/written by
+                buffersize_t data_length;    // total bytes of data
+                buffersize_t nxt_index;      // index next byte is read/written by
                 ERROR error;
             } _trxBuffer;
         };

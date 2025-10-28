@@ -39,6 +39,12 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
 
     vTaskDelay(pdMS_TO_TICKS(500));
 
+    while(1){
+        uint8_t arr[] = {1,2,3,4,5,6,7};
+        bq.i2c_controller->tx_blocking(0x08, ARRANDN(arr), 0);
+        vTaskDelay(pdMS_TO_TICKS(200));
+    }
+
     // -----------------------------------------------------------------------------
 
 //    { // reset device
