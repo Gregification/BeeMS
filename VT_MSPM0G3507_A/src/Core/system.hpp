@@ -318,7 +318,7 @@ namespace System {
             void tx(uint8_t addr, void * data, buffersize_t size);
             void rx(uint8_t addr, void * data, buffersize_t size);
 
-            enum ERROR : uint8_t {
+            enum STATUS {
                 IN_USE,
                 NONE,
                 NACK,
@@ -329,7 +329,7 @@ namespace System {
                 uint8_t * data;
                 buffersize_t data_length;    // total bytes of data
                 buffersize_t nxt_index;      // index next byte is read/written by
-                ERROR error;
+                STATUS status;
             } _trxBuffer;
         };
     }

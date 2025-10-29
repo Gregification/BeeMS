@@ -111,7 +111,7 @@ void System::init() {
          * formula -> "X / (1 / <clk> * 520 * 1e6) + 1"
          *      X: max wait in uS
          */
-        DL_I2C_setTimeoutACount(System::i2c1.reg, 50.0 * configCPU_CLOCK_HZ / 520.0e6 + 1);
+        DL_I2C_setTimeoutACount(System::i2c1.reg, 60.0 * configCPU_CLOCK_HZ / 520.0e6 + 1);
         DL_I2C_enableTimeoutA(System::i2c1.reg); // SCL low timeout detection
 
         // PA15
@@ -146,30 +146,31 @@ void System::init() {
         // as controller
         DL_I2C_resetControllerTransfer(i2c1.reg);
 
-        DL_I2C_setControllerTXFIFOThreshold(i2c1.reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_BYTES_1);
+        DL_I2C_setControllerTXFIFOThreshold(i2c1.reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_BYTES_3);
         DL_I2C_setControllerRXFIFOThreshold(i2c1.reg, DL_I2C_RX_FIFO_LEVEL::DL_I2C_RX_FIFO_LEVEL_BYTES_1);
         DL_I2C_enableControllerClockStretching(i2c1.reg);
 
         i2c1.setSCLTarget(100e3);
 
-        DL_I2C_enableController(i2c1.reg);
 
         i2c1._trxBuffer.data_length = 0;
         i2c1._trxBuffer.data = 0;
-        i2c1._trxBuffer.error = I2C::I2C::ERROR::NONE;
+        i2c1._trxBuffer.status = I2C::I2C::STATUS::NONE;
 
-        NVIC_EnableIRQ(I2C1_INT_IRQn);
-        uint32_t irqM = DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+        uint32_t irqM =
+                  DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
+                | DL_I2C_INTERRUPT_CONTROLLER_ARBITRATION_LOST
+                | DL_I2C_INTERRUPT_CONTROLLER_NACK
                 | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
                 | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
                 | DL_I2C_INTERRUPT_TIMEOUT_A
-                | DL_I2C_INTERRUPT_TIMEOUT_B
-                | DL_I2C_INTERRUPT_CONTROLLER_START
-                | DL_I2C_INTERRUPT_CONTROLLER_STOP
                 ;
-        DL_I2C_clearInterruptStatus(i2c1.reg, irqM);
         DL_I2C_enableInterrupt(i2c1.reg, irqM);
+
+        DL_I2C_enableController(i2c1.reg);
+        DL_I2C_clearInterruptStatus(i2c1.reg, irqM);
+        NVIC_EnableIRQ(I2C1_INT_IRQn);
     }
     #endif
 
@@ -674,7 +675,7 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
 void System::I2C::I2C::_irq() {
     switch(DL_I2C_getPendingInterrupt(reg)){
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
-//            uart_ui.nputs(ARRANDN(" R "));
+            _trxBuffer.status = STATUS::IN_USE;
             while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
                 if(_trxBuffer.nxt_index < _trxBuffer.data_length){
                     _trxBuffer.data[_trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
@@ -686,12 +687,12 @@ void System::I2C::I2C::_irq() {
             break;
 
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
-//            uart_ui.nputs(ARRANDN(" T "));
+            _trxBuffer.status = STATUS::IN_USE;
             // fill TX fifo
-            if(_trxBuffer.data && (_trxBuffer.nxt_index < _trxBuffer.data_length)){
+            if(_trxBuffer.nxt_index < _trxBuffer.data_length){
                 _trxBuffer.nxt_index += DL_I2C_fillControllerTXFIFO(
                         reg,
-                        ((uint8_t *)_trxBuffer.data) + _trxBuffer.nxt_index,
+                        &(_trxBuffer.data[_trxBuffer.nxt_index]),
                         _trxBuffer.data_length - _trxBuffer.nxt_index
                     );
             }
@@ -699,40 +700,29 @@ void System::I2C::I2C::_irq() {
 
         case DL_I2C_IIDX::DL_I2C_IIDX_TIMEOUT_A:
         case DL_I2C_IIDX::DL_I2C_IIDX_TIMEOUT_B:
-//            uart_ui.nputs(ARRANDN(" O "));
             _trxBuffer.data_length = 0;
-            _trxBuffer.error = I2C::ERROR::TIMEOUT;
+            _trxBuffer.status = I2C::STATUS::TIMEOUT;
             break;
 
+        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_ARBITRATION_LOST:
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_NACK:
-//            uart_ui.nputs(ARRANDN(" N "));
             _trxBuffer.data_length = 0;
-            _trxBuffer.error = I2C::ERROR::NACK;
+            _trxBuffer.status = I2C::STATUS::NACK;
             break;
 
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_TX_DONE:
         case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_RX_DONE:
-//            uart_ui.nputs(ARRANDN(" D "));
-            _trxBuffer.error = I2C::ERROR::NONE;
-            break;
-
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_STOP:
-            _trxBuffer.data_length = 0;
-//            uart_ui.nputs(ARRANDN(" E "));
-            break;
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_START:
-//            uart_ui.nputs(ARRANDN(" B "));
-            _trxBuffer.error = I2C::ERROR::IN_USE;
+            _trxBuffer.status = I2C::STATUS::NONE;
             break;
 
         default:
-            uart_ui.nputs(ARRANDN(" z " NEWLINE));
             break;
     };
 }
 
 bool System::I2C::I2C::isBusy() {
-    return  (_trxBuffer.error == I2C::ERROR::IN_USE)
+    return  (_trxBuffer.status == I2C::STATUS::IN_USE)
+//            || !DL_I2C_isControllerTXFIFOEmpty(reg)
         ;
 }
 
@@ -740,12 +730,20 @@ void System::I2C::I2C::tx(uint8_t addr, void * data, buffersize_t size) {
     while (isBusy())
         {}
 
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+            ;
+
     DL_I2C_flushControllerTXFIFO(reg);
 
     _trxBuffer.data         = (uint8_t *)data;
     _trxBuffer.data_length  = size;
-    _trxBuffer.error        = I2C::ERROR::IN_USE;
+    _trxBuffer.status       = STATUS::IN_USE;
     _trxBuffer.nxt_index    = DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, _trxBuffer.data_length);
+
+    if(_trxBuffer.nxt_index < _trxBuffer.data_length)
+        DL_I2C_enableInterrupt(reg, DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER);
+    else
+        DL_I2C_disableInterrupt(reg, DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER);
 
     DL_I2C_startControllerTransfer(
             reg,
@@ -759,11 +757,14 @@ void System::I2C::I2C::rx(uint8_t addr, void * data, buffersize_t size) {
     while(isBusy())
         {}
 
-    DL_I2C_flushControllerTXFIFO(reg);
+    while (DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+        {}
+
+    DL_I2C_flushControllerRXFIFO(reg);
 
     _trxBuffer.data         = (uint8_t *)data;
     _trxBuffer.data_length  = size;
-    _trxBuffer.error        = ERROR::IN_USE;
+    _trxBuffer.status       = STATUS::IN_USE;
     _trxBuffer.nxt_index    = 0;
 
     DL_I2C_startControllerTransfer(
@@ -777,13 +778,20 @@ void System::I2C::I2C::rx(uint8_t addr, void * data, buffersize_t size) {
 bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t) {
     tx(addr, data, size);
     while(isBusy());
-    return _trxBuffer.error == ERROR::NONE;
+    while (DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+            ;
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+        ;
+    return _trxBuffer.status != STATUS::NONE; // no idea why its inverted??
 }
 
 bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t) {
     rx(addr, data, size);
-    while(isBusy());
-    return _trxBuffer.error == ERROR::NONE;
+    while(isBusy())
+        {}
+    while (DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+        {}
+    return _trxBuffer.status != STATUS::NONE;
 }
 
 
@@ -806,7 +814,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
 
 
     // for ease of debugging. delete if needed
-    /*
+//    /*
     extern "C" void NMI_Handler(void)
     { while(1){} }
     extern "C" void HardFault_Handler(void) // if this is giving u a problem check if your using IRQ safe funcitons in your IRQ
@@ -853,7 +861,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     { while(1){} }
     extern "C" void DMA_IRQHandler(void)
     { while(1){} }
-    */
+//    */
 
 /*--- idiot detection ------------------------------------------------------------------*/
 
