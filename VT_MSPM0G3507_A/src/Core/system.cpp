@@ -757,7 +757,7 @@ void System::I2C::I2C::rx(uint8_t addr, void * data, buffersize_t size) {
     while(isBusy())
         {}
 
-    while (DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
         {}
 
     DL_I2C_flushControllerRXFIFO(reg);
@@ -818,7 +818,10 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     extern "C" void NMI_Handler(void)
     { while(1){} }
     extern "C" void HardFault_Handler(void) // if this is giving u a problem check if your using IRQ safe funcitons in your IRQ
-    { while(1){} }
+    { while(1){
+        System::uart_ui.nputs(ARRANDN("HARD FAULT" NEWLINE));
+        delay_cycles(System::CLK::CPUCLK);
+    } }
     extern "C" void GROUP0_IRQHandler(void)
     { while(1){} }
     extern "C" void GROUP1_IRQHandler(void)

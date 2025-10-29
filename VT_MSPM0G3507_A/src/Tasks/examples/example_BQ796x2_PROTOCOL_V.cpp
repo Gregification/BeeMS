@@ -35,7 +35,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
 
-    bq.i2c_controller->setSCLTarget(100e3);
+    bq.i2c_controller->setSCLTarget(60e3);
 
     vTaskDelay(pdMS_TO_TICKS(500));
 
@@ -699,7 +699,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     while(true){
         for(uint8_t i = 0; i < sizeof(cmds); i++){
             uint16_t v = 0xBEEF;
-            bool success = bq.I2C_ReadReg(cmds[i], &v, sizeof(v));
+            bool success = bq.sendDirectCommandR(cmds[i], &v);
 
             snprintf(ARRANDN(str), "%6d,", v);
 
