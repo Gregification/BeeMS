@@ -35,20 +35,30 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
 
-    bq.i2c_controller->setSCLTarget(60e3);
+    bq.i2c_controller->setSCLTarget(40e3);
 
     vTaskDelay(pdMS_TO_TICKS(500));
 
-    while(0) {
-        static uint8_t arr[] = {1,2,3,4,5,6,7,8,9};
+    while(1) {
+        static uint8_t arr[] = {0,0,0,0,0,0};
         static const uint8_t arr_size = sizeof(arr);
         static char output_buffer[64];
         static volatile bool res;
-//        res = bq.i2c_controller->rx_blocking(0x08, arr, sizeof(arr), 0);
-        bq.i2c_controller->rx(0x08, arr, sizeof(arr));
+//        bq.I2C_ReadReg(0x14, arr, 2);
+//        res = bq.i2c_controller->rx_blocking(0x11, arr, sizeof(arr), 0);
+//        arr[0] = 0x14;
+        uint8_t tx[] = {0x14};
+        res = bq.i2c_controller->tx_blocking(0x08, tx, sizeof(tx), 0);
+        bq.i2c_controller->rx_blocking(0x08, arr, 4, 0);
+        vTaskDelay(pdMS_TO_TICKS(1e3));
 //        vTaskDelay(pdMS_TO_TICKS(100));
-//        res = bq.i2c_controller->tx_blocking(0x08, arr, sizeof(arr), 0 );
-//        vTaskDelay(pdMS_TO_TICKS(100));
+
+        {
+            uint16_t v;
+            v = (arr[2] << 8) | arr[0];
+            snprintf(ARRANDN(str), "%d" NEWLINE, v);
+            System::uart_ui.nputs(ARRANDN(str));
+        }
 
         if(res) System::uart_ui.nputs(ARRANDN(CLIRESET CLIGOOD));
         else    System::uart_ui.nputs(ARRANDN(CLIRESET CLIBAD));
