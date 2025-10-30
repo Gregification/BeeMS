@@ -298,9 +298,6 @@ namespace System {
             I2C_Regs * const reg;
 
             void setSCLTarget(uint32_t target, uint32_t clk = System::CLK::ULPCLK);
-            void _irq();
-
-            bool isBusy();
 
             /** blocks the task calling this function until TX is complete or timeout.
              * uses IRQ+Notifications. other tasks can run while this is blocking
@@ -314,23 +311,6 @@ namespace System {
              *      or received less than expected amount of bytes.
              */
             bool rx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t timeout);
-
-            void tx(uint8_t addr, void * data, buffersize_t size);
-            void rx(uint8_t addr, void * data, buffersize_t size);
-
-            enum ERROR : uint8_t {
-                IN_USE,
-                NONE,
-                NACK,
-                TIMEOUT
-            };
-
-            struct {
-                uint8_t * data;
-                buffersize_t data_length;    // total bytes of data
-                buffersize_t nxt_index;      // index next byte is read/written by
-                ERROR error;
-            } _trxBuffer;
         };
     }
 

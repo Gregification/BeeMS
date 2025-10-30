@@ -35,18 +35,71 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     bq.i2c_controller   = &System::i2c1;
     bq.i2c_addr         = 0x8;
 
-    bq.i2c_controller->setSCLTarget(100e3);
+    bq.i2c_controller->setSCLTarget(40e3);
 
     vTaskDelay(pdMS_TO_TICKS(500));
 
-    while(1){
-        static uint8_t i = 0;
-        uint8_t arr[] = {0xF,0xF,0xF,0xF,0xF,0xF,0xF};
-        arr[i] = i;
-        i++;
-        i = i%sizeof(arr);
-        bq.i2c_controller->tx(0x08, arr, sizeof(arr));
-//        vTaskDelay(pdMS_TO_TICKS(1e3));
+    while(1) {
+        static uint8_t arr[] = {0,0,0,0,0,0};
+        static const uint8_t arr_size = sizeof(arr);
+        static char output_buffer[64];
+        static volatile bool res;
+//        bq.I2C_ReadReg(0x14, arr, 2);
+//        res = bq.i2c_controller->rx_blocking(0x11, arr, sizeof(arr), 0);
+//        arr[0] = 0x14;
+        uint8_t tx[] = {0x14};
+        res = bq.i2c_controller->tx_blocking(0x08, tx, sizeof(tx), 0);
+        bq.i2c_controller->rx_blocking(0x08, arr, 4, 0);
+        vTaskDelay(pdMS_TO_TICKS(1e3));
+//        vTaskDelay(pdMS_TO_TICKS(100));
+
+        {
+            uint16_t v;
+            v = (arr[2] << 8) | arr[0];
+            snprintf(ARRANDN(str), "%d" NEWLINE, v);
+            System::uart_ui.nputs(ARRANDN(str));
+        }
+
+        if(res) System::uart_ui.nputs(ARRANDN(CLIRESET CLIGOOD));
+        else    System::uart_ui.nputs(ARRANDN(CLIRESET CLIBAD));
+
+        // --- INLINED PRINTING LOGIC START ---
+
+        // Use an offset to track the current position in the output_buffer.
+        int offset = 0;
+
+        // Start the string with a descriptive prefix.
+        offset += snprintf(output_buffer + offset, sizeof(output_buffer) - offset, "RX_DATA: ");
+
+        // 2. LOOP TO FORMAT RECEIVED BYTES
+        // This replaces the original fragmented printing loop.
+        for(int k = 0; k < arr_size; k++){
+            // Check boundary before writing
+            if (offset >= sizeof(output_buffer) - 4) { // Need at least 4 chars (space, 2 hex digits, null terminator)
+                break;
+            }
+
+            // Format the current byte (arr[k]) as two-digit hexadecimal (%02X) followed by a space.
+            offset += snprintf(output_buffer + offset, sizeof(output_buffer) - offset, "%02X ", arr[k]);
+        }
+
+        // 3. FINISH AND OUTPUT THE STRING
+
+        // Replace the trailing space with a newline character for clean console output.
+        // We only do this if we actually appended data (offset > "RX_DATA: ".length).
+        if (offset > 9) {
+            output_buffer[offset - 1] = '\0';
+            output_buffer[offset] = '\0';
+        } else {
+            // Safety measure: ensure it's null-terminated even if no data was written.
+            output_buffer[offset] = '\0';
+        }
+
+        // Output the complete, formatted string in one go.
+        // Assuming System::uart_ui.nputs can handle the final null-terminated string.
+        System::uart_ui.nputs(ARRANDN(output_buffer));
+
+        System::uart_ui.nputs(ARRANDN(NEWLINE));
     }
 
     // -----------------------------------------------------------------------------
@@ -622,20 +675,20 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
 
     const BQ769X2_PROTOCOL::CmdDrt cmds[] = {
              BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell2Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell3Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell4Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell5Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell6Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell7Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell8Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell9Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell10Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell12Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell13Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell14Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell15Voltage,
-//             BQ769X2_PROTOCOL::CmdDrt::Cell16Voltage
+             BQ769X2_PROTOCOL::CmdDrt::Cell2Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell3Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell4Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell5Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell6Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell7Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell8Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell9Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell10Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell12Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell13Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell14Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell15Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell16Voltage
         };
 
 //    while(1)
@@ -656,7 +709,7 @@ void Task::BQ769x2_PROTOCOL_Test_V_Task(void*) {
     while(true){
         for(uint8_t i = 0; i < sizeof(cmds); i++){
             uint16_t v = 0xBEEF;
-            bool success = bq.I2C_ReadReg(cmds[i], &v, sizeof(v));
+            bool success = bq.sendDirectCommandR(cmds[i], &v);
 
             snprintf(ARRANDN(str), "%6d,", v);
 

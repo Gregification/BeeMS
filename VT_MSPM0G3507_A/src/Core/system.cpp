@@ -111,7 +111,7 @@ void System::init() {
          * formula -> "X / (1 / <clk> * 520 * 1e6) + 1"
          *      X: max wait in uS
          */
-        DL_I2C_setTimeoutACount(System::i2c1.reg, 50.0 * configCPU_CLOCK_HZ / 520.0e6 + 1);
+        DL_I2C_setTimeoutACount(System::i2c1.reg, 60.0 * configCPU_CLOCK_HZ / 520.0e6 + 1);
         DL_I2C_enableTimeoutA(System::i2c1.reg); // SCL low timeout detection
 
         // PA15
@@ -141,35 +141,17 @@ void System::init() {
             };
         DL_I2C_setClockConfig(i2c1.reg, &clk_config);
         DL_I2C_enableAnalogGlitchFilter(i2c1.reg);
+        DL_I2C_resetControllerTransfer(i2c1.reg);
         DL_I2C_setControllerAddressingMode(i2c1.reg, DL_I2C_CONTROLLER_ADDRESSING_MODE::DL_I2C_CONTROLLER_ADDRESSING_MODE_7_BIT);
 
-        // as controller
-        DL_I2C_resetControllerTransfer(i2c1.reg);
 
-        DL_I2C_setControllerTXFIFOThreshold(i2c1.reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_BYTES_1);
+        DL_I2C_setControllerTXFIFOThreshold(i2c1.reg, DL_I2C_TX_FIFO_LEVEL::DL_I2C_TX_FIFO_LEVEL_EMPTY);
         DL_I2C_setControllerRXFIFOThreshold(i2c1.reg, DL_I2C_RX_FIFO_LEVEL::DL_I2C_RX_FIFO_LEVEL_BYTES_1);
         DL_I2C_enableControllerClockStretching(i2c1.reg);
 
-        i2c1.setSCLTarget(100e3);
+        DL_I2C_setTimerPeriod(i2c1.reg, 7);
 
         DL_I2C_enableController(i2c1.reg);
-
-        i2c1._trxBuffer.data_length = 0;
-        i2c1._trxBuffer.data = 0;
-        i2c1._trxBuffer.error = I2C::I2C::ERROR::NONE;
-
-        NVIC_EnableIRQ(I2C1_INT_IRQn);
-        uint32_t irqM = DL_I2C_INTERRUPT_CONTROLLER_RXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TXFIFO_TRIGGER
-                | DL_I2C_INTERRUPT_CONTROLLER_TX_DONE
-                | DL_I2C_INTERRUPT_CONTROLLER_RX_DONE
-                | DL_I2C_INTERRUPT_TIMEOUT_A
-                | DL_I2C_INTERRUPT_TIMEOUT_B
-                | DL_I2C_INTERRUPT_CONTROLLER_START
-                | DL_I2C_INTERRUPT_CONTROLLER_STOP
-                ;
-        DL_I2C_clearInterruptStatus(i2c1.reg, irqM);
-        DL_I2C_enableInterrupt(i2c1.reg, irqM);
     }
     #endif
 
@@ -671,119 +653,60 @@ void System::I2C::I2C::setSCLTarget(uint32_t target, uint32_t clk){
     DL_I2C_setTimerPeriod(reg, effective_clk / (target * 10) - 1);
 }
 
-void System::I2C::I2C::_irq() {
-    switch(DL_I2C_getPendingInterrupt(reg)){
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_RXFIFO_TRIGGER:
-//            uart_ui.nputs(ARRANDN(" R "));
-            while(!DL_I2C_isControllerRXFIFOEmpty(reg)){
-                if(_trxBuffer.nxt_index < _trxBuffer.data_length){
-                    _trxBuffer.data[_trxBuffer.nxt_index++] = DL_I2C_receiveControllerData(reg);
-                } else {
-                    // ignore and flush
-                    DL_I2C_receiveControllerData(reg);
-                }
-            }
-            break;
-
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_TXFIFO_TRIGGER:
-//            uart_ui.nputs(ARRANDN(" T "));
-            // fill TX fifo
-            if(_trxBuffer.data && (_trxBuffer.nxt_index < _trxBuffer.data_length)){
-                _trxBuffer.nxt_index += DL_I2C_fillControllerTXFIFO(
-                        reg,
-                        ((uint8_t *)_trxBuffer.data) + _trxBuffer.nxt_index,
-                        _trxBuffer.data_length - _trxBuffer.nxt_index
-                    );
-            }
-            break;
-
-        case DL_I2C_IIDX::DL_I2C_IIDX_TIMEOUT_A:
-        case DL_I2C_IIDX::DL_I2C_IIDX_TIMEOUT_B:
-//            uart_ui.nputs(ARRANDN(" O "));
-            _trxBuffer.data_length = 0;
-            _trxBuffer.error = I2C::ERROR::TIMEOUT;
-            break;
-
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_NACK:
-//            uart_ui.nputs(ARRANDN(" N "));
-            _trxBuffer.data_length = 0;
-            _trxBuffer.error = I2C::ERROR::NACK;
-            break;
-
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_TX_DONE:
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_RX_DONE:
-//            uart_ui.nputs(ARRANDN(" D "));
-            _trxBuffer.error = I2C::ERROR::NONE;
-            break;
-
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_STOP:
-            _trxBuffer.data_length = 0;
-//            uart_ui.nputs(ARRANDN(" E "));
-            break;
-        case DL_I2C_IIDX::DL_I2C_IIDX_CONTROLLER_START:
-//            uart_ui.nputs(ARRANDN(" B "));
-            _trxBuffer.error = I2C::ERROR::IN_USE;
-            break;
-
-        default:
-            uart_ui.nputs(ARRANDN(" z " NEWLINE));
-            break;
-    };
-}
-
-bool System::I2C::I2C::isBusy() {
-    return  (_trxBuffer.error == I2C::ERROR::IN_USE)
-        ;
-}
-
-void System::I2C::I2C::tx(uint8_t addr, void * data, buffersize_t size) {
-    while (isBusy())
-        {}
-
-    DL_I2C_flushControllerTXFIFO(reg);
-
-    _trxBuffer.data         = (uint8_t *)data;
-    _trxBuffer.data_length  = size;
-    _trxBuffer.error        = I2C::ERROR::IN_USE;
-    _trxBuffer.nxt_index    = DL_I2C_fillControllerTXFIFO(reg, _trxBuffer.data, _trxBuffer.data_length);
-
-    DL_I2C_startControllerTransfer(
-            reg,
-            addr,
-            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_TX,
-            _trxBuffer.data_length
-        );
-}
-
-void System::I2C::I2C::rx(uint8_t addr, void * data, buffersize_t size) {
-    while(isBusy())
-        {}
-
-    DL_I2C_flushControllerTXFIFO(reg);
-
-    _trxBuffer.data         = (uint8_t *)data;
-    _trxBuffer.data_length  = size;
-    _trxBuffer.error        = ERROR::IN_USE;
-    _trxBuffer.nxt_index    = 0;
-
-    DL_I2C_startControllerTransfer(
-            reg,
-            addr,
-            DL_I2C_CONTROLLER_DIRECTION::DL_I2C_CONTROLLER_DIRECTION_RX,
-            _trxBuffer.data_length
-        );
-}
-
 bool System::I2C::I2C::tx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t) {
-    tx(addr, data, size);
-    while(isBusy());
-    return _trxBuffer.error == ERROR::NONE;
+    bool ret = true;
+    /*
+     * Fill FIFO with data. This example will send a MAX of 8 bytes since it
+     * doesn't handle the case where FIFO is full
+     */
+    DL_I2C_fillControllerTXFIFO(reg, (uint8_t *)data, size);
+
+    /* Wait for I2C to be Idle */
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+        vTaskDelay(0);
+
+    /* Send the packet to the controller.
+     * This function will send Start + Stop automatically.
+     */
+    DL_I2C_startControllerTransfer(reg, addr,
+        DL_I2C_CONTROLLER_DIRECTION_TX, size);
+
+    /* Poll until the Controller writes all bytes */
+    while (DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
+        vTaskDelay(0);
+
+    /* Trap if there was an error */
+    if (DL_I2C_getControllerStatus(reg) &
+        DL_I2C_CONTROLLER_STATUS_ERROR) {
+        ret = false;
+    }
+
+    /* Wait for I2C to be Idle */
+    while (!(DL_I2C_getControllerStatus(reg) & DL_I2C_CONTROLLER_STATUS_IDLE))
+        vTaskDelay(0);
+
+    /* Add delay between transfers */
+    delay_cycles(1000);
+
+    return ret;
 }
 
 bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t) {
-    rx(addr, data, size);
-    while(isBusy());
-    return _trxBuffer.error == ERROR::NONE;
+    /* Send a read request to Target */
+    DL_I2C_startControllerTransfer(reg, addr,
+        DL_I2C_CONTROLLER_DIRECTION_RX, size);
+
+    /*
+     * Receive all bytes from target. LED will remain high if not all bytes
+     * are received
+     */
+    for (uint8_t i = 0; i < size; i++) {
+        while (DL_I2C_isControllerRXFIFOEmpty(reg))
+            vTaskDelay(0);
+        ((uint8_t *)data)[i] = DL_I2C_receiveControllerData(reg);
+    }
+
+    return true;
 }
 
 
@@ -791,12 +714,6 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
 /* most peripherals don't need a IRQ
  */
 
-#ifdef PROJECT_ENABLE_I2C0
-    extern "C" void I2C0_IRQHandler(void){ System::i2c0._irq(); }
-#endif
-#ifdef PROJECT_ENABLE_I2C1
-    extern "C" void I2C1_IRQHandler(void){ System::i2c1._irq(); }
-#endif
 #ifdef PROJECT_ENABLE_SPI0
     extern "C" void SPI0_IRQHandler(void){ System::spi0._irq(); }
 #endif
@@ -806,11 +723,14 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
 
 
     // for ease of debugging. delete if needed
-    /*
+//    /*
     extern "C" void NMI_Handler(void)
     { while(1){} }
     extern "C" void HardFault_Handler(void) // if this is giving u a problem check if your using IRQ safe funcitons in your IRQ
-    { while(1){} }
+    { while(1){
+        System::uart_ui.nputs(ARRANDN("HARD FAULT" NEWLINE));
+        delay_cycles(System::CLK::CPUCLK);
+    } }
     extern "C" void GROUP0_IRQHandler(void)
     { while(1){} }
     extern "C" void GROUP1_IRQHandler(void)
@@ -853,7 +773,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     { while(1){} }
     extern "C" void DMA_IRQHandler(void)
     { while(1){} }
-    */
+//    */
 
 /*--- idiot detection ------------------------------------------------------------------*/
 
