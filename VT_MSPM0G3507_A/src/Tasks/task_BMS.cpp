@@ -95,6 +95,7 @@ void Task::BMS_task(void *){
              BQ769X2_PROTOCOL::CmdDrt::Cell8Voltage,
              BQ769X2_PROTOCOL::CmdDrt::Cell9Voltage,
              BQ769X2_PROTOCOL::CmdDrt::Cell10Voltage,
+             BQ769X2_PROTOCOL::CmdDrt::Cell11Voltage,
              BQ769X2_PROTOCOL::CmdDrt::Cell12Voltage,
              BQ769X2_PROTOCOL::CmdDrt::Cell13Voltage,
              BQ769X2_PROTOCOL::CmdDrt::Cell14Voltage,
@@ -103,6 +104,18 @@ void Task::BMS_task(void *){
         };
 
     char str[MAX_STR_LEN_COMMON];
+
+    while(1){
+        uint32_t v= 0xBeeF;
+        bq.I2C_ReadReg(BQ769X2_PROTOCOL::RegAddr::PowerConfig, &v, sizeof(v));
+        if((0x2D80 | BV(6)) != v){
+            char str[20];
+            snprintf(ARRANDN(str), "%04h", v);
+            System::uart_ui.nputs(ARRANDN(str));
+            System::uart_ui.nputs(ARRANDN("meow" NEWLINE));
+        } else
+            break;
+    }
 
     DL_MCAN_TxBufElement txmsg = {
            .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
@@ -123,10 +136,7 @@ void Task::BMS_task(void *){
 
             snprintf(ARRANDN(str), "%6d,", v);
 
-            System::uart_ui.nputs(ARRANDN(success ? CLIGOOD : CLIBAD));
             System::uart_ui.nputs(ARRANDN(str));
-            System::uart_ui.nputs(ARRANDN(CLIRESET));
-
 
             if(!success)
                 v = 0;
@@ -206,7 +216,7 @@ bool setup_BBQ(BQ76952 & bq){
     // 'Power Config' - 0x9234 = 0x2D80
     // Setting the DSLP_LDO bit allows the LDOs to remain active when the device goes into Deep Sleep mode
     // Set wake speed bits to 00 for best performance
-    bq.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2D80, 2);
+    bq.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2D80 | BV(6), 2);
 
     // 'REG0 Config' - set REG0_EN bit to enable pre-regulator
     bq.setRegister(BQ769X2_PROTOCOL::RegAddr::REG0Config, 0x01, 1);
