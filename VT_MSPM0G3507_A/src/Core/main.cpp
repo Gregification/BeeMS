@@ -49,19 +49,19 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::BMS_task,
-//            "BMS_task",
-//            configMINIMAL_STACK_SIZE*10,
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
-
-    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
-            "BQ769x2_PROTOCOL_Test_V_Task",
+    xTaskCreate(Task::BMS_task,
+            "BMS_task",
             configMINIMAL_STACK_SIZE*20,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
+
+//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
+//            "BQ769x2_PROTOCOL_Test_V_Task",
+//            configMINIMAL_STACK_SIZE*20,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
 //    xTaskCreate(Task::non_BMS_functions_task,
 //            "non_BMS_functions_task",

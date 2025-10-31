@@ -156,7 +156,6 @@ namespace System {
          * theres benefits to both but Im going with a locking design since its allows 'tasks' more
          * detailed hardware control.
          */
-
         SemaphoreHandle_t semph = NULL;
 
     public:

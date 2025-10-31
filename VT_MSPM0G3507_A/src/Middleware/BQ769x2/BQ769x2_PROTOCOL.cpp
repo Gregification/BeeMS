@@ -66,9 +66,13 @@ uint8_t BQ769X2_PROTOCOL::CRC8(uint8_t *ptr, uint8_t len)
 //}
 
 bool BQ769X2_PROTOCOL::sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut){
-    if(I2C_ReadReg(i2c_controller, i2c_addr, command, (uint8_t *)readOut, 2))
+    uint8_t buff[4];
+    if(I2C_ReadReg(i2c_controller, i2c_addr, command, buff, 4)){
+        *readOut = buff[2];
+        *readOut <<= 8;
+        *readOut |= buff[0];
         return true;
-    else
+    } else
         return false;
 }
 
