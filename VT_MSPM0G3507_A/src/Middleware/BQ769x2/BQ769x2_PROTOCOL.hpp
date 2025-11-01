@@ -446,7 +446,7 @@ namespace BQ769X2_PROTOCOL {
     bool sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data);
 
     /** returns false if timed */
-    bool sendCommandSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command);
+    bool sendCommandSubcommand(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd command);
 
     /** returns false if timed */
     bool sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut);
@@ -462,6 +462,9 @@ namespace BQ769X2_PROTOCOL {
 
     /** returns false if timed */
     bool I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
+
+    bool spi24b_writeReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t data);
+//    void spi24b_readReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t data);
 
     uint8_t Checksum(uint8_t *ptr, uint8_t len);
 

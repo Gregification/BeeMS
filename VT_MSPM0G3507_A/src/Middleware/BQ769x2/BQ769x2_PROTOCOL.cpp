@@ -44,36 +44,15 @@ uint8_t BQ769X2_PROTOCOL::CRC8(uint8_t *ptr, uint8_t len)
     return (crc);
 }
 
-//bool  BQ769X2_PROTOCOL::sendDirectCommand(System::I2C::I2C i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data, DIR_CMD_TYPE type, TickType_t timeout)
-//{
-//    uint8_t TX_data[2] = {0x00, 0x00};
-//
-//    //little endian format
-//    TX_data[0] = data & 0xff;
-//    TX_data[1] = (data >> 8) & 0xff;
-//
-//    uint16_t ret = 0;
-//    if (type == R) {                       //Read
-//        I2C_ReadReg(i2c_controller, i2c_addr, command, &ret, 2, timeout);  //RX_data is a global variable
-//        vTaskDelay(0);
-//    }
-//    if (type == W) {  //write
-//        //Control_status, alarm_status, alarm_enable all 2 bytes long
-//        I2C_WriteReg(i2c_controller, i2c_addr, command, TX_data, 2, timeout);
-//        vTaskDelay(0);
-//    }
-//    return true;
-//}
-
 bool BQ769X2_PROTOCOL::sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut){
     uint8_t buff[4];
-    if(I2C_ReadReg(i2c_controller, i2c_addr, command, buff, 4)){
-        *readOut = buff[2];
-        *readOut <<= 8;
-        *readOut |= buff[0];
-        return true;
-    } else
-        return false;
+
+    I2C_ReadReg(i2c_controller, i2c_addr, command, buff, sizeof(buff));
+
+    *readOut = buff[2];
+    *readOut <<= 8;
+    *readOut |= buff[0];
+    return true;
 }
 
 bool BQ769X2_PROTOCOL::sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data) {
@@ -90,22 +69,15 @@ bool BQ769X2_PROTOCOL::sendDirectCommandW(System::I2C::I2C &i2c_controller, uint
         return false;
 }
 
-bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command)  //For Command only Subcommands
+bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd)  //For Command only Subcommands
 // See the TRM or the BQ76952 header file for a full list of Command-only subcommands
 // All that this function do is formatting the transfer array then writing the array to hex 3E,
 // the monitor will then operate based on the command.
 {  //For DEEPSLEEP/SHUTDOWN subcommand you will need to call this function twice consecutively
 
-    uint8_t TX_Reg[2] = {0x00, 0x00};
-
-    //TX_Reg in little endian format
-    TX_Reg[0] = command & 0xff;
-    TX_Reg[1] = (command >> 8) & 0xff;
-
-    if(I2C_WriteReg(i2c_controller, i2c_addr, 0x3E, TX_Reg, 2))
-        return true;
-    else
-        return false;
+    spi24b_writeReg(spi, cs, 0x3E, cmd & 0xFF);
+    spi24b_writeReg(spi, cs, 0x3F, (cmd >> 8) & 0xFF);
+    return true;
 }
 
 //bool BQ769X2_PROTOCOL::sendSubcommand(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd command, uint16_t data, DIR_CMD_TYPE type, TickType_t timeout)
@@ -293,48 +265,6 @@ bool BQ769X2_PROTOCOL::I2C_ReadReg(System::I2C::I2C &i2c_controller, uint8_t i2c
     return false;
 }
 
-//bool BQ769X2_PROTOCOL::I2C_WriteReg(uint8_t reg_addr, uint8_t *reg_data, uint8_t count, TickType_t timeout)
-//{
-//    uint8_t I2Ctxbuff[8] = {0x00};
-//
-//    I2Ctxbuff[0] = reg_addr;
-//    uint8_t i, j = 1;
-//
-//    for (i = 0; i < count; i++) {
-//        I2Ctxbuff[j] = reg_data[i];
-//        j++;
-//    }
-//
-//    //    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-//    DL_I2C_fillControllerTXFIFO(I2C_0_INST, &I2Ctxbuff[0], count + 1);
-//
-//    /* Wait for I2C to be Idle */
-//    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
-//             DL_I2C_CONTROLLER_STATUS_IDLE))
-//        ;
-//
-//    DL_I2C_startControllerTransfer(I2C_0_INST, I2C_TARGET_ADDRESS,
-//        DL_I2C_CONTROLLER_DIRECTION_TX, count + 1);
-//
-//    while (DL_I2C_getControllerStatus(I2C_0_INST) &
-//           DL_I2C_CONTROLLER_STATUS_BUSY_BUS)
-//        ;
-//    /* Wait for I2C to be Idle */
-//    while (!(DL_I2C_getControllerStatus(I2C_0_INST) &
-//             DL_I2C_CONTROLLER_STATUS_IDLE))
-//        ;
-//
-//    //Avoid BQ769x2 to stretch the SCLK too long and generate a timeout interrupt at 400kHz because of low power mode
-//    // if(DL_I2C_getRawInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT))
-//    // {
-//    //     DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-//    //     DL_I2C_clearInterruptStatus(I2C_0_INST,DL_I2C_INTERRUPT_CONTROLLER_CLOCK_TIMEOUT);
-//    //     I2C_WriteReg(reg_addr, reg_data, count);
-//    // }
-//    DL_I2C_flushControllerTXFIFO(I2C_0_INST);
-//
-//    return true;
-//}
 
 bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count)
 {
@@ -349,6 +279,49 @@ bool BQ769X2_PROTOCOL::I2C_WriteReg(System::I2C::I2C &i2c_controller, uint8_t i2
     }
 
     return i2c_controller.tx_blocking(i2c_addr, I2Ctxbuff, count+1, pdMS_TO_TICKS(10));
+}
+
+bool BQ769X2_PROTOCOL::spi24b_writeReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t data){
+    if(!spi) return false;
+
+    static uint8_t tx[3], rx[3];
+    uint8_t retries;
+    constexpr int max_retries = 5;
+
+    tx[0] = BV(7) | reg;
+    tx[1] = data;
+    tx[2] = CRC8(&tx[0], 2);
+
+    retries = 0;
+    do{
+        spi->transfer_blocking(tx, rx, 3, cs);
+
+        retries++;
+        if(retries != 1)
+            vTaskDelay(pdMS_TO_TICKS(retries));
+    } while(
+                (retries < max_retries)
+            &&  (rx[0] == 0xFF)
+            &&  (rx[1] == 0xFF)
+            &&  (
+                        (rx[2] == 0xFF) // 0xFF'FF'FF : internal clock not powered.
+                    ||  (rx[2] == 0x00) // 0xFF'FF'00 : prev transaction incomplete.
+                )
+        );
+
+    // TODO: duplicate transmissions on some start up cases. see oscilloscope.
+    //      not a pressing issue, just might waste a few mS here and there.
+
+    return      (retries <= max_retries)
+            && !(
+                    (rx[0] == 0xFF)
+                &&  (rx[1] == 0xFF)
+                &&  (
+                        (rx[2] == 0xFF) // 0xFF'FF'FF : internal clock not powered.
+                    ||  (rx[2] == 0x00) // 0xFF'FF'00 : prev transaction incomplete.
+                    )
+                )
+        ;
 }
 
 //************************************End of BQ769X2_PROTOCOL Measurement Commands******************************************

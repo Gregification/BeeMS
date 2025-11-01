@@ -225,6 +225,77 @@ void System::init() {
     }
     #endif
 
+    #ifdef PROJECT_ENABLE_SPI1
+    {
+        // high speed SPI
+
+        DL_SPI_enablePower(spi1.reg);
+        delay_cycles(POWER_STARTUP_DELAY);
+
+        /*--- GPIO config ----------------*/
+
+        DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO/POCI , PA16
+                IOMUX_PINCM38,
+                IOMUX_PINCM38_PF_SPI1_POCI,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+            );
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    SCLK , PA17
+                IOMUX_PINCM39,
+                IOMUX_PINCM39_PF_SPI1_SCLK,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI/PICO, PA18
+                IOMUX_PINCM40,
+                IOMUX_PINCM40_PF_SPI1_PICO,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
+        DL_GPIO_enableHiZ(IOMUX_PINCM38);// MISO
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA16));
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA17));
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA18));
+
+        /*--- SPI config -----------------*/
+
+        DL_SPI_ClockConfig clk_config = {
+                 .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
+                 .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
+            };
+        DL_SPI_setClockConfig(spi1.reg, &clk_config);
+        DL_SPI_Config config = {
+                .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
+                .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
+                .parity         = DL_SPI_PARITY::DL_SPI_PARITY_NONE,
+                .dataSize       = DL_SPI_DATA_SIZE::DL_SPI_DATA_SIZE_8,
+                .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_MSB_FIRST,
+                .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_NONE,
+            };
+        DL_SPI_init(spi1.reg, &config);
+        DL_SPI_setFIFOThreshold(spi1.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
+        DL_SPI_disablePacking(spi1.reg);
+        spi1.setSCLKTarget(125e3);
+        DL_SPI_enable(spi1.reg);
+
+        spi1._trxBuffer.rx_i = -1;
+
+        NVIC_EnableIRQ(spi1.irq_type);
+        DL_SPI_enableInterrupt(spi1.reg,
+                  DL_SPI_INTERRUPT_RX
+                | DL_SPI_INTERRUPT_TX
+                | DL_SPI_INTERRUPT_IDLE
+            );
+    }
+    #endif
+
+
     #ifdef PROJECT_ENABLE_MCAN0
     {
         DL_MCAN_enableModuleClock(CANFD0);
@@ -572,6 +643,15 @@ void System::SPI::SPI::_irq() {
             break;
 
     };
+}
+
+void System::SPI::SPI::transfer_blocking(void * tx, void * rx, buffersize_t len, System::GPIO::GPIO const * cs){
+    transfer(tx,rx,len,cs);
+    while(isBusy())
+        vTaskDelay(0);
+    if(cs){ // extra fast clear
+        cs->clear();
+    }
 }
 
 void System::SPI::SPI::transfer(void * tx, void * rx, buffersize_t len, System::GPIO::GPIO const * cs){

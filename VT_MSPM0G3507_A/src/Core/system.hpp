@@ -119,10 +119,10 @@ typedef uint16_t buffersize_t;
 #define PROJECT_ENABLE_UART0        // LP
 
 //#define PROJECT_ENABLE_SPI0         // up to 2Mhz
-//#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
+#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
 
 //#define PROJECT_ENABLE_I2C0
-#define PROJECT_ENABLE_I2C1
+//#define PROJECT_ENABLE_I2C1
 
 #define PROJECT_ENABLE_MCAN0
 
@@ -219,8 +219,8 @@ namespace System {
             uint32_t    pin;    // eg: DL_GPIO_PIN_0
             uint32_t    iomux;  // eg: IOMUX_PINCM0
 
-            void set() const { DL_GPIO_setPins(port, pin); }
-            void clear() const { DL_GPIO_clearPins(port, pin); }
+            void inline set() const { DL_GPIO_setPins(port, pin); }
+            void inline clear() const { DL_GPIO_clearPins(port, pin); }
         };
 
 //#define MSPM0G3507_LQFP64   // UG.6.1/6
@@ -275,6 +275,7 @@ namespace System {
             void _irq();
 
             void transfer(void * tx, void * rx, buffersize_t len, System::GPIO::GPIO const * cs = NULL);
+            void transfer_blocking(void * tx, void * rx, buffersize_t len, System::GPIO::GPIO const * cs = NULL);
             bool isBusy();
 
             // should be private but eh

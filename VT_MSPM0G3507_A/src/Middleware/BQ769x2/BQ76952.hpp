@@ -20,26 +20,8 @@
  */
 class BQ76952 {
 public:
-    System::I2C::I2C * i2c_controller;
-    uint8_t i2c_addr;
-
-//    void readAlarmStatus();
-//    void readSafetyStatus();
-//    void readPFStatus();
-
-    /** reads a specific cells voltage
-     * @param command : eg :  CmdDrt::Cell1Voltage, CmdDrt::StackVoltage, CmdDrt::LDPinVoltage, ...
-     * @returns mV
-     * - 16b resolution, units of 1mV
-     * " –0.2 V to 5.5 V " - BQ769x2DS.10.1/35
-     */
-//    uint16_t readVoltage(BQ769X2_PROTOCOL::CmdDrt command);
-//    void readSeriesCurrent();
-//    float readTemperature(BQ769X2_PROTOCOL::CmdDrt command);
-//    int16_t readCurrent();
-//    void readPassQ();
-//    void readFETStatus();
-//    void readAllTemperatures();
+    System::SPI::SPI * const spi;
+    System::GPIO::GPIO const * const cs;
 
     bool sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd cmd);
 
@@ -52,9 +34,6 @@ public:
 
     bool setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint32_t reg_data, uint8_t datalen);
 
-    bool I2C_ReadReg(uint16_t reg_addr, void *reg_data, uint8_t count);
-    bool I2C_WriteReg(uint16_t reg_addr, void *reg_data, uint8_t count);
-    bool I2C_WriteReg(uint16_t reg_addr, uint8_t data);
 };
 
 
