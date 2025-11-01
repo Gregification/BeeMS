@@ -59,16 +59,12 @@ void Task::BMS_task(void *){
     while(1){
 //        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
 //        vTaskDelay(pdMS_TO_TICKS(61));
-//        uint8_t arr[] = {1,2,3,4,5,6};
-//        bq.cs->set();
-//        bq.spi->transfer_blocking(arr, NULL, sizeof(arr), bq.cs);
-//        bq.cs->clear();
 
-//        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE);
-//        vTaskDelay(pdMS_TO_TICKS(9));
+        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE);
+        vTaskDelay(pdMS_TO_TICKS(9));
 //
-//        bq.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2DC0, 2);
-//        vTaskDelay(pdMS_TO_TICKS(9));
+        bq.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2983, 2);
+        vTaskDelay(pdMS_TO_TICKS(9));
 //
 //        // Exit CONFIGUPDATE mode  - Subcommand 0x0092
         bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE);

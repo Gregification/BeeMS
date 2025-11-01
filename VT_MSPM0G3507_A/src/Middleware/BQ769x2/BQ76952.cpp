@@ -39,6 +39,5 @@ bool BQ76952::sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, uint16_t data
 }
 
 bool BQ76952::setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint32_t reg_data, uint8_t datalen) {
-    return false;
-//    return BQ769X2_PROTOCOL::setRegister(*i2c_controller, i2c_addr, reg_addr, reg_data, datalen);
+    return BQ769X2_PROTOCOL::setRegister(*i2c_controller, i2c_addr, reg_addr, reg_data, datalen);
 }
