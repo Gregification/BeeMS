@@ -62,7 +62,8 @@ void Task::BMS_task(void *){
 
         bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE);
         vTaskDelay(pdMS_TO_TICKS(9));
-//
+
+//        bq.setRegister(BQ769X2_PROTOCOL::RegAddr::Cell1Gain, 0x307A, 2);
         bq.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2983, 2);
         vTaskDelay(pdMS_TO_TICKS(9));
 //

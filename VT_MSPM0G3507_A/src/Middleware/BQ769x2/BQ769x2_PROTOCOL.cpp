@@ -47,7 +47,7 @@ uint8_t BQ769X2_PROTOCOL::CRC8(uint8_t *ptr, uint8_t len)
 bool BQ769X2_PROTOCOL::sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut){
     uint8_t buff[4];
 
-    I2C_ReadReg(i2c_controller, i2c_addr, command, buff, sizeof(buff));
+//    I2C_ReadReg(i2c_controller, i2c_addr, command, buff, sizeof(buff));
 
     *readOut = buff[2];
     *readOut <<= 8;
@@ -63,9 +63,9 @@ bool BQ769X2_PROTOCOL::sendDirectCommandW(System::I2C::I2C &i2c_controller, uint
     TX_data[1] = (data >> 8) & 0xff;
 
     //Control_status, alarm_status, alarm_enable all 2 bytes long
-    if(I2C_WriteReg(i2c_controller, i2c_addr, command, TX_data, 2))
-        return true;
-    else
+//    if(I2C_WriteReg(i2c_controller, i2c_addr, command, TX_data, 2))
+//        return true;
+//    else
         return false;
 }
 
@@ -108,20 +108,24 @@ bool BQ769X2_PROTOCOL::setRegister(System::SPI::SPI * spi, System::GPIO::GPIO co
 // and there are different cases for the three varying data lengths.
 {
     // BQTM.13.1/123
+    volatile uint8_t txB;// debugging
 
     // lower byte of address to 0x3E
+    txB = reg_addr & 0xFF;
     if(!spi24b_writeReg(spi, cs, 0x3E, reg_addr & 0xFF))
         return false;
 
     // upper byte of address to 0x3F
+    txB = (reg_addr >> 8) & 0xFF;
     if(!spi24b_writeReg(spi, cs, 0x3F, (reg_addr >> 8) & 0xFF))
         return false;
 
     // memory value in little endian format into the transfer buffer (0x40 to 0x5F)
     for(uint8_t i = 0; i < datalen; i++){
+        txB = ((uint8_t *)&reg_data)[i];
         if(!spi24b_writeReg(spi, cs,
                     0x40 + i,
-                    ((uint8_t *)reg_data)[i]
+                    ((uint8_t *)&reg_data)[i]
                 ))
             return false;
     }
@@ -130,18 +134,19 @@ bool BQ769X2_PROTOCOL::setRegister(System::SPI::SPI * spi, System::GPIO::GPIO co
     { // checksum is {addr low B, addr high B, <data ... >}
         // max data is 32B
         uint8_t crcRange[32 + 2];
-        crcRange[0] = reg_addr & 0xFF;
-        crcRange[1] = (reg_addr >> 8) & 0xFF;
-        uint8_t i = 2;
-        for(; i < datalen && i < sizeof(crcRange - 2) && i < sizeof(reg_data); i++) {
-            crcRange[i] = ((uint8_t *)reg_data)[i];
+        ((uint16_t*)crcRange)[0] = reg_addr;
+        uint8_t i;
+        for(i = 0; i < datalen && i < sizeof(crcRange - 2) && i < sizeof(reg_data); i++) {
+            crcRange[2 + i] = ((uint8_t *)&reg_data)[i];
         }
 
-        if(!spi24b_writeReg(spi, cs, 0x60, Checksum(crcRange, i)))
+        txB = Checksum(crcRange, i+2);
+        if(!spi24b_writeReg(spi, cs, 0x60, Checksum(crcRange, i+2)))
             return false;
     }
 
     // data len in 0x61
+    txB = datalen + 4;
     if(!spi24b_writeReg(spi, cs, 0x61, datalen + 4)) // +4 : datalen + sizeof({0x3E, 0x3F, 0x60, 0x61})
         return false;
 
