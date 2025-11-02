@@ -13,9 +13,8 @@ bool BQ76952::sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd command) {
     return BQ769X2_PROTOCOL::sendCommandSubcommand(spi, cs, command);
 }
 
-bool BQ76952::sendSubcommandR(BQ769X2_PROTOCOL::Cmd cmd, uint8_t readOut[32]) {
-    return false;
-//    return BQ769X2_PROTOCOL::sendSubcommandR(*i2c_controller, i2c_addr, cmd, readOut);
+bool BQ76952::sendSubcommandR(BQ769X2_PROTOCOL::Cmd cmd, void * data_out, uint8_t datalen) {
+    return BQ769X2_PROTOCOL::sendSubcommandR(spi, cs, cmd, data_out, datalen);
 }
 
 bool BQ76952::sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint8_t data) {
@@ -40,6 +39,6 @@ bool BQ76952::setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint16_t reg_data,
     return BQ769X2_PROTOCOL::setRegister(spi, cs, reg_addr, reg_data, datalen);
 }
 
-bool BQ76952::getRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint16_t * reg_out){
-    return BQ769X2_PROTOCOL::readRegister(spi, cs, reg_addr, reg_out);
+uint8_t BQ76952::getRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, void * reg_out, uint8_t datalen){
+    return BQ769X2_PROTOCOL::readRegister(spi, cs, reg_addr, reg_out, datalen);
 }

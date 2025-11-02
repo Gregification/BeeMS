@@ -74,10 +74,9 @@ bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::SPI::SPI * spi, System::GPI
     return false;
 }
 
-bool BQ769X2_PROTOCOL::sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t readOut[32]) {
+bool BQ769X2_PROTOCOL::sendSubcommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void * data_out, uint8_t datalen) {
     //max readback size is 32 bytes i.e. DASTATUS, CUV/COV snapshot
-
-    return true;
+    return readRegister(spi, cs, cmd, data_out, datalen);
 }
 
 bool BQ769X2_PROTOCOL::sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data) {
@@ -136,27 +135,25 @@ bool BQ769X2_PROTOCOL::setRegister(System::SPI::SPI * spi, System::GPIO::GPIO co
     return true;
 }
 
-bool BQ769X2_PROTOCOL::readRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t * data_out){
+uint8_t BQ769X2_PROTOCOL::readRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint16_t reg_addr, void * data_out, uint8_t datalen){
     // BQTM.13.1/123
-    volatile uint8_t txB; // debugging
 
     // lower byte of address to 0x3E
-    txB = reg_addr & 0xFF;
     if(!spi24b_writeReg(spi, cs, 0x3E, reg_addr & 0xFF))
         return false;
 
     // upper byte of address to 0x3F
-    txB = (reg_addr >> 8) & 0xFF;
     if(!spi24b_writeReg(spi, cs, 0x3F, (reg_addr >> 8) & 0xFF))
         return false;
 
     // memory value in little endian format out of the transfer buffer (0x40 to 0x5F)
-    uint8_t datalen;
+    uint8_t datalen_r; // response length
     if(!spi24b_readReg(spi, cs, 0x61, &datalen))
         return false;
+    if(datalen_r < datalen)
+        datalen = datalen_r;
 
-    for(uint8_t i = 0; i < datalen && i < sizeof(*data_out); i++){
-        txB = ((uint8_t *)data_out)[i];
+    for(uint8_t i = 0; i < datalen && (0x40+i) <= 0x5F; i++){
         if(!spi24b_readReg(spi, cs,
                     0x40 + i,
                     &((uint8_t *)data_out)[i]
@@ -167,7 +164,7 @@ bool BQ769X2_PROTOCOL::readRegister(System::SPI::SPI * spi, System::GPIO::GPIO c
     // checksum of entire data set is in 0x60
     // i dont bother checking since each byte is CRC checked when its read
 
-    return true;
+    return datalen;
 }
 
 bool BQ769X2_PROTOCOL::spi24b_writeReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t data){

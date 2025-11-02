@@ -432,7 +432,7 @@ namespace BQ769X2_PROTOCOL {
     };
 
     /** returns false if timed */
-    bool sendSubcommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t readOut[32]);
+    bool sendSubcommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void * data_out, uint8_t datalen);
 
     /** returns false if timed */
     bool sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data);
@@ -440,7 +440,7 @@ namespace BQ769X2_PROTOCOL {
     /** returns false if timed */
     bool sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data);
 
-    /** returns false if timed */
+    /** returns false if failed */
     bool sendCommandSubcommand(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd command);
 
     /** returns false if failed */
@@ -454,8 +454,8 @@ namespace BQ769X2_PROTOCOL {
     /** returns false if failed */
     bool setRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t reg_data, uint8_t datalen);
 
-    /** returns false if failed */
-    bool readRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t * reg_data_out);
+    /** returns number of bytes read */
+    uint8_t readRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint16_t reg_addr, void * reg_data_out, uint8_t datalen);
 
     bool spi24b_writeReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t data);
     bool spi24b_readReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t * data_out);
