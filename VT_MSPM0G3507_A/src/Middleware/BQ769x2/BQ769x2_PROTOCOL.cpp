@@ -44,29 +44,18 @@ uint8_t BQ769X2_PROTOCOL::CRC8(uint8_t *ptr, uint8_t len)
     return (crc);
 }
 
-bool BQ769X2_PROTOCOL::sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut){
-    uint8_t buff[4];
+bool BQ769X2_PROTOCOL::sendDirectCommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt cmd, void * data_out, uint8_t datalen){
 
-//    I2C_ReadReg(i2c_controller, i2c_addr, command, buff, sizeof(buff));
+    for(uint8_t i = 0; i < datalen; i++)
+        if(!spi24b_readReg(spi, cs, cmd+i, &((uint8_t*)data_out)[i]))
+            return false;
 
-    *readOut = buff[2];
-    *readOut <<= 8;
-    *readOut |= buff[0];
     return true;
 }
 
-bool BQ769X2_PROTOCOL::sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data) {
-    uint8_t TX_data[2] = {0x00, 0x00};
+bool BQ769X2_PROTOCOL::sendDirectCommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt command, uint16_t data, uint8_t datalen) {
 
-    //little endian format
-    TX_data[0] = data & 0xff;
-    TX_data[1] = (data >> 8) & 0xff;
-
-    //Control_status, alarm_status, alarm_enable all 2 bytes long
-//    if(I2C_WriteReg(i2c_controller, i2c_addr, command, TX_data, 2))
-//        return true;
-//    else
-        return false;
+    return false;
 }
 
 bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd)  //For Command only Subcommands

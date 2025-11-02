@@ -444,10 +444,10 @@ namespace BQ769X2_PROTOCOL {
     bool sendCommandSubcommand(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd command);
 
     /** returns false if timed */
-    bool sendDirectCommandR(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t * readOut);
+    bool sendDirectCommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt command, void * data_out, uint8_t datalen);
 
     /** returns false if timed */
-    bool sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data);
+    bool sendDirectCommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt command, uint16_t data, uint8_t datalen);
 
     /** returns false if failed */
     bool setRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t reg_data, uint8_t datalen);
