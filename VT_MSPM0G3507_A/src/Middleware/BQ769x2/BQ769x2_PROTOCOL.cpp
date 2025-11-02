@@ -53,7 +53,10 @@ bool BQ769X2_PROTOCOL::sendDirectCommandR(System::SPI::SPI * spi, System::GPIO::
     return true;
 }
 
-bool BQ769X2_PROTOCOL::sendDirectCommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt command, uint16_t data, uint8_t datalen) {
+bool BQ769X2_PROTOCOL::sendDirectCommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt cmd, void * data, uint8_t datalen) {
+    for(uint8_t i = 0; i < datalen; i++)
+        if(!spi24b_writeReg(spi, cs, cmd+i, ((uint8_t*)data)[i]))
+            return false;
 
     return false;
 }

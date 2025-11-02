@@ -32,9 +32,8 @@ bool BQ76952::sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt command, void * readOu
     return BQ769X2_PROTOCOL::sendDirectCommandR(spi, cs, command, readOut, datalen);
 }
 
-bool BQ76952::sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, uint16_t data, uint8_t datalen) {
-    return false;
-//    return BQ769X2_PROTOCOL::sendDirectCommandW(spi, cs, command, data, datalen);
+bool BQ76952::sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, void * data, uint8_t datalen) {
+    return BQ769X2_PROTOCOL::sendDirectCommandW(spi, cs, command, data, datalen);
 }
 
 bool BQ76952::setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint16_t reg_data, uint8_t datalen) {

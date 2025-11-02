@@ -443,11 +443,13 @@ namespace BQ769X2_PROTOCOL {
     /** returns false if timed */
     bool sendCommandSubcommand(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd command);
 
-    /** returns false if timed */
+    /** returns false if failed */
     bool sendDirectCommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt command, void * data_out, uint8_t datalen);
 
-    /** returns false if timed */
-    bool sendDirectCommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt command, uint16_t data, uint8_t datalen);
+    /** returns false if failed
+     * also seeems to return false randomly even if it works
+     */
+    bool sendDirectCommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, CmdDrt command, void * data, uint8_t datalen);
 
     /** returns false if failed */
     bool setRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t reg_data, uint8_t datalen);

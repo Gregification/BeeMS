@@ -73,7 +73,7 @@ void Task::BMS_task(void *){
         uint16_t v = 0xBeeF;
 //        success &= BQ769X2_PROTOCOL::spi24b_readReg(bq.spi, bq.cs, 0x61, &v);
 //        success &= bq.getRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, &v);
-        success &= bq.sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt::StackVoltage, &v, 2);
+        success &= bq.sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt::AlarmEnable, &v, 2);
         System::uart_ui.putu32d(v);
         System::uart_ui.nputs(ARRANDN(NEWLINE));
 

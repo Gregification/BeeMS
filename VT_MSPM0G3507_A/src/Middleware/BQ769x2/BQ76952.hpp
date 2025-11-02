@@ -29,8 +29,8 @@ public:
     bool sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint8_t data);
     bool sendSubcommandW2(BQ769X2_PROTOCOL::Cmd cmd,uint16_t data);
 
-    bool sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt command, void * readValue, uint8_t datalen);
-    bool sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, uint16_t data_out, uint8_t datalen);
+    bool sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt command, void * data_out, uint8_t datalen);
+    bool sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, void * data, uint8_t datalen);
 
     /* writes a 16b register of data memory
      * - see bqTM.13.9/198 for register lengths. at most is 32b, so 4
