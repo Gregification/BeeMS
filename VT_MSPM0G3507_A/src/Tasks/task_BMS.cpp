@@ -59,17 +59,25 @@ void Task::BMS_task(void *){
     while(1){
 //        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
 //        vTaskDelay(pdMS_TO_TICKS(61));
+        bool success = true;
 
-        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE);
-        vTaskDelay(pdMS_TO_TICKS(9));
-
-//        bq.setRegister(BQ769X2_PROTOCOL::RegAddr::Cell1Gain, 0x307A, 2);
-        bq.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2983, 2);
-        vTaskDelay(pdMS_TO_TICKS(9));
+//        success &= bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE);
+//        vTaskDelay(pdMS_TO_TICKS(9));
 //
-//        // Exit CONFIGUPDATE mode  - Subcommand 0x0092
-        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE);
-        vTaskDelay(pdMS_TO_TICKS(9));
+//        success &= bq.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2983, 2);
+//        vTaskDelay(pdMS_TO_TICKS(9));
+//
+//        success &= bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE);
+//        vTaskDelay(pdMS_TO_TICKS(9));
+
+        uint16_t v = 0xBeeF;
+//        success &= BQ769X2_PROTOCOL::spi24b_readReg(bq.spi, bq.cs, 0x61, &v);
+        success &= bq.getRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, &v);
+        System::uart_ui.putu32h(v);
+        System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+        if(!success)
+            System::uart_ui.nputs(ARRANDN(CLIBAD "womp" NEWLINE CLIRESET));
     }
 
 

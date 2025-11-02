@@ -102,13 +102,51 @@ bool BQ769X2_PROTOCOL::sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t
     return true;
 }
 
-bool BQ769X2_PROTOCOL::setRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint32_t reg_data, uint8_t datalen)
+bool BQ769X2_PROTOCOL::setRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t reg_data, uint8_t datalen)
 // This function will write hex 3E for the initial write for subcommands in direct memory
 // and write to register hex 60 for the checksum to enter the data transmitted was correct.
 // and there are different cases for the three varying data lengths.
 {
     // BQTM.13.1/123
-    volatile uint8_t txB;// debugging
+
+    // lower byte of address to 0x3E
+    if(!spi24b_writeReg(spi, cs, 0x3E, reg_addr & 0xFF))
+        return false;
+
+    // upper byte of address to 0x3F
+    if(!spi24b_writeReg(spi, cs, 0x3F, (reg_addr >> 8) & 0xFF))
+        return false;
+
+    // memory value in little endian format into the transfer buffer (0x40 to 0x5F)
+    if(datalen > (0x5F - 0x40))
+        datalen = 0x5F - 0x40;
+    for(uint8_t i = 0; i < datalen; i++){
+        if(!spi24b_writeReg(spi, cs,
+                    0x40 + i,
+                    ((uint8_t *)&reg_data)[i]
+                ))
+            return false;
+    }
+
+    // checksum of data written goes in 0x60
+    { // checksum is {addr low B, addr high B, <data ... >}
+        // max data is 32B
+        uint16_t crcRange[] = {reg_addr, reg_data};
+
+        if(!spi24b_writeReg(spi, cs, 0x60, Checksum((uint8_t*)crcRange, sizeof(reg_addr) + datalen)))
+            return false;
+    }
+
+    // data len in 0x61
+    if(!spi24b_writeReg(spi, cs, 0x61, datalen + 4)) // +4 : datalen + sizeof({0x3E, 0x3F, 0x60, 0x61})
+        return false;
+
+    return true;
+}
+
+bool BQ769X2_PROTOCOL::readRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t * data_out){
+    // BQTM.13.1/123
+    volatile uint8_t txB; // debugging
 
     // lower byte of address to 0x3E
     txB = reg_addr & 0xFF;
@@ -120,35 +158,22 @@ bool BQ769X2_PROTOCOL::setRegister(System::SPI::SPI * spi, System::GPIO::GPIO co
     if(!spi24b_writeReg(spi, cs, 0x3F, (reg_addr >> 8) & 0xFF))
         return false;
 
-    // memory value in little endian format into the transfer buffer (0x40 to 0x5F)
-    for(uint8_t i = 0; i < datalen; i++){
-        txB = ((uint8_t *)&reg_data)[i];
-        if(!spi24b_writeReg(spi, cs,
+    // memory value in little endian format out of the transfer buffer (0x40 to 0x5F)
+    uint8_t datalen;
+    if(!spi24b_readReg(spi, cs, 0x61, &datalen))
+        return false;
+
+    for(uint8_t i = 0; i < datalen && i < sizeof(*data_out); i++){
+        txB = ((uint8_t *)data_out)[i];
+        if(!spi24b_readReg(spi, cs,
                     0x40 + i,
-                    ((uint8_t *)&reg_data)[i]
+                    &((uint8_t *)data_out)[i]
                 ))
             return false;
     }
 
-    // checksum of data written goes in 0x60
-    { // checksum is {addr low B, addr high B, <data ... >}
-        // max data is 32B
-        uint8_t crcRange[32 + 2];
-        ((uint16_t*)crcRange)[0] = reg_addr;
-        uint8_t i;
-        for(i = 0; i < datalen && i < sizeof(crcRange - 2) && i < sizeof(reg_data); i++) {
-            crcRange[2 + i] = ((uint8_t *)&reg_data)[i];
-        }
-
-        txB = Checksum(crcRange, i+2);
-        if(!spi24b_writeReg(spi, cs, 0x60, Checksum(crcRange, i+2)))
-            return false;
-    }
-
-    // data len in 0x61
-    txB = datalen + 4;
-    if(!spi24b_writeReg(spi, cs, 0x61, datalen + 4)) // +4 : datalen + sizeof({0x3E, 0x3F, 0x60, 0x61})
-        return false;
+    // checksum of entire data set is in 0x60
+    // i dont bother checking since each byte is CRC checked when its read
 
     return true;
 }
@@ -156,45 +181,74 @@ bool BQ769X2_PROTOCOL::setRegister(System::SPI::SPI * spi, System::GPIO::GPIO co
 bool BQ769X2_PROTOCOL::spi24b_writeReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t data){
     if(!spi) return false;
 
-    uint8_t tx[3], rx[3];
+    uint8_t tx[3], rx[3] = {0,0,0};
     uint8_t retries;
     constexpr int max_retries = 5;
 
     tx[0] = BV(7) | reg;
     tx[1] = data;
-    tx[2] = CRC8(&tx[0], 2);
+    tx[2] = CRC8(tx, 2);
 
     retries = 0;
     do{
+        if(retries != 0)
+            vTaskDelay(pdMS_TO_TICKS(retries));
+
         spi->transfer_blocking(tx, rx, 3, cs);
 
-        retries++;
-        if(retries != 1)
-            vTaskDelay(pdMS_TO_TICKS(retries));
-    } while(
-                (retries < max_retries)
-            &&  (rx[0] == 0xFF)
-            &&  (rx[1] == 0xFF)
-            &&  (
-                        (rx[2] == 0x00) // 0xFF'FF'00 : prev transaction incomplete.
-                    ||  (rx[2] == 0xAA) // 0xFF'FF'AA : former CRC wrong
-                    ||  (rx[2] == 0xFF) // 0xFF'FF'FF : internal clock not powered.
-                )
-        );
+        if(rx[0] == tx[0])
+        if(rx[1] == tx[1])
+        if(rx[2] == tx[2])
+            return true;
+    } while(retries++ < max_retries);
 
     // TODO: duplicate transmissions on some start up cases. see oscilloscope.
     //      not a pressing issue, just might waste a few mS here and there.
 
-    return      (retries <= max_retries)
-            && !(
-                    (rx[0] == 0xFF)
-                &&  (rx[1] == 0xFF)
-                &&  (
-                        (rx[2] == 0xFF) // 0xFF'FF'FF : internal clock not powered.
-                    ||  (rx[2] == 0x00) // 0xFF'FF'00 : prev transaction incomplete.
-                    )
-                )
-        ;
+    return false;
+}
+
+bool BQ769X2_PROTOCOL::spi24b_readReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t * data_out){
+    if(!spi) return false;
+
+    uint8_t tx[3], rx[3];
+    uint8_t retries;
+    constexpr int max_retries = 6;
+
+    tx[0] = reg & ~BV(7); //7th bit = 0 for read
+    tx[1] = 0; // arbitrary. only used for CRC
+    tx[2] = CRC8(tx, 2);
+
+    retries = 0;
+    do{
+        if(retries != 0)
+            vTaskDelay(pdMS_TO_TICKS(retries));
+
+        spi->transfer_blocking(tx, rx, 3, cs);
+
+
+//        if(rx[0] == 0xFF && rx[1] == 0xFF){
+//            switch(rx[2]){
+//                case 0x00: // 0xFF'FF'00 : prev transaction incomplete.
+//                case 0xAA: // 0xFF'FF'AA : former CRC wrong
+//                case 0xFF: // 0xFF'FF'FF : internal clock not powered.
+//                    continue;
+//                default:
+//            }
+//        }
+
+        if(rx[0] == tx[0]) { // yippie!
+            // check CRC
+            if(rx[2] != CRC8(rx,2))
+                continue;
+
+            *data_out = rx[1];
+            return true;
+        }
+
+    } while(retries++ < max_retries);
+
+    return false;
 }
 
 //************************************End of BQ769X2_PROTOCOL Measurement Commands******************************************

@@ -14,11 +14,6 @@
 #include "ti/battery_gauge/gauge_level2/Gauge_Type.h"
 
 namespace BQ769X2_PROTOCOL {
-    struct I2C_addr {
-        uint8_t read;
-        uint8_t write;
-    };
-
     //Data  Memory  registers   Name in TRM.13.9/13-37/197
     enum RegAddr : uint16_t {
         SECURITY_KEY_ENTRY_1          = 0x003E,
@@ -454,11 +449,14 @@ namespace BQ769X2_PROTOCOL {
     /** returns false if timed */
     bool sendDirectCommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, CmdDrt command, uint16_t data);
 
-    /** returns false if timed */
-    bool setRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint32_t reg_data, uint8_t datalen);
+    /** returns false if failed */
+    bool setRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t reg_data, uint8_t datalen);
+
+    /** returns false if failed */
+    bool readRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t * reg_data_out);
 
     bool spi24b_writeReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t data);
-//    void spi24b_readReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t data);
+    bool spi24b_readReg(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, uint8_t reg, uint8_t * data_out);
 
     uint8_t Checksum(uint8_t *ptr, uint8_t len);
 

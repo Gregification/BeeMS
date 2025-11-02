@@ -32,7 +32,15 @@ public:
     bool sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt command, uint16_t * readValue);
     bool sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, uint16_t data);
 
-    bool setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint32_t reg_data, uint8_t datalen);
+    /* writes a 16b register of data memory
+     * - see bqTM.13.9/198 for register lengths. at most is 32b, so 4
+     */
+    bool setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint16_t reg_data, uint8_t datalen);
+
+    /* reads a 16b register of data memory
+     * - bqTM.13.9/198
+     */
+    bool getRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint16_t * reg_data_out);
 
 };
 
