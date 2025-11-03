@@ -151,24 +151,13 @@ namespace System {
      * purpose is to standardize resource access.
      */
     class Lockable { // Java gang
-        /* theres a design consideration between sharing a resource across multiple 'tasks' though
-         * locks or having a trx buffer they all reference and a single 'task' handle the resource.
-         * theres benefits to both but Im going with a locking design since its allows 'tasks' more
-         * detailed hardware control.
-         */
-        SemaphoreHandle_t semph = NULL;
+        StaticSemaphore_t xMutexBuffer;
+        SemaphoreHandle_t mutex;// handle to buffer
 
     public:
-
         Lockable() {
-            semph = xSemaphoreCreateRecursiveMutex();
-            while(semph == NULL){
-                // ran out of memory
-
-                // TODO: handle this problem somehow, probably just restart the device. just
-                //      make sure the system is in a state where nothing dangerous is enabled
-                //      as this is happening.
-            }
+            mutex = xSemaphoreCreateMutexStatic(&xMutexBuffer);
+            configASSERT( mutex != NULL );
         }
 
         /** takes the recursive lock.
@@ -180,7 +169,7 @@ namespace System {
          * returns true of the resource was successfully released
          *      can fail in cases such as releasing a resource without taking it first.
          */
-        void releaseResource();
+        void giveResource();
 
     };
 
@@ -203,8 +192,8 @@ namespace System {
             void setBaudTarget(uint32_t target_baud, uint32_t clk = System::CLK::MFCLK);
 
             /** transmits - blocking - a string of at most size n */
-            void nputs(char const * str, uint32_t n);
-            void ngets(char * str, uint32_t n);
+            buffersize_t nputs(char const * str, buffersize_t n);
+            buffersize_t ngets(char * str, buffersize_t n);
 
             void putu32d(uint32_t);
             void putu32h(uint32_t);

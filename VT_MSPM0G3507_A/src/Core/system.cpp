@@ -431,11 +431,11 @@ void System::init() {
 }
 
 inline bool System::Lockable::takeResource(TickType_t timeout) {
-    return pdTRUE == xSemaphoreTakeRecursive(semph, timeout);
+    return pdTRUE == xSemaphoreTake(mutex, timeout);
 }
 
-inline void System::Lockable::releaseResource() {
-    xSemaphoreGiveRecursive(semph);
+inline void System::Lockable::giveResource() {
+    xSemaphoreGive(mutex);
 }
 
 void System::UART::UART::setBaudTarget(uint32_t target_baud, uint32_t clk) {
@@ -519,14 +519,17 @@ void System::FailHard(const char *str) {
 //    DL_SYSCTL_resetDevice(DL_SYSCTL_RESET_CAUSE_POR_SW_TRIGGERED);
 }
 
-void System::UART::UART::nputs(const char *str, uint32_t n) {
-    for(uint32_t i = 0; (i < n) && (str[i] != '\0'); i++){
+buffersize_t System::UART::UART::nputs(const char *str, buffersize_t n) {
+    buffersize_t i;
+    for(i = 0; (i < n) && (str[i] != '\0'); i++){
         DL_UART_transmitDataBlocking(reg, str[i]);
     }
+    return i;
 }
 
-void System::UART::UART::ngets(char *str, uint32_t n) {
-    for(uint32_t i = 0; i < n; i++){
+buffersize_t System::UART::UART::ngets(char *str, buffersize_t n) {
+    buffersize_t i;
+    for(i = 0; i < n; i++){
         char c = DL_UART_receiveDataBlocking(reg);
 
         str[i] = c;
@@ -539,7 +542,7 @@ void System::UART::UART::ngets(char *str, uint32_t n) {
                     str[i] ='\0';
                 else
                     str[i+1] ='\0';
-                return;
+                return i;
 
             case '\b':
                 i -= 2;
@@ -547,6 +550,7 @@ void System::UART::UART::ngets(char *str, uint32_t n) {
 
         DL_UART_transmitDataBlocking(reg, c);
     }
+    return i ;
 }
 
 void System::UART::UART::putu32d(uint32_t v) {

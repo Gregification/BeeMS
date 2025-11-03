@@ -10,7 +10,7 @@
 #include <Tasks/task_BMS.hpp>
 #include "Core/system.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
-#include <array>
+#include "FancyCli.hpp"
 
 BQ76952 bq = {
               .spi  = &System::spi1,
@@ -19,7 +19,64 @@ BQ76952 bq = {
 
 bool setup_BBQ(BQ76952 &);
 
+FancyCli fcli;
+FancyCli::MenuDir menu = {
+        .name = "root name",
+        .description = "root des",
+        .leafCount = 2,
+        .leafs = new FancyCli::MenuLeaf[]{
+                {
+                    .name       = "root leaf0 name",
+                    .description= "root leaf0 des",
+                    .accept     = NULL,
+                }, {
+                    .name       = "root leaf1 name",
+                    .description= "root leaf1 des",
+                    .accept     = NULL,
+                }
+        },
+        .dirCount = 2,
+        .dirs = new FancyCli::MenuDir[]{
+                 {
+                     .name       = "dir0 name",
+                     .description= "dir0 des",
+                     .leafCount = 2,
+                     .leafs = new FancyCli::MenuLeaf[]{
+                             {
+                                 .name       = "dir0 leaf0 name",
+                                 .description= "dir0 leaf0 des",
+                                 .accept     = NULL,
+                             }, {
+                                 .name       = "dir0 leaf1 name",
+                                 .description= "dir0 leaf1 des",
+                                 .accept     = NULL,
+                             }
+                     }
+                 },{
+                    .name       = "dir1 name",
+                    .description= "dir1 des",
+                    .leafCount = 1,
+                    .leafs = new FancyCli::MenuLeaf[]{
+                            {
+                                .name       = "dir1 leaf0 name",
+                                .description= "dir1 leaf0 des",
+                                .accept     = NULL,
+                            }
+                    }
+                }
+         },
+    };
+
 void Task::BMS_task(void *){
+    fcli.root = &menu;
+    while(1){
+        while(!DL_UART_isRXFIFOEmpty(System::uart_ui.reg)){
+            if(fcli.charInput(&System::uart_ui, DL_UART_receiveData(System::uart_ui.reg))){
+                fcli.printFrame(System::uart_ui, true);
+            }
+        }
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
 
     bq.spi->setSCLKTarget(500e3);
     DL_GPIO_enableOutput(GPIOPINPUX((*bq.cs)));
