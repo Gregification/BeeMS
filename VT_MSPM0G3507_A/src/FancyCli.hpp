@@ -52,15 +52,15 @@ public:
         char * name;
         char * description;
 
-        MenuLeaf * leafs;
         uint8_t leafCount;
-        MenuDir * dirs;
+        MenuLeaf * leafs;
         uint8_t dirCount;
+        MenuDir * dirs;
     };
 
     MenuDir * root;
     uint8_t selections[5] = {0}; // size is max depth
-    uint8_t selectionDepth = 0; // selected selection. zero indexed
+    uint8_t volatile selectionDepth = 0; // selected selection. zero indexed
 
     void printFrame(System::UART::UART&, bool update_buffers);
 

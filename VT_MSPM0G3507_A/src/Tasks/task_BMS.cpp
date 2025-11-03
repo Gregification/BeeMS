@@ -22,21 +22,49 @@ bool setup_BBQ(BQ76952 &);
 FancyCli fcli;
 FancyCli::MenuDir menu = {
         .name = "root name",
-        .description = "meow",
+        .description = "root des",
+        .leafCount = 2,
         .leafs = new FancyCli::MenuLeaf[]{
                 {
-                    .name       = "0moo",
-                    .description= "0toot",
+                    .name       = "root leaf0 name",
+                    .description= "root leaf0 des",
                     .accept     = NULL,
                 }, {
-                    .name       = "1moo",
-                    .description= "1toot",
+                    .name       = "root leaf1 name",
+                    .description= "root leaf1 des",
                     .accept     = NULL,
                 }
         },
-        .leafCount = 2,
-        .dirs = NULL,
-        .dirCount = 0,
+        .dirCount = 2,
+        .dirs = new FancyCli::MenuDir[]{
+                 {
+                     .name       = "dir0 name",
+                     .description= "dir0 des",
+                     .leafCount = 2,
+                     .leafs = new FancyCli::MenuLeaf[]{
+                             {
+                                 .name       = "dir0 leaf0 name",
+                                 .description= "dir0 leaf0 des",
+                                 .accept     = NULL,
+                             }, {
+                                 .name       = "dir0 leaf1 name",
+                                 .description= "dir0 leaf1 des",
+                                 .accept     = NULL,
+                             }
+                     }
+                 },{
+                    .name       = "dir1 name",
+                    .description= "dir1 des",
+                    .leafCount = 1,
+                    .leafs = new FancyCli::MenuLeaf[]{
+                            {
+                                .name       = "dir1 leaf0 name",
+                                .description= "dir1 leaf0 des",
+                                .accept     = NULL,
+                            }
+                    }
+                }
+         },
     };
 
 void Task::BMS_task(void *){

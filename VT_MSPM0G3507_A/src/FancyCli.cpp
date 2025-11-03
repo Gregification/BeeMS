@@ -46,11 +46,27 @@ bool FancyCli::charInput(System::UART::UART * uart, char c){
     switch(clistate){
         case CLISTATE::MENU_SELECTION:
             if(_charInput_contains(ARRANDN(keys_selectUp), c)){
+                // print is backwards so this is reversed
+                if(selections[selectionDepth])
+                    selections[selectionDepth]--;
+                getSelectedLeaf();
+            }
+
+            if(_charInput_contains(ARRANDN(keys_selectDown), c)){
+                // print is backwards so this is reversed
                 selections[selectionDepth]++;
-//                if(selections[selectionDepth] > )
-                {
-//                    selections[selectionDepth] =
-                }
+                getSelectedLeaf();
+            }
+
+            if(_charInput_contains(ARRANDN(keys_select), c)){
+                if(!getSelectedLeaf())
+                    selectionDepth++;
+                getSelectedDir();
+            }
+
+            if(_charInput_contains(ARRANDN(keys_unselect), c)){
+                selectionDepth--;
+                getSelectedDir();
             }
 
             ret = true;
@@ -144,7 +160,7 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
     uart.nputs(ARRANDN(CLIRESET NEWLINE));
 
     // print menu path
-    MenuDir * dir;
+    MenuDir * dir = root;
     {
         for(uint8_t i = 0; i < selectionDepth; i++){
             dir = getSelectedDir();
@@ -163,11 +179,15 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
 
     uart.nputs(ARRANDN(CLIRESET CLIHIGHLIGHT));
     uart.nputs(ARRANDN(menu_header));
+    uart.putu32d(selections[selectionDepth]);
+    uart.nputs(ARRANDN("/"));
+    if(dir) uart.putu32d(dir->dirCount + dir->leafCount);
+    else    uart.nputs(ARRANDN("?"));
     uart.nputs(ARRANDN(CLIRESET NEWLINE));
 
     // print node overton window
     char * si_description = NULL;
-    NodeAccept * accept = NULL;
+    NodeAccept accept = NULL;
     if(dir)
     {
         uint8_t a, b;
@@ -180,22 +200,17 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
             b = (dir->dirCount + dir->leafCount);
 
         uint8_t og_sel = selections[selectionDepth];
-        uart.nputs(ARRANDN(NEWLINE "a: "));
-        uart.putu32d(a);
-        uart.nputs(ARRANDN(NEWLINE "b: "));
-        uart.putu32d(b);
-        uart.nputs(ARRANDN(NEWLINE));
         for(selections[selectionDepth] = a; selections[selectionDepth] < b; selections[selectionDepth]++){
             MenuLeaf * leaf = getSelectedLeaf();
             if(leaf){
                 if(selections[selectionDepth] == og_sel){
-                    accept = &leaf->accept;
+                    accept = leaf->accept;
                     si_description = leaf->description;
                     uart.nputs(ARRANDN(CLIYES "  > " CLIRESET));
                 } else {
                     uart.nputs(ARRANDN("    "));
                 }
-                uart.nputs(ARRANDN(leaf->name));
+                uart.nputs(leaf->name, STR_LEN_COMMON);
                 uart.nputs(ARRANDN(NEWLINE));
             } else {
                 MenuDir * d = getSelectedDir();
@@ -208,7 +223,7 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
                     } else {
                         uart.nputs(ARRANDN("    "));
                     }
-                    uart.nputs(ARRANDN(leaf->name));
+                    uart.nputs(d->name, STR_LEN_COMMON);
                     uart.nputs(ARRANDN(NEWLINE));
                 }
             }
@@ -216,7 +231,7 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
         selections[selectionDepth] = og_sel;
     }
 
-    uart.nputs(ARRANDN(CLIHIGHLIGHT NEWLINE));
+    uart.nputs(ARRANDN(CLIHIGHLIGHT));
     uart.nputs(ARRANDN(line_delim));
     uart.nputs(ARRANDN(CLIRESET NEWLINE));
 
@@ -233,7 +248,7 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
 
     // print message
     if(update && accept){
-        (*accept)(NULL, 0, ARRANDN(message));
+        accept(NULL, 0, ARRANDN(message));
         uart.nputs(ARRANDN(message));
     } else {
         uart.nputs(ARRANDN("<NO MESSAGE>"));
