@@ -29,6 +29,7 @@
 #include <Tasks/task_non_BMS.hpp>
 #include "system.hpp"
 #include "Core/Networking/CANComm.hpp"
+#include "FancyCli.hpp"
 
 #include "Tasks/examples/example_blink_task.hpp"
 #include "Tasks/examples/example_BQ769x2_PROTOCOL_V.hpp"

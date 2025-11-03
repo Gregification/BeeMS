@@ -10,7 +10,7 @@
 #include <Tasks/task_BMS.hpp>
 #include "Core/system.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
-#include <array>
+#include "FancyCli.hpp"
 
 BQ76952 bq = {
               .spi  = &System::spi1,
@@ -19,7 +19,36 @@ BQ76952 bq = {
 
 bool setup_BBQ(BQ76952 &);
 
+FancyCli fcli;
+FancyCli::MenuDir menu = {
+        .name = "root name",
+        .description = "meow",
+        .leafs = new FancyCli::MenuLeaf[]{
+                {
+                    .name       = "0moo",
+                    .description= "0toot",
+                    .accept     = NULL,
+                }, {
+                    .name       = "1moo",
+                    .description= "1toot",
+                    .accept     = NULL,
+                }
+        },
+        .leafCount = 2,
+        .dirs = NULL,
+        .dirCount = 0,
+    };
+
 void Task::BMS_task(void *){
+    fcli.root = &menu;
+    while(1){
+        while(!DL_UART_isRXFIFOEmpty(System::uart_ui.reg)){
+            if(fcli.charInput(&System::uart_ui, DL_UART_receiveData(System::uart_ui.reg))){
+                fcli.printFrame(System::uart_ui, true);
+            }
+        }
+        vTaskDelay(pdMS_TO_TICKS(100));
+    }
 
     bq.spi->setSCLKTarget(500e3);
     DL_GPIO_enableOutput(GPIOPINPUX((*bq.cs)));
