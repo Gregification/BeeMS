@@ -47,3 +47,22 @@ bool BQ76952::I2C_WriteReg(uint16_t reg_addr, void *reg_data, uint8_t count){
 bool BQ76952::I2C_WriteReg(uint16_t reg_addr, uint8_t data){
     return BQ769X2_PROTOCOL::I2C_WriteReg(*i2c_controller, i2c_addr, reg_addr, &data, 1);
 }
+
+// --- Coulomb-counter helpers ----------------------------------------------
+
+bool BQ76952::read_DAStatus5(uint8_t out32[32]) {
+    return BQ769X2_PROTOCOL::sendSubcommandR(*i2c_controller, i2c_addr,
+                                             BQ769X2_PROTOCOL::DASTATUS5, out32);
+}
+
+bool BQ76952::read_DAStatus6(uint8_t out32[32]) {
+    return BQ769X2_PROTOCOL::sendSubcommandR(*i2c_controller, i2c_addr,
+                                             BQ769X2_PROTOCOL::DASTATUS6, out32);
+}
+
+bool BQ76952::reset_passq() {
+    return BQ769X2_PROTOCOL::sendCommandSubcommand(*i2c_controller, i2c_addr,
+                                                   BQ769X2_PROTOCOL::RESET_PASSQ);
+}
+
+

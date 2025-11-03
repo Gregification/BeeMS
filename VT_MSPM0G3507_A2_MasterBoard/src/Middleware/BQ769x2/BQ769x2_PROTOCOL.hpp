@@ -19,6 +19,17 @@ namespace BQ769X2_PROTOCOL {
         uint8_t write;
     };
 
+// BQ769x2_PROTOCOL.hpp
+namespace BQ769X2_PROTOCOL {
+    enum Cmd : uint16_t {
+        // ... others ...
+        DASTATUS5    = 0x0075,   // CC1 + CC2 block
+        DASTATUS6    = 0x0076,   // CC3 block
+        RESET_PASSQ  = 0x0082,   // reset charge accumulator
+    };
+}
+
+
     //Data  Memory  registers   Name in TRM.13.9/13-37/197
     enum RegAddr : uint16_t {
         SECURITY_KEY_ENTRY_1          = 0x003E,

@@ -55,6 +55,11 @@ public:
     bool I2C_ReadReg(uint16_t reg_addr, void *reg_data, uint8_t count);
     bool I2C_WriteReg(uint16_t reg_addr, void *reg_data, uint8_t count);
     bool I2C_WriteReg(uint16_t reg_addr, uint8_t data);
+
+    // --- Coulomb-counter helpers ---
+    bool read_DAStatus5(uint8_t out32[32]);  // CC1 + CC2 live here
+    bool read_DAStatus6(uint8_t out32[32]);  // CC3 lives here
+    bool reset_passq();                      // resets device PassQ accumulator
 };
 
 
