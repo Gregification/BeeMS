@@ -38,6 +38,10 @@ bool FancyCli::charInput(System::UART::UART * uart, char c){
 
     bool ret = false;
 
+    MenuDir * currentDir = getSelectedDir();
+    uint8_t totalItems = currentDir ? (currentDir->dirCount + currentDir->leafCount) : 0;
+    uint8_t currentSelection = selections[selectionDepth];
+
     if(_charInput_contains(ARRANDN(keys_changeState), c)){
         clistate = static_cast<CLISTATE>((static_cast<uint8_t>(clistate) + 1) % static_cast<uint8_t>(CLISTATE::_count));
         return true;
@@ -45,18 +49,21 @@ bool FancyCli::charInput(System::UART::UART * uart, char c){
 
     switch(clistate){
         case CLISTATE::MENU_SELECTION:
+            // Select Up/Previous
             if(_charInput_contains(ARRANDN(keys_selectUp), c)){
-                // print is backwards so this is reversed
-                if(selections[selectionDepth])
-                    selections[selectionDepth]--;
-                getSelectedLeaf();
-            }
+                if(currentSelection > 0) {
+                        selections[selectionDepth]--;
+                    }
+                    getSelectedLeaf(); // Recalculate and bound
+                }
 
+                // Select Down/Next
             if(_charInput_contains(ARRANDN(keys_selectDown), c)){
-                // print is backwards so this is reversed
-                selections[selectionDepth]++;
-                getSelectedLeaf();
-            }
+                if (currentSelection < totalItems - 1) { // Check against the maximum index
+                        selections[selectionDepth]++;
+                    }
+                    getSelectedLeaf(); // Recalculate and bound
+                }
 
             if(_charInput_contains(ARRANDN(keys_select), c)){
                 if(!getSelectedLeaf())
@@ -107,16 +114,32 @@ FancyCli::MenuDir * FancyCli::getSelectedDir(){
     MenuDir * dir = root;
     uint8_t i = 0;
     for(i = 0; i < selectionDepth; i++){
-        if(!dir->dirs)
+        if(!dir->dirs || dir->dirCount == 0) // No more sub-directories to enter
             break;
 
-        if(selections[i] >= dir->dirCount) // a leaf is selected
-            break;
+        // Ensure selection index is within the valid directory range
+        if(selections[i] >= dir->dirCount){
+            selections[i] = dir->dirCount - 1; // Correct to the last valid dir
+        }
 
         dir = &dir->dirs[selections[i]];
     }
-    if(i > 0)
-        selectionDepth = i-1;
+
+    // After the loop, the current directory (dir) is now the current selectionDepth's parent.
+    // If we broke out early because the path was invalid, we set selectionDepth back.
+    if(i < selectionDepth){
+        selectionDepth = i; // Reset depth to the last valid one we found.
+    }
+
+    // Now, apply the check for the current directory we are about to display
+    if(dir->dirCount + dir->leafCount > 0){
+        if(selections[selectionDepth] >= dir->dirCount + dir->leafCount){
+            selections[selectionDepth] = dir->dirCount + dir->leafCount - 1;
+        }
+    } else {
+        selections[selectionDepth] = 0; // If directory is empty, selection must be 0
+    }
+
     return dir;
 }
 
@@ -125,21 +148,26 @@ FancyCli::MenuLeaf * FancyCli::getSelectedLeaf(){
     if(!dir)
         return NULL;
 
+    // Check if the current selection index falls within the leaf range
     if(selections[selectionDepth] >= dir->dirCount){
-        if(dir->leafCount == 0){
-            selections[selectionDepth] = dir->dirCount;
 
-            if(selections[selectionDepth])
-                selections[selectionDepth]--;
+        // If there are NO leaves, correct the selection back to the last directory index
+        if(dir->leafCount == 0){
+            // If there are also no directories, selection defaults to 0.
+            selections[selectionDepth] = dir->dirCount ? dir->dirCount - 1 : 0;
             return NULL;
         }
 
+        // Calculate the index of the leaf (relative to the start of the leaves)
         uint8_t sel_leaf = selections[selectionDepth] - dir->dirCount;
-        if(sel_leaf > dir->leafCount){
-            sel_leaf = dir->leafCount-1;
+
+        // If the calculated leaf index is OUT OF BOUNDS (it's >= leafCount)
+        if(sel_leaf >= dir->leafCount){
+            // Correct the leaf index to the last valid leaf
+            sel_leaf = dir->leafCount - 1;
+            // Correct the overall selection index
             selections[selectionDepth] = dir->dirCount + sel_leaf;
         }
-
         return &dir->leafs[sel_leaf];
     }
 
@@ -179,7 +207,7 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
 
     uart.nputs(ARRANDN(CLIRESET CLIHIGHLIGHT));
     uart.nputs(ARRANDN(menu_header));
-    uart.putu32d(selections[selectionDepth]);
+    uart.putu32d(selections[selectionDepth] + 1);
     uart.nputs(ARRANDN("/"));
     if(dir) uart.putu32d(dir->dirCount + dir->leafCount);
     else    uart.nputs(ARRANDN("?"));
@@ -190,16 +218,41 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
     NodeAccept accept = NULL;
     if(dir)
     {
+        // Corrected Window Logic
         uint8_t a, b;
-        if(selections[selectionDepth] < DISPLAY_ITEM_COUNT/2)
+        uint8_t total_count = dir->dirCount + dir->leafCount;
+        uint8_t og_sel = selections[selectionDepth];
+
+        // 1. Calculate the starting index 'a'
+        // Keep the selection near the top of the display window, but start at 0 if possible
+        if (og_sel < total_count) {
+            if (og_sel < DISPLAY_ITEM_COUNT - 1) { // If selection is within the first N-1 items
+                a = 0;
+            } else {
+                // Start the window N items before the current selection
+                // This keeps the selected item near the top of the window, allowing scrolling
+                a = og_sel - (DISPLAY_ITEM_COUNT - 1);
+            }
+        } else {
+            // Should not happen if other bounds checks are working, but as a safeguard:
             a = 0;
-        else
-            a = selections[selectionDepth];
+        }
+
+        // 2. Calculate the ending index 'b'
         b = a + DISPLAY_ITEM_COUNT;
+        if(b > total_count) {
+            b = total_count;
+            // PUSH-BACK CORRECTION: If 'b' was capped, ensure 'a' didn't start too high.
+            // This makes the list stick to the bottom when the end is reached.
+            if (b >= DISPLAY_ITEM_COUNT) {
+                a = b - DISPLAY_ITEM_COUNT;
+            } else {
+                a = 0;
+            }
+        }
         if(b > (dir->dirCount + dir->leafCount))
             b = (dir->dirCount + dir->leafCount);
 
-        uint8_t og_sel = selections[selectionDepth];
         for(selections[selectionDepth] = a; selections[selectionDepth] < b; selections[selectionDepth]++){
             MenuLeaf * leaf = getSelectedLeaf();
             if(leaf){
@@ -223,7 +276,7 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
                     } else {
                         uart.nputs(ARRANDN("    "));
                     }
-                    uart.nputs(d->name, STR_LEN_COMMON);
+                    uart.nputs(d->dirs[selections[selectionDepth]].name, STR_LEN_COMMON);
                     uart.nputs(ARRANDN(NEWLINE));
                 }
             }
@@ -254,6 +307,7 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
         uart.nputs(ARRANDN("<NO MESSAGE>"));
     }
 
+
     uart.nputs(ARRANDN(CLIRESET NEWLINE CLIHIGHLIGHT));
     uart.nputs(ARRANDN(line_delim));
     uart.nputs(ARRANDN(CLIRESET NEWLINE));
@@ -261,4 +315,8 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
     // mirror user input
     uart.nputs(ARRANDN(input_start));
     uart.nputs(userInput, userInputLen);
+
+    uart.nputs(ARRANDN(CLIRESET NEWLINE CLIHIGHLIGHT));
+    uart.nputs(ARRANDN(line_delim));
+    uart.nputs(ARRANDN(CLIRESET NEWLINE));
 }
