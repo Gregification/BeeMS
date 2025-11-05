@@ -23,18 +23,6 @@ FancyCli fcli;
 FancyCli::MenuDir menu = {
         .name = "root name",
         .description = "root des",
-        .leafCount = 2,
-        .leafs = new FancyCli::MenuLeaf[]{
-                {
-                    .name       = "root leaf0 name",
-                    .description= "root leaf0 des",
-                    .accept     = NULL,
-                }, {
-                    .name       = "root leaf1 name",
-                    .description= "root leaf1 des",
-                    .accept     = NULL,
-                }
-        },
         .dirCount = 2,
         .dirs = new FancyCli::MenuDir[]{
                  {
@@ -64,6 +52,18 @@ FancyCli::MenuDir menu = {
                             }
                     }
                 }
+         },
+         .leafCount = 2,
+         .leafs = new FancyCli::MenuLeaf[]{
+                 {
+                     .name       = "root leaf0 name",
+                     .description= "root leaf0 des",
+                     .accept     = NULL,
+                 }, {
+                     .name       = "root leaf1 name",
+                     .description= "root leaf1 des",
+                     .accept     = NULL,
+                 }
          },
     };
 
