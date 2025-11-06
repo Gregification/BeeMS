@@ -84,6 +84,7 @@ bool FancyCli::charInput(System::UART::UART * uart, char c){
                     userInputLen--;
                     if(uart) DL_UART_transmitDataBlocking(uart->reg, c);
                 }
+                break;
             }
 
             if(c == 13){
@@ -307,7 +308,6 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
         uart.nputs(ARRANDN("<NO MESSAGE>"));
     }
 
-
     uart.nputs(ARRANDN(CLIRESET NEWLINE CLIHIGHLIGHT));
     uart.nputs(ARRANDN(line_delim));
     uart.nputs(ARRANDN(CLIRESET NEWLINE));
@@ -315,8 +315,4 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
     // mirror user input
     uart.nputs(ARRANDN(input_start));
     uart.nputs(userInput, userInputLen);
-
-    uart.nputs(ARRANDN(CLIRESET NEWLINE CLIHIGHLIGHT));
-    uart.nputs(ARRANDN(line_delim));
-    uart.nputs(ARRANDN(CLIRESET NEWLINE));
 }
