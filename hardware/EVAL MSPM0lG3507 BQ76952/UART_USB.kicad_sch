@@ -1229,7 +1229,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "zzLocalLibrary:STISO620TR"
+		(symbol "zzLocalLibrary:STISO621"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
@@ -1249,7 +1249,7 @@
 					)
 				)
 			)
-			(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+			(property "Footprint" "Package_SO:SOIC-8_7.5x5.85mm_P1.27mm"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1276,7 +1276,7 @@
 					(hide yes)
 				)
 			)
-			(property "mouser" "https://www.mouser.com/ProductDetail/STMicroelectronics/STISO620TR?qs=sGAEpiMZZMuyKkoWRCJ2WLmFe67vl1y7ddVHe8kBxVu5Ar3Boch0nw%3D%3D"
+			(property "mouser" "https://www.mouser.com/ProductDetail/STMicroelectronics/STISO621WTR?qs=DPoM0jnrROWnssw71EEUdg%3D%3D&srsltid=AfmBOooWor0VJktvanGRLm62GGRvBwRvNg6pgl64oBHJnTIBJyGQPB71"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1294,7 +1294,7 @@
 					(hide yes)
 				)
 			)
-			(property "unit x10" "1.23"
+			(property "unit x10" "2.22"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1303,7 +1303,7 @@
 					(hide yes)
 				)
 			)
-			(property "unit x1" "1.79"
+			(property "unit x1" "3.4"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1312,7 +1312,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "STISO620TR_0_1"
+			(symbol "STISO621_0_1"
 				(rectangle
 					(start -10.16 5.08)
 					(end 10.16 -5.08)
@@ -1326,7 +1326,7 @@
 				)
 				(polyline
 					(pts
-						(xy -5.842 1.27) (xy -4.318 2.032)
+						(xy -5.842 -1.397) (xy -4.318 -2.159)
 					)
 					(stroke
 						(width 0)
@@ -1338,7 +1338,7 @@
 				)
 				(polyline
 					(pts
-						(xy -5.842 -1.27) (xy -4.318 -2.032)
+						(xy -4.318 -3.937) (xy -4.318 -0.381) (xy -0.254 -2.159) (xy -4.318 -3.937)
 					)
 					(stroke
 						(width 0)
@@ -1350,7 +1350,8 @@
 				)
 				(polyline
 					(pts
-						(xy -4.318 3.81) (xy -4.318 0.254) (xy -0.254 2.032) (xy -4.318 3.81)
+						(xy -4.064 -1.143) (xy -3.302 -1.143) (xy -2.794 -2.921) (xy -2.286 -2.921) (xy -3.302 -2.921)
+						(xy -3.81 -1.143) (xy -4.318 -1.143)
 					)
 					(stroke
 						(width 0)
@@ -1362,7 +1363,31 @@
 				)
 				(polyline
 					(pts
-						(xy -4.318 0) (xy -4.318 -3.556) (xy -0.254 -1.778) (xy -4.318 0)
+						(xy -3.556 2.159) (xy -6.096 1.397)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy -2.794 2.54) (xy -1.524 1.524) (xy -1.778 3.81) (xy -2.794 3.048)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy -2.794 1.778) (xy -1.016 2.032) (xy -2.286 3.048) (xy -2.794 2.54)
 					)
 					(stroke
 						(width 0)
@@ -1374,8 +1399,55 @@
 				)
 				(polyline
 					(pts
-						(xy -4.064 1.016) (xy -3.302 1.016) (xy -2.794 2.794) (xy -2.286 2.794) (xy -3.302 2.794) (xy -3.81 1.016)
-						(xy -4.318 1.016)
+						(xy -1.524 3.81) (xy -1.524 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy -0.254 3.302) (xy -2.032 3.048) (xy -0.762 2.032) (xy -0.254 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy -0.254 2.54) (xy -1.524 3.556) (xy -1.27 1.27) (xy -0.254 2.032)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 0 -2.667) (xy 1.27 -3.683) (xy 1.016 -1.397) (xy 0 -2.159)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 0 -3.429) (xy 1.778 -3.175) (xy 0.508 -2.159) (xy 0 -2.667)
 					)
 					(stroke
 						(width 0)
@@ -1387,8 +1459,31 @@
 				)
 				(polyline
 					(pts
-						(xy -4.064 -2.794) (xy -3.302 -2.794) (xy -2.794 -1.016) (xy -2.286 -1.016) (xy -3.302 -1.016)
-						(xy -3.81 -2.794) (xy -4.318 -2.794)
+						(xy 1.27 -3.937) (xy 1.27 -1.397)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -1.905) (xy 0.762 -2.159) (xy 2.032 -3.175) (xy 2.54 -2.667)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(bezier
+					(pts
+						(xy 2.54 -2.667) (xy 1.27 -1.651) (xy 1.524 -3.937) (xy 2.54 -3.175)
 					)
 					(stroke
 						(width 0)
@@ -1400,7 +1495,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 3.81) (xy 0 -3.81)
+						(xy 3.302 -2.286) (xy 5.842 -1.524)
 					)
 					(stroke
 						(width 0)
@@ -1412,7 +1507,8 @@
 				)
 				(polyline
 					(pts
-						(xy 1.27 3.81) (xy 1.27 -3.81)
+						(xy 3.81 1.016) (xy 3.048 1.016) (xy 2.54 2.794) (xy 2.032 2.794) (xy 3.048 2.794) (xy 3.556 1.016)
+						(xy 4.064 1.016)
 					)
 					(stroke
 						(width 0)
@@ -1424,7 +1520,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.778 2.159) (xy 4.318 1.397)
+						(xy 4.064 3.81) (xy 4.064 0.254) (xy 0 2.032) (xy 4.064 3.81)
 					)
 					(stroke
 						(width 0)
@@ -1436,7 +1532,7 @@
 				)
 				(polyline
 					(pts
-						(xy 1.778 -1.905) (xy 4.318 -1.143)
+						(xy 5.588 1.27) (xy 4.064 2.032)
 					)
 					(stroke
 						(width 0)
@@ -1447,7 +1543,7 @@
 					)
 				)
 			)
-			(symbol "STISO620TR_1_1"
+			(symbol "STISO621_1_1"
 				(pin input line
 					(at -12.7 3.81 0)
 					(length 2.54)
@@ -1469,7 +1565,7 @@
 				(pin input line
 					(at -12.7 1.27 0)
 					(length 2.54)
-					(name "TXA"
+					(name "RXB"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1487,7 +1583,7 @@
 				(pin input line
 					(at -12.7 -1.27 0)
 					(length 2.54)
-					(name "TXB"
+					(name "TXA"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1541,7 +1637,7 @@
 				(pin input line
 					(at 12.7 1.27 180)
 					(length 2.54)
-					(name "RXA"
+					(name "TXB"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1559,7 +1655,7 @@
 				(pin input line
 					(at 12.7 -1.27 180)
 					(length 2.54)
-					(name "RXB"
+					(name "RXA"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1622,16 +1718,6 @@
 		)
 		(uuid "bc0be051-5c3c-4b68-ba57-2b40dbdfef47")
 	)
-	(text "2 IC's are the cheapest way I \ncould find that do galvanic isolation"
-		(exclude_from_sim no)
-		(at 141.478 109.982 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "f71b1d8a-f8b6-4b76-9db4-70ca68bce751")
-	)
 	(junction
 		(at 49.53 120.65)
 		(diameter 0)
@@ -1663,22 +1749,10 @@
 		(uuid "6c6c2d3f-34c9-42d9-962b-f16157f0803a")
 	)
 	(junction
-		(at 157.48 96.52)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7202e967-474b-4b97-af06-b1b8e7b49f76")
-	)
-	(junction
 		(at 49.53 92.71)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "76a8ac84-4b77-4851-a1b9-8e7793c560c8")
-	)
-	(junction
-		(at 119.38 104.14)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "84cf2aa5-209d-4270-9897-2425c0efeb38")
 	)
 	(junction
 		(at 64.77 78.74)
@@ -1687,22 +1761,10 @@
 		(uuid "8693daed-b7f1-4794-90b5-79a27ebeac30")
 	)
 	(junction
-		(at 116.84 78.74)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "88a690c4-39a3-4e12-a376-d40a63a95193")
-	)
-	(junction
 		(at 93.98 78.74)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "cf36ebaf-e28e-41eb-9a7d-b392adbf9133")
-	)
-	(junction
-		(at 154.94 104.14)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e5c53c09-d315-448a-8cc9-449bb2157ee5")
 	)
 	(no_connect
 		(at 73.66 90.17)
@@ -1737,22 +1799,6 @@
 		(uuid "52a53fe9-456e-4adc-a5fb-f78a8fed9730")
 	)
 	(no_connect
-		(at 123.19 101.6)
-		(uuid "9733d2b2-76d0-4fdb-b0d1-5bf576999e29")
-	)
-	(no_connect
-		(at 123.19 83.82)
-		(uuid "befbd377-7df5-4ff0-b5e3-18e3d9e2f647")
-	)
-	(no_connect
-		(at 148.59 83.82)
-		(uuid "bfb3e74c-1499-4379-9619-0d6e31d4836f")
-	)
-	(no_connect
-		(at 148.59 101.6)
-		(uuid "c6ca4017-aac1-4a30-8c58-e1936280748a")
-	)
-	(no_connect
 		(at 109.22 97.79)
 		(uuid "cb174daf-0aa2-4bd1-b4cc-f05b078b1278")
 	)
@@ -1762,17 +1808,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 104.14) (xy 119.38 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "096aa2d3-2d74-4c63-9259-4e67236d580e")
-	)
-	(wire
-		(pts
-			(xy 64.77 78.74) (xy 64.77 105.41)
+			(xy 64.77 78.74) (xy 64.77 101.6)
 		)
 		(stroke
 			(width 0)
@@ -1789,36 +1825,6 @@
 			(type default)
 		)
 		(uuid "0d7e0bbb-3195-4559-98c9-dde00d946215")
-	)
-	(wire
-		(pts
-			(xy 148.59 86.36) (xy 154.94 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "19926f8f-d4d6-4098-a94a-8e6296fd9956")
-	)
-	(wire
-		(pts
-			(xy 158.75 96.52) (xy 157.48 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "21be6e0b-9492-4cc1-9e5d-9a541a319f2a")
-	)
-	(wire
-		(pts
-			(xy 123.19 96.52) (xy 116.84 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "226ee305-2cf7-495c-893e-56f750f5758e")
 	)
 	(wire
 		(pts
@@ -1862,16 +1868,6 @@
 	)
 	(wire
 		(pts
-			(xy 113.03 99.06) (xy 113.03 92.71)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4365b24f-5be2-4062-8acd-c53d8b83e057")
-	)
-	(wire
-		(pts
 			(xy 46.99 97.79) (xy 55.88 97.79)
 		)
 		(stroke
@@ -1879,26 +1875,6 @@
 			(type default)
 		)
 		(uuid "482584ce-830c-4e48-8a6d-9ad9b2616a4f")
-	)
-	(wire
-		(pts
-			(xy 157.48 78.74) (xy 157.48 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4ee54ccc-cb51-486a-a03f-952ee2bc9856")
-	)
-	(wire
-		(pts
-			(xy 157.48 96.52) (xy 148.59 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "507480c7-8031-4d20-ac99-7568403c5f18")
 	)
 	(wire
 		(pts
@@ -1919,36 +1895,6 @@
 			(type default)
 		)
 		(uuid "5b8eae9f-c5fb-40a0-9012-b1eea3b0feb6")
-	)
-	(wire
-		(pts
-			(xy 154.94 86.36) (xy 154.94 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5d8e129c-1fc6-4ced-a129-21041fc838c5")
-	)
-	(wire
-		(pts
-			(xy 113.03 81.28) (xy 123.19 81.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "618350c8-e4e1-4fe6-8a49-8f3f9e703282")
-	)
-	(wire
-		(pts
-			(xy 113.03 81.28) (xy 113.03 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "63164fb5-9f92-4e43-8943-6b5395e7309e")
 	)
 	(wire
 		(pts
@@ -1993,7 +1939,7 @@
 	)
 	(wire
 		(pts
-			(xy 113.03 90.17) (xy 109.22 90.17)
+			(xy 109.22 90.17) (xy 120.65 90.17)
 		)
 		(stroke
 			(width 0)
@@ -2013,16 +1959,6 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 96.52) (xy 116.84 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "76bc2c67-a42b-4566-8ee7-36a4204a77a2")
-	)
-	(wire
-		(pts
 			(xy 54.61 100.33) (xy 54.61 99.06)
 		)
 		(stroke
@@ -2033,23 +1969,13 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 86.36) (xy 119.38 86.36)
+			(xy 120.65 95.25) (xy 118.11 95.25)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "81daff21-6e23-4719-8d61-8d5f74efdb2d")
-	)
-	(wire
-		(pts
-			(xy 158.75 104.14) (xy 154.94 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "85beb5eb-c48c-43dc-84e3-060424ea65cf")
+		(uuid "838a1611-d32c-4065-92a4-c5fda935bbfb")
 	)
 	(wire
 		(pts
@@ -2063,13 +1989,13 @@
 	)
 	(wire
 		(pts
-			(xy 154.94 104.14) (xy 148.59 104.14)
+			(xy 118.11 95.25) (xy 118.11 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "92021e04-fb1e-4d36-9133-3e26443733aa")
+		(uuid "8f135e40-46fb-4fff-9320-773de96ca073")
 	)
 	(wire
 		(pts
@@ -2083,13 +2009,13 @@
 	)
 	(wire
 		(pts
-			(xy 116.84 78.74) (xy 123.19 78.74)
+			(xy 64.77 116.84) (xy 64.77 120.65)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "97877700-26ea-410c-a1bc-d40121ef020b")
+		(uuid "96092c6a-cd9f-4a52-bf33-95b2a125eec9")
 	)
 	(wire
 		(pts
@@ -2100,16 +2026,6 @@
 			(type default)
 		)
 		(uuid "a2b88ade-8851-4620-9cbb-f80b6b48c954")
-	)
-	(wire
-		(pts
-			(xy 113.03 99.06) (xy 123.19 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a8be5aa7-5f83-4840-993a-a2b1754a22ff")
 	)
 	(polyline
 		(pts
@@ -2124,7 +2040,7 @@
 	)
 	(wire
 		(pts
-			(xy 119.38 104.14) (xy 119.38 120.65)
+			(xy 115.57 87.63) (xy 115.57 120.65)
 		)
 		(stroke
 			(width 0)
@@ -2144,7 +2060,17 @@
 	)
 	(wire
 		(pts
-			(xy 113.03 92.71) (xy 109.22 92.71)
+			(xy 120.65 87.63) (xy 115.57 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "baef652d-07ac-4edc-807a-169bfad622f4")
+	)
+	(wire
+		(pts
+			(xy 109.22 92.71) (xy 120.65 92.71)
 		)
 		(stroke
 			(width 0)
@@ -2154,7 +2080,7 @@
 	)
 	(wire
 		(pts
-			(xy 93.98 78.74) (xy 116.84 78.74)
+			(xy 93.98 78.74) (xy 118.11 78.74)
 		)
 		(stroke
 			(width 0)
@@ -2171,16 +2097,6 @@
 			(type default)
 		)
 		(uuid "c150d38f-1804-4bfa-b838-8a366a318765")
-	)
-	(wire
-		(pts
-			(xy 148.59 78.74) (xy 157.48 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d24fb9bc-fa51-4fc7-b52a-d437a1d9046b")
 	)
 	(wire
 		(pts
@@ -2244,23 +2160,13 @@
 	)
 	(wire
 		(pts
-			(xy 93.98 120.65) (xy 119.38 120.65)
+			(xy 93.98 120.65) (xy 115.57 120.65)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "eee85979-bb3c-40b7-bff3-e6caca69ecc7")
-	)
-	(wire
-		(pts
-			(xy 119.38 86.36) (xy 119.38 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f92a9988-40c1-4040-afbb-601bce94759d")
 	)
 	(label "GND"
 		(at 39.37 120.65 0)
@@ -2284,7 +2190,7 @@
 	)
 	(hierarchical_label "RXD"
 		(shape output)
-		(at 148.59 81.28 0)
+		(at 146.05 90.17 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2295,7 +2201,7 @@
 	)
 	(hierarchical_label "VSS"
 		(shape passive)
-		(at 158.75 104.14 0)
+		(at 146.05 87.63 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2306,7 +2212,7 @@
 	)
 	(hierarchical_label "VDD"
 		(shape passive)
-		(at 158.75 96.52 0)
+		(at 146.05 95.25 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2317,7 +2223,7 @@
 	)
 	(hierarchical_label "TXD"
 		(shape input)
-		(at 148.59 99.06 0)
+		(at 146.05 92.71 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -2325,128 +2231,6 @@
 			(justify left)
 		)
 		(uuid "b04d64f4-0e54-478c-908b-fca7e7261466")
-	)
-	(symbol
-		(lib_id "zzLocalLibrary:STISO620TR")
-		(at 135.89 100.33 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "211208af-afc6-4117-9c56-02c24e236fd6")
-		(property "Reference" "U8"
-			(at 135.89 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "STISO620"
-			(at 135.89 92.71 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 135.89 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 135.89 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 135.89 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/STMicroelectronics/STISO620TR?qs=sGAEpiMZZMuyKkoWRCJ2WLmFe67vl1y7ddVHe8kBxVu5Ar3Boch0nw%3D%3D"
-			(at 135.89 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "galvanic isolation, 1.2kVDC working, 2 unidir chan, 100Mb/s, -40C, +125C"
-			(at 135.89 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "1.23"
-			(at 135.89 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "1.79"
-			(at 135.89 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "8"
-			(uuid "45bfb4ac-bb12-475f-807b-d3e76e12845f")
-		)
-		(pin "2"
-			(uuid "5c66ebec-2102-4282-8a1d-aae8a648dacb")
-		)
-		(pin "6"
-			(uuid "3e65f228-fb6b-4804-b53d-0e4b5fdbf6be")
-		)
-		(pin "5"
-			(uuid "cb1eb1ed-4f6c-4829-8920-21ec2e8b9d5c")
-		)
-		(pin "7"
-			(uuid "6b989eee-63a3-4bce-b4aa-8a3a21e717d3")
-		)
-		(pin "3"
-			(uuid "d6fd3c9f-a2a7-4de7-98a8-386790c80fe1")
-		)
-		(pin "1"
-			(uuid "64c83fd7-f949-4d17-9b81-21c1bf476398")
-		)
-		(pin "4"
-			(uuid "fb7a80d7-9170-40b8-ae37-eba5f6c23180")
-		)
-		(instances
-			(project "EVAL MSPM0lG3507 BQ76952"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/1c14d83e-4410-4167-900a-156beb56e266"
-					(reference "U8")
-					(unit 1)
-				)
-			)
-		)
 	)
 	(symbol
 		(lib_id "Connector:USB_B_Micro")
@@ -2556,32 +2340,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:LED")
-		(at 64.77 116.84 90)
+		(lib_id "zzLocalLibrary:STISO621")
+		(at 133.35 91.44 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "a74f0230-bb70-4941-8701-9f83f04c9a31")
-		(property "Reference" "D5"
-			(at 68.58 115.824 90)
+		(uuid "7d361258-c3d6-4893-ab04-0a965ed4a53c")
+		(property "Reference" "U3"
+			(at 133.35 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "LED"
-			(at 68.58 118.364 90)
+		(property "Value" "STISO620"
+			(at 133.35 99.06 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
-			(at 64.77 116.84 0)
+		(property "Footprint" "Package_SO:SOIC-8_7.5x5.85mm_P1.27mm"
+			(at 133.35 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2590,7 +2375,128 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 64.77 116.84 0)
+			(at 133.35 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 133.35 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/STMicroelectronics/STISO621WTR?qs=DPoM0jnrROWnssw71EEUdg%3D%3D&srsltid=AfmBOooWor0VJktvanGRLm62GGRvBwRvNg6pgl64oBHJnTIBJyGQPB71"
+			(at 133.35 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "galvanic isolation, 1.2kVDC working, 2 unidir chan, 100Mb/s, -40C, +125C"
+			(at 133.35 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "2.22"
+			(at 133.35 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "3.4"
+			(at 133.35 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "befa010d-cdba-42b1-b4b0-ec0d80b81cd7")
+		)
+		(pin "7"
+			(uuid "3393814e-c8ff-473f-b49d-3dd047f3268e")
+		)
+		(pin "6"
+			(uuid "3945945a-de4a-46bb-b061-79aaf2d51998")
+		)
+		(pin "5"
+			(uuid "4cf10927-0ef3-49b0-bd0f-4d4c05bb632b")
+		)
+		(pin "3"
+			(uuid "086a53d5-b433-42a6-96d6-9677a72f8a12")
+		)
+		(pin "8"
+			(uuid "c40c705b-84cf-4a17-a37e-198faf3fa6b0")
+		)
+		(pin "1"
+			(uuid "6eea98e4-1848-4b15-8608-f7ba8620896f")
+		)
+		(pin "2"
+			(uuid "427d03a1-14ac-411b-a4a7-2a16a451d2fe")
+		)
+		(instances
+			(project "EVAL MSPM0lG3507 BQ76952"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/1c14d83e-4410-4167-900a-156beb56e266"
+					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:LED")
+		(at 64.77 113.03 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a74f0230-bb70-4941-8701-9f83f04c9a31")
+		(property "Reference" "D5"
+			(at 68.58 112.014 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "LED"
+			(at 68.58 114.554 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "LED_SMD:LED_0603_1608Metric"
+			(at 64.77 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 64.77 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2599,7 +2505,7 @@
 			)
 		)
 		(property "Description" "Amber LED, 5mA, 1.9Vf, 5Vr, 75mW"
-			(at 64.77 116.84 0)
+			(at 64.77 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2608,7 +2514,7 @@
 			)
 		)
 		(property "Sim.Pins" "1=K 2=A"
-			(at 64.77 116.84 0)
+			(at 64.77 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2617,7 +2523,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 64.77 116.84 90)
+			(at 64.77 113.03 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2626,7 +2532,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 64.77 116.84 90)
+			(at 64.77 113.03 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2635,7 +2541,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Inolux/IN-S63AT5A?qs=sGAEpiMZZMusoohG2hS%252B168PbK3Wnfgfrs6xlVjjR%2FyR990S%252B53E4A%3D%3D"
-			(at 64.77 116.84 90)
+			(at 64.77 113.03 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2644,7 +2550,7 @@
 			)
 		)
 		(property "specs" "amber, 5mA, 1.9V, 75mW, -40C, +85C"
-			(at 64.77 116.84 90)
+			(at 64.77 113.03 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2653,7 +2559,7 @@
 			)
 		)
 		(property "unit x10" "0.118"
-			(at 64.77 116.84 90)
+			(at 64.77 113.03 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2677,130 +2583,8 @@
 		)
 	)
 	(symbol
-		(lib_id "zzLocalLibrary:STISO620TR")
-		(at 135.89 82.55 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "af0ca6cc-d47c-4d25-afc5-e947c6b30c84")
-		(property "Reference" "U7"
-			(at 135.89 72.39 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "STISO620"
-			(at 135.89 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-			(at 135.89 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 135.89 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 135.89 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/STMicroelectronics/STISO620TR?qs=sGAEpiMZZMuyKkoWRCJ2WLmFe67vl1y7ddVHe8kBxVu5Ar3Boch0nw%3D%3D"
-			(at 135.89 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "galvanic isolation, 1.2kVDC working, 2 unidir chan, 100Mb/s, -40C, +125C"
-			(at 135.89 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "1.23"
-			(at 135.89 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "1.79"
-			(at 135.89 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "8"
-			(uuid "db0e8dc8-ddc7-45eb-9edb-dcfd6e66af42")
-		)
-		(pin "2"
-			(uuid "8d377679-1ebe-4056-8191-b9e3cdf3dd10")
-		)
-		(pin "6"
-			(uuid "5898419f-9734-40c3-86b9-912ec7bc89e8")
-		)
-		(pin "5"
-			(uuid "4fb94c04-d25b-4584-9922-2aaf6d54d004")
-		)
-		(pin "7"
-			(uuid "7f328aff-79ed-4106-ab3f-15891fd39b0d")
-		)
-		(pin "3"
-			(uuid "4ad86224-d60e-4d05-a2bc-bd051a75466e")
-		)
-		(pin "1"
-			(uuid "c6c76a61-17cc-4e8f-89b8-3aa64b27b9a9")
-		)
-		(pin "4"
-			(uuid "46aa1a7e-1e73-49ac-81a2-8d15a42906c5")
-		)
-		(instances
-			(project "EVAL MSPM0lG3507 BQ76952"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/1c14d83e-4410-4167-900a-156beb56e266"
-					(reference "U7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_US")
-		(at 64.77 109.22 0)
+		(at 64.77 105.41 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -2809,7 +2593,7 @@
 		(dnp no)
 		(uuid "af309e45-9610-49cf-a8f2-6c41ea21a80c")
 		(property "Reference" "R10"
-			(at 66.802 107.95 0)
+			(at 66.802 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2818,7 +2602,7 @@
 			)
 		)
 		(property "Value" "750"
-			(at 66.802 110.49 0)
+			(at 66.802 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2827,7 +2611,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 63.754 109.474 90)
+			(at 63.754 105.664 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2836,7 +2620,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
-			(at 64.77 109.22 0)
+			(at 64.77 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2845,7 +2629,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 64.77 109.22 0)
+			(at 64.77 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2854,7 +2638,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 64.77 109.22 0)
+			(at 64.77 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2863,7 +2647,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 64.77 109.22 0)
+			(at 64.77 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2872,7 +2656,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RC1206JR-13750RL?qs=sGAEpiMZZMvdGkrng054t8AJgcdMkx7xRBGyMWDk%2FFM%3D"
-			(at 64.77 109.22 0)
+			(at 64.77 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2881,7 +2665,7 @@
 			)
 		)
 		(property "specs" "750mOhm, 250mW, 5%, 100PPM, 200C, -55C, +155C"
-			(at 64.77 109.22 0)
+			(at 64.77 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2890,7 +2674,7 @@
 			)
 		)
 		(property "unit x10" "0.022"
-			(at 64.77 109.22 0)
+			(at 64.77 105.41 0)
 			(effects
 				(font
 					(size 1.27 1.27)
