@@ -5887,6 +5887,17 @@
 		)
 		(uuid "c8cedb4b-abc2-467b-ba44-9a232daf07a5")
 	)
+	(text "user uart"
+		(exclude_from_sim no)
+		(at 86.36 26.67 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(color 218 0 255 1)
+			)
+		)
+		(uuid "ceae4933-d46a-46ee-85ce-e724ac878cf4")
+	)
 	(text "*using the XDS debugger"
 		(exclude_from_sim no)
 		(at 25.654 17.018 0)
@@ -5904,7 +5915,7 @@
 		(uuid "0126d91e-b8a3-45c3-b760-1aecfee5bc65")
 	)
 	(junction
-		(at 22.86 31.75)
+		(at 26.67 31.75)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "03014231-3a1d-4470-8095-a5efaa0451b2")
@@ -6150,7 +6161,7 @@
 		(uuid "e4854ea2-cda2-4b6c-a9b0-b3f760f2f266")
 	)
 	(junction
-		(at 22.86 34.29)
+		(at 26.67 34.29)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e533675d-7403-438f-b9f6-747108a1589f")
@@ -6204,6 +6215,10 @@
 	(no_connect
 		(at 335.28 167.64)
 		(uuid "29f5e8fd-7b56-4362-8b2e-db73485bd90e")
+	)
+	(no_connect
+		(at 41.91 31.75)
+		(uuid "2e85fb81-d06f-4123-aacc-5b4cbcc7b89c")
 	)
 	(no_connect
 		(at 335.28 190.5)
@@ -6264,6 +6279,10 @@
 	(no_connect
 		(at 335.28 114.3)
 		(uuid "7a436fe9-5007-4962-87c6-e4128913fb4e")
+	)
+	(no_connect
+		(at 41.91 34.29)
+		(uuid "7cc8ff23-a7a4-4aa0-9a37-c1cbab3d0c32")
 	)
 	(no_connect
 		(at 335.28 157.48)
@@ -6589,7 +6608,7 @@
 	)
 	(wire
 		(pts
-			(xy 22.86 34.29) (xy 25.4 34.29)
+			(xy 26.67 34.29) (xy 29.21 34.29)
 		)
 		(stroke
 			(width 0)
@@ -7099,26 +7118,6 @@
 	)
 	(wire
 		(pts
-			(xy 33.02 45.72) (xy 35.56 45.72)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7cd7e354-af75-4180-95fa-abaedd4e2749")
-	)
-	(wire
-		(pts
-			(xy 33.02 48.26) (xy 35.56 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7db4c8c0-9003-4cf8-9c5a-f0cae296b8e9")
-	)
-	(wire
-		(pts
 			(xy 316.23 33.02) (xy 335.28 33.02)
 		)
 		(stroke
@@ -7169,7 +7168,7 @@
 	)
 	(wire
 		(pts
-			(xy 22.86 31.75) (xy 25.4 31.75)
+			(xy 26.67 31.75) (xy 29.21 31.75)
 		)
 		(stroke
 			(width 0)
@@ -7239,7 +7238,7 @@
 	)
 	(wire
 		(pts
-			(xy 22.86 29.21) (xy 25.4 29.21)
+			(xy 26.67 29.21) (xy 29.21 29.21)
 		)
 		(stroke
 			(width 0)
@@ -7279,7 +7278,7 @@
 	)
 	(wire
 		(pts
-			(xy 22.86 29.21) (xy 22.86 31.75)
+			(xy 26.67 29.21) (xy 26.67 31.75)
 		)
 		(stroke
 			(width 0)
@@ -7459,16 +7458,6 @@
 	)
 	(wire
 		(pts
-			(xy 33.02 53.34) (xy 35.56 53.34)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b261808a-253c-4f81-ad58-5ea71fdf344f")
-	)
-	(wire
-		(pts
 			(xy 41.91 85.09) (xy 46.99 85.09)
 		)
 		(stroke
@@ -7539,7 +7528,7 @@
 	)
 	(wire
 		(pts
-			(xy 22.86 36.83) (xy 25.4 36.83)
+			(xy 26.67 36.83) (xy 29.21 36.83)
 		)
 		(stroke
 			(width 0)
@@ -7719,7 +7708,7 @@
 	)
 	(wire
 		(pts
-			(xy 22.86 36.83) (xy 22.86 34.29)
+			(xy 26.67 36.83) (xy 26.67 34.29)
 		)
 		(stroke
 			(width 0)
@@ -7799,16 +7788,6 @@
 	)
 	(wire
 		(pts
-			(xy 33.02 50.8) (xy 35.56 50.8)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ead9e8b0-5a01-42f3-8325-f8f9b421f44a")
-	)
-	(wire
-		(pts
 			(xy 113.03 21.59) (xy 129.54 21.59)
 		)
 		(stroke
@@ -7859,7 +7838,7 @@
 	)
 	(wire
 		(pts
-			(xy 22.86 34.29) (xy 22.86 31.75)
+			(xy 26.67 34.29) (xy 26.67 31.75)
 		)
 		(stroke
 			(width 0)
@@ -7927,18 +7906,8 @@
 		)
 		(uuid "ffcf700e-dc23-409e-a23e-b64ba254b519")
 	)
-	(label "XDS_VCC"
-		(at 33.02 45.72 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "03114816-e8b4-457d-bb7b-0297b7ee5426")
-	)
 	(label "XDS_TCK_SWDCLK"
-		(at 38.1 29.21 0)
+		(at 41.91 29.21 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7987,18 +7956,8 @@
 		)
 		(uuid "26fd2a7c-3e86-4021-9ace-513a83d8bb48")
 	)
-	(label "XDS_TMS_SWDIO"
-		(at 33.02 48.26 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "27e805e8-d021-4fe9-84cf-bf38a7ac9295")
-	)
 	(label "XDS_RESET_OUT"
-		(at 38.1 36.83 0)
+		(at 41.91 36.83 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8017,23 +7976,13 @@
 		)
 		(uuid "3ef5a9ac-5da8-4e68-8d2f-79ca6769f198")
 	)
-	(label "XDS_TDO_SWO"
-		(at 38.1 31.75 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "3fc19b8e-908c-4ccf-a53e-20ba8d2f5d62")
-	)
 	(label "XDS_3v_supply"
-		(at 35.56 45.72 0)
+		(at 29.21 26.67 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "48fb5a65-e2ba-4b2b-96f0-184b9a1262e9")
 	)
@@ -8067,18 +8016,8 @@
 		)
 		(uuid "6f90da1b-ea0b-47f4-a843-16fc2473d531")
 	)
-	(label "XDS_TCK_SWDCLK"
-		(at 33.02 50.8 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "7c9bd76b-7a9e-4c6b-8b03-f518254937df")
-	)
 	(label "XDS_GND"
-		(at 22.86 36.83 180)
+		(at 26.67 36.83 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8086,16 +8025,6 @@
 			(justify right bottom)
 		)
 		(uuid "89534c6a-515b-428a-a205-95c81fe7f33a")
-	)
-	(label "XDS_VCC"
-		(at 25.4 26.67 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "9bc4ed59-3ab6-42ea-b16e-4473bb2b141b")
 	)
 	(label "XDS_RESET_OUT"
 		(at 73.66 31.75 0)
@@ -8106,16 +8035,6 @@
 			(justify left bottom)
 		)
 		(uuid "a572e910-cc5d-4508-bce1-1b73c49fb16a")
-	)
-	(label "XDS_RESET_OUT"
-		(at 35.56 53.34 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "a64aab96-4516-42d4-bcef-697407401494")
 	)
 	(label "XDS_TMS_SWDIO"
 		(at 73.66 34.29 0)
@@ -8157,26 +8076,6 @@
 		)
 		(uuid "c9a1a97f-2779-4326-ac2a-76bbffb42a88")
 	)
-	(label "XDS_TDI"
-		(at 38.1 34.29 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ce01f1c8-09f7-4053-bedb-7e6994b75ce7")
-	)
-	(label "XDS_RESET_OUT"
-		(at 33.02 53.34 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "d0003f40-178b-4796-9653-cacdca82dcfb")
-	)
 	(label "XDS_TCK_SWDCLK"
 		(at 72.39 58.42 180)
 		(effects
@@ -8198,7 +8097,7 @@
 		(uuid "d6367acf-14d8-49da-b366-41b2a68f51f5")
 	)
 	(label "XDS_TMS_SWDIO"
-		(at 38.1 26.67 0)
+		(at 41.91 26.67 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -11849,16 +11748,15 @@
 	)
 	(symbol
 		(lib_id "Connector_Generic:Conn_02x05_Odd_Even")
-		(at 30.48 31.75 0)
+		(at 34.29 31.75 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "64cde337-4eb6-4d91-90d8-5cd3c8180f43")
 		(property "Reference" "J2"
-			(at 31.75 20.32 0)
+			(at 35.052 22.098 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11866,7 +11764,7 @@
 			)
 		)
 		(property "Value" "Conn_02x05_Odd_Even"
-			(at 31.75 22.86 0)
+			(at 35.56 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11875,7 +11773,7 @@
 			)
 		)
 		(property "Footprint" "Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical_SMD"
-			(at 30.48 31.75 0)
+			(at 34.29 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11884,7 +11782,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samtec/FTSH-105-01-L-DV-K?qs=%252B5JSS813miOqo3Vy%252BvhCFg%3D%3D&mgh=1&utm_id=22307413912&utm_source=google&utm_medium=cpc&utm_marketing_tactic=amercorp&gad_source=1&gad_campaignid=22307417416&gclid=EAIaIQobChMI7euR0cGajgMVHEp_AB1IOho8EAQYASABEgIaMPD_BwE"
-			(at 30.48 31.75 0)
+			(at 34.29 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11893,7 +11791,7 @@
 			)
 		)
 		(property "Description" "https://www.digikey.com/en/products/detail/adafruit-industries-llc/556/6827041?gclsrc=aw.ds&gad_source=1&gad_campaignid=20232005509&gclid=EAIaIQobChMIgoT1icKajgMVrXJ_AB3caCGqEAQYByABEgJ-U_D_BwE"
-			(at 30.48 31.75 0)
+			(at 34.29 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11902,7 +11800,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 30.48 31.75 0)
+			(at 34.29 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11911,7 +11809,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 30.48 31.75 0)
+			(at 34.29 31.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
