@@ -27,6 +27,10 @@
 #include <Tasks/task_BMS.hpp>
 #include <Tasks/task_non_BMS.hpp>
 #include <Tasks/task_non_BMS.hpp>
+#include <Tasks/task_TX.hpp>
+#include <Tasks/task_RX.hpp>
+
+
 //#include <Tasks/task_CC.hpp>
 #include "system.hpp"
 #include "Core/Networking/CANComm.hpp"
@@ -56,6 +60,21 @@ int main(){
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
+
+    xTaskCreate(Task::task_TX,
+            "task_TX",
+            configMINIMAL_STACK_SIZE * 10,   // allocate enough stack; CAN + FreeRTOS calls can use a bit more
+            NULL,
+            tskIDLE_PRIORITY + 1,            // slightly above idle so it runs regularly
+            NULL);
+
+    xTaskCreate(Task::task_RX,
+            "task_RX",
+            configMINIMAL_STACK_SIZE * 8,   // RX path is light; 8–12x minimal is plenty
+            NULL,
+            tskIDLE_PRIORITY + 2,           // slightly above TX so it drains promptly
+            NULL);
+
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
 //            "BQ769x2_PROTOCOL_Test_V_Task",
