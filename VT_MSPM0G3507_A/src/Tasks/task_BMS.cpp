@@ -68,23 +68,24 @@ FancyCli::MenuDir menu = {
     };
 
 void Task::BMS_task(void *){
-    fcli.root = &menu;
-    while(1){
-        while(!DL_UART_isRXFIFOEmpty(System::uart_ui.reg)){
-            if(fcli.charInput(&System::uart_ui, DL_UART_receiveData(System::uart_ui.reg))){
-                fcli.printFrame(System::uart_ui, true);
-            }
-        }
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
+    System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
+//    fcli.root = &menu;
+//    while(1){
+//        while(!DL_UART_isRXFIFOEmpty(System::uart_ui.reg)){
+//            if(fcli.charInput(&System::uart_ui, DL_UART_receiveData(System::uart_ui.reg))){
+//                fcli.printFrame(System::uart_ui, true);
+//            }
+//        }
+//        vTaskDelay(pdMS_TO_TICKS(100));
+//    }
 
-    bq.spi->setSCLKTarget(500e3);
+    bq.spi->setSCLKTarget(200e3);
     DL_GPIO_enableOutput(GPIOPINPUX((*bq.cs)));
     DL_GPIO_initDigitalOutputFeatures(
             bq.cs->iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
             DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
             DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
         );
     bq.cs->clear();
@@ -148,7 +149,6 @@ void Task::BMS_task(void *){
             uint32_t CC3Counts;       // Bytes 28-31: CC3 Counts, 32-bit ADC counts
         } v;
         success &= bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS5, &v, sizeof(v));
-        System::uart_ui.nputs(ARRANDN("--- Battery Data Block ---" NEWLINE));
 
         // Print Header
         System::uart_ui.nputs(ARRANDN("--- Battery Data Block ---" NEWLINE));
@@ -225,6 +225,8 @@ void Task::BMS_task(void *){
 
         if(!success)
             System::uart_ui.nputs(ARRANDN(CLIBAD "womp" NEWLINE CLIRESET));
+
+        vTaskDelay(pdMS_TO_TICKS(1e3));
     }
 
 
@@ -336,8 +338,9 @@ void Task::BMS_task(void *){
 
         vTaskDelay(pdMS_TO_TICKS(400));
     };
-
     */
+
+
     System::FailHard("BMS_task ended" NEWLINE);
     vTaskDelete(NULL);
 }

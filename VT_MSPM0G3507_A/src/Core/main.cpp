@@ -35,6 +35,7 @@
 #include "Tasks/examples/example_BQ769x2_PROTOCOL_V.hpp"
 
 int main(){
+
     System::init();
 
     System::uart_ui.setBaudTarget(115200);
