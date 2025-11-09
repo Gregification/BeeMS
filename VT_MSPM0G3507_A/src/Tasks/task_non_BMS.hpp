@@ -8,6 +8,9 @@
 #ifndef SRC_CORE_FIDDLE_HPP_
 #define SRC_CORE_FIDDLE_HPP_
 
+#include "Core/FancyCli.hpp"
+#include "Core/system.hpp"
+
 namespace Task {
 
     /**

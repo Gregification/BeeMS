@@ -15,10 +15,11 @@ void Task::blink_task(void*) {
     /* different iterations of the board use different pins for the blink led
      * see schematic of exact version for correct pin.
      */
-    auto &led = System::GPIO::PA14; // purple board
+//    auto &led = System::GPIO::PA14; // purple board
 //    auto &led = System::GPIO::PB27; // blue board
 //    auto &led = System::GPIO::PA14; // green board
-//    auto &led = System::GPIO::PB26; // LP
+    auto &led = System::GPIO::PB26; // LP RED
+//    auto &led = System::GPIO::PB27; // LP GREEN
 
     DL_GPIO_initDigitalOutputFeatures(
             led.iomux,

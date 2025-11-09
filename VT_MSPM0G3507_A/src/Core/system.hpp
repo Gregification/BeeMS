@@ -51,6 +51,8 @@
 
 #include <ti/driverlib/driverlib.h>
 
+#include "Core/common.h"
+
 
 /*--- meta ---------------------------------------------*/
 
@@ -75,9 +77,6 @@
 /* if fails BMS will immediately trigger a shutdown */
 #define ASSERT_FATAL(X, STR)        if(!(X)) System::FailHard(STR " @assert:line" TOSTRING(__LINE__) "," __FILE__);
 
-/* for the uart nputs(char*,num len) command */
-#define ARRANDN(ARR)                ARR,sizeof(ARR)
-
 /* OCCUPY macro defines a static const variable with a unique name per ID
     If the same ID is used again in the same translation unit, it will cause redefinition error
     IMPORTANT: this macro will only work with things in the same scope!
@@ -86,19 +85,6 @@
 
 /*--- general configuration ----------------------------*/
 
-#define NEWLINE                     "\n\r"
-#define CLIERROR                    "\033[38;2;255;0;0m"
-#define CLIHIGHLIGHT                "\033[38;2;255;255;0m"
-#define CLIBAD                      CLIERROR
-#define CLIGOOD                     "\033[38;2;0;255;0m"
-#define CLIYES                      "\033[38;2;0;255;255m"
-#define CLINO                       "\033[38;2;255;0;255m"
-#define CLIWARN                     "\033[38;2;255;100;0m"
-#define CLIRESET                    "\033[0m"
-#define CLICLEAR                    "\033[2J\033[H\033[0m"
-
-#define MAX_STR_LEN_COMMON          125   // assumed max length of a string if not specified. to minimize the damage of overruns.
-#define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 #define POWER_STARTUP_DELAY         16
 
 /* the System IRQ functions rely on notifications to sync with tasks, this is the specific index used as the notification
@@ -110,8 +96,6 @@
 #if configTASK_NOTIFICATION_ARRAY_ENTRIES < 2
     #error "increase size of configTASK_NOTIFICATION_ARRAY_ENTRIES"
 #endif
-
-typedef uint16_t buffersize_t;
 
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
