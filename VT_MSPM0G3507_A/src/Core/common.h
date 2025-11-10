@@ -11,8 +11,18 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/* for the uart nputs(char*,num len) command */
+
+//--- unit conversions ---------------------------------------
+
+#define KELVIN_TO_CELSIUS(C) (C - 273.15);
+#define K2C(C) KELVIN_TO_CELSIUS(C)
+
+//--- program macros ------------------------------------------
+
 #define ARRANDN(ARR)                (ARR),sizeof(ARR)
+#define PTRANDN(ARR)                (&(ARR)),sizeof(ARR)  // for pointer to a object
+
+//--- program constants ---------------------------------------
 
 #define NEWLINE                     "\n\r"
 #define CLIERROR                    "\033[38;2;255;0;0m"
@@ -28,7 +38,12 @@
 #define MAX_STR_LEN_COMMON          125   // assumed max length of a string if not specified. to minimize the damage of overruns.
 #define MAX_STR_ERROR_LEN           (MAX_STR_LEN_COMMON * 2)
 
+//--- program types -------------------------------------------
+
 typedef uint16_t buffersize_t;
 
+//--- functions -----------------------------------------------
+
+bool arrCmp(void const * a, void const * b, buffersize_t len);
 
 #endif /* SRC_CORE_COMMON_H_ */

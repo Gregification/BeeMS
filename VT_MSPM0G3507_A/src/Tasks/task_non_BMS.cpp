@@ -88,15 +88,16 @@ void Task::non_BMS_functions_task(void *){
     fcli.printFrame(uart, true);
 
     while(1){
-        tickStart = xTaskGetTickCount();
+//        tickStart = xTaskGetTickCount();
 
         // cli ui
         UI();
 
         // maintain refresh rate
-        tickD = tickStart - xTaskGetTickCount();
-        if(tickD < tickFrameMin)
-            vTaskDelay(tickFrameMin - tickD);
+//        tickD = tickStart - xTaskGetTickCount();
+//        if(tickD < tickFrameMin)
+//            vTaskDelay(tickFrameMin - tickD);
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 
     System::FailHard("non_BMS_functions_task ended" NEWLINE);
@@ -119,6 +120,8 @@ void UI(){
 }
 
 bool fcli_dumpConfig(char * userInput, uint8_t strlen, char * msg, uint8_t msglen){
-
+    while(1){
+        uart.nputs(ARRANDN("meow" NEWLINE));
+    }
     return false;
 }

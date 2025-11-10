@@ -1,8 +1,10 @@
 /*
- * task_DAQ.cpp
+ * task_BMS.cpp
  *
  *  Created on: Oct 4, 2025
  *      Author: turtl
+ *
+ *  All voltage tap logic is in here
  */
 
 #include <stdio.h>
@@ -11,19 +13,119 @@
 #include "Core/system.hpp"
 #include "Core/FancyCli.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
+#include "Core/common.h"
 
+
+// user amp to centiamp scale (10mA)
+// using 10mA scale (determined by DAConfiguration)
+#define userAto10mA(X) (X)
+
+// user volt to centivolt scale (10mV)
+// using 10mV scale (determined by DAConfiguration)
+#define userVto10mV(X) (X)
+
+// only 1 BQ on the voltage tap board
 BQ76952 bq = {
-              .spi  = &System::spi1,
-              .cs   = &System::GPIO::PA15,
-};
+        .spi  = &System::spi1,
+        .cs   = &System::GPIO::PA15,
+    };
 
-bool setup_BBQ(BQ76952 &);
+BQ76952::BQ76952SSetting constexpr bqSetting = {
+        .Fuse = {
+            .minBlowFuseVoltage_10mV= 75000 / 10,   // 75V
+            .timeout_S              = 0,            // 0:indefinite
+        },
+        .Configuration = {
+            .powerConfig = {
+                .wake_speed     = 3,
+                .loop_slow      = 0,
+                .cb_loop_slow   = 3,
+                .fastadc        = 0,
+                .otsd           = 1,
+                .sleep          = 0,
+                .dpslp_lfo      = 0,
+                .dpslp_ldo      = 1,
+                .dpslp_pd       = 1,
+                .shut_ts2       = 1,
+                .dpslp_ot       = 1,
+            },
+            .REG0Config = {
+                .enable0    = 1,
+            },
+            .HWDRegulatorOptions = { // TODO: is a safety thing, set up properly on final product
+                .toggle_time    = 10, // 5S power cycle
+                .toggle_opt     = 2,  // turn-off then turn-on on HWD
+            },
+            .spiConfig = {
+                .filt       = 0, // no digital filter
+                .miso_reg1  = 1, // logic high V = REG1 output
+            },
+            .commIdleTime_S = 1, // 1S of no comms before turning off HFO
+            .cfetoffPinConfig = {// WARNING: effects SPI CS behavior
+                .Raw = 0,   // as SPI cs
+            },
+            .dfetoffPinConfig = { // TODO: figure out how to do custom thermistor polynomial
+                .function   = 3,    // ADC input / thermistor
+                .opt1_0     = 0b00, // as ADC
+                .opt3_2     = 0b11, // no polynomial, report raw ADC
+                .opt5_4     = 0b10, // no PU
+            },
+            .alertPinConfig = { // TODO: figure out how to do custom thermistor polynomial
+                .function   = 3,    // ADC input / thermistor
+                .opt1_0     = 0b00, // as ADC
+                .opt3_2     = 0b11, // no polynomial, report raw ADC
+                .opt5_4     = 0b10, // no PU
+            },
+            .TS1Config = { // TODO: figure out how to do custom thermistor polynomial
+                .function   = 3,    // ADC input / thermistor
+                .opt1_0     = 0b00, // as ADC
+                .opt3_2     = 0b11, // no polynomial, report raw ADC
+                .opt5_4     = 0b10, // no PU
+            },
+            .TS2Config = { // TODO: figure out how to do custom thermistor polynomial
+                .function   = 3,    // ADC input / thermistor
+                .opt1_0     = 0b00, // as ADC
+                .opt3_2     = 0b11, // no polynomial, report raw ADC
+                .opt5_4     = 0b10, // no PU
+            },
+            .TS3Config = { // TODO: figure out how to do custom thermistor polynomial
+                .function   = 3,    // ADC input / thermistor
+                .opt1_0     = 0b00, // as ADC
+                .opt3_2     = 0b11, // no polynomial, report raw ADC
+                .opt5_4     = 0b10, // no PU
+            },
+            .HDQPinConfig = { // WARNING: effects SPI MOSI behavior
+                .Raw = 0,   // as SPI MOSI
+            },
+            .DCHGPinConfig = { // TODO: figure out how to do custom thermistor polynomial
+                .function   = 3,    // ADC input / thermistor
+                .opt1_0     = 0b00, // as ADC
+                .opt3_2     = 0b11, // no polynomial, report raw ADC
+                .opt5_4     = 0b10, // no PU
+            },
+            .DDSGPinConfig = { // TODO: figure out how to do custom thermistor polynomial
+                .function   = 3,    // ADC input / thermistor
+                .opt1_0     = 0b00, // as ADC
+                .opt3_2     = 0b11, // no polynomial, report raw ADC
+                .opt5_4     = 0b10, // no PU
+            },
+            .DAConfig = {
+                .user_amps  = 2, // USER AMPS unit selection. 2:10mA,3:100mA . see userAto10mA macro
+                .user_volts = 1, // USER VOLTS unit selection. 0:1mV,1:10mV . see userVto10mV macro
+                .tint_en    = 0, // die temp used as a cell temp? 0:no, 1:yes.
+                .tint_fett  = 0, // die tmep used as fet temp? 0:no, 1:yes
+            },
+            .VcellMode  = 0xffff,
+            .CC3Samples = 0x0F,
+        },
+    };
 
 void Task::BMS_task(void *){
     System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
 
-    bq.spi->setSCLKTarget(200e3);
-    DL_GPIO_enableOutput(GPIOPINPUX((*bq.cs)));
+    //---- SPI setup ------------------------------------------
+    bq.spi->setSCLKTarget(250e3); // bq76952 max speed of 2MHz
+    DL_GPIO_enableOutput(GPIOPINPUX(*bq.cs));
     DL_GPIO_initDigitalOutputFeatures(
             bq.cs->iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
@@ -33,48 +135,43 @@ void Task::BMS_task(void *){
         );
     bq.cs->clear();
 
-    vTaskDelay(pdMS_TO_TICKS(50));
+    vTaskDelay(pdMS_TO_TICKS(50)); // CS needs some time to get recognized by the slave
 
-    if(0){ // SEAL -> UNSEAL
-        //bqTM.13.8.2/197
+    //--- init BQ76952 ----------------------------------------
+    // TODO: on the final product we need to somehow prevent the MCU from locking up the BQ,
+    //      if the MCU gets in a power cycle loop.
 
-        /* bqTM.8.1/71
-         *  """
-         *      each transition requires that a unique set of keys be sent to the device
-         *      through the sub-command address (0x3E and 0x3F). The keys must be sent
-         *      consecutively to 0x3E and 0x3F, with no other data written between the
-         *      keys. Do not set the two keys to identical values
-         *  """
-         */
+    bq.unseal(0x36720414);
 
-        uint32_t usk = 0x3672'0414; // un-seal key
-//        uint32_t usk = 0x3672'0414; // un-seal key : factory default
+    {
+        uint16_t batt_status;
+        bq.sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt, PTRANDN(batt_status));
+            switch((batt_status >> 8) & 0b11){
+                case 0: System::uart_ui.nputs(ARRANDN("not initialized")); break;
+                case 1: System::uart_ui.nputs(ARRANDN("full access")); break;
+                case 2: System::uart_ui.nputs(ARRANDN("unsealed")); break;
+                case 3: System::uart_ui.nputs(ARRANDN("sealed")); break;
+            }
+        else
+            case 1: System::uart_ui.nputs(ARRANDN(":("));
+    }
 
-//        uint8_t sk1[] = {0x3E, (uint8_t)((usk & 0x0000'00FF) >> 00), (uint8_t)((usk & 0x0000'FF00) >> 8)};
-//        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk1, sizeof(sk1), pdMS_TO_TICKS(10));
-//
-//        uint8_t sk2[] = {0x3E, (uint8_t)((usk & 0x00FF'0000) >> 16), (uint8_t)((usk & 0xFF00'0000) >> 24)};
-//        bq.i2c_controller->tx_blocking(bq.i2c_addr, sk2, sizeof(sk2), pdMS_TO_TICKS(10));
+    bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
+    vTaskDelay(pdMS_TO_TICKS(61));
+
+    if(! bq.setConfig(&bqSetting))
+        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
+
+    {
+        BQ76952::BQ76952SSetting read = bqSetting;
+        if(!bq.getConfig(&read))
+            System::FailHard("failed to init BBQ settings on MCU power up. failed to read");
+
+        if(!(read == bqSetting))
+            System::FailHard("failed to init BBQ settings on MCU power up. READ != WRITE");
     }
 
     while(1){
-//        bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
-//        vTaskDelay(pdMS_TO_TICKS(61));
-        bool success = true;
-
-//        success &= bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE);
-//        vTaskDelay(pdMS_TO_TICKS(9));
-//
-//        success &= bq.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2983, 2);
-//        vTaskDelay(pdMS_TO_TICKS(9));
-//
-//        success &= bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE);
-//        vTaskDelay(pdMS_TO_TICKS(9));
-
-//        uint16_t v = 0xBeeF;
-//        success &= BQ769X2_PROTOCOL::spi24b_readReg(bq.spi, bq.cs, 0x61, &v);
-//        success &= bq.getRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, &v);
-//        success &= bq.sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt::AlarmEnable, &v, 2);
         struct {
             uint16_t Vreg18;          // Bytes 0-1: VREG18, 16-bit ADC counts
             uint16_t VSS;             // Bytes 2-3: VSS, 16-bit ADC counts
@@ -91,7 +188,7 @@ void Task::BMS_task(void *){
             uint32_t CC2Counts;       // Bytes 24-27: CC2 Counts, 32-bit ADC counts
             uint32_t CC3Counts;       // Bytes 28-31: CC3 Counts, 32-bit ADC counts
         } v;
-        success &= bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS5, &v, sizeof(v));
+        bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS5, &v, sizeof(v));
 
         // Print Header
         System::uart_ui.nputs(ARRANDN("--- Battery Data Block ---" NEWLINE));

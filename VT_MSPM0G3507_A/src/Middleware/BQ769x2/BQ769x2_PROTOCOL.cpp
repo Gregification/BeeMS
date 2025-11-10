@@ -79,20 +79,6 @@ bool BQ769X2_PROTOCOL::sendSubcommandR(System::SPI::SPI * spi, System::GPIO::GPI
     return readRegister(spi, cs, cmd, data_out, datalen);
 }
 
-bool BQ769X2_PROTOCOL::sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data) {
-    //security keys and Manu_data writes dont work with this function (reading these commands works)
-    //max readback size is 32 bytes i.e. DASTATUS, CUV/COV snapshot
-
-    return true;
-}
-
-bool BQ769X2_PROTOCOL::sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data) {
-    //security keys and Manu_data writes dont work with this function (reading these commands works)
-    //max readback size is 32 bytes i.e. DASTATUS, CUV/COV snapshot
-
-    return true;
-}
-
 bool BQ769X2_PROTOCOL::setRegister(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, RegAddr reg_addr, uint16_t reg_data, uint8_t datalen)
 // This function will write hex 3E for the initial write for subcommands in direct memory
 // and write to register hex 60 for the checksum to enter the data transmitted was correct.

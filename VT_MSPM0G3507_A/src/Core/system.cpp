@@ -502,6 +502,9 @@ void System::UART::UART::partialInit() {
 }
 
 void System::FailHard(const char *str) {
+    // TODO: replace this code with one that kills all other tasks,
+    //      leave the UI task as the only one running for diagnostics.
+    //      somehow indicate its a fatal error
     taskDISABLE_INTERRUPTS();
 
     static uint32_t count = 0;

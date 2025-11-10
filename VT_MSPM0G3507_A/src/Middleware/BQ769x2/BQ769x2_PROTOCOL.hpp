@@ -434,12 +434,6 @@ namespace BQ769X2_PROTOCOL {
     /** returns false if timed */
     bool sendSubcommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void * data_out, uint8_t datalen);
 
-    /** returns false if timed */
-    bool sendSubcommandW(System::I2C::I2C &i2c_controller, uint8_t i2c_addr, Cmd cmd, uint8_t data);
-
-    /** returns false if timed */
-    bool sendSubcommandW2(System::I2C::I2C &i2c_controller,uint8_t i2c_addr, Cmd cmd, uint16_t data);
-
     /** returns false if failed */
     bool sendCommandSubcommand(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd command);
 
