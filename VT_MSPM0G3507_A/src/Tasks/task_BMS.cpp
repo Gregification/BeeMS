@@ -115,7 +115,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
                 .tint_en    = 0, // die temp used as a cell temp? 0:no, 1:yes.
                 .tint_fett  = 0, // die tmep used as fet temp? 0:no, 1:yes
             },
-            .VcellMode  = 0xffff,
+            .VcellMode  = 0x420,
             .CC3Samples = 0x0F,
         },
     };
@@ -141,20 +141,20 @@ void Task::BMS_task(void *){
     // TODO: on the final product we need to somehow prevent the MCU from locking up the BQ,
     //      if the MCU gets in a power cycle loop.
 
-    bq.unseal(0x36720414);
+//    bq.unseal(0x36720414);
 
-    {
-        uint16_t batt_status;
-        bq.sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt, PTRANDN(batt_status));
-            switch((batt_status >> 8) & 0b11){
-                case 0: System::uart_ui.nputs(ARRANDN("not initialized")); break;
-                case 1: System::uart_ui.nputs(ARRANDN("full access")); break;
-                case 2: System::uart_ui.nputs(ARRANDN("unsealed")); break;
-                case 3: System::uart_ui.nputs(ARRANDN("sealed")); break;
-            }
-        else
-            case 1: System::uart_ui.nputs(ARRANDN(":("));
-    }
+//    {
+//        uint16_t batt_status;
+//        if(bq.sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, PTRANDN(batt_status)))
+//        switch((batt_status >> 8) & 0b11){
+//            case 0: System::uart_ui.nputs(ARRANDN("not initialized")); break;
+//            case 1: System::uart_ui.nputs(ARRANDN("full access")); break;
+//            case 2: System::uart_ui.nputs(ARRANDN("unsealed")); break;
+//            case 3: System::uart_ui.nputs(ARRANDN("sealed")); break;
+//        }
+//        else System::uart_ui.nputs(ARRANDN(":("));
+//        System::uart_ui.nputs(ARRANDN(NEWLINE));
+//    }
 
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
     vTaskDelay(pdMS_TO_TICKS(61));
@@ -163,7 +163,7 @@ void Task::BMS_task(void *){
         System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
 
     {
-        BQ76952::BQ76952SSetting read = bqSetting;
+        BQ76952::BQ76952SSetting read;
         if(!bq.getConfig(&read))
             System::FailHard("failed to init BBQ settings on MCU power up. failed to read");
 
