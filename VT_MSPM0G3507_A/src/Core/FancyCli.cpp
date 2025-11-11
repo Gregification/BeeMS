@@ -65,10 +65,20 @@ bool FancyCli::charInput(System::UART::UART * uart, char c){
                     getSelectedLeaf(); // Recalculate and bound
                 }
 
-            if(_charInput_contains(ARRANDN(keys_select), c)){
-                if(!getSelectedLeaf())
+            if (_charInput_contains(ARRANDN(keys_select), c)) {
+                MenuLeaf* leaf = getSelectedLeaf();
+
+                if (leaf) {
+                    if (leaf->accept) {
+                        message[0] = '\0';
+                        leaf->accept(userInput, userInputLen, ARRANDN(message));
+                    }
+                } else {
                     selectionDepth++;
-                getSelectedDir();
+                    getSelectedDir();
+                }
+
+                ret = true;
             }
 
             if(_charInput_contains(ARRANDN(keys_unselect), c)){
@@ -304,8 +314,7 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
     uart.nputs(ARRANDN(CLIRESET NEWLINE));
 
     // print message
-    if(update && accept){
-        accept(NULL, 0, ARRANDN(message));
+    if (message[0] != '\0') {
         uart.nputs(ARRANDN(message));
     } else {
         uart.nputs(ARRANDN("<NO MESSAGE>"));
