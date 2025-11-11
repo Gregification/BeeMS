@@ -266,10 +266,45 @@ void Task::BMS_task(void *){
         if(!success)
             System::uart_ui.nputs(ARRANDN(CLIBAD "womp" NEWLINE CLIRESET));
 
+        //Not tested yet the BBQ locked up
+        //fatal error 0 : failed to init BBQ settings on MCU power up. failed to write ...
+        // Read Internal Temperature using 0x68 command
+        uint16_t internalTempRaw = 0;
+        bool tempSuccess = bq.sendDirectCommandR(
+            BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68
+            &internalTempRaw,
+            sizeof(internalTempRaw)
+        );
+
+        // Print Internal Temperature
+        System::uart_ui.nputs(ARRANDN("--- Internal Temperature ---" NEWLINE));
+
+        if(tempSuccess) {
+            // Internal temperature is already in units of 0.1 K from the BQ chip
+            // The chip handles the calibration formula internally:
+            // Temp = (ADC × Int Gain / 65536) + Int base offset + Int Temp Offset
+
+            System::uart_ui.nputs(ARRANDN("Internal Temp (0.1 K): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(internalTempRaw));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 0.1 K units, so divide by 10 to get K, then subtract 273.15 for °C
+            int32_t tempCelsius = (static_cast<int32_t>(internalTempRaw) - 2731) / 10;
+            System::uart_ui.nputs(ARRANDN("Internal Temp (C): "));
+            if(tempCelsius < 0) {
+                System::uart_ui.nputs(ARRANDN("-"));
+                tempCelsius = -tempCelsius;
+            }
+            System::uart_ui.putu32d(static_cast<uint32_t>(tempCelsius));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+        } else {
+            System::uart_ui.nputs(ARRANDN(CLIBAD "Failed to read internal temperature" NEWLINE CLIRESET));
+        }
+
+        System::uart_ui.nputs(ARRANDN(NEWLINE));
+
         vTaskDelay(pdMS_TO_TICKS(1e3));
     }
-
-
 
     /* pesudo code
      * {
