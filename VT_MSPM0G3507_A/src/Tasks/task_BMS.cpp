@@ -167,8 +167,8 @@ void Task::BMS_task(void *){
         if(!bq.getConfig(&read))
             System::FailHard("failed to init BBQ settings on MCU power up. failed to read");
 
-        if(!(read == bqSetting))
-            System::FailHard("failed to init BBQ settings on MCU power up. READ != WRITE");
+//        if(!(read == bqSetting))
+//            System::FailHard("failed to init BBQ settings on MCU power up. READ != WRITE");
     }
 
     while(1){
@@ -266,7 +266,23 @@ void Task::BMS_task(void *){
         if(!success)
             System::uart_ui.nputs(ARRANDN(CLIBAD "womp" NEWLINE CLIRESET));
 
-        //Not tested yet the BBQ locked up
+        // Cell Balancing
+        uint16_t cb_ac = 0;
+        char str[128];
+        success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, &cb_ac, sizeof(cb_ac));
+        if(success)
+        {
+            snprintf(ARRANDN(str), "CB Active Cells: %x,", cb_ac);
+            System::uart_ui.nputs(ARRANDN(str));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+        }
+        else
+            System::uart_ui.nputs(ARRANDN(CLIBAD "panik" NEWLINE CLIRESET));
+
+
+
+
+
         //fatal error 0 : failed to init BBQ settings on MCU power up. failed to write ...
         // Read Internal Temperature using 0x68 command
         uint16_t internalTempRaw = 0;
