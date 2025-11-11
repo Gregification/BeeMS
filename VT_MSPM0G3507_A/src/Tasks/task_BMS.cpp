@@ -269,15 +269,19 @@ void Task::BMS_task(void *){
         // Cell Balancing
         uint16_t cb_ac = 0;
         char str[128];
-        success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, &cb_ac, sizeof(cb_ac));
-        if(success)
+
+        bool cb_wr = bq.sendSubcommandW2(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, 0x1); //starts balancing on cell 0
+
+        bool cb_rd = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, &cb_ac, sizeof(cb_ac));
+
+        if(cb_wr && cb_rd)
         {
             snprintf(ARRANDN(str), "CB Active Cells: %x,", cb_ac);
             System::uart_ui.nputs(ARRANDN(str));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
         }
         else
-            System::uart_ui.nputs(ARRANDN(CLIBAD "panik" NEWLINE CLIRESET));
+            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 2" NEWLINE CLIRESET));
 
 
 
