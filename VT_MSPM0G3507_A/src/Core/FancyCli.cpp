@@ -267,18 +267,21 @@ void FancyCli::printFrame(System::UART::UART& uart, bool update){
                 uart.nputs(leaf->name, STR_LEN_COMMON);
                 uart.nputs(ARRANDN(NEWLINE));
             } else {
-                MenuDir * d = getSelectedDir();
-                if(d){
-                    if(selections[selectionDepth] == og_sel){
-                        si_description = d->description;
-                        uart.nputs(ARRANDN(CLIYES "  >"));
-                        uart.nputs(ARRANDN(dir_prefix));
-                        uart.nputs(ARRANDN(CLIRESET));
-                    } else {
-                        uart.nputs(ARRANDN("    "));
+                MenuDir * parent = getSelectedDir();
+                if (parent) {
+                    MenuDir * childDir = &parent->dirs[selections[selectionDepth]];
+                    if (childDir) {
+                        if (selections[selectionDepth] == og_sel) {
+                            si_description = childDir->description;
+                            uart.nputs(ARRANDN(CLIYES "  >"));
+                            uart.nputs(ARRANDN(dir_prefix));
+                            uart.nputs(ARRANDN(CLIRESET));
+                        } else {
+                            uart.nputs(ARRANDN("    "));
+                        }
+                        uart.nputs(childDir->name, STR_LEN_COMMON);
+                        uart.nputs(ARRANDN(NEWLINE));
                     }
-                    uart.nputs(d->dirs[selections[selectionDepth]].name, STR_LEN_COMMON);
-                    uart.nputs(ARRANDN(NEWLINE));
                 }
             }
         }
