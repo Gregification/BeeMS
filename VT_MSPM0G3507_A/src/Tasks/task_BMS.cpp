@@ -30,7 +30,7 @@ BQ76952 bq = {
         .cs   = &System::GPIO::PA15,
     };
 
-BQ76952::BQ76952SSetting constexpr bqSetting = {
+/*BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {
             .minBlowFuseVoltage_10mV= 75000 / 10,   // 75V
             .timeout_S              = 0,            // 0:indefinite
@@ -119,6 +119,9 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
             .CC3Samples = 0x0F,
         },
     };
+    */
+
+bool setup_BBQ(BQ76952 & b);
 
 void Task::BMS_task(void *){
     System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
@@ -159,8 +162,11 @@ void Task::BMS_task(void *){
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
     vTaskDelay(pdMS_TO_TICKS(61));
 
-    if(! bq.setConfig(&bqSetting))
+    if(! setup_BBQ(bq))
         System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
+
+//    if(! bq.setConfig(&bqSetting))
+//        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
 
     {
         BQ76952::BQ76952SSetting read;
@@ -270,8 +276,8 @@ void Task::BMS_task(void *){
         uint16_t cb_ac = 0;
         char str[128];
 
-        if(!bq.sendSubcommandW2(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, 0x1))//starts balancing on cell 0
-            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 1" NEWLINE CLIRESET));
+//        if(!bq.sendSubcommandW2(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, 0x1))//starts balancing on cell 0
+//            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 1" NEWLINE CLIRESET));
 
         if(bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, &cb_ac, sizeof(cb_ac)))
         {
@@ -451,19 +457,19 @@ bool setup_BBQ(BQ76952 & b){
     // An easier way to find the descriptions is in the BQStudio Data Memory screen. When you move the mouse over the register name,
     // a full description of the register and the bits will pop up on the screen.
 
-    // 'Comm Type' - I2C without CRC for TX only, RX will still have to deal with it
-    b.setRegister(BQ769X2_PROTOCOL::RegAddr::CommType, 0x07, 1);
+    // 'Comm Type' - SPI with CRC
+    b.setRegister(BQ769X2_PROTOCOL::RegAddr::CommType, 0x10, 1);
 
     // 'Power Config' - 0x9234 = 0x2D80
     // Setting the DSLP_LDO bit allows the LDOs to remain active when the device goes into Deep Sleep mode
     // Set wake speed bits to 00 for best performance
-    b.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2D80 | BV(6), 2);
+    b.setRegister(BQ769X2_PROTOCOL::RegAddr::PowerConfig, 0x2D80, 2);
+
+    // 'REG12 Config' - Enable REG1 with 3.3V output (0x0D for 3.3V, 0x0F for 5V)
+    b.setRegister(BQ769X2_PROTOCOL::RegAddr::REG12Config, 0xFD, 1);
 
     // 'REG0 Config' - set REG0_EN bit to enable pre-regulator
     b.setRegister(BQ769X2_PROTOCOL::RegAddr::REG0Config, 0x01, 1);
-
-    // 'REG12 Config' - Enable REG1 with 3.3V output (0x0D for 3.3V, 0x0F for 5V)
-    b.setRegister(BQ769X2_PROTOCOL::RegAddr::REG12Config, 0x0D, 1);
 
     // Set DFETOFF pin to control BOTH CHG and DSG FET - 0x92FB = 0x42 (set to 0x00 to disable)
     b.setRegister(BQ769X2_PROTOCOL::RegAddr::DFETOFFPinConfig, 0x42, 1);

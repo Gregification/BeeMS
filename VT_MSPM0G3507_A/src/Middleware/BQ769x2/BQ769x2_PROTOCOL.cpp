@@ -74,6 +74,18 @@ bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::SPI::SPI * spi, System::GPI
     return false;
 }
 
+bool BQ769X2_PROTOCOL::sendSubcommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void const * data, uint8_t datalen){
+    // lower byte of address to 0x3E
+    if(!spi24b_writeReg(spi, cs, 0x3E, cmd & 0xFF))
+        return false;
+
+    // upper byte of address to 0x3F
+    if(!spi24b_writeReg(spi, cs, 0x3F, (cmd >> 8) & 0xFF))
+        return false;
+
+    return true;
+}
+
 bool BQ769X2_PROTOCOL::sendSubcommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void * data_out, uint8_t datalen) {
     //max readback size is 32 bytes i.e. DASTATUS, CUV/COV snapshot
     return readRegister(spi, cs, cmd, data_out, datalen);
