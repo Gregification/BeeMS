@@ -288,7 +288,7 @@ void Task::BMS_task(void *){
         else
                     System::uart_ui.nputs(ARRANDN(CLIBAD "panik 4" NEWLINE CLIRESET));
 
-        if(!bq.sendSubcommandW(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, 0x1,2))//starts balancing on cell 0
+        if(!bq.sendSubcommandW(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, 0xff,2))//starts balancing on cell 0
             System::uart_ui.nputs(ARRANDN(CLIBAD "panik 2" NEWLINE CLIRESET));
 
 
@@ -300,6 +300,15 @@ void Task::BMS_task(void *){
         }
         else
             System::uart_ui.nputs(ARRANDN(CLIBAD "panik 3: the sequel" NEWLINE CLIRESET));
+
+        if(bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::CBSTATUS1, &num, sizeof(num)))
+                {
+                    snprintf(ARRANDN(str), "CB Time: %d,", num);
+                    System::uart_ui.nputs(ARRANDN(str));
+                    System::uart_ui.nputs(ARRANDN(NEWLINE));
+                }
+                else
+                            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 5" NEWLINE CLIRESET));
 
 
 
