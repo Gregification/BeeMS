@@ -435,7 +435,7 @@ namespace BQ769X2_PROTOCOL {
     bool sendSubcommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void * data_out, uint8_t datalen);
 
     /** returns false if timed */
-    bool sendSubcommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void const * data, uint8_t datalen);
+    bool sendSubcommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, uint16_t data, uint8_t datalen);
 
     /** returns false if failed */
     bool sendCommandSubcommand(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd command);

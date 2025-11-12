@@ -273,20 +273,33 @@ void Task::BMS_task(void *){
             System::uart_ui.nputs(ARRANDN(CLIBAD "womp" NEWLINE CLIRESET));
 
         // Cell Balancing Era
-        uint16_t cb_ac = 0;
+        uint16_t num = 0;
         char str[128];
 
-//        if(!bq.sendSubcommandW2(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, 0x1))//starts balancing on cell 0
-//            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 1" NEWLINE CLIRESET));
+        if(!bq.sendSubcommandW(BQ769X2_PROTOCOL::Cmd::CB_SET_LVL, 1000,2))//starts balancing on cell 0
+                    System::uart_ui.nputs(ARRANDN(CLIBAD "panik 1" NEWLINE CLIRESET));
 
-        if(bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, &cb_ac, sizeof(cb_ac)))
+        if(bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::CB_SET_LVL, &num, sizeof(num)))
         {
-            snprintf(ARRANDN(str), "CB Active Cells: %x,", cb_ac);
+            snprintf(ARRANDN(str), "CB Level: %d,", num);
             System::uart_ui.nputs(ARRANDN(str));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
         }
         else
-            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 2: the sequel" NEWLINE CLIRESET));
+                    System::uart_ui.nputs(ARRANDN(CLIBAD "panik 4" NEWLINE CLIRESET));
+
+        if(!bq.sendSubcommandW(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, 0x1,2))//starts balancing on cell 0
+            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 2" NEWLINE CLIRESET));
+
+
+        if(bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, &num, sizeof(num)))
+        {
+            snprintf(ARRANDN(str), "CB Active Cells: %x,", num);
+            System::uart_ui.nputs(ARRANDN(str));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+        }
+        else
+            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 3: the sequel" NEWLINE CLIRESET));
 
 
 

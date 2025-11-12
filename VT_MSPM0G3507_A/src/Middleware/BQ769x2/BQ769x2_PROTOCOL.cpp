@@ -74,16 +74,40 @@ bool BQ769X2_PROTOCOL::sendCommandSubcommand(System::SPI::SPI * spi, System::GPI
     return false;
 }
 
-bool BQ769X2_PROTOCOL::sendSubcommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void const * data, uint8_t datalen){
+bool BQ769X2_PROTOCOL::sendSubcommandW(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, uint16_t data, uint8_t datalen){
     // lower byte of address to 0x3E
-    if(!spi24b_writeReg(spi, cs, 0x3E, cmd & 0xFF))
-        return false;
+        if(!spi24b_writeReg(spi, cs, 0x3E, cmd & 0xFF))
+            return false;
 
-    // upper byte of address to 0x3F
-    if(!spi24b_writeReg(spi, cs, 0x3F, (cmd >> 8) & 0xFF))
-        return false;
+        // upper byte of address to 0x3F
+        if(!spi24b_writeReg(spi, cs, 0x3F, (cmd >> 8) & 0xFF))
+            return false;
 
-    return true;
+        // memory value in little endian format into the transfer buffer (0x40 to 0x5F)
+        if(datalen > (0x5F - 0x40))
+            datalen = 0x5F - 0x40;
+        for(uint8_t i = 0; i < datalen; i++){
+            if(!spi24b_writeReg(spi, cs,
+                        0x40 + i,
+                        ((uint8_t *)&data)[i]
+                    ))
+                return false;
+        }
+
+        // checksum of data written goes in 0x60
+        { // checksum is {addr low B, addr high B, <data ... >}
+            // max data is 32B
+            uint16_t crcRange[] = {cmd, data};
+
+            if(!spi24b_writeReg(spi, cs, 0x60, Checksum((uint8_t*)crcRange, sizeof(cmd) + datalen)))
+                return false;
+        }
+
+        // data len in 0x61
+        if(!spi24b_writeReg(spi, cs, 0x61, datalen + 4)) // +4 : datalen + sizeof({0x3E, 0x3F, 0x60, 0x61})
+            return false;
+
+        return true;
 }
 
 bool BQ769X2_PROTOCOL::sendSubcommandR(System::SPI::SPI * spi, System::GPIO::GPIO const * cs, Cmd cmd, void * data_out, uint8_t datalen) {

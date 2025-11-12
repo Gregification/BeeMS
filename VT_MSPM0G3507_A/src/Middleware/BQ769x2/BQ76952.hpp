@@ -222,8 +222,7 @@ public:
     bool sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd cmd);
 
     bool sendSubcommandR(BQ769X2_PROTOCOL::Cmd cmd, void * data_out, uint8_t datalen);
-    bool sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint8_t data);
-    bool sendSubcommandW2(BQ769X2_PROTOCOL::Cmd cmd,uint16_t data);
+    bool sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint16_t data, uint8_t datalen);
 
     bool sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt command, void * data_out, uint8_t datalen);
     bool sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, void * data, uint8_t datalen);

@@ -16,9 +16,8 @@ bool BQ76952::sendSubcommandR(BQ769X2_PROTOCOL::Cmd cmd, void * data_out, uint8_
     return BQ769X2_PROTOCOL::sendSubcommandR(spi, cs, cmd, data_out, datalen);
 }
 
-bool BQ76952::sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint8_t data) {
-    System::FailHard("BQ76952::sendSubcommandW DNE");
-    return false;
+bool BQ76952::sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint16_t data, uint8_t datalen) {
+    return BQ769X2_PROTOCOL::sendSubcommandW(spi, cs, cmd, data, datalen);
 //    return BQ769X2_PROTOCOL::sendSubcommandW(*i2c_controller, i2c_addr, cmd, data);
 }
 
