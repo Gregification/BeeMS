@@ -293,7 +293,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
         },
 
         .InterconnectResistance = {
-             .cellInterconnectResistance_mOhm[16] = {
+             .cellInterconnectResistance_mOhm = {
                  3500,3500,3500,3500,
                  3500,3500,3500,3500,
                  3500,3500,3500,3500,
@@ -316,10 +316,10 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
              .cellBalanceMaxCells   = 2,
              .cellBalanceMinCellV_Charge_mV = 3000,
              .cellBalanceMinDelta_Charge_mV = 30,
-             .cellBalanceStopDelta_Charge_mV= 20.
+             .cellBalanceStopDelta_Charge_mV= 10,
              .cellBalanceMinCellV_Relax_mV  = 3000,
              .cellBalanceMinDelta_Relax_mV  = 30,
-             .cellBalanceStopDelta_Relax_mV = 20,
+             .cellBalanceStopDelta_Relax_mV = 10,
         },
     };
 
@@ -364,11 +364,11 @@ void Task::BMS_task(void *){
     bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
     vTaskDelay(pdMS_TO_TICKS(61));
 
-    if(! setup_BBQ(bq))
-        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
-
-//    if(! bq.setConfig(&bqSetting))
+//    if(! setup_BBQ(bq))
 //        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
+
+    if(! bq.setConfig(&bqSetting))
+        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
 
     {
         BQ76952::BQ76952SSetting read;
