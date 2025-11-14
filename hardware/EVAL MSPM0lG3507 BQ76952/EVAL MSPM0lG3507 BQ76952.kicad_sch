@@ -5783,6 +5783,16 @@
 		)
 		(uuid "2ac15490-a0ee-4e58-b6bf-72e42b4075bc")
 	)
+	(text "TODO: power isolators using BQ reg2, set reg2 to 3v3.\n	required since reg1 cant supply enough power in some cases"
+		(exclude_from_sim no)
+		(at 344.932 259.842 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "32418a5f-6472-4de1-b784-f9eaf1887056")
+	)
 	(text "shunt"
 		(exclude_from_sim no)
 		(at 32.004 133.858 0)
@@ -8336,7 +8346,7 @@
 	)
 	(global_label "PA11_UART0-RX_XDS"
 		(shape input)
-		(at 381 233.68 0)
+		(at 381 234.95 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -8346,7 +8356,7 @@
 		)
 		(uuid "53e63739-9f7b-460f-88d1-62bce7990c6d")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 404.3051 233.68 0)
+			(at 404.3051 234.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8490,7 +8500,7 @@
 	)
 	(global_label "PA10_UART0-TX_XDS"
 		(shape input)
-		(at 381 236.22 0)
+		(at 381 237.49 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -8500,7 +8510,7 @@
 		)
 		(uuid "7f2d67fa-8d47-4a7b-8210-52d5fc4a03ec")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 404.0027 236.22 0)
+			(at 404.0027 237.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15244,7 +15254,7 @@
 			)
 		)
 		(pin "RXD" output
-			(at 381 233.68 0)
+			(at 381 234.95 0)
 			(uuid "b48af4cd-43a3-4ae7-8220-907ae59bc2de")
 			(effects
 				(font
@@ -15254,7 +15264,7 @@
 			)
 		)
 		(pin "TXD" input
-			(at 381 236.22 0)
+			(at 381 237.49 0)
 			(uuid "57cde646-71e2-49b5-a6c8-65c3e6ccd5a3")
 			(effects
 				(font
@@ -15293,7 +15303,7 @@
 	)
 	(sheet
 		(at 335.28 224.79)
-		(size 13.97 21.59)
+		(size 13.97 15.24)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -15317,7 +15327,7 @@
 			)
 		)
 		(property "Sheetfile" "GLV CAN TRX.kicad_sch"
-			(at 335.28 246.9646 0)
+			(at 335.28 240.6146 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15358,26 +15368,6 @@
 		(pin "VSS" passive
 			(at 349.25 229.87 0)
 			(uuid "8a08c0a0-b79d-4a7a-aafd-c28f6e46c31a")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "IL_Engage" input
-			(at 349.25 241.3 0)
-			(uuid "62b72939-4e0b-4de6-9d9f-0bb8e4c1f7f3")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "IL_Presense" input
-			(at 349.25 243.84 0)
-			(uuid "1588072c-1fa5-4aa4-acd0-befa98fb0b03")
 			(effects
 				(font
 					(size 1.27 1.27)
