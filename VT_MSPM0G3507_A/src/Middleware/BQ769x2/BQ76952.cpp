@@ -112,6 +112,7 @@ bool BQ76952::setConfig(BQ76952SSetting const * config){
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::VCellMode, ARRANDN(config->Configuration.VcellMode)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::CC3Samples, ARRANDN(config->Configuration.CC3Samples)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::DAConfiguration, ARRANDN(config->Configuration.DAConfig.Raw)))
+        //TO_DO fill out the rest of the registers and check that they all go the right place ts
         success = true;
     //TODO: finish adding all registers
 
