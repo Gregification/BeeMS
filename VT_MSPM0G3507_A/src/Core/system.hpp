@@ -180,6 +180,7 @@ namespace System {
             buffersize_t ngets(char * str, buffersize_t n);
 
             void putu32d(uint32_t);
+            void put32d(int32_t);
             void putu32h(uint32_t);
         };
     }

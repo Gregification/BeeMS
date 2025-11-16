@@ -33,7 +33,7 @@ auto &bqReset = System::GPIO::PA15;
 
 BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {
-            .minBlowFuseVoltage_10mV= 75000 / 10,   // 75V
+            .minBlowFuseVoltage_10mV= 5000 / 10,   // 75V
             .timeout_S              = 30,           // 0:indefinite
         },
         .Configuration = {
@@ -52,7 +52,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
             },
             .REG12Config = {
                 .enable1    = 1,
-                .reg1_v     = 4, // use 2.5V logic (the line spikes sometimes)
+                .reg1_v     = 6, // use 2.5V logic (the line spikes sometimes)
                 .enable2    = 0,
                 .reg2_v     = 0,
             },
@@ -78,7 +78,10 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
                 .Raw = 0,
             },
             .TS1Config = { // TODO: figure out how to do custom thermistor polynomial
-                .Raw = 0,
+                .function   = 3,    // as ADC/thermistor
+                .opt1_0     = 0b01, // as thermistor
+                .opt3_2     = 0b00, // 18k model
+                .opt5_4     = 0b00, // 18k PU
             },
             .TS2Config = { // TODO: figure out how to do custom thermistor polynomial
                 .Raw = 0,
@@ -99,7 +102,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
                 .user_amps  = 2, // USER AMPS unit selection. 2:10mA,3:100mA . see userAto10mA macro
                 .user_volts = 1, // USER VOLTS unit selection. 0:1mV,1:10mV . see userVto10mV macro
                 .tint_en    = 1, // die temp used as a cell temp? 0:no, 1:yes.
-                .tint_fett  = 0, // die tmep used as fet temp? 0:no, 1:yes
+                .tint_fett  = 1, // die tmep used as fet temp? 0:no, 1:yes
             },
             .VcellMode  = 0b0000'0000'0001'1111,
             .CC3Samples = 0x80,
@@ -219,7 +222,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
             },
             .sfAlertMaskC = {
                 .PTO  = 0, // Bit 2: Precharge Timeout (Default: 1)
-                .COVL = 1, // Bit 4: Cell Overvoltage Latch (Default: 1)
+                .COVL = 0, // Bit 4: Cell Overvoltage Latch (Default: 1)
                 .OCDL = 0, // Bit 5: Overcurrent in Discharge Latch (Default: 1)
                 .SCDL = 0, // Bit 6: Short Circuit in Discharge Latch (Default: 1)
                 .OCD3 = 0, // Bit 7: Overcurrent in Discharge 3rd Tier Protection (Default: 1)
@@ -295,7 +298,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
         // we dotn use this, values are just what ever it takes to turn stuff off
         .FET = {
             .fetOptions = {
-                .SFET          = 1, // Bit 0: Series/Parallel FET mode (Default: 1)
+                .SFET          = 0, // Bit 0: Series/Parallel FET mode (Default: 1)
                 .SLEEPCHG      = 0, // Bit 1: CHG FET enabled in SLEEP mode (Default: 0)
                 .HOST_FET_EN   = 0, // Bit 2: Host FET control commands allowed (Default: 1)
                 .FET_CTRL_EN   = 0, // Bit 3: FETs are controlled by the device (Default: 1)
@@ -304,7 +307,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
             },
             .chgPumpControl = { // WARNING: do not turn on charge pump when stack over 35V
                 .CPEN           = 0, // Bit 0: Charge pumps for FET drivers are enabled (Default: 1)
-                .LVEN           = 0, // Bit 1: Charge pump overdrive level (Default: 0 / High/11V)
+                .LVEN           = 1, // Bit 1: Charge pump overdrive level (Default: 0 / High/11V)
                 .SFMODE_SLEEP   = 0, // Bit 2: DSG FET driver source-follower mode in SLEEP (Default: 0)
             },
             .prechargeStartVoltage  = 0,
@@ -318,10 +321,14 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
 
         .InterconnectResistance = {
              .cellInterconnectResistance_mOhm = {
-                 3500,3500,3500,3500,
-                 3500,3500,3500,3500,
-                 3500,3500,3500,3500,
-                 3500,3500,3500,3500,
+                 0,0,0,0,
+                 0,0,0,0,
+                 0,0,0,0,
+                 0,0,0,0,
+//                 3500,3500,3500,3500,
+//                 3500,3500,3500,3500,
+//                 3500,3500,3500,3500,
+//                 3500,3500,3500,3500,
              },
         },
 
@@ -337,7 +344,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
              .maxCellTemp_C     = 60,
              .maxInternalTemp_C = 70,
              .cellBalanceInterval_s = 20,
-             .cellBalanceMaxCells   = 2,
+             .cellBalanceMaxCells   = 10,
              .cellBalanceMinCellV_Charge_mV = 3000,
              .cellBalanceMinDelta_Charge_mV = 30,
              .cellBalanceStopDelta_Charge_mV= 10,
@@ -393,141 +400,236 @@ void Task::BMS_task(void *){
         System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
 
     while(1){
-        struct {
-            uint16_t Vreg18;          // Bytes 0-1: VREG18, 16-bit ADC counts
-            uint16_t VSS;             // Bytes 2-3: VSS, 16-bit ADC counts
-            uint16_t MaxCellVoltage;  // Bytes 4-5: Max Cell Voltage, mV
-            uint16_t MinCellVoltage;  // Bytes 6-7: Min Cell Voltage, mV
-            uint16_t BatteryVoltageSum; // Bytes 8-9: Battery Voltage Sum, cV
-            uint16_t AvgCellTemperature; // Bytes 10-11: Avg Cell Temperature, 0.1 K
-            uint16_t FETTemperature;  // Bytes 12-13: FET Temperature, 0.1 K
-            uint16_t MaxCellTemperature; // Bytes 14-15: Max Cell Temperature, 0.1 K
-            uint16_t MinCellTemperature; // Bytes 16-17: Min Cell Temperature, 0.1 K
-            uint16_t SecondAvgCellTemperature; // Bytes 18-19: Avg Cell Temperature, 0.1 K (renamed to avoid conflict)
-            uint16_t CC3Current;      // Bytes 20-21: CC3 Current, userA
-            uint16_t CC1Current;      // Bytes 22-23: CC1 Current, userA
-            uint32_t CC2Counts;       // Bytes 24-27: CC2 Counts, 32-bit ADC counts
-            uint32_t CC3Counts;       // Bytes 28-31: CC3 Counts, 32-bit ADC counts
-        } v;
-        bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS5, &v, sizeof(v));
+        {
+            struct {
+                uint16_t Vreg18;          // Bytes 0-1: VREG18, 16-bit ADC counts
+                uint16_t VSS;             // Bytes 2-3: VSS, 16-bit ADC counts
+                uint16_t MaxCellVoltage;  // Bytes 4-5: Max Cell Voltage, mV
+                uint16_t MinCellVoltage;  // Bytes 6-7: Min Cell Voltage, mV
+                uint16_t BatteryVoltageSum; // Bytes 8-9: Battery Voltage Sum, cV
+                uint16_t AvgCellTemperature; // Bytes 10-11: Avg Cell Temperature, 0.1 K
+                uint16_t FETTemperature;  // Bytes 12-13: FET Temperature, 0.1 K
+                uint16_t MaxCellTemperature; // Bytes 14-15: Max Cell Temperature, 0.1 K
+                uint16_t MinCellTemperature; // Bytes 16-17: Min Cell Temperature, 0.1 K
+                uint16_t SecondAvgCellTemperature; // Bytes 18-19: Avg Cell Temperature, 0.1 K (renamed to avoid conflict)
+                uint16_t CC3Current;      // Bytes 20-21: CC3 Current, userA
+                uint16_t CC1Current;      // Bytes 22-23: CC1 Current, userA
+                uint32_t CC2Counts;       // Bytes 24-27: CC2 Counts, 32-bit ADC counts
+                uint32_t CC3Counts;       // Bytes 28-31: CC3 Counts, 32-bit ADC counts
+            } v;
+            bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS5, &v, sizeof(v));
 
-        // Print Header
-        System::uart_ui.nputs(ARRANDN("--- Battery Data Block ---" NEWLINE));
+            // Print Header
+            System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET "--- Battery Data Block ---" NEWLINE));
 
-        // 1. VREG18 (16-bit)
-        System::uart_ui.nputs(ARRANDN("VREG18 (ADC counts): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.Vreg18));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 2. VSS (16-bit)
-        System::uart_ui.nputs(ARRANDN("VSS (ADC counts): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.VSS));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 3. Max Cell Voltage (16-bit)
-        System::uart_ui.nputs(ARRANDN("Max Cell Voltage (mV): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.MaxCellVoltage));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 4. Min Cell Voltage (16-bit)
-        System::uart_ui.nputs(ARRANDN("Min Cell Voltage (mV): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.MinCellVoltage));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 5. Battery Voltage Sum (16-bit)
-        System::uart_ui.nputs(ARRANDN("Battery Voltage Sum (cV): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.BatteryVoltageSum));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 6. Avg Cell Temperature (16-bit)
-        System::uart_ui.nputs(ARRANDN("Avg Cell Temperature (0.1 K): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.AvgCellTemperature));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 7. FET Temperature (16-bit)
-        System::uart_ui.nputs(ARRANDN("FET Temperature (0.1 K): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.FETTemperature));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 8. Max Cell Temperature (16-bit)
-        System::uart_ui.nputs(ARRANDN("Max Cell Temperature (0.1 K): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.MaxCellTemperature));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 9. Min Cell Temperature (16-bit)
-        System::uart_ui.nputs(ARRANDN("Min Cell Temperature (0.1 K): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.MinCellTemperature));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 10. Second Avg Cell Temperature (16-bit)
-        System::uart_ui.nputs(ARRANDN("Avg Cell Temp 2 (0.1 K): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.SecondAvgCellTemperature));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 11. CC3 Current (16-bit)
-        System::uart_ui.nputs(ARRANDN("CC3 Current (userA): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.CC3Current));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 12. CC1 Current (16-bit)
-        System::uart_ui.nputs(ARRANDN("CC1 Current (userA): "));
-        System::uart_ui.putu32d(static_cast<uint32_t>(v.CC1Current));
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 13. CC2 Counts (32-bit)
-        System::uart_ui.nputs(ARRANDN("CC2 Counts (ADC counts): "));
-        System::uart_ui.putu32d(v.CC2Counts);
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        // 14. CC3 Counts (32-bit)
-        System::uart_ui.nputs(ARRANDN("CC3 Counts (ADC counts): "));
-        System::uart_ui.putu32d(v.CC3Counts);
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        if(!success)
-            System::uart_ui.nputs(ARRANDN(CLIBAD "womp" NEWLINE CLIRESET));
-
-        if(!bq.sendSubcommandW(BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS, 0x1,2))//starts balancing on cell 0
-            System::uart_ui.nputs(ARRANDN(CLIBAD "panik 2" NEWLINE CLIRESET));
-
-
-        //fatal error 0 : failed to init BBQ settings on MCU power up. failed to write ...
-        // Read Internal Temperature using 0x68 command
-        uint16_t internalTempRaw = 0;
-        bool tempSuccess = bq.sendDirectCommandR(
-            BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68
-            &internalTempRaw,
-            sizeof(internalTempRaw)
-        );
-
-        // Print Internal Temperature
-        System::uart_ui.nputs(ARRANDN("--- Internal Temperature ---" NEWLINE));
-
-        if(tempSuccess) {
-            // Internal temperature is already in units of 0.1 K from the BQ chip
-            // The chip handles the calibration formula internally:
-            // Temp = (ADC × Int Gain / 65536) + Int base offset + Int Temp Offset
-
-            System::uart_ui.nputs(ARRANDN("Internal Temp (0.1 K): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(internalTempRaw));
+            // 1. VREG18 (16-bit)
+            System::uart_ui.nputs(ARRANDN("VREG18 (ADC counts): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.Vreg18));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
-            // 0.1 K units, so divide by 10 to get K, then subtract 273.15 for °C
-            int32_t tempCelsius = (static_cast<int32_t>(internalTempRaw) - 2731) / 10;
-            System::uart_ui.nputs(ARRANDN("Internal Temp (C): "));
-            if(tempCelsius < 0) {
-                System::uart_ui.nputs(ARRANDN("-"));
-                tempCelsius = -tempCelsius;
-            }
-            System::uart_ui.putu32d(static_cast<uint32_t>(tempCelsius));
+            // 2. VSS (16-bit)
+            System::uart_ui.nputs(ARRANDN("VSS (ADC counts): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.VSS));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
-        } else {
-            System::uart_ui.nputs(ARRANDN(CLIBAD "Failed to read internal temperature" NEWLINE CLIRESET));
+
+            // 3. Max Cell Voltage (16-bit)
+            System::uart_ui.nputs(ARRANDN("Max Cell Voltage (mV): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.MaxCellVoltage));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 4. Min Cell Voltage (16-bit)
+            System::uart_ui.nputs(ARRANDN("Min Cell Voltage (mV): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.MinCellVoltage));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 5. Battery Voltage Sum (16-bit)
+            System::uart_ui.nputs(ARRANDN("Battery Voltage Sum (cV): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.BatteryVoltageSum));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 6. Avg Cell Temperature (16-bit)
+            System::uart_ui.nputs(ARRANDN("Avg Cell Temperature (0.1 K): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.AvgCellTemperature));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 7. FET Temperature (16-bit)
+            System::uart_ui.nputs(ARRANDN("FET Temperature (0.1 K): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.FETTemperature));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 8. Max Cell Temperature (16-bit)
+            System::uart_ui.nputs(ARRANDN("Max Cell Temperature (0.1 K): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.MaxCellTemperature));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 9. Min Cell Temperature (16-bit)
+            System::uart_ui.nputs(ARRANDN("Min Cell Temperature (0.1 K): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.MinCellTemperature));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 10. Second Avg Cell Temperature (16-bit)
+            System::uart_ui.nputs(ARRANDN("Avg Cell Temp 2 (0.1 K): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.SecondAvgCellTemperature));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 11. CC3 Current (16-bit)
+            System::uart_ui.nputs(ARRANDN("CC3 Current (userA): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.CC3Current));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 12. CC1 Current (16-bit)
+            System::uart_ui.nputs(ARRANDN("CC1 Current (userA): "));
+            System::uart_ui.putu32d(static_cast<uint32_t>(v.CC1Current));
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 13. CC2 Counts (32-bit)
+            System::uart_ui.nputs(ARRANDN("CC2 Counts (ADC counts): "));
+            System::uart_ui.putu32d(v.CC2Counts);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 14. CC3 Counts (32-bit)
+            System::uart_ui.nputs(ARRANDN("CC3 Counts (ADC counts): "));
+            System::uart_ui.putu32d(v.CC3Counts);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
         }
 
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
+        {
+            struct {
+                int32_t  AccumCharge;
+                int32_t AccumChargeFraction;
+                int32_t AccumTime;
+                int32_t  CFETOFF_Counts;
+                int32_t  DFETOFF_Counts;
+                int32_t  ALERT_Counts;
+                int32_t  TS1_Counts;
+                int32_t  TS2_Counts;
+            } v6;
 
-        vTaskDelay(pdMS_TO_TICKS(1e3));
+            // Read the data block for DASTATUS6 (Subcommand 0x0076)
+            bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS6, &v6, sizeof(v6));
+
+            // Print Header
+            System::uart_ui.nputs(ARRANDN(CLIRESET "--- Battery Data Block 6 ---" NEWLINE));
+
+            // 1. Accum Charge (32-bit, signed)
+            System::uart_ui.nputs(ARRANDN("Accum Charge (userAh): "));
+            System::uart_ui.put32d(v6.AccumCharge);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 2. Accum Charge Fraction (32-bit, unsigned)
+            System::uart_ui.nputs(ARRANDN("Accum Charge Fraction (U4): "));
+            System::uart_ui.put32d(v6.AccumChargeFraction);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 3. Accum Time (32-bit, unsigned)
+            System::uart_ui.nputs(ARRANDN("Accum Time (s): "));
+            System::uart_ui.putu32d(v6.AccumTime);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 4. CFETOFF Counts (32-bit, signed)
+            System::uart_ui.nputs(ARRANDN("CFETOFF Counts (ADC counts): "));
+            System::uart_ui.putu32d(v6.CFETOFF_Counts);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 5. DFETOFF Counts (32-bit, signed)
+            System::uart_ui.nputs(ARRANDN("DFETOFF Counts (ADC counts): "));
+            System::uart_ui.putu32d(v6.DFETOFF_Counts);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 6. ALERT Counts (32-bit, signed)
+            System::uart_ui.nputs(ARRANDN("ALERT Counts (ADC counts): "));
+            System::uart_ui.putu32d(v6.ALERT_Counts);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 7. TS1 Counts (32-bit, signed)
+            System::uart_ui.nputs(ARRANDN("TS1 Counts (ADC counts): "));
+            System::uart_ui.putu32d(v6.TS1_Counts);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            // 8. TS2 Counts (32-bit, signed)
+            System::uart_ui.nputs(ARRANDN("TS2 Counts (ADC counts): "));
+            System::uart_ui.putu32d(v6.TS2_Counts);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+        }
+
+        // print out all cell V's
+        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "--- other stuff ---"));
+        {
+
+            System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "CELLS: "));
+            for(uint8_t i = 0; i < 16; i++){
+                System::uart_ui.nputs(ARRANDN(CLIRESET "\t"));
+
+                if(bqSetting.Configuration.VcellMode & BV(i))
+                    System::uart_ui.nputs(ARRANDN(CLIYES));
+
+                System::uart_ui.putu32d(i);
+                System::uart_ui.nputs(ARRANDN(CLIRESET));
+            }
+
+            System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "mV:    "));
+            for(uint8_t i = 0; i < 16; i++){
+                System::uart_ui.nputs(ARRANDN(CLIRESET "\t"));
+
+                uint16_t mv = 0;
+
+                if(!bq.sendDirectCommandR(
+                        (BQ769X2_PROTOCOL::CmdDrt)(BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage + 2 * i),
+                        &mv,
+                        sizeof(mv)
+                    ))
+                    System::uart_ui.nputs(ARRANDN(CLIBAD));
+
+                System::uart_ui.putu32d(mv);
+            }
+
+            System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE  "bal?:  "));
+            {
+                uint16_t activeBalMask = 0;
+                if(!bq.sendCommandR(
+                        BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS,
+                        &activeBalMask,
+                        sizeof(activeBalMask)
+                    )){
+                    System::uart_ui.nputs(ARRANDN(CLIBAD));
+                } else {
+                    for(uint8_t i = 0; i < 16; i++){
+                        System::uart_ui.nputs(ARRANDN(CLIRESET "\t"));
+                        System::uart_ui.putu32d((activeBalMask & BV(i)) != 0);
+                    }
+                }
+            }
+        }
+
+        {
+            System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "internal temp (0.1 K): "));
+            uint16_t internalTempRaw = 0;
+            if(!bq.sendDirectCommandR(
+                BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68
+                &internalTempRaw,
+                sizeof(internalTempRaw)
+            ))
+                System::uart_ui.nputs(ARRANDN(CLIBAD));
+
+            System::uart_ui.put32d(internalTempRaw);
+
+        }
+
+        {
+            System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "bal time: "));
+            uint16_t balTime = 0;
+            if(!bq.sendSubcommandR(
+                BQ769X2_PROTOCOL::Cmd::CBSTATUS1,
+                &balTime,
+                sizeof(balTime)
+            ))
+                System::uart_ui.nputs(ARRANDN(CLIBAD));
+
+            System::uart_ui.putu32d(balTime);
+
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(2e3));
     }
 
     /* pesudo code

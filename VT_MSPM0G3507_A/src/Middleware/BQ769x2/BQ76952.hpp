@@ -38,7 +38,7 @@ public:
     static_assert(sizeof(BQ76952PinConfig) == sizeof(uint8_t));
 
     /**
-     * BQ76952 configuration.
+     * BQ76952 settings.
      * this is no where near all the options on the BQ.
      * Add options as you need them
      * BQTRM: https://www.ti.com/lit/ug/sluuby2b/sluuby2b.pdf

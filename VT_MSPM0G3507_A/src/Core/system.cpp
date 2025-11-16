@@ -556,6 +556,31 @@ buffersize_t System::UART::UART::ngets(char *str, buffersize_t n) {
     return i ;
 }
 
+void System::UART::UART::put32d(int32_t v) {
+    char str[12];
+    int i = 0;
+
+    if (v < 0) {
+        DL_UART_transmitDataBlocking(reg, '-');
+        v = -v;
+    }
+
+    if (v == 0) {
+        DL_UART_transmitDataBlocking(reg, '0');
+        return;
+    }
+
+    for(i = 0; v > 0; i++){
+        str[i] = '0' + (v % 10);
+        v /= 10;
+    }
+
+    i--;
+    for(; i >= 0; i--){
+        DL_UART_transmitDataBlocking(reg, str[i]);
+    }
+}
+
 void System::UART::UART::putu32d(uint32_t v) {
     if(v == 0){
         DL_UART_transmitDataBlocking(reg, '0');

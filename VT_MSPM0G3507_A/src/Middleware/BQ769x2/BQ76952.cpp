@@ -103,7 +103,7 @@ bool BQ76952::setConfig(BQ76952SSetting const * config){
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::REG12Config, ARRANDN(config->Configuration.REG12Config.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::REG0Config, ARRANDN(config->Configuration.REG0Config.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::HWDRegulatorOptions, ARRANDN(config->Configuration.HWDRegulatorOptions.Raw)))
-//    if(setRegister(BQ769X2_PROTOCOL::RegAddr::SPIConfiguration, ARRANDN(config->Configuration.spiConfig.Raw)))
+    if(setRegister(BQ769X2_PROTOCOL::RegAddr::SPIConfiguration, ARRANDN(config->Configuration.spiConfig.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::CommIdleTime, ARRANDN(config->Configuration.commIdleTime_S)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::CFETOFFPinConfig, ARRANDN(config->Configuration.cfetoffPinConfig.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::DFETOFFPinConfig, ARRANDN(config->Configuration.dfetoffPinConfig.Raw)))
@@ -191,6 +191,13 @@ bool BQ76952::setConfig(BQ76952SSetting const * config){
     if(!sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE))
         success = false;
     vTaskDelay(pdMS_TO_TICKS(9));
+
+    // clear alarms
+    {
+        uint16_t alarm;
+        sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt::AlarmStatus, &alarm, sizeof(alarm));
+        sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt::AlarmStatus, &alarm, sizeof(alarm));
+    }
 
     return success;
 }
