@@ -79,20 +79,19 @@ public:
             static_assert(sizeof(powerConfig) == sizeof(uint16_t));
 
             /* BATRM.13.3.2.2/137 */
-            // should be setup though OTPM at factory or in-house when assembling board
             /* WARNING: settings for BQ PSU output. can damage any attached hardware.
              *      double check schematic before fiddling with
              */
-//            union {
-//                uint8_t Raw;
-//                struct __attribute__((packed)) {
-//                    unsigned int enable1 :1;
-//                    unsigned int reg1_v :3;
-//                    unsigned int enable2 :1;
-//                    unsigned int reg2_v :3;
-//                };
-//            } REG12Config;
-//            static_assert(sizeof(REG12Config) == sizeof(uint8_t));
+            union {
+                uint8_t Raw;
+                struct __attribute__((packed)) {
+                    unsigned int enable1 :1;
+                    unsigned int reg1_v :3;
+                    unsigned int enable2 :1;
+                    unsigned int reg2_v :3;
+                };
+            } REG12Config;
+            static_assert(sizeof(REG12Config) == sizeof(uint8_t));
 
             /* BATRM.13.3.2.3/138 */
             union {
@@ -731,7 +730,7 @@ public:
         uint32_t CC3Counts;       // Bytes 28-31: CC3 Counts, 32-bit ADC counts
     };
 
-    bool getConfig(BQ76952SSetting *);
+//    bool getConfig(BQ76952SSetting *);
     bool setConfig(BQ76952SSetting const *);
 
     bool unseal(uint32_t key);

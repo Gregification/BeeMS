@@ -58,7 +58,7 @@
 
 #define PROJECT_NAME            "Voltage Tap"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "2.2" // [project version].[hardware version].[software version]
+#define PROJECT_VERSION         "3.0" // [project version].[hardware version].[software version]
 
 /*--- IC footprint -------------------------------------*/
 
@@ -206,7 +206,7 @@ namespace System {
         #ifdef  MSPM0G3507_LQFP64
             extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
                  PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
-                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
+                 PA16, PA17, PA18, PA21, PA22, PA23,        // PA19 and PA20 reserved for SWD
                  PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31;
         #elif defined MSPM0G3507_VQFN32
             extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,

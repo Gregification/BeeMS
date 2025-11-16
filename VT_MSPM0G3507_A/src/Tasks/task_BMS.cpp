@@ -27,40 +27,47 @@
 // only 1 BQ on the voltage tap board
 BQ76952 bq = {
         .spi  = &System::spi1,
-        .cs   = &System::GPIO::PA15,
+        .cs   = &System::GPIO::PB19,
     };
+auto &bqReset = System::GPIO::PA15;
 
 BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {
             .minBlowFuseVoltage_10mV= 75000 / 10,   // 75V
-            .timeout_S              = 0,            // 0:indefinite
+            .timeout_S              = 30,           // 0:indefinite
         },
         .Configuration = {
             .powerConfig = {
-                .wake_speed     = 3,
+                .wake_speed     = 0,
                 .loop_slow      = 0,
-                .cb_loop_slow   = 3,
+                .cb_loop_slow   = 2,
                 .fastadc        = 0,
                 .otsd           = 1,
-                .sleep          = 0,
+                .sleep          = 1,
                 .dpslp_lfo      = 0,
-                .dpslp_ldo      = 1,
+                .dpslp_ldo      = 0,
                 .dpslp_pd       = 1,
-                .shut_ts2       = 1,
+                .shut_ts2       = 0,
                 .dpslp_ot       = 1,
+            },
+            .REG12Config = {
+                .enable1    = 1,
+                .reg1_v     = 4, // use 2.5V logic (the line spikes sometimes)
+                .enable2    = 0,
+                .reg2_v     = 0,
             },
             .REG0Config = {
                 .enable0    = 1,
             },
             .HWDRegulatorOptions = { // TODO: is a safety thing, set up properly on final product
-                .toggle_time    = 10, // 5S power cycle
-                .toggle_opt     = 2,  // turn-off then turn-on on HWD
+                .toggle_time    = 0, // 5S power cycle
+                .toggle_opt     = 0,  // turn-off then turn-on on HWD
             },
             .spiConfig = {
-                .filt       = 0, // no digital filter
+                .filt       = 1, // use digital filter?
                 .miso_reg1  = 1, // logic high V = REG1 output
             },
-            .commIdleTime_S = 1, // 1S of no comms before turning off HFO
+            .commIdleTime_S = 0, // 1S of no comms before turning off HFO
             .cfetoffPinConfig = {// WARNING: effects SPI CS behavior
                 .Raw = 0,   // as SPI cs
             },
@@ -91,11 +98,11 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
             .DAConfig = {
                 .user_amps  = 2, // USER AMPS unit selection. 2:10mA,3:100mA . see userAto10mA macro
                 .user_volts = 1, // USER VOLTS unit selection. 0:1mV,1:10mV . see userVto10mV macro
-                .tint_en    = 0, // die temp used as a cell temp? 0:no, 1:yes.
+                .tint_en    = 1, // die temp used as a cell temp? 0:no, 1:yes.
                 .tint_fett  = 0, // die tmep used as fet temp? 0:no, 1:yes
             },
             .VcellMode  = 0b0000'0000'0001'1111,
-            .CC3Samples = 0x0F,
+            .CC3Samples = 0x80,
         },
 
         .Protection = {
@@ -117,6 +124,23 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
                 .OCD1 = 0, // Bit 5: Overcurrent in Discharge 1st Tier Protection (Default: 0)
                 .OCD2 = 0, // Bit 6: Overcurrent in Discharge 2nd Tier Protection (Default: 0)
                 .SCD  = 1, // Bit 7: Short Circuit in Discharge Protection (Default: 1)
+            },
+            .enabledProtectionsB = {
+                .UTC   = 0, // Bit 0: Undertemperature in Charge (Default: 0)
+                .UTD   = 0, // Bit 1: Undertemperature in Discharge (Default: 0)
+                .UTINT = 0, // Bit 2: Internal Undertemperature (Default: 0)
+                .OTC   = 0, // Bit 4: Overtemperature in Charge (Default: 0)
+                .OTD   = 0, // Bit 5: Overtemperature in Discharge (Default: 0)
+                .OTINT = 0, // Bit 6: Internal Overtemperature (Default: 0)
+                .OTF   = 0, // Bit 7: FET Overtemperature (Default: 0)
+            },
+            .enabledProtectionsC = {
+                .HWDF = 0, // Bit 1: Host Watchdog Fault (Default: 0)
+                .PTO  = 0, // Bit 2: Precharge Timeout (Default: 0)
+                .COVL = 0, // Bit 4: Cell Overvoltage Latch (Default: 0)
+                .OCDL = 0, // Bit 5: Overcurrent in Discharge Latch (Default: 0)
+                .SCDL = 0, // Bit 6: Short Circuit in Discharge Latch (Default: 0)
+                .OCD3 = 0, // Bit 7: Overcurrent in Discharge 3rd Tier Protection (Default: 0)
             },
             .chgFetProtectionsA = {
                 .COV  = 1, // Bit 3: Cell Overvoltage Protection (Default: 1)
@@ -191,7 +215,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
                 .OTC   = 1, // Bit 4: Overtemperature in Charge (Default: 1)
                 .OTD   = 1, // Bit 5: Overtemperature in Discharge (Default: 1)
                 .OTINT = 1, // Bit 6: Internal Overtemperature (Default: 1)
-                .OTF   = 1, // Bit 7: FET Overtemperature (Default: 1)
+                .OTF   = 0, // Bit 7: FET Overtemperature (Default: 1)
             },
             .sfAlertMaskC = {
                 .PTO  = 0, // Bit 2: Precharge Timeout (Default: 1)
@@ -207,7 +231,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
                 .SOCD  = 0, // Bit 3: Safety Overcurrent in Discharge (Default: 1)
                 .SOT   = 1, // Bit 4: Safety Overtemperature (Default: 1)
                 .SOTF  = 0, // Bit 6: Safety Over-FET-Temperature (Default: 1)
-                .CUDEP = 0, // Bit 7: Cell Undervoltage Depletion (Default: 0)
+                .CUDEP = 1, // Bit 7: Cell Undervoltage Depletion (Default: 0)
             },
             .pfAlertMaskB = {
                 .CFETF   = 0, // Bit 0: CHG FET Fault (Default: 1)
@@ -330,17 +354,31 @@ void Task::BMS_task(void *){
 
     //---- SPI setup ------------------------------------------
     bq.spi->setSCLKTarget(250e3); // bq76952 max speed of 2MHz
-    DL_GPIO_enableOutput(GPIOPINPUX(*bq.cs));
+    DL_GPIO_enableOutput(GPIOPINPUX(*bq.cs)); // SPI CS
     DL_GPIO_initDigitalOutputFeatures(
             bq.cs->iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
             DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
             DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
         );
-    bq.cs->clear();
+    DL_GPIO_enableOutput(GPIOPINPUX(bqReset)); // BBQ reset
+    DL_GPIO_initDigitalOutputFeatures(
+            bqReset.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
 
-    vTaskDelay(pdMS_TO_TICKS(50)); // CS needs some time to get recognized by the slave
+    bq.cs->clear();
+    bqReset.set();
+
+    vTaskDelay(pdMS_TO_TICKS(500)); // CS needs some time to get recognized by the slave
+
+    bqReset.clear();
+
+    vTaskDelay(pdMS_TO_TICKS(300));
 
     //--- init BQ76952 ----------------------------------------
     // TODO: on the final product we need to somehow prevent the MCU from locking up the BQ,
@@ -348,36 +386,11 @@ void Task::BMS_task(void *){
 
 //    bq.unseal(0x36720414);
 
-//    {
-//        uint16_t batt_status;
-//        if(bq.sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus, PTRANDN(batt_status)))
-//        switch((batt_status >> 8) & 0b11){
-//            case 0: System::uart_ui.nputs(ARRANDN("not initialized")); break;
-//            case 1: System::uart_ui.nputs(ARRANDN("full access")); break;
-//            case 2: System::uart_ui.nputs(ARRANDN("unsealed")); break;
-//            case 3: System::uart_ui.nputs(ARRANDN("sealed")); break;
-//        }
-//        else System::uart_ui.nputs(ARRANDN(":("));
-//        System::uart_ui.nputs(ARRANDN(NEWLINE));
-//    }
-
-    bq.sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::BQ769x2_RESET);
-    vTaskDelay(pdMS_TO_TICKS(61));
-
 //    if(! setup_BBQ(bq))
 //        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
 
     if(! bq.setConfig(&bqSetting))
         System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
-
-    {
-        BQ76952::BQ76952SSetting read;
-        if(!bq.getConfig(&read))
-            System::FailHard("failed to init BBQ settings on MCU power up. failed to read");
-
-//        if(!(read == bqSetting))
-//            System::FailHard("failed to init BBQ settings on MCU power up. READ != WRITE");
-    }
 
     while(1){
         struct {
