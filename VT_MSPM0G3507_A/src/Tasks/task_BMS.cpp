@@ -594,7 +594,7 @@ void Task::BMS_task(void *){
                     System::uart_ui.nputs(ARRANDN(CLIBAD));
                 } else {
                     for(uint8_t i = 0; i < 16; i++){
-                        System::uart_ui.nputs(ARRANDN(CLIRESET "\t"));
+                        System::uart_ui.nputs(ARRANDN("\t"));
                         System::uart_ui.putu32d((activeBalMask & BV(i)) != 0);
                     }
                 }
