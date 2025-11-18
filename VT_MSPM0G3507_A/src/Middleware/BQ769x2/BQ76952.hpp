@@ -145,108 +145,34 @@ public:
             uint8_t commIdleTime_S;
 
             /* BATRM.13.3.2.9/140 */
-//            BQ76952PinConfig cfetoffPinConfig;
-// I am getting an error when I do this, I think its because in BQ76952.cpp we are doing .raw, but in operator not doing raw
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)) {
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                };
-            } cfetoffPinConfig;
-
-            static_assert(sizeof(cfetoffPinConfig) == sizeof(uint8_t));
+            BQ76952PinConfig cfetoffPinConfig;
 
 
             /* BATRM.13.3.2.10/142 */
-//            BQ76952PinConfig dfetoffPinConfig;
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)){
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                };
-            } dfetoffPinConfig;
-            static_assert(sizeof(dfetoffPinConfig) == sizeof(uint8_t));
+            BQ76952PinConfig dfetoffPinConfig;
 
 
             /* BATRM.13.3.2.11/144 */
-//            BQ76952PinConfig alertPinConfig;
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)){
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                } ;
-            } alertPinConfig;
-            static_assert(sizeof(alertPinConfig) == sizeof(uint8_t));
+            BQ76952PinConfig alertPinConfig;
 
             /* BATRM.13.3.2.12/146 */
-//            BQ76952PinConfig TS1Config;
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)){
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                } ;
-            } TS1Config;
-            static_assert(sizeof(TS1Config) == sizeof(uint8_t));
+            BQ76952PinConfig TS1Config;
 
             /* BATRM.13.3.2.13/146 */
-//            BQ76952PinConfig TS2Config;
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)){
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                } ;
-            } TS2Config;
-            static_assert(sizeof(TS2Config) == sizeof(uint8_t));
+            BQ76952PinConfig TS2Config;
 
             /* BATRM.13.3.2.14/147 */
-//            BQ76952PinConfig TS3Config;
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)){
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                };
-            } TS3Config;
-            static_assert(sizeof(TS3Config) == sizeof(uint8_t));
+            BQ76952PinConfig TS3Config;
 
             /* BATRM.13.3.2.15/148 */
-//            BQ76952PinConfig HDQPinConfig;
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)){
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                };
-            } HDQPinConfig;
-            static_assert(sizeof(HDQPinConfig) == sizeof(uint8_t));
+            BQ76952PinConfig HDQPinConfig;
 
             /* BATRM.13.3.2.16/150 */
-//            BQ76952PinConfig DCHGPinConfig;
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)){
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                };
-            } DCHGPinConfig;
-            static_assert(sizeof(DCHGPinConfig) == sizeof(uint8_t));
+            BQ76952PinConfig DCHGPinConfig;
 
 
             /* BATRM.13.3.2.17/152 */
-//            BQ76952PinConfig DDSGPinConfig;
-            union {
-                uint8_t Raw;
-                struct __attribute__((packed)){
-                    unsigned int OPT5_OPT0 : 6;
-                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-                };
-            } DDSGPinConfig;
-            static_assert(sizeof(DDSGPinConfig) == sizeof(uint8_t));
+            BQ76952PinConfig DDSGPinConfig;
 
             /* BATRM.13.3.2.18/154 */
             union {

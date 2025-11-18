@@ -117,10 +117,8 @@ bool BQ76952::setConfig(BQ76952SSetting const * config){
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::DAConfiguration, ARRANDN(config->Configuration.DAConfig.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::VCellMode, ARRANDN(config->Configuration.VcellMode)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::CC3Samples, ARRANDN(config->Configuration.CC3Samples)))
-<<<<<<< HEAD
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::DAConfiguration, ARRANDN(config->Configuration.DAConfig.Raw)))
-        //TO_DO fill out the rest of the registers and check that they all go the right place ts
-=======
+    //TO_DO fill out the rest of the registers and check that they all go the right place ts
 
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::ProtectionConfiguration, ARRANDN(config->Protection.protectionConfiguraiton.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::EnabledProtectionsA, ARRANDN(config->Protection.enabledProtectionsA.Raw)))
@@ -187,7 +185,6 @@ bool BQ76952::setConfig(BQ76952SSetting const * config){
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::CellBalanceMinDeltaRelax, ARRANDN(config->CellBalancingConfig.cellBalanceMinDelta_Relax_mV)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::CellBalanceStopDeltaRelax, ARRANDN(config->CellBalancingConfig.cellBalanceStopDelta_Relax_mV)))
 
->>>>>>> 4489a2b12e8be8ae8cb76758fdead38fb2be0a3d
         success = true;
 
     //TODO: finish adding all registers
