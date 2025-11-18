@@ -138,15 +138,15 @@ bool BQ76952::BQ76952SSetting::operator==(const BQ76952SSetting& other) const {
     if (Configuration.CC3Samples != other.Configuration.CC3Samples) return false;
 
     // 2. Compare BQ76952PinConfig members using their own operator==
-    if (!(Configuration.cfetoffPinConfig == other.Configuration.cfetoffPinConfig)) return false;
-    if (!(Configuration.dfetoffPinConfig == other.Configuration.dfetoffPinConfig)) return false;
-    if (!(Configuration.alertPinConfig == other.Configuration.alertPinConfig)) return false;
-    if (!(Configuration.TS1Config == other.Configuration.TS1Config)) return false;
-    if (!(Configuration.TS2Config == other.Configuration.TS2Config)) return false;
-    if (!(Configuration.TS3Config == other.Configuration.TS3Config)) return false;
-    if (!(Configuration.HDQPinConfig == other.Configuration.HDQPinConfig)) return false;
-    if (!(Configuration.DCHGPinConfig == other.Configuration.DCHGPinConfig)) return false;
-    if (!(Configuration.DDSGPinConfig == other.Configuration.DDSGPinConfig)) return false;
+    if (!(Configuration.cfetoffPinConfig.Raw == other.Configuration.cfetoffPinConfig.Raw)) return false; //changed this to .Raw...ask george
+    if (!(Configuration.dfetoffPinConfig.Raw == other.Configuration.dfetoffPinConfig.Raw)) return false; // changed to .Raw
+    if (!(Configuration.alertPinConfig.Raw == other.Configuration.alertPinConfig.Raw)) return false; // .Raw
+    if (!(Configuration.TS1Config.Raw == other.Configuration.TS1Config.Raw)) return false; // .Raw
+    if (!(Configuration.TS2Config.Raw == other.Configuration.TS2Config.Raw)) return false; // .Raw
+    if (!(Configuration.TS3Config.Raw == other.Configuration.TS3Config.Raw)) return false; // .Raw
+    if (!(Configuration.HDQPinConfig.Raw == other.Configuration.HDQPinConfig.Raw)) return false; // .Raw
+    if (!(Configuration.DCHGPinConfig.Raw == other.Configuration.DCHGPinConfig.Raw)) return false; // .Raw
+    if (!(Configuration.DDSGPinConfig.Raw == other.Configuration.DDSGPinConfig.Raw)) return false; // .Raw
 
     // 3. Compare Union members with reserved bits using a MASK
 
