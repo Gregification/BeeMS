@@ -1808,7 +1808,7 @@
 	)
 	(wire
 		(pts
-			(xy 64.77 78.74) (xy 64.77 101.6)
+			(xy 64.77 78.74) (xy 64.77 87.63)
 		)
 		(stroke
 			(width 0)
@@ -2168,6 +2168,16 @@
 		)
 		(uuid "eee85979-bb3c-40b7-bff3-e6caca69ecc7")
 	)
+	(wire
+		(pts
+			(xy 64.77 95.25) (xy 64.77 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc025f92-af43-499b-86d3-a1ad27abf093")
+	)
 	(label "GND"
 		(at 39.37 120.65 0)
 		(effects
@@ -2456,6 +2466,121 @@
 			(project "EVAL MSPM0lG3507 BQ76952"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/1c14d83e-4410-4167-900a-156beb56e266"
 					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_US")
+		(at 64.77 91.44 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "96480152-0749-460d-924a-6df7cfc880a9")
+		(property "Reference" "R18"
+			(at 66.802 90.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "750"
+			(at 66.802 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 63.754 91.694 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
+			(at 64.77 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 64.77 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 64.77 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 64.77 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RC1206JR-13750RL?qs=sGAEpiMZZMvdGkrng054t8AJgcdMkx7xRBGyMWDk%2FFM%3D"
+			(at 64.77 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "750mOhm, 250mW, 5%, 100PPM, 200C, -55C, +155C"
+			(at 64.77 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.022"
+			(at 64.77 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "caa26175-5e60-41b9-ad89-295c2b99b840")
+		)
+		(pin "1"
+			(uuid "9318b3a9-fe75-46f8-8f77-871541fd859f")
+		)
+		(instances
+			(project "EVAL MSPM0lG3507 BQ76952"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/1c14d83e-4410-4167-900a-156beb56e266"
+					(reference "R18")
 					(unit 1)
 				)
 			)

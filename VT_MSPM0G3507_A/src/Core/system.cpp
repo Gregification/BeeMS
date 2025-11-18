@@ -254,7 +254,7 @@ void System::init() {
                 IOMUX_PINCM40,
                 IOMUX_PINCM40_PF_SPI1_PICO,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
@@ -554,6 +554,31 @@ buffersize_t System::UART::UART::ngets(char *str, buffersize_t n) {
         DL_UART_transmitDataBlocking(reg, c);
     }
     return i ;
+}
+
+void System::UART::UART::put32d(int32_t v) {
+    char str[12];
+    int i = 0;
+
+    if (v < 0) {
+        DL_UART_transmitDataBlocking(reg, '-');
+        v = -v;
+    }
+
+    if (v == 0) {
+        DL_UART_transmitDataBlocking(reg, '0');
+        return;
+    }
+
+    for(i = 0; v > 0; i++){
+        str[i] = '0' + (v % 10);
+        v /= 10;
+    }
+
+    i--;
+    for(; i >= 0; i--){
+        DL_UART_transmitDataBlocking(reg, str[i]);
+    }
 }
 
 void System::UART::UART::putu32d(uint32_t v) {
