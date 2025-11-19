@@ -27,9 +27,9 @@
 // only 1 BQ on the voltage tap board
 BQ76952 bq = {
         .spi  = &System::spi1,
-        .cs   = &System::GPIO::PB19,
+        .cs   = &System::GPIO::PA15,
     };
-auto &bqReset = System::GPIO::PA15;
+//auto &bqReset = System::GPIO::PA15;
 
 BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {
@@ -354,38 +354,38 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
         },
     };
 
-bool setup_BBQ(BQ76952 & b);
+//bool setup_BBQ(BQ76952 & b);
 
 void Task::BMS_task(void *){
     System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
 
     //---- SPI setup ------------------------------------------
-    bq.spi->setSCLKTarget(250e3); // bq76952 max speed of 2MHz
-    DL_GPIO_enableOutput(GPIOPINPUX(*bq.cs)); // SPI CS
-    DL_GPIO_initDigitalOutputFeatures(
-            bq.cs->iomux,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
-            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-        );
-    DL_GPIO_enableOutput(GPIOPINPUX(bqReset)); // BBQ reset
-    DL_GPIO_initDigitalOutputFeatures(
-            bqReset.iomux,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
-            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-        );
-
-    bq.cs->clear();
-    bqReset.set();
-
-    vTaskDelay(pdMS_TO_TICKS(500)); // CS needs some time to get recognized by the slave
-
-    bqReset.clear();
-
-    vTaskDelay(pdMS_TO_TICKS(300));
+//    bq.spi->setSCLKTarget(250e3); // bq76952 max speed of 2MHz
+//    DL_GPIO_enableOutput(GPIOPINPUX(*bq.cs)); // SPI CS
+//    DL_GPIO_initDigitalOutputFeatures(
+//            bq.cs->iomux,
+//            DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
+//            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+//            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+//            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+//        );
+//    DL_GPIO_enableOutput(GPIOPINPUX(bqReset)); // BBQ reset
+//    DL_GPIO_initDigitalOutputFeatures(
+//            bqReset.iomux,
+//            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+//            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+//            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+//            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+//        );
+//
+//    bq.cs->clear();
+//    bqReset.set();
+//
+//    vTaskDelay(pdMS_TO_TICKS(500)); // CS needs some time to get recognized by the slave
+//
+//    bqReset.clear();
+//
+//    vTaskDelay(pdMS_TO_TICKS(300));
 
     //--- init BQ76952 ----------------------------------------
     // TODO: on the final product we need to somehow prevent the MCU from locking up the BQ,
@@ -393,13 +393,10 @@ void Task::BMS_task(void *){
 
 //    bq.unseal(0x36720414);
 
-//    if(! setup_BBQ(bq))
+//    if(! bq.setConfig(&bqSetting))
 //        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
 
-    if(! bq.setConfig(&bqSetting))
-        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
-
-    while(1){
+    while(0){
         {
             struct {
                 uint16_t Vreg18;          // Bytes 0-1: VREG18, 16-bit ADC counts
@@ -660,50 +657,50 @@ void Task::BMS_task(void *){
      * }
      */
 
-/*
-    DL_MCAN_TxBufElement txmsg = {
-           .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
-           .rtr    = 0,        // 0: data frame, 1: remote frame
-           .xtd    = 1,        // 0: 11b id, 1: 29b id
-           .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-           .dlc    = 8,        // data byte count, see DL comments
-           .brs    = 0,        // 0: no bit rate switching, 1: yes brs
-           .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
-           .efc    = 0,        // 0: dont store Tx events, 1: store
-           .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
-       };
 
-    while(1){
-        for(uint8_t i = 0; i < sizeof(cmds); i++){
-            uint16_t v = 0xBEEF;
-            bool success = bq.sendDirectCommandR(cmds[i], &v);
-            vTaskDelay(pdMS_TO_TICKS(1e6));
-
-            snprintf(ARRANDN(str), "%6d,", v);
-
-            System::uart_ui.nputs(ARRANDN(str));
-
-            if(!success)
-                v = 0;
-
-            ((uint16_t*)txmsg.data)[i % 8] = v;
-
-            // transmit in 8B packets
-            if((i+1) % 8 == 0)
-            {
-               DL_MCAN_TxFIFOStatus tf;
-               DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
-
-               uint32_t bufferIndex = tf.putIdx;
-
-               DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-               DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
-            }
-        }
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        vTaskDelay(pdMS_TO_TICKS(1e6));
-    }
+//    DL_MCAN_TxBufElement txmsg = {
+//           .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
+//           .rtr    = 0,        // 0: data frame, 1: remote frame
+//           .xtd    = 1,        // 0: 11b id, 1: 29b id
+//           .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
+//           .dlc    = 8,        // data byte count, see DL comments
+//           .brs    = 0,        // 0: no bit rate switching, 1: yes brs
+//           .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
+//           .efc    = 0,        // 0: dont store Tx events, 1: store
+//           .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
+//       };
+//
+////    while(1){
+//        for(uint8_t i = 0; i < sizeof(cmds); i++){
+//            uint16_t v = 0xBEEF;
+//            bool success = bq.sendDirectCommandR(cmds[i], &v);
+//            vTaskDelay(pdMS_TO_TICKS(1e6));
+//
+//            snprintf(ARRANDN(str), "%6d,", v);
+//
+//            System::uart_ui.nputs(ARRANDN(str));
+//
+//            if(!success)
+//                v = 0;
+//
+//            ((uint16_t*)txmsg.data)[i % 8] = v;
+//
+//            // transmit in 8B packets
+//            if((i+1) % 8 == 0)
+//            {
+//               DL_MCAN_TxFIFOStatus tf;
+//               DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
+//
+//               uint32_t bufferIndex = tf.putIdx;
+//
+//               DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
+//               DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
+//            }
+//        }
+//        System::uart_ui.nputs(ARRANDN(NEWLINE));
+//
+//        vTaskDelay(pdMS_TO_TICKS(1e6));
+//    }
 
 
 
@@ -723,11 +720,9 @@ void Task::BMS_task(void *){
                 .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
             };
 
-
-
-//        txmsg.data[0] = 6;
-//        txmsg.data[1] = 7;
-//        txmsg.data[2] = 8;
+        txmsg.data[0] = 6;
+        txmsg.data[1] = 7;
+        txmsg.data[2] = 8;
 
         DL_MCAN_TxFIFOStatus tf;
         DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
@@ -738,8 +733,8 @@ void Task::BMS_task(void *){
         DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
 
         vTaskDelay(pdMS_TO_TICKS(400));
+        System::uart_ui.nputs(ARRANDN("meow" NEWLINE));
     };
-    */
 
 
     System::FailHard("BMS_task ended" NEWLINE);
