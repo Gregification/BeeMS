@@ -309,30 +309,10 @@ namespace System {
         };
         static_assert(sizeof(CAN_ID_J1939) == sizeof(uint32_t));
 
+        uint8_t dlDataLenDLC(DL_MCAN_RxBufElement TxBufferElement);
+        uint8_t dlDataLenDLC(DL_MCAN_TxBufElement TxBufferElement);
+        uint32_t dlDataLen(uint32_t size);
 
-        uint32_t return_dlc(DL_MCAN_TxBufElement TxBufferElement)
-        {
-            if(TxBufferElement.fdf)
-            {
-
-                if(TxBufferElement.dlc < 9)
-                            return TxBufferElement.dlc;
-
-                switch(TxBufferElement.dlc)
-                {
-                    case 9: return 12;
-                    case 10: return 16;
-                    case 11: return 20;
-                    case 12: return 24;
-                    case 13: return 32;
-                    case 14: return 48;
-                    case 15: return 64;
-                    default: return 0;
-                }
-            }
-            else
-               return TxBufferElement.dlc;
-        }
     }
 
     void init();

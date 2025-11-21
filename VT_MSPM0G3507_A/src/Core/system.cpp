@@ -822,6 +822,64 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
 }
 
 
+uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_TxBufElement TxBufferElement)
+{
+    if(TxBufferElement.fdf)
+    {
+        if(TxBufferElement.dlc < 9)
+                    return TxBufferElement.dlc;
+
+        switch(TxBufferElement.dlc)
+        {
+            case 9: return 12;
+            case 10: return 16;
+            case 11: return 20;
+            case 12: return 24;
+            case 13: return 32;
+            case 14: return 48;
+            case 15: return 64;
+            default: return 0;
+        }
+    }
+    else
+       return 8;
+}
+
+uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_RxBufElement TxBufferElement)
+{
+    if(TxBufferElement.fdf)
+    {
+        if(TxBufferElement.dlc < 9)
+                    return TxBufferElement.dlc;
+
+        switch(TxBufferElement.dlc)
+        {
+            case 9: return 12;
+            case 10: return 16;
+            case 11: return 20;
+            case 12: return 24;
+            case 13: return 32;
+            case 14: return 48;
+            case 15: return 64;
+            default: return 0;
+        }
+    }
+    else
+       return 8;
+}
+
+uint32_t System::CANFD::dlDataLen(uint32_t size)
+{
+    if(size < 9) return size;
+    if(size <= 12)  return 9;
+    if(size <= 16)  return 10;
+    if(size <= 20)  return 11;
+    if(size <= 24)  return 12;
+    if(size <= 32)  return 13;
+    if(size <= 48)  return 13;
+    return 15;
+}
+
 /*--- Peripheral IRQ assignment --------------------------------------------------------*/
 /* most peripherals don't need a IRQ
  */
