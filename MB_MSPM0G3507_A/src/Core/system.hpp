@@ -311,6 +311,7 @@ namespace System {
 
         uint8_t dlDataLenDLC(DL_MCAN_RxBufElement const *);
         uint8_t dlDataLenDLC(DL_MCAN_TxBufElement const *);
+        uin32_t dlDataLen(uint32_t sizeof);
     }
 
     void init();
