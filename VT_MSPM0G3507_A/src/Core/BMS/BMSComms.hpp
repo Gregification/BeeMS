@@ -53,16 +53,16 @@ namespace BMSComms {
     };
     static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(Pkt_CellV))));
 
-    struct __attribute__((packed)) Pkt_DeltaCC {
-        int64_t accumulatedmC   : 40; // CC in 0.001C
-        uint16_t timedS         : 16; // CC runtime in 0.1S
-    };
-    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(Pkt_DeltaCC))));
-
-    struct __attribute__((packed)) Pkt_TotalCC {
-        int64_t accumulatedmC   : 56; // units of 0.001C
-    };
-    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(Pkt_TotalCC))));
+//    struct __attribute__((packed)) Pkt_DeltaCC {
+//        int64_t accumulatedmC;
+//        uint32_t timedS;
+//    };
+//    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(Pkt_DeltaCC))));
+//
+//    struct __attribute__((packed)) Pkt_TotalCC {
+//        int64_t accumulatedmC // units of 0.001C
+//    };
+//    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(Pkt_TotalCC))));
 
 };
 
