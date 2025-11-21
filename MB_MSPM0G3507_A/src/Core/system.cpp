@@ -860,13 +860,13 @@ uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_TxBufElement const * ele) {
 }
 
 uint32_t System::CANFD::dlDataLen(uint32_t size) {
-    if(size < 9) return size;
+    if(size < 9)    return size;
     if(size <= 12)  return 9;
     if(size <= 16)  return 10;
     if(size <= 20)  return 11;
     if(size <= 24)  return 12;
     if(size <= 32)  return 13;
-    if(size <= 48)  return 13;
+    if(size <= 48)  return 14;
     return 15;
 }
 
