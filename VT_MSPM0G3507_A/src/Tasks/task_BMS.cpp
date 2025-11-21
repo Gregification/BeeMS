@@ -738,8 +738,6 @@ void Task::BMS_task(void *){
 
 //    PacketHeader pktHeader;
 //    Pkt_CellV pktCellV;
-    BMSComms::PacketHeader Packetheader;
-    BMSComms::Pkt_CellV Pkt_cellV;
 
 
     //pointer to variable -> point it to the start of the data array, no copy
@@ -758,6 +756,10 @@ void Task::BMS_task(void *){
                 .efc    = 0,        // 0: dont store Tx events, 1: store
                 .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
             };
+
+
+        BMSComms::PacketHeader * header = static_cast<BMSComms::PacketHeader *>((void *)txmsg.data);
+        BMSComms::Pkt_CellV * cellcv = static_cast<BMSComms::Pkt_CellV *>((void *)header->data);
 
         txmsg.data[0] = 6;
         txmsg.data[1] = 7;
