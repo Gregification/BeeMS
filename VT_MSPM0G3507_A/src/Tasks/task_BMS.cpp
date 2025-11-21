@@ -15,7 +15,6 @@
 #include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/common.h"
 
-
 // user amp to centiamp scale (10mA)
 // using 10mA scale (determined by DAConfiguration)
 #define userAto10mA(X) (X)
@@ -701,8 +700,6 @@ void Task::BMS_task(void *){
 //
 //        vTaskDelay(pdMS_TO_TICKS(1e6));
 //    }
-
-
 
 
     while(1)
