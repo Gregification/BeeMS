@@ -47,8 +47,34 @@ void Task::BMS_task(void *){
      * }
      */
 
+    do {
+        static DL_MCAN_RxFIFOStatus rf;
+        rf.num = DL_MCAN_RX_FIFO_NUM_0;
+        DL_MCAN_getRxFIFOStatus(CANFD0, &rf);
 
-    while(1)
+        if(rf.fillLvl != 0) { // if not empty
+            DL_MCAN_RxBufElement e;
+            DL_MCAN_readMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, 0, rf.num, &e);
+            DL_MCAN_writeRxFIFOAck(CANFD0, rf.num, rf.getIdx);
+
+            uint32_t id;
+            if(e.xtd)   id = e.id;
+            else        id = (e.id & 0x1FFC'0000) >> 18;
+
+            System::uart_ui.nputs(ARRANDN("ID: "));
+            System::uart_ui.putu32d(id);
+            System::uart_ui.nputs(ARRANDN(" \tData: " NEWLINE));
+
+            for(uint8_t i = 0, len = System::CANFD::dlDataLenDLC(&e); i < len; i++) {
+                System::uart_ui.nputs(ARRANDN(" \t"));
+                System::uart_ui.putu32h(e.data[i]);
+            }
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+        }
+    } while(1);
+
+    while(0)
     {
         // Canned CAN TX
         DL_MCAN_TxBufElement txmsg = {

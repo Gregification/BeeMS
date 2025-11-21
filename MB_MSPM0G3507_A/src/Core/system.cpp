@@ -821,6 +821,43 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     return true;
 }
 
+uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_RxBufElement const * ele) {
+    if(ele->dlc < 9)
+        return ele->dlc;
+
+    if(ele->fdf)
+        switch(ele->dlc) {
+            case 9:     return 12;
+            case 10:    return 16;
+            case 11:    return 20;
+            case 12:    return 24;
+            case 13:    return 32;
+            case 14:    return 48;
+            case 15:    return 64;
+            default:    return 0;
+        }
+    else
+        return 8;
+}
+
+uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_TxBufElement const * ele) {
+    if(ele->dlc < 9)
+        return ele->dlc;
+
+    if(ele->fdf)
+        switch(ele->dlc) {
+            case 9:     return 12;
+            case 10:    return 16;
+            case 11:    return 20;
+            case 12:    return 24;
+            case 13:    return 32;
+            case 14:    return 48;
+            case 15:    return 64;
+            default:    return 0;
+        }
+    else
+        return 8;
+}
 
 /*--- Peripheral IRQ assignment --------------------------------------------------------*/
 /* most peripherals don't need a IRQ
