@@ -782,9 +782,10 @@ void Task::BMS_task(void *){
         BMSComms::PacketHeader * header = static_cast<BMSComms::PacketHeader *>((void *)txmsg.data);
         BMSComms::PktSM_CellV * cellcv = static_cast<BMSComms::PktSM_CellV *>((void *)header->data);
 
-        txmsg.data[0] = 6;
-        txmsg.data[1] = 7;
-        txmsg.data[2] = 8;
+        header->slaveID = 10;
+//        txmsg.data[0] = 6;
+//        txmsg.data[1] = 7;
+//        txmsg.data[2] = 8;
 
         DL_MCAN_TxFIFOStatus tf;
         DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
