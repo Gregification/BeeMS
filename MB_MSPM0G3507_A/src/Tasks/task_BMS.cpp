@@ -16,8 +16,19 @@
 
 volatile BMSMaster<10> master;
 
+#define SW2 (System::GPIO::PB21)
+
 void Task::BMS_task(void *){
     System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
+
+    DL_GPIO_initDigitalOutput(CHARGEPIN.iomux);
+    DL_GPIO_initDigitalInputFeatures(
+            SW2.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
+            DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+            DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+        );
 
     /* pesudo code
      * {
@@ -63,18 +74,61 @@ void Task::BMS_task(void *){
 
             System::uart_ui.nputs(ARRANDN("ID: "));
             System::uart_ui.putu32d(id);
-            System::uart_ui.nputs(ARRANDN(" \tData: " NEWLINE));
-
-            for(uint8_t i = 0, len = System::CANFD::dlDataLenDLC(&e); i < len; i++) {
-                System::uart_ui.nputs(ARRANDN(" \t"));
-                System::uart_ui.putu32h(e.data[i]);
-            }
+//            System::uart_ui.nputs(ARRANDN(" \tData: "));
+//
+//            for(uint8_t i = 0, len = System::CANFD::DLC2Len(&e); i < len; i++) {
+//                System::uart_ui.nputs(ARRANDN(" \t"));
+//                System::uart_ui.putu32h(e.data[i]);
+//            }
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
+
+            BMSComms::PacketHeader * header = reinterpret_cast<BMSComms::PacketHeader *>(e.data);
+            BMSComms::PktSM_Test1 * pktsm = reinterpret_cast<BMSComms::PktSM_Test1 *>(header->data);
+
+            if(header->typeSM == BMSComms::PktTypeSM_t::TEST_1){
+                // 3. Print the structure's variables using the required custom functions
+                System::uart_ui.nputs(ARRANDN("--- PktSM_Test1 Contents --- slave #"));
+                System::uart_ui.putu32d(header->slaveID);
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+                // Max Cell Voltage
+                System::uart_ui.nputs(ARRANDN("Max Cell Voltage (mV): "));
+                System::uart_ui.putu32d(pktsm->MaxCellVoltage);
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+                // Min Cell Voltage
+                System::uart_ui.nputs(ARRANDN("Min Cell Voltage (mV): "));
+                System::uart_ui.putu32d(pktsm->MinCellVoltage);
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+                // Battery Voltage Sum
+                System::uart_ui.nputs(ARRANDN("Battery Voltage Sum (cV): "));
+                System::uart_ui.putu32d(pktsm->BatteryVoltageSum);
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+                System::uart_ui.nputs(ARRANDN("CELL"));
+                for (int i = 0; i < 16; i++) {
+                    System::uart_ui.nputs(ARRANDN(" \t"));
+                    System::uart_ui.putu32d(i);
+                }
+                System::uart_ui.nputs(ARRANDN(NEWLINE "mV"));
+                for (int i = 0; i < 16; i++) {
+                    System::uart_ui.nputs(ARRANDN(" \t"));
+                    System::uart_ui.putu32d(pktsm->cellInfo[i].cellmV);
+                }
+                System::uart_ui.nputs(ARRANDN(NEWLINE "bal?"));
+                for (int i = 0; i < 16; i++) {
+                    System::uart_ui.nputs(ARRANDN(" \t"));
+                    System::uart_ui.putu32d(pktsm->cellInfo[i].balancing != 0);
+                }
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
+            }
         }
+
     } while(1);
 
-    while(0)
+    while(1)
     {
         // Canned CAN TX
         DL_MCAN_TxBufElement txmsg = {

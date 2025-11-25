@@ -9,6 +9,7 @@
 #define SRC_CORE_BMS_BMSCOMMS_HPP_
 
 #include "Core/common.h"
+#include "Middleware/BQ769x2/BQ76952.hpp"
 
 /**
  * packet content being sent between master and slave
@@ -25,6 +26,8 @@ namespace BMSComms {
         CELLV               = 0,    // cell voltage
         DELTA_CC            = 1,    // coulomb counting change
         TOTAL_CC            = 2,    // slave board CC
+        TEST_1              = 3,
+
         // add entries & corresponding struct as needed
         // maximum message count limited by "type" size in PacketHeader
     };
@@ -45,25 +48,38 @@ namespace BMSComms {
         uint8_t data[0];
     };
 
-    struct __attribute__((packed)) Pkt_CellV {
+    struct __attribute__((packed)) PktSM_CellV {
         uint8_t baseCellNum;
         uint8_t cellCount;
         int16_t cellsmV[14];
         uint8_t                 : 8; // reserved
     };
-    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(Pkt_CellV))));
+    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(PktSM_CellV))));
 
-    struct __attribute__((packed)) Pkt_DeltaCC {
+    struct __attribute__((packed)) PktSM_DeltaCC {
         int64_t accumulatedmC   : 40;
         uint32_t timeddS        : 16;
     };
-    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(Pkt_DeltaCC))));
+    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(PktSM_DeltaCC))));
 
-    struct __attribute__((packed)) Pkt_TotalCC {
-        int64_t accumulatedmC   : 56; // units of 0.001C
+    struct __attribute__((packed)) PktSM_TotalCC {
+        int64_t accumulatedmC : 56; // units of 0.001C
     };
-    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(Pkt_TotalCC))));
+    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(PktSM_TotalCC))));
 
+    struct __attribute__((packed)) PktSM_Test1 {
+        struct __attribute__((packed)) {
+            signed long     cellmV      : 15;
+            bool            balancing   : 1;
+        } cellInfo[16];
+
+        uint16_t MaxCellVoltage;  // Bytes 4-5: Max Cell Voltage, mV
+        uint16_t MinCellVoltage;  // Bytes 6-7: Min Cell Voltage, mV
+        uint16_t BatteryVoltageSum; // Bytes 8-9: Battery Voltage Sum, cV
+
+        uint8_t _filler[9];
+    };
+    static_assert(isValidPacketSize((sizeof(PacketHeader) + sizeof(PktSM_Test1))));
 };
 
 #endif /* SRC_CORE_BMS_BMSCOMMS_HPP_ */

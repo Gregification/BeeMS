@@ -47,4 +47,7 @@ typedef uint16_t buffersize_t;
 
 bool arrCmp(void const * a, void const * b, buffersize_t len);
 
+
+#define CHARGEPIN System::GPIO::PB7
+
 #endif /* SRC_CORE_COMMON_H_ */

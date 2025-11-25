@@ -10,6 +10,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
+#include "BMSCommon.hpp"
 
 /*--- variables ------------------------------------------------------------------------*/
 
@@ -35,6 +36,14 @@ namespace System {
 }
 
 void System::init() {
+    DL_GPIO_disablePower(GPIOA);
+    DL_GPIO_disablePower(GPIOB);
+    DL_GPIO_reset(GPIOA);
+    DL_GPIO_reset(GPIOB);
+    DL_GPIO_enablePower(GPIOA);
+    DL_GPIO_enablePower(GPIOB);
+    delay_cycles(POWER_STARTUP_DELAY);
+
     #ifdef PROJECT_ENABLE_MCAN0
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
@@ -84,14 +93,6 @@ void System::init() {
 
     // must be done after enabling PLL
 //    DL_FlashCTL_executeClearStatus(); // ERRNO thing
-
-    DL_GPIO_disablePower(GPIOA);
-    DL_GPIO_disablePower(GPIOB);
-    DL_GPIO_reset(GPIOA);
-    DL_GPIO_reset(GPIOB);
-    DL_GPIO_enablePower(GPIOA);
-    DL_GPIO_enablePower(GPIOB);
-    delay_cycles(POWER_STARTUP_DELAY);
 
     #ifdef PROJECT_ENABLE_UART0
         System::uart0.partialInit();
@@ -330,7 +331,7 @@ void System::init() {
                   .fdMode            = true,    // CAN FD mode?
                   .brsEnable         = true,    // enable bit rate switching?
                   .txpEnable         = true,    // pause for 2 bit times after successful transmission?
-                  .efbi              = false,   // edge filtering? 2 consecutive Tq to accept sync
+                  .efbi              = true,   // edge filtering? 2 consecutive Tq to accept sync
                   .pxhddisable       = false,   // do not Tx error frame on protocol error?
                   .darEnable         = true,    // auto retransmission of failed frames?
                   .wkupReqEnable     = false,   // enable wake up request?
@@ -370,7 +371,7 @@ void System::init() {
                     .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
                     .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
                     .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
-                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
+                    .dataTimeSeg1       = 26,   /* Data Time segment before sample point. */
                     .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
                     .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
                 };
@@ -509,6 +510,8 @@ void System::FailHard(const char *str) {
 
     static uint32_t count = 0;
     while(1) {
+        CHARGEPIN.clear();
+
         System::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
         System::uart_ui.putu32d(count);
         System::uart_ui.nputs(ARRANDN(" : " CLIRESET));
@@ -821,7 +824,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     return true;
 }
 
-uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_RxBufElement const * ele) {
+uint8_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
     if(ele->dlc < 9)
         return ele->dlc;
 
@@ -840,7 +843,7 @@ uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_RxBufElement const * ele) {
         return 8;
 }
 
-uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_TxBufElement const * ele) {
+uint8_t System::CANFD::DLC2Len(DL_MCAN_TxBufElement const * ele) {
     if(ele->dlc < 9)
         return ele->dlc;
 
@@ -859,7 +862,7 @@ uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_TxBufElement const * ele) {
         return 8;
 }
 
-uint32_t System::CANFD::dlDataLen(uint32_t size) {
+uint32_t System::CANFD::len2DLC(uint32_t size) {
     if(size < 9)    return size;
     if(size <= 12)  return 9;
     if(size <= 16)  return 10;

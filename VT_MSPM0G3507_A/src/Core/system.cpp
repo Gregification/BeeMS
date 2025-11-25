@@ -35,10 +35,21 @@ namespace System {
 }
 
 void System::init() {
+    DL_GPIO_disablePower(GPIOA);
+    DL_GPIO_disablePower(GPIOB);
+    DL_GPIO_reset(GPIOA);
+    DL_GPIO_reset(GPIOB);
+    DL_GPIO_enablePower(GPIOA);
+    DL_GPIO_enablePower(GPIOB);
+    delay_cycles(POWER_STARTUP_DELAY);
+
     #ifdef PROJECT_ENABLE_MCAN0
-        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
-        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
-        // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
+    // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
+
+        // pins for v: 2.2, 3.0
+//        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
+//        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
+
         DL_MCAN_enablePower(CANFD0);
         delay_cycles(POWER_STARTUP_DELAY);
     #endif
@@ -84,14 +95,6 @@ void System::init() {
 
     // must be done after enabling PLL
 //    DL_FlashCTL_executeClearStatus(); // ERRNO thing
-
-    DL_GPIO_disablePower(GPIOA);
-    DL_GPIO_disablePower(GPIOB);
-    DL_GPIO_reset(GPIOA);
-    DL_GPIO_reset(GPIOB);
-    DL_GPIO_enablePower(GPIOA);
-    DL_GPIO_enablePower(GPIOB);
-    delay_cycles(POWER_STARTUP_DELAY);
 
     #ifdef PROJECT_ENABLE_UART0
         System::uart0.partialInit();
@@ -821,64 +824,55 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     return true;
 }
 
+uint8_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
+    if(ele->dlc < 9)
+        return ele->dlc;
 
-uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_TxBufElement TxBufferElement)
-{
-    if(TxBufferElement.fdf)
-    {
-        if(TxBufferElement.dlc < 9)
-                    return TxBufferElement.dlc;
-
-        switch(TxBufferElement.dlc)
-        {
-            case 9: return 12;
-            case 10: return 16;
-            case 11: return 20;
-            case 12: return 24;
-            case 13: return 32;
-            case 14: return 48;
-            case 15: return 64;
-            default: return 0;
+    if(ele->fdf)
+        switch(ele->dlc) {
+            case 9:     return 12;
+            case 10:    return 16;
+            case 11:    return 20;
+            case 12:    return 24;
+            case 13:    return 32;
+            case 14:    return 48;
+            case 15:    return 64;
+            default:    return 0;
         }
-    }
     else
-       return 8;
+        return 8;
 }
 
-uint8_t System::CANFD::dlDataLenDLC(DL_MCAN_RxBufElement TxBufferElement)
-{
-    if(TxBufferElement.fdf)
-    {
-        if(TxBufferElement.dlc < 9)
-                    return TxBufferElement.dlc;
+uint8_t System::CANFD::DLC2Len(DL_MCAN_TxBufElement const * ele) {
+    if(ele->dlc < 9)
+        return ele->dlc;
 
-        switch(TxBufferElement.dlc)
-        {
-            case 9: return 12;
-            case 10: return 16;
-            case 11: return 20;
-            case 12: return 24;
-            case 13: return 32;
-            case 14: return 48;
-            case 15: return 64;
-            default: return 0;
+    if(ele->fdf)
+        switch(ele->dlc) {
+            case 9:     return 12;
+            case 10:    return 16;
+            case 11:    return 20;
+            case 12:    return 24;
+            case 13:    return 32;
+            case 14:    return 48;
+            case 15:    return 64;
+            default:    return 0;
         }
-    }
     else
-       return 8;
+        return 8;
 }
 
-uint32_t System::CANFD::dlDataLen(uint32_t size)
-{
-    if(size < 9) return size;
+uint32_t System::CANFD::len2DLC(uint32_t size) {
+    if(size < 9)    return size;
     if(size <= 12)  return 9;
     if(size <= 16)  return 10;
     if(size <= 20)  return 11;
     if(size <= 24)  return 12;
     if(size <= 32)  return 13;
-    if(size <= 48)  return 13;
+    if(size <= 48)  return 14;
     return 15;
 }
+
 
 /*--- Peripheral IRQ assignment --------------------------------------------------------*/
 /* most peripherals don't need a IRQ

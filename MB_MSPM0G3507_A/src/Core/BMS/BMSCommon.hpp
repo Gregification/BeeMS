@@ -9,6 +9,7 @@
 #define SRC_CORE_BMS_BMSCOMMON_HPP_
 
 #include "Core/common.h"
+#include "Core/system.hpp"
 
 struct __attribute__((packed)) TempSensor {
     /** describes what the temperature measurement is of.

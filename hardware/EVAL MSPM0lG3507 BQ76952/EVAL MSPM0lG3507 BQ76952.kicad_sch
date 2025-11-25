@@ -5955,6 +5955,12 @@
 		(uuid "1afd6fb8-43b2-4ff2-9179-7a987db2ac67")
 	)
 	(junction
+		(at 113.03 21.59)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "1ea466df-bc29-493d-9ed5-5531010db54b")
+	)
+	(junction
 		(at 41.91 92.71)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5965,12 +5971,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "260b2b95-919e-4ef7-bff5-353f71d945b5")
-	)
-	(junction
-		(at 113.03 21.59)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "2d2c8c5d-c0fe-416f-b8ea-c5a855087af5")
 	)
 	(junction
 		(at 41.91 82.55)
@@ -6655,6 +6655,16 @@
 			(type default)
 		)
 		(uuid "23e6c83a-d56a-4676-bf5d-266992d45650")
+	)
+	(wire
+		(pts
+			(xy 113.03 21.59) (xy 129.54 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "26007eb6-de98-41d2-8ad9-22403a50e512")
 	)
 	(wire
 		(pts
@@ -7795,16 +7805,6 @@
 			(type default)
 		)
 		(uuid "e7e57494-ad88-407c-8eba-d61fc7c12d4c")
-	)
-	(wire
-		(pts
-			(xy 113.03 21.59) (xy 129.54 21.59)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ec26e566-2fdc-4776-9aef-abf41f042462")
 	)
 	(wire
 		(pts
@@ -13104,33 +13104,33 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 290.83 72.39 0)
+		(at 113.03 25.4 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "9ac5cf13-5a8c-43b1-8c96-f4ad20b47f48")
-		(property "Reference" "R3"
-			(at 286.131 73.279 90)
+		(uuid "90c11e29-7172-4085-bf10-adb7b18da160")
+		(property "Reference" "R27"
+			(at 105.664 23.876 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
-		(property "Value" "750"
-			(at 288.671 73.279 90)
+		(property "Value" "4.99k"
+			(at 105.664 26.416 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 291.846 72.644 90)
+			(at 112.014 25.146 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13138,8 +13138,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
-			(at 290.83 72.39 0)
+		(property "Datasheet" ""
+			(at 113.03 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13148,7 +13148,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 290.83 72.39 0)
+			(at 113.03 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13157,7 +13157,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 290.83 72.39 90)
+			(at 113.03 25.4 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13166,7 +13166,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 290.83 72.39 90)
+			(at 113.03 25.4 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13174,8 +13174,8 @@
 				(hide yes)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RC1206JR-13750RL?qs=sGAEpiMZZMvdGkrng054t8AJgcdMkx7xRBGyMWDk%2FFM%3D"
-			(at 290.83 72.39 90)
+		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP1206FTD4K99?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ95yR%2FF2bQQIaAb5UdPiGbTtQ%3D%3D"
+			(at 113.03 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13183,8 +13183,8 @@
 				(hide yes)
 			)
 		)
-		(property "specs" "750mOhm, 250mW, 5%, 100PPM, 200C, -55C, +155C"
-			(at 290.83 72.39 90)
+		(property "specs" "4.99kOhm, 200V, 500mW, 1%, 100PPM, -55C, +155C"
+			(at 113.03 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13192,25 +13192,25 @@
 				(hide yes)
 			)
 		)
-		(property "unit x10" "0.022"
-			(at 290.83 72.39 90)
+		(property "unit x10" "0.017"
+			(at 113.03 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(hide yes)
 			)
-		)
-		(pin "2"
-			(uuid "4de12a42-f9b4-42c8-a5c4-a5318f8c4c75")
 		)
 		(pin "1"
-			(uuid "a4818ad8-e111-453f-9ebf-10d2c3ca3249")
+			(uuid "daea3165-ab68-4c40-a5f3-37398de2743d")
+		)
+		(pin "2"
+			(uuid "83a25ab0-9878-48f3-94c0-2a538e758d82")
 		)
 		(instances
-			(project "VT MSPM0lG3507 BQ7962 layout test"
+			(project "EVAL MSPM0lG3507 BQ76952"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "R3")
+					(reference "R27")
 					(unit 1)
 				)
 			)
@@ -15107,7 +15107,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_US")
-		(at 113.03 25.4 180)
+		(at 290.83 72.39 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15115,7 +15115,7 @@
 		(dnp no)
 		(uuid "fb189ee3-e095-4b49-8890-f9cc73268564")
 		(property "Reference" "R6"
-			(at 117.729 24.511 90)
+			(at 285.496 69.596 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15123,8 +15123,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "750"
-			(at 115.189 24.511 90)
+		(property "Value" "1.1k"
+			(at 285.496 72.136 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15133,7 +15133,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 112.014 25.146 90)
+			(at 291.846 72.644 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15141,8 +15141,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
-			(at 113.03 25.4 0)
+		(property "Datasheet" ""
+			(at 290.83 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15151,7 +15151,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 113.03 25.4 0)
+			(at 290.83 72.39 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15160,7 +15160,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 113.03 25.4 90)
+			(at 290.83 72.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15169,7 +15169,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 113.03 25.4 90)
+			(at 290.83 72.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15177,8 +15177,8 @@
 				(hide yes)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RC1206JR-13750RL?qs=sGAEpiMZZMvdGkrng054t8AJgcdMkx7xRBGyMWDk%2FFM%3D"
-			(at 113.03 25.4 90)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Bourns/CR1206-JW-112ELF?qs=sGAEpiMZZMvdGkrng054t%252BRNGJdg958RO4zQLvq6wC8%3D"
+			(at 290.83 72.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15186,8 +15186,8 @@
 				(hide yes)
 			)
 		)
-		(property "specs" "750mOhm, 250mW, 5%, 100PPM, 200C, -55C, +155C"
-			(at 113.03 25.4 90)
+		(property "specs" "1.1kOhm, 250mW, 5%, 200PPM, 200C, -55C, +155C"
+			(at 290.83 72.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15196,7 +15196,7 @@
 			)
 		)
 		(property "unit x10" "0.022"
-			(at 113.03 25.4 90)
+			(at 290.83 72.39 90)
 			(effects
 				(font
 					(size 1.27 1.27)
