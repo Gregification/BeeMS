@@ -96,6 +96,12 @@ bool BQ76952::setConfig(BQ76952SSetting const * config){
         return false;
     vTaskDelay(pdMS_TO_TICKS(8));
 
+    {
+        float ccgain = 7.4768 / 200e-3;
+        if(!setRegister(BQ769X2_PROTOCOL::RegAddr::CCGain, *((uint32_t *)&ccgain), sizeof(ccgain)))
+            return false;
+    }
+
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::MinBlowFuseVoltage, ARRANDN(config->Fuse.minBlowFuseVoltage_10mV)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::FuseBlowTimeout, ARRANDN(config->Fuse.timeout_S)))
 

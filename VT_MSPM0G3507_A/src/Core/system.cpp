@@ -47,8 +47,8 @@ void System::init() {
     // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
 
         // pins for v: 2.2, 3.0
-//        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
-//        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
+        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
+        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
 
         DL_MCAN_enablePower(CANFD0);
         delay_cycles(POWER_STARTUP_DELAY);
@@ -358,8 +358,8 @@ void System::init() {
                     .timeoutSelect     = DL_MCAN_TIMEOUT_SELECT_CONT, // timeout source select
                     .timeoutPreload    = 65535,     // load value of timeout counter
                     .timeoutCntEnable  = false,     // timeout counter enable
-                    .filterConfig.rrfe = 0,      // reject remote frames extended
-                    .filterConfig.rrfs = 0,      // reject remote frames standard
+                    .filterConfig.rrfe = 0,         // reject remote frames extended
+                    .filterConfig.rrfs = 0,         // reject remote frames standard
                     .filterConfig.anfe = 0,         // accept non-matching frames extended
                     .filterConfig.anfs = 0,         // accept non-matching frames standard
                 };

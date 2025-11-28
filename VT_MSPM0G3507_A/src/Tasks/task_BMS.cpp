@@ -21,16 +21,18 @@
 // using 10mA scale (determined by DAConfiguration)
 #define userAto10mA(X) (X)
 
-// user volt to centivolt scale (10mV)
+// user volt to centivolt scale (10mV)'
 // using 10mV scale (determined by DAConfiguration)
 #define userVto10mV(X) (X)
 
 // only 1 BQ on the voltage tap board
 BQ76952 bq = {
         .spi  = &System::spi1,
-        .cs   = &System::GPIO::PB15,
+//        .cs   = &System::GPIO::PB19, // v3
+        .cs   = &System::GPIO::PA15, // v2.2
     };
-auto &bqReset = System::GPIO::PA15;
+//auto &bqReset = System::GPIO::PA15; // v3
+auto &bqReset = System::GPIO::PA21; // v2.2
 
 BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {
@@ -620,7 +622,7 @@ void Task::BMS_task(void *){
 
             BMSComms::PacketHeader * header = reinterpret_cast<BMSComms::PacketHeader *>(txmsg.data);
             header->typeSM = BMSComms::PktTypeSM_t::TEST_1;
-            header->slaveID = 1;
+            header->slaveID = 2;
 
             BMSComms::PktSM_Test1 * pktms = reinterpret_cast<BMSComms::PktSM_Test1 *>(header->data);
             { // populate
