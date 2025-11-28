@@ -8,6 +8,8 @@
 #ifndef SRC_TASKS_TASK_BMS_HPP_
 #define SRC_TASKS_TASK_BMS_HPP_
 
+#include "Middleware/BQ769x2/BQ76952.hpp"
+
 namespace Task {
     /**
      * performs the DAQ and comms required to operate as part of a BMS.
@@ -16,6 +18,8 @@ namespace Task {
      * - uses CAN FIFO 0
      */
     void BMS_task(void *);
+
+    extern BQ76952 bq;
 }
 
 #endif /* SRC_TASKS_TASK_BMS_HPP_ */

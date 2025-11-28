@@ -28,11 +28,11 @@
 // only 1 BQ on the voltage tap board
 BQ76952 bq = {
         .spi  = &System::spi1,
-//        .cs   = &System::GPIO::PB19, // v3
-        .cs   = &System::GPIO::PA15, // v2.2
+        .cs   = &System::GPIO::PB19, // v3
+//        .cs   = &System::GPIO::PA15, // v2.2
     };
-//auto &bqReset = System::GPIO::PA15; // v3
-auto &bqReset = System::GPIO::PA21; // v2.2
+auto &bqReset = System::GPIO::PA15; // v3
+//auto &bqReset = System::GPIO::PA21; // v2.2
 
 BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {
@@ -362,6 +362,8 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
 void Task::BMS_task(void *){
     System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
 
+    bq.spi->takeResource(0);
+
     //---- SPI setup ------------------------------------------
     bq.spi->setSCLKTarget(250e3); // bq76952 max speed of 2MHz
     DL_GPIO_enableOutput(GPIOPINPUX(*bq.cs)); // SPI CS
@@ -399,11 +401,15 @@ void Task::BMS_task(void *){
     if(! bq.setConfig(&bqSetting))
         System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
 
+    bq.spi->giveResource();
+
     while(1){
 
         BQ76952::DAStatus5 dastatus5;
         {
+            bq.spi->takeResource(0);
             bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS5, &dastatus5, sizeof(dastatus5));
+            bq.spi->giveResource();
 
             // Print Header
             System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET "--- Battery Data Block ---" NEWLINE));
@@ -483,7 +489,9 @@ void Task::BMS_task(void *){
         {
 
             // Read the data block for DASTATUS6 (Subcommand 0x0076)
+            bq.spi->takeResource(0);
             bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS6, &dastatus6, sizeof(dastatus6));
+            bq.spi->giveResource();
 
             // Print Header
             System::uart_ui.nputs(ARRANDN(CLIRESET "--- Battery Data Block 6 ---" NEWLINE));
@@ -549,12 +557,14 @@ void Task::BMS_task(void *){
             for(uint8_t i = 0; i < 16; i++){
                 System::uart_ui.nputs(ARRANDN(CLIRESET "\t"));
 
+                bq.spi->takeResource(0);
                 if(!bq.sendDirectCommandR(
                         (BQ769X2_PROTOCOL::CmdDrt)(BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage + 2 * i),
                         cellmV + i,
                         sizeof(cellmV[0])
                     ))
                     System::uart_ui.nputs(ARRANDN(CLIBAD));
+                bq.spi->giveResource();
 
                 System::uart_ui.putu32d(cellmV[i]);
             }
@@ -564,12 +574,14 @@ void Task::BMS_task(void *){
         System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE  "bal?:  "));
         uint16_t activeBalMask = 0;
         {
+            bq.spi->takeResource(0);
             if(!bq.sendCommandR(
                     BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS,
                     &activeBalMask,
                     sizeof(activeBalMask)
                 )){
                 System::uart_ui.nputs(ARRANDN(CLIBAD));
+            bq.spi->giveResource();
             } else {
                 for(uint8_t i = 0; i < 16; i++){
                     System::uart_ui.nputs(ARRANDN("\t"));
@@ -581,12 +593,14 @@ void Task::BMS_task(void *){
         uint16_t internalTempRaw = 0;
         {
             System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "internal temp (0.1 K): "));
+            bq.spi->takeResource(0);
             if(!bq.sendDirectCommandR(
                 BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68
                 &internalTempRaw,
                 sizeof(internalTempRaw)
             ))
                 System::uart_ui.nputs(ARRANDN(CLIBAD));
+            bq.spi->giveResource();
 
             System::uart_ui.put32d(internalTempRaw);
 
@@ -595,12 +609,14 @@ void Task::BMS_task(void *){
         uint16_t balTime = 0;
         {
             System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "bal time: "));
+            bq.spi->takeResource(0);
             if(!bq.sendSubcommandR(
                 BQ769X2_PROTOCOL::Cmd::CBSTATUS1,
                 &balTime,
                 sizeof(balTime)
             ))
                 System::uart_ui.nputs(ARRANDN(CLIBAD));
+            bq.spi->giveResource();
 
             System::uart_ui.putu32d(balTime);
         }
@@ -680,128 +696,6 @@ void Task::BMS_task(void *){
      *      }
      * }
      */
-
-
-//    DL_MCAN_TxBufElement txmsg = {
-//           .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
-//           .rtr    = 0,        // 0: data frame, 1: remote frame
-//           .xtd    = 1,        // 0: 11b id, 1: 29b id
-//           .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-//           .dlc    = 8,        // data byte count, see DL comments
-//           .brs    = 0,        // 0: no bit rate switching, 1: yes brs
-//           .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
-//           .efc    = 0,        // 0: dont store Tx events, 1: store
-//           .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
-//       };
-//
-////    while(1){
-//        for(uint8_t i = 0; i < sizeof(cmds); i++){
-//            uint16_t v = 0xBEEF;
-//            bool success = bq.sendDirectCommandR(cmds[i], &v);
-//            vTaskDelay(pdMS_TO_TICKS(1e6));
-//
-//            snprintf(ARRANDN(str), "%6d,", v);
-//
-//            System::uart_ui.nputs(ARRANDN(str));
-//
-//            if(!success)
-//                v = 0;
-//
-//            ((uint16_t*)txmsg.data)[i % 8] = v;
-//
-//            // transmit in 8B packets
-//            if((i+1) % 8 == 0)
-//            {
-//               DL_MCAN_TxFIFOStatus tf;
-//               DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
-//
-//               uint32_t bufferIndex = tf.putIdx;
-//
-//               DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-//               DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
-//            }
-//        }
-//        System::uart_ui.nputs(ARRANDN(NEWLINE));
-//
-//        vTaskDelay(pdMS_TO_TICKS(1e6));
-//    }
-
-
-    while(1)
-    {
-        // Canned CAN TX
-        DL_MCAN_TxBufElement txmsg = {
-                .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
-                .rtr    = 0,        // 0: data frame, 1: remote frame
-                .xtd    = 1,        // 0: 11b id, 1: 29b id
-                .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-                .dlc    = 3,        // data byte count, see DL comments
-                .brs    = 0,        // 0: no bit rate switching, 1: yes brs
-                .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
-                .efc    = 0,        // 0: dont store Tx events, 1: store
-                .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
-            };
-
-        txmsg.data[0] = 6;
-        txmsg.data[1] = 7;
-        txmsg.data[2] = 8;
-
-        DL_MCAN_TxFIFOStatus tf;
-        DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
-
-        uint32_t bufferIndex = tf.putIdx;
-
-        DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-        DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
-
-        vTaskDelay(pdMS_TO_TICKS(400));
-        System::uart_ui.nputs(ARRANDN("meow" NEWLINE));
-    };
-
-
-//    PacketHeader pktHeader;
-//    Pkt_CellV pktCellV;
-
-
-    //pointer to variable -> point it to the start of the data array, no copy
-
-    while (1)
-    {
-        // Slave CAN TX
-        DL_MCAN_TxBufElement txmsg = {
-                .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
-                .rtr    = 0,        // 0: data frame, 1: remote frame
-                .xtd    = 1,        // 0: 11b id, 1: 29b id
-                .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-                .dlc    = 3,        // data byte count, see DL comments
-                .brs    = 0,        // 0: no bit rate switching, 1: yes brs
-                .fdf    = 1,        // FD format, 0: classic CAN, 1: CAN FD format
-                .efc    = 0,        // 0: dont store Tx events, 1: store
-                .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
-            };
-
-
-        BMSComms::PacketHeader * header = static_cast<BMSComms::PacketHeader *>((void *)txmsg.data);
-        BMSComms::PktSM_CellV * cellcv = static_cast<BMSComms::PktSM_CellV *>((void *)header->data);
-
-        header->slaveID = 10;
-//        txmsg.data[0] = 6;
-//        txmsg.data[1] = 7;
-//        txmsg.data[2] = 8;
-
-        DL_MCAN_TxFIFOStatus tf;
-        DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
-
-        uint32_t bufferIndex = tf.putIdx;
-
-        DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-        DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
-
-        vTaskDelay(pdMS_TO_TICKS(400));
-        System::uart_ui.nputs(ARRANDN("meow" NEWLINE));
-    }
-
-
 
     System::FailHard("BMS_task ended" NEWLINE);
     vTaskDelete(NULL);
