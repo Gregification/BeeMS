@@ -27,7 +27,7 @@ auto &wiz_spi   = System::spi1;
 auto &wiz_cs    = System::GPIO::PA8;
 auto &wiz_reset = System::GPIO::PA15;
 
-uint16_t modbusTCPPort = 502;   // arbitrary, must match RapidSCADA settings
+uint16_t const modbusTCPPort = 502;   // arbitrary, must match RapidSCADA settings
 uint8_t const socketNum = 0;          // [0,8], arbitrary
 
 wiz_NetInfo netConfig = {
@@ -91,9 +91,12 @@ void Task::non_BMS_ethModbus_task(void *){
 
     int8_t error;
     SOCKET sn;
+    bool reset;
 
-    while(1){
+    while(true){
+        reset = false;
         sn = socketNum;
+
         // init socket
         switch(error = socket(sn, Sn_MR_TCP, modbusTCPPort, SF_IO_NONBLOCK)){
             default:
@@ -115,8 +118,6 @@ void Task::non_BMS_ethModbus_task(void *){
                 continue;
         }
 
-        System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "Modbus listening for TCP connection." NEWLINE));
-
         // establish incomming connection
         error = listen(sn);
         switch(error) {
@@ -131,18 +132,41 @@ void Task::non_BMS_ethModbus_task(void *){
                 continue;
 
             case SOCK_OK:
-                // yippie
-                System::uart_ui.nputs(ARRANDN("sock OK! " NEWLINE));
+                // yippie!
                 break;
         }
+
+        System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "Modbus listening for TCP connection on port: " ));
+        System::uart_ui.putu32d(modbusTCPPort);
+        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+
+
+        while((error = getSn_SR(sn)) != SOCK_ESTABLISHED){
+            switch(error){
+                // cases found at w5500.h/480
+
+                case SOCK_LISTEN:
+                    // keep waiting
+//                    System::uart_ui.nputs(ARRANDN("sock listening..." NEWLINE));
+                    vTaskDelay(pdMS_TO_TICKS(10));
+                    continue;
+
+                default:
+                    // restart
+                    reset = true;
+                    break;
+            }
+            if(reset)
+                break;
+        }
+        if(reset) continue;
 
         static uint8_t buf[20];
         static_assert(sizeof(buf) <= UINT16_MAX);
 
         // process packets
-        bool reset = false;
-        while(reset == false){
-            uint8_t status = recv(sn, ARRANDN(buf));
+        while(!reset){
+            int32_t status = recv(sn, ARRANDN(buf));
 
             // is data available?
             switch(status){
@@ -166,16 +190,19 @@ void Task::non_BMS_ethModbus_task(void *){
                     reset = true;
                     continue;
                 default:
-                    if(status == sizeof(buf))
+                    if(status >= 0 && status <= sizeof(buf))
                         // yippie
                         break;
 
-                    System::uart_ui.nputs(ARRANDN("Modbus: unknown receive status!?" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN("Modbus: unknown receive status!? -> "));
+                    System::uart_ui.put32d(status);
+                    System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
                     reset = true;
                     continue;
             }
 
             // process packet
+            System::uart_ui.nputs(ARRANDN("Modbus: dump packet" NEWLINE));
             for(uint16_t i = 0; i < sizeof(buf); i++){
                 System::uart_ui.nputs(ARRANDN(" \t"));
                 System::uart_ui.putu32h(buf[i]);
