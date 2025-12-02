@@ -10,7 +10,6 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
-#include "BMSCommon.hpp"
 
 /*--- variables ------------------------------------------------------------------------*/
 
@@ -45,9 +44,12 @@ void System::init() {
     delay_cycles(POWER_STARTUP_DELAY);
 
     #ifdef PROJECT_ENABLE_MCAN0
+    // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
+
+        // pins for v: 2.2, 3.0
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
-        // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
+
         DL_MCAN_enablePower(CANFD0);
         delay_cycles(POWER_STARTUP_DELAY);
     #endif
@@ -331,7 +333,7 @@ void System::init() {
                   .fdMode            = true,    // CAN FD mode?
                   .brsEnable         = true,    // enable bit rate switching?
                   .txpEnable         = true,    // pause for 2 bit times after successful transmission?
-                  .efbi              = true,   // edge filtering? 2 consecutive Tq to accept sync
+                  .efbi              = false,   // edge filtering? 2 consecutive Tq to accept sync
                   .pxhddisable       = false,   // do not Tx error frame on protocol error?
                   .darEnable         = true,    // auto retransmission of failed frames?
                   .wkupReqEnable     = false,   // enable wake up request?
@@ -356,8 +358,8 @@ void System::init() {
                     .timeoutSelect     = DL_MCAN_TIMEOUT_SELECT_CONT, // timeout source select
                     .timeoutPreload    = 65535,     // load value of timeout counter
                     .timeoutCntEnable  = false,     // timeout counter enable
-                    .filterConfig.rrfe = 0,      // reject remote frames extended
-                    .filterConfig.rrfs = 0,      // reject remote frames standard
+                    .filterConfig.rrfe = 0,         // reject remote frames extended
+                    .filterConfig.rrfs = 0,         // reject remote frames standard
                     .filterConfig.anfe = 0,         // accept non-matching frames extended
                     .filterConfig.anfs = 0,         // accept non-matching frames standard
                 };
@@ -371,7 +373,7 @@ void System::init() {
                     .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
                     .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
                     .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
-                    .dataTimeSeg1       = 26,   /* Data Time segment before sample point. */
+                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
                     .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
                     .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
                 };
@@ -510,8 +512,6 @@ void System::FailHard(const char *str) {
 
     static uint32_t count = 0;
     while(1) {
-        CHARGEPIN.clear();
-
         System::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
         System::uart_ui.putu32d(count);
         System::uart_ui.nputs(ARRANDN(" : " CLIRESET));
