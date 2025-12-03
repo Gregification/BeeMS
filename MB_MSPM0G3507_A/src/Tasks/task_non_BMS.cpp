@@ -244,14 +244,14 @@ void Task::non_BMS_ethModbus_task(void *){
             void const * const rxend = (void*)(rxbuf + rxlen);
 
             // dump packet
-            System::uart_ui.nputs(ARRANDN("Modbus: dump packet" NEWLINE));
-            for(uint16_t i = 0; i < rxlen; i++){
-                System::uart_ui.nputs(ARRANDN(" \t"));
-                System::uart_ui.putu32h(rxbuf[i]);
-                if(i % 8 == 0 && i != 0)
-                    System::uart_ui.nputs(ARRANDN(NEWLINE));
-            }
-            System::uart_ui.nputs(ARRANDN(NEWLINE));
+//            System::uart_ui.nputs(ARRANDN("Modbus: dump packet" NEWLINE));
+//            for(uint16_t i = 0; i < rxlen; i++){
+//                System::uart_ui.nputs(ARRANDN(" \t"));
+//                System::uart_ui.putu32h(rxbuf[i]);
+//                if(i % 8 == 0 && i != 0)
+//                    System::uart_ui.nputs(ARRANDN(NEWLINE));
+//            }
+//            System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             do {
                 // make life simple
@@ -306,35 +306,9 @@ void Task::non_BMS_ethModbus_task(void *){
                             *txadu      = *rxadu;
                             resp->byteCount = 0;
 
-                            uart_ui.nputs(ARRANDN("transcation id: "));
-                            uart_ui.putu32h(ntoh16(txheader->transactionID));
-                            uart_ui.nputs(ARRANDN(NEWLINE));
-                            uart_ui.nputs(ARRANDN("protocol id: "));
-                            uart_ui.putu32h(ntoh16(txheader->protocolID));
-                            uart_ui.nputs(ARRANDN(NEWLINE));
-                            uart_ui.nputs(ARRANDN("len: "));
-                            uart_ui.putu32h(ntoh16(txheader->len));
-                            uart_ui.nputs(ARRANDN(NEWLINE));
-                            uart_ui.nputs(ARRANDN("unit id: "));
-                            uart_ui.putu32h(txheader->unitID);
-                            uart_ui.nputs(ARRANDN(NEWLINE));
-                            uart_ui.nputs(ARRANDN("func: "));
-                            uart_ui.putu32h(txadu->func);
-                            uart_ui.nputs(ARRANDN(NEWLINE));
-                            uart_ui.nputs(ARRANDN("query addr start: "));
-                            uart_ui.putu32h(ntoh16(query->start));
-                            uart_ui.nputs(ARRANDN(NEWLINE));
-                            uart_ui.nputs(ARRANDN("query len: "));
-                            uart_ui.putu32h(ntoh16(query->len));
-                            uart_ui.nputs(ARRANDN(NEWLINE));
-
                             for(uint16_t i = 0; i < ntoh16(query->len); i++){
                                 if((void*)(resp->values + i) >= txend) // constrain to tx buffer size
                                     break;
-
-                                uart_ui.nputs(ARRANDN("\trequesting addr: "));
-                                uart_ui.put32d(ntoh16(query->start) + i);
-                                uart_ui.nputs(ARRANDN(NEWLINE));
 
                                 uint16_t res;
                                 if(!MasterRegisters::getReg(ntoh16(query->start) + i, &res))
@@ -344,7 +318,7 @@ void Task::non_BMS_ethModbus_task(void *){
                                 resp->byteCount += sizeof(res);
                             }
 
-                            // tx
+                            // tx response
                             txheader->len = hton16(resp->byteCount + 3); // +3 = [unit id] + [function] + [1 byte error]
                             uint16_t _len = sizeof(*txheader) + sizeof(*txadu) + sizeof(*resp) + resp->byteCount;
                             send(sn, txbuf, _len);
