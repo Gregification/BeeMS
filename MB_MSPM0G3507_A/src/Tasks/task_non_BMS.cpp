@@ -73,8 +73,9 @@ void Task::non_BMS_ethModbus_task(void *){
     wiz_spi.setSCLKTarget(25e6);
 
     /*** W5500 init *****************/
-    if(!setupWizchip())
-        System::FailHard("W5500 init failed!");
+    while(!setupWizchip()) {
+        System::uart_ui.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed!" CLIRESET NEWLINE));
+    }
 
     wizchip_setnetinfo(&netConfig);
     {
@@ -86,7 +87,7 @@ void Task::non_BMS_ethModbus_task(void *){
     }
 
     /********************************/
-    System::uart_ui.nputs(ARRANDN(NEWLINE "IP: \t"));
+    System::uart_ui.nputs(ARRANDN("IP: \t"));
     for(int i = 0; i < 4; i++){
         System::uart_ui.putu32d(netConfig.ip[i]);
         System::uart_ui.nputs(ARRANDN("."));
@@ -117,7 +118,8 @@ void Task::non_BMS_ethModbus_task(void *){
         reset = false;
         sn = socketNum;
 
-        // init socket
+        /*** init socket ****************/
+
         switch(error = socket(sn, Sn_MR_TCP, modbusTCPPort, SF_IO_NONBLOCK)){
             default:
                 if(error == sn)
@@ -138,7 +140,9 @@ void Task::non_BMS_ethModbus_task(void *){
                 continue;
         }
 
-        // setup socket to listen
+
+        /*** setup socket to listen *****/
+
         error = listen(sn);
         switch(error) {
             default:
@@ -156,11 +160,13 @@ void Task::non_BMS_ethModbus_task(void *){
                 break;
         }
 
+
+        /*** wait for incoming connection ***/
+
         System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "Modbus listening for TCP connection on port: " ));
         System::uart_ui.putu32d(modbusTCPPort);
         System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
 
-        // wait for incoming connection
         while((error = getSn_SR(sn)) != SOCK_ESTABLISHED){ // get socket status
             switch(error){
                 // cases found at w5500.h/480
@@ -184,6 +190,10 @@ void Task::non_BMS_ethModbus_task(void *){
 
         /*** receive packets ******************/
 
+        System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "Modbus: accepted incoming TCP connection on port: " ));
+        System::uart_ui.putu32d(modbusTCPPort);
+        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+
         static uint8_t rxbuf[60]; // 260B MAX standard Modbus-TCP len (MBAP + PDU), we can get away with smaller for 99% of stuff
         static uint8_t txbuf[70]; // see comment above. idk. what do u want from me. go find the campus cat. ("mmmm" (Microwave imitation))
         static constexpr uint8_t * txend = txbuf + sizeof(txbuf);
@@ -195,8 +205,6 @@ void Task::non_BMS_ethModbus_task(void *){
         while(!reset){
             // rx packet
             int32_t status = recv(sn, ARRANDN(rxbuf));
-
-            // is data available?
             switch(status){
                 static uint8_t cycles = 0; // exponential back off style wait times
 
@@ -207,19 +215,19 @@ void Task::non_BMS_ethModbus_task(void *){
                     vTaskDelay(pdMS_TO_TICKS(cycles));
                     continue;
                 case SOCKERR_DATALEN:
-                    System::uart_ui.nputs(ARRANDN("Modbus: zero data length" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: zero data length" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKNUM:
-                    System::uart_ui.nputs(ARRANDN("Modbus: Invalid socket number" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket number" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKMODE:
-                    System::uart_ui.nputs(ARRANDN("Modbus: Invalid operation in the socket" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid operation in the socket" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKSTATUS:
-                    System::uart_ui.nputs(ARRANDN("Modbus: Invalid socket status for socket operation" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 default:
@@ -230,7 +238,7 @@ void Task::non_BMS_ethModbus_task(void *){
                         break;
                     }
 
-                    System::uart_ui.nputs(ARRANDN("Modbus: unknown receive status!? -> "));
+                    System::uart_ui.nputs(ARRANDN(CLIERROR "Modbus: unknown receive status!? -> "));
                     System::uart_ui.put32d(status);
                     System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
                     reset = true;
@@ -290,7 +298,7 @@ void Task::non_BMS_ethModbus_task(void *){
                         break;
 
                     case Function::R_HOLDING_REGS: {
-                            uart_ui.nputs(ARRANDN("R_HOLDING_REGS" NEWLINE));
+//                            uart_ui.nputs(ARRANDN("R_HOLDING_REGS" NEWLINE));
                             F_Holding_REQ const * query = reinterpret_cast<F_Holding_REQ const *>(rxadu->data);
                             F_Holding_RES * resp = reinterpret_cast<F_Holding_RES *>(txadu->data);
 
@@ -346,7 +354,7 @@ void Task::non_BMS_ethModbus_task(void *){
                         break;
 
                     default:
-                        uart_ui.nputs(ARRANDN("unknown function : "));
+                        uart_ui.nputs(ARRANDN("Modbus: received unknown function : "));
                         uart_ui.put32d(rxadu->func);
                         uart_ui.nputs(ARRANDN(NEWLINE));
                         break;
@@ -443,11 +451,5 @@ bool setupWizchip() {
     wiz_reset.clear();
     vTaskDelay(pdMS_TO_TICKS(10));
 
-    if(wizchip_init(NULL,NULL)) {
-        System::uart_ui.nputs(ARRANDN(CLIERROR "failed wizchip init chip" CLIRESET NEWLINE));
-        return false;
-    } else {
-        System::uart_ui.nputs(ARRANDN(CLIGOOD "wizchip init-ed chip" CLIRESET NEWLINE));
-        return true;
-    }
+    return 0 == wizchip_init(NULL,NULL);
 }

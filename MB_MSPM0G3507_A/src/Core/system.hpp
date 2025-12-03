@@ -59,7 +59,7 @@
 #define PROJECT_NAME                    "Voltage Tap"
 #define PROJECT_DESCRIPTION             "github.com/Gregification/BeeMS"
 #define PROJECT_VERSION                 "3.1"
-constexpr uint16_t PROJECT_VERSION_N    = 310;
+constexpr uint16_t PROJECT_VERSION_N    = 67;
 
 /*--- IC footprint -------------------------------------*/
 
