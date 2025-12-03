@@ -21,7 +21,6 @@ volatile BMSMaster<10> master;
 void Task::BMS_task(void *){
     System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
 
-    DL_GPIO_initDigitalOutput(CHARGEPIN.iomux);
     DL_GPIO_initDigitalInputFeatures(
             SW2.iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,

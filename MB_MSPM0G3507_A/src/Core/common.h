@@ -47,7 +47,10 @@ typedef uint16_t buffersize_t;
 
 bool arrCmp(void const * a, void const * b, buffersize_t len);
 
+//--- general macros ------------------------------------------
 
-#define CHARGEPIN System::GPIO::PB7
+#define SWAP_BYTES_16(X) ( (((X) & 0x00FF) << 8) | (((X) & 0xFF00) >> 8) )
+#define hton16(X) SWAP_BYTES_16(X)
+#define ntoh16(X) SWAP_BYTES_16(X)
 
 #endif /* SRC_CORE_COMMON_H_ */
