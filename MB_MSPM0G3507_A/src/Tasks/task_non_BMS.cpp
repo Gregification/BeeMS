@@ -3,6 +3,24 @@
  *
  *  Created on: Jun 6, 2025
  *      Author: FSAE
+ *
+ *  This task is the interface with RapidSCADA.
+ *  Achieved by a Modbus-TCP connection through the W5500.
+ *  A non-standard interpretation of Modbus packets is needed since the master-board
+ *      needs to bridge it over a CAN-bus connection.
+ *
+ *  RESOURCES:
+ *      - Modbus-TCP : https://www.prosoft-technology.com/kb/assets/intro_modbustcp.pdf
+ *          - TLDR: its just Modbus-RTU but sent over TCP
+ *          - doc has a LOT of info. see Modbus-RTU doc for more on relevant stuff
+ *          - "Modbus TCP/IP (also Modbus-TCP) is simply the Modbus RTU protocol
+ *              with a TCP interface that runs on Ethernet." /4
+ *      - Modbus-RTU : https://www.modbustools.com/modbus.html
+ *          - doc has too-d-point packet breakdown
+ *
+ * - in the name of professor Microwave, we will put all the code in one function
+ * - probably reentrant but i wouldn't find out. easier to add-on multi-socket support
+ *      if thats what your looking at.
  */
 
 /*
@@ -18,14 +36,16 @@
 
 #include "Core/system.hpp"
 #include "Core/std alternatives/string.hpp"
+#include "Core/Networking/Modbus.hpp"
 #include "Middleware/W5500/socket.h"
 #include "Middleware/W5500/wizchip_conf.h"
+#include "Tasks/MasterModbusRegisters.hpp"
 
 /*** wixchip setup *******************************************/
 
-auto &wiz_spi   = System::spi1;
-auto &wiz_cs    = System::GPIO::PA8;
-auto &wiz_reset = System::GPIO::PA15;
+System::SPI::SPI         &wiz_spi   = System::spi1;
+System::GPIO::GPIO const &wiz_cs    = System::GPIO::PA8;
+System::GPIO::GPIO const &wiz_reset = System::GPIO::PA15;
 
 uint16_t const modbusTCPPort = 502;   // arbitrary, must match RapidSCADA settings
 uint8_t const socketNum = 0;          // [0,8], arbitrary
@@ -53,8 +73,9 @@ void Task::non_BMS_ethModbus_task(void *){
     wiz_spi.setSCLKTarget(25e6);
 
     /*** W5500 init *****************/
-    if(!setupWizchip())
-        System::FailHard("W5500 init failed!");
+    while(!setupWizchip()) {
+        System::uart_ui.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed!" CLIRESET NEWLINE));
+    }
 
     wizchip_setnetinfo(&netConfig);
     {
@@ -66,7 +87,7 @@ void Task::non_BMS_ethModbus_task(void *){
     }
 
     /********************************/
-    System::uart_ui.nputs(ARRANDN(NEWLINE "IP: \t"));
+    System::uart_ui.nputs(ARRANDN("IP: \t"));
     for(int i = 0; i < 4; i++){
         System::uart_ui.putu32d(netConfig.ip[i]);
         System::uart_ui.nputs(ARRANDN("."));
@@ -97,7 +118,8 @@ void Task::non_BMS_ethModbus_task(void *){
         reset = false;
         sn = socketNum;
 
-        // init socket
+        /*** init socket ****************/
+
         switch(error = socket(sn, Sn_MR_TCP, modbusTCPPort, SF_IO_NONBLOCK)){
             default:
                 if(error == sn)
@@ -118,7 +140,9 @@ void Task::non_BMS_ethModbus_task(void *){
                 continue;
         }
 
-        // establish incomming connection
+
+        /*** setup socket to listen *****/
+
         error = listen(sn);
         switch(error) {
             default:
@@ -136,12 +160,14 @@ void Task::non_BMS_ethModbus_task(void *){
                 break;
         }
 
+
+        /*** wait for incoming connection ***/
+
         System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "Modbus listening for TCP connection on port: " ));
         System::uart_ui.putu32d(modbusTCPPort);
         System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
 
-
-        while((error = getSn_SR(sn)) != SOCK_ESTABLISHED){
+        while((error = getSn_SR(sn)) != SOCK_ESTABLISHED){ // get socket status
             switch(error){
                 // cases found at w5500.h/480
 
@@ -161,58 +187,185 @@ void Task::non_BMS_ethModbus_task(void *){
         }
         if(reset) continue;
 
-        static uint8_t buf[20];
-        static_assert(sizeof(buf) <= UINT16_MAX);
 
-        // process packets
+        /*** receive packets ******************/
+
+        System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "Modbus: accepted incoming TCP connection on port: " ));
+        System::uart_ui.putu32d(modbusTCPPort);
+        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+
+        static uint8_t rxbuf[60]; // 260B MAX standard Modbus-TCP len (MBAP + PDU), we can get away with smaller for 99% of stuff
+        static uint8_t txbuf[70]; // see comment above. idk. what do u want from me. go find the campus cat. ("mmmm" (Microwave imitation))
+        static constexpr uint8_t * txend = txbuf + sizeof(txbuf);
+
+        static_assert(sizeof(rxbuf) <= UINT16_MAX);
+        static_assert(sizeof(txbuf) <= UINT16_MAX);
+
+
         while(!reset){
-            int32_t status = recv(sn, ARRANDN(buf));
-
-            // is data available?
+            // rx packet
+            int32_t status = recv(sn, ARRANDN(rxbuf));
             switch(status){
+                static uint8_t cycles = 0; // exponential back off style wait times
+
                 case SOCK_BUSY:
-                    vTaskDelay(pdMS_TO_TICKS(10));
+                    if(cycles < 10) // back off max cap at 10mS
+                        cycles++;
+
+                    vTaskDelay(pdMS_TO_TICKS(cycles));
                     continue;
                 case SOCKERR_DATALEN:
-                    System::uart_ui.nputs(ARRANDN("Modbus: zero data length" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: zero data length" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKNUM:
-                    System::uart_ui.nputs(ARRANDN("Modbus: Invalid socket number" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket number" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKMODE:
-                    System::uart_ui.nputs(ARRANDN("Modbus: Invalid operation in the socket" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid operation in the socket" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKSTATUS:
-                    System::uart_ui.nputs(ARRANDN("Modbus: Invalid socket status for socket operation" NEWLINE));
+                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 default:
-                    if(status >= 0 && status <= sizeof(buf))
+                    if(status >= 0 && status <= sizeof(rxbuf)){
                         // yippie
-                        break;
 
-                    System::uart_ui.nputs(ARRANDN("Modbus: unknown receive status!? -> "));
+                        cycles = 0; // reset wait
+                        break;
+                    }
+
+                    System::uart_ui.nputs(ARRANDN(CLIERROR "Modbus: unknown receive status!? -> "));
                     System::uart_ui.put32d(status);
                     System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
                     reset = true;
                     continue;
             }
 
-            // process packet
-            System::uart_ui.nputs(ARRANDN("Modbus: dump packet" NEWLINE));
-            for(uint16_t i = 0; i < sizeof(buf); i++){
-                System::uart_ui.nputs(ARRANDN(" \t"));
-                System::uart_ui.putu32h(buf[i]);
-                if(i % 8 == 0)
-                    System::uart_ui.nputs(ARRANDN(NEWLINE));
-            }
-            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            /*** handle packet **************************************/
+
+            uint16_t const rxlen = status;
+            void const * const rxend = (void*)(rxbuf + rxlen);
+
+            // dump packet
+//            System::uart_ui.nputs(ARRANDN("Modbus: dump packet" NEWLINE));
+//            for(uint16_t i = 0; i < rxlen; i++){
+//                System::uart_ui.nputs(ARRANDN(" \t"));
+//                System::uart_ui.putu32h(rxbuf[i]);
+//                if(i % 8 == 0 && i != 0)
+//                    System::uart_ui.nputs(ARRANDN(NEWLINE));
+//            }
+//            System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+            do {
+                // make life simple
+                using namespace System;
+                using namespace Networking::Modbus;
+
+                MBAPHeader const * rxheader = reinterpret_cast<MBAPHeader const *>(rxbuf);
+                ADUPacket const * rxadu     = rxheader->adu;
+                MBAPHeader * txheader       = reinterpret_cast<MBAPHeader *>(txbuf);
+                ADUPacket * txadu           = txheader->adu;
+
+
+                /*** validation *****************/
+
+                if(rxadu >= rxend) // is under sized?
+                    break; // ignore packet
+
+                if(ntoh16(rxheader->protocolID) != MBAPHeader::PROTOCOL_ID_MODBUS) // is protocol not Modbus ?
+                    break; // ignore packet
+
+                if(! (rxheader->unitID == 0x00 || rxheader->unitID == 0xFF)) // is not Modbus-TCP/IP ?
+                    break; // ignore packet
+
+
+                /*** process packet *************/
+                /* rxheader and rxbuff is not guaranteed to be unmodified by the code after this point.
+                 */
+
+                switch (rxadu->func) {
+                    case Function::R_COILS:
+                        uart_ui.nputs(ARRANDN("R_COILS" NEWLINE));
+                        break;
+
+                    case Function::R_DISRETE_INPUTS:
+                        uart_ui.nputs(ARRANDN("R_DISRETE_INPUTS" NEWLINE));
+                        break;
+
+                    case Function::R_HOLDING_REGS: {
+//                            uart_ui.nputs(ARRANDN("R_HOLDING_REGS" NEWLINE));
+                            F_Holding_REQ const * query = reinterpret_cast<F_Holding_REQ const *>(rxadu->data);
+                            F_Holding_RES * resp = reinterpret_cast<F_Holding_RES *>(txadu->data);
+
+                            /*** validation ***********/
+
+                            if((sizeof(*query) + 2) > ntoh16(rxheader->len))// is "query" struct in packet out of bounds ?  // +2 = [unit id] + [function]
+                                break; // ignore packet
+
+
+                            /*** response *************/
+
+                            *txheader   = *rxheader;
+                            *txadu      = *rxadu;
+                            resp->byteCount = 0;
+
+                            for(uint16_t i = 0; i < ntoh16(query->len); i++){
+                                if((void*)(resp->values + i) >= txend) // constrain to tx buffer size
+                                    break;
+
+                                uint16_t res;
+                                if(!MasterRegisters::getReg(ntoh16(query->start) + i, &res))
+                                    break;
+
+                                resp->values[i] = hton16(res);
+                                resp->byteCount += sizeof(res);
+                            }
+
+                            // tx response
+                            txheader->len = hton16(resp->byteCount + 3); // +3 = [unit id] + [function] + [1 byte error]
+                            uint16_t _len = sizeof(*txheader) + sizeof(*txadu) + sizeof(*resp) + resp->byteCount;
+                            send(sn, txbuf, _len);
+
+                        } break;
+
+                    case Function::R_INPUT_REGS:
+                        uart_ui.nputs(ARRANDN("R_INPUT_REGS" NEWLINE));
+                        break;
+
+                    case Function::W_COIL:
+                        uart_ui.nputs(ARRANDN("W_COIL" NEWLINE));
+                        break;
+
+                    case Function::W_REG:
+                        uart_ui.nputs(ARRANDN("W_REG" NEWLINE));
+                        break;
+
+                    case Function::W_COILS:
+                        uart_ui.nputs(ARRANDN("W_COILS" NEWLINE));
+                        break;
+
+                    case Function::W_REGS:
+                        uart_ui.nputs(ARRANDN("W_REGS" NEWLINE));
+                        break;
+
+                    default:
+                        uart_ui.nputs(ARRANDN("Modbus: received unknown function : "));
+                        uart_ui.put32d(rxadu->func);
+                        uart_ui.nputs(ARRANDN(NEWLINE));
+                        break;
+                }
+
+            } while(false);
         }
 
-        vTaskDelay(pdMS_TO_TICKS(10e3));
+        // connection was lost / terminated
+        // wait some time, maybe something went bonkers
+        vTaskDelay(pdMS_TO_TICKS(2e3));
     }
 
     System::FailHard("non_BMS_functions_task ended" NEWLINE);
@@ -222,9 +375,9 @@ void Task::non_BMS_ethModbus_task(void *){
 
 /*** wizchip setup *******************************************/
 
-void wiz_select(void)       { wiz_cs.set();    } // if spi runs at 32MHz no need for delay
-void wiz_deselect(void)     { wiz_cs.clear();  }
-uint8_t wiz_read_byte(void) {
+void wiz_select(void)       { wiz_spi.takeResource(0); wiz_cs.set();  }
+void wiz_deselect(void)     { wiz_cs.clear(); wiz_spi.giveResource(); }
+uint8_t wiz_read_byte(void) {wiz_spi.takeResource(0);
     uint8_t rx;
     wiz_spi.transfer(NULL, &rx, 1);
     while(wiz_spi.isBusy());
@@ -298,11 +451,5 @@ bool setupWizchip() {
     wiz_reset.clear();
     vTaskDelay(pdMS_TO_TICKS(10));
 
-    if(wizchip_init(NULL,NULL)) {
-        System::uart_ui.nputs(ARRANDN(CLIERROR "failed wizchip init chip" CLIRESET NEWLINE));
-        return false;
-    } else {
-        System::uart_ui.nputs(ARRANDN(CLIGOOD "wizchip init-ed chip" CLIRESET NEWLINE));
-        return true;
-    }
+    return 0 == wizchip_init(NULL,NULL);
 }

@@ -56,9 +56,10 @@
 
 /*--- meta ---------------------------------------------*/
 
-#define PROJECT_NAME            "Voltage Tap"
-#define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "3.0" // [project version].[hardware version].[software version]
+#define PROJECT_NAME                    "Voltage Tap"
+#define PROJECT_DESCRIPTION             "github.com/Gregification/BeeMS"
+#define PROJECT_VERSION                 "3.1"
+constexpr uint16_t PROJECT_VERSION_N    = 67;
 
 /*--- IC footprint -------------------------------------*/
 
@@ -238,7 +239,7 @@ namespace System {
          * - functions here are general and are nowhere near peak performance
          * - master only device
          */
-        struct SPI : Lockable {
+        struct SPI : public Lockable {
             SPI_Regs * const reg;
             const IRQn_Type irq_type;
 

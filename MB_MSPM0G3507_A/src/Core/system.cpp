@@ -433,11 +433,11 @@ void System::init() {
 
 }
 
-inline bool System::Lockable::takeResource(TickType_t timeout) {
+bool System::Lockable::takeResource(TickType_t timeout) {
     return pdTRUE == xSemaphoreTake(mutex, timeout);
 }
 
-inline void System::Lockable::giveResource() {
+void System::Lockable::giveResource() {
     xSemaphoreGive(mutex);
 }
 
@@ -662,7 +662,7 @@ void System::SPI::SPI::_irq() {
                 if(_trxBuffer.tx) { // TX array contents
                     _trxBuffer.tx_i +=  DL_SPI_fillTXFIFO8(
                             reg,
-                            (uint8_t *)_trxBuffer.tx,
+                            _trxBuffer.tx + _trxBuffer.tx_i,
                             _trxBuffer.len - _trxBuffer.tx_i
                         );
                 } else { // TX bogus data
