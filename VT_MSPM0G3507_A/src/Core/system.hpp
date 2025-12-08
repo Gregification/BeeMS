@@ -308,6 +308,10 @@ namespace System {
             unsigned int prioroty       : 3;
         };
         static_assert(sizeof(CAN_ID_J1939) == sizeof(uint32_t));
+
+        uint8_t DLC2Len(DL_MCAN_RxBufElement const *);
+        uint8_t DLC2Len(DL_MCAN_TxBufElement const *);
+        uint32_t len2DLC(uint32_t size);
     }
 
     void init();

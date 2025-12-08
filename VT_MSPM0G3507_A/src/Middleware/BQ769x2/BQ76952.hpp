@@ -705,7 +705,7 @@ public:
 
     } Power;
 
-    struct DAStatus5 {
+    struct __attribute__((packed)) DAStatus5 {
         uint16_t Vreg18;          // Bytes 0-1: VREG18, 16-bit ADC counts
         uint16_t VSS;             // Bytes 2-3: VSS, 16-bit ADC counts
         uint16_t MaxCellVoltage;  // Bytes 4-5: Max Cell Voltage, mV
@@ -720,6 +720,17 @@ public:
         uint16_t CC1Current;      // Bytes 22-23: CC1 Current, userA
         uint32_t CC2Counts;       // Bytes 24-27: CC2 Counts, 32-bit ADC counts
         uint32_t CC3Counts;       // Bytes 28-31: CC3 Counts, 32-bit ADC counts
+    };
+
+    struct __attribute__((packed)) DAStatus6 {
+        int32_t  AccumCharge;
+        int32_t  AccumChargeFraction;
+        int32_t  AccumTime;
+        int32_t  CFETOFF_Counts;
+        int32_t  DFETOFF_Counts;
+        int32_t  ALERT_Counts;
+        int32_t  TS1_Counts;
+        int32_t  TS2_Counts;
     };
 
 //    bool getConfig(BQ76952SSetting *);

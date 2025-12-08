@@ -12,7 +12,7 @@
 static constexpr char software_info[FancyCli::STR_LEN_COMMON] = PROJECT_NAME " " PROJECT_VERSION " | " __DATE__ " " __TIME__ NEWLINE "\t" PROJECT_DESCRIPTION;
 static constexpr char menu_header[] =   "--- options ----";
 static constexpr char line_delim[]  =   "----------------";
-static constexpr char input_start[] =   ":";
+static constexpr char input_start[] =   ">>>";
 static constexpr char dir_prefix[]  =   "/";
 char message[FancyCli::STR_LEN_COMMON];
 

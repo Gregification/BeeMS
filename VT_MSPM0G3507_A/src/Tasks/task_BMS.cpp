@@ -14,22 +14,25 @@
 #include "Core/FancyCli.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/common.h"
+#include "Core/BMS/BMSComms.hpp"   // adjust path if needed
 
 
 // user amp to centiamp scale (10mA)
 // using 10mA scale (determined by DAConfiguration)
 #define userAto10mA(X) (X)
 
-// user volt to centivolt scale (10mV)
+// user volt to centivolt scale (10mV)'
 // using 10mV scale (determined by DAConfiguration)
 #define userVto10mV(X) (X)
 
 // only 1 BQ on the voltage tap board
 BQ76952 bq = {
         .spi  = &System::spi1,
-        .cs   = &System::GPIO::PB19,
+        .cs   = &System::GPIO::PB19, // v3
+//        .cs   = &System::GPIO::PA15, // v2.2
     };
-auto &bqReset = System::GPIO::PA15;
+auto &bqReset = System::GPIO::PA15; // v3
+//auto &bqReset = System::GPIO::PA21; // v2.2
 
 BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {
@@ -104,7 +107,7 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
                 .tint_en    = 1, // die temp used as a cell temp? 0:no, 1:yes.
                 .tint_fett  = 1, // die tmep used as fet temp? 0:no, 1:yes
             },
-            .VcellMode  = 0b0000'0000'0001'1111,
+            .VcellMode  = 0b0000'1111'1111'1111,
             .CC3Samples = 0x80,
         },
 
@@ -354,10 +357,12 @@ BQ76952::BQ76952SSetting constexpr bqSetting = {
         },
     };
 
-bool setup_BBQ(BQ76952 & b);
+//bool setup_BBQ(BQ76952 & b);
 
 void Task::BMS_task(void *){
     System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
+
+    bq.spi->takeResource(0);
 
     //---- SPI setup ------------------------------------------
     bq.spi->setSCLKTarget(250e3); // bq76952 max speed of 2MHz
@@ -393,167 +398,148 @@ void Task::BMS_task(void *){
 
 //    bq.unseal(0x36720414);
 
-//    if(! setup_BBQ(bq))
-//        System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
-
     if(! bq.setConfig(&bqSetting))
         System::FailHard("failed to init BBQ settings on MCU power up. failed to write");
 
+    bq.spi->giveResource();
+
     while(1){
+
+        BQ76952::DAStatus5 dastatus5;
         {
-            struct {
-                uint16_t Vreg18;          // Bytes 0-1: VREG18, 16-bit ADC counts
-                uint16_t VSS;             // Bytes 2-3: VSS, 16-bit ADC counts
-                uint16_t MaxCellVoltage;  // Bytes 4-5: Max Cell Voltage, mV
-                uint16_t MinCellVoltage;  // Bytes 6-7: Min Cell Voltage, mV
-                uint16_t BatteryVoltageSum; // Bytes 8-9: Battery Voltage Sum, cV
-                uint16_t AvgCellTemperature; // Bytes 10-11: Avg Cell Temperature, 0.1 K
-                uint16_t FETTemperature;  // Bytes 12-13: FET Temperature, 0.1 K
-                uint16_t MaxCellTemperature; // Bytes 14-15: Max Cell Temperature, 0.1 K
-                uint16_t MinCellTemperature; // Bytes 16-17: Min Cell Temperature, 0.1 K
-                uint16_t SecondAvgCellTemperature; // Bytes 18-19: Avg Cell Temperature, 0.1 K (renamed to avoid conflict)
-                uint16_t CC3Current;      // Bytes 20-21: CC3 Current, userA
-                uint16_t CC1Current;      // Bytes 22-23: CC1 Current, userA
-                uint32_t CC2Counts;       // Bytes 24-27: CC2 Counts, 32-bit ADC counts
-                uint32_t CC3Counts;       // Bytes 28-31: CC3 Counts, 32-bit ADC counts
-            } v;
-            bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS5, &v, sizeof(v));
+            bq.spi->takeResource(0);
+            bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS5, &dastatus5, sizeof(dastatus5));
+            bq.spi->giveResource();
 
             // Print Header
             System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET "--- Battery Data Block ---" NEWLINE));
 
             // 1. VREG18 (16-bit)
             System::uart_ui.nputs(ARRANDN("VREG18 (ADC counts): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.Vreg18));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.Vreg18));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 2. VSS (16-bit)
             System::uart_ui.nputs(ARRANDN("VSS (ADC counts): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.VSS));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.VSS));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 3. Max Cell Voltage (16-bit)
             System::uart_ui.nputs(ARRANDN("Max Cell Voltage (mV): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.MaxCellVoltage));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.MaxCellVoltage));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 4. Min Cell Voltage (16-bit)
             System::uart_ui.nputs(ARRANDN("Min Cell Voltage (mV): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.MinCellVoltage));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.MinCellVoltage));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 5. Battery Voltage Sum (16-bit)
             System::uart_ui.nputs(ARRANDN("Battery Voltage Sum (cV): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.BatteryVoltageSum));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.BatteryVoltageSum));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 6. Avg Cell Temperature (16-bit)
             System::uart_ui.nputs(ARRANDN("Avg Cell Temperature (0.1 K): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.AvgCellTemperature));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.AvgCellTemperature));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 7. FET Temperature (16-bit)
             System::uart_ui.nputs(ARRANDN("FET Temperature (0.1 K): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.FETTemperature));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.FETTemperature));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 8. Max Cell Temperature (16-bit)
             System::uart_ui.nputs(ARRANDN("Max Cell Temperature (0.1 K): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.MaxCellTemperature));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.MaxCellTemperature));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 9. Min Cell Temperature (16-bit)
             System::uart_ui.nputs(ARRANDN("Min Cell Temperature (0.1 K): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.MinCellTemperature));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.MinCellTemperature));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 10. Second Avg Cell Temperature (16-bit)
             System::uart_ui.nputs(ARRANDN("Avg Cell Temp 2 (0.1 K): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.SecondAvgCellTemperature));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.SecondAvgCellTemperature));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 11. CC3 Current (16-bit)
             System::uart_ui.nputs(ARRANDN("CC3 Current (userA): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.CC3Current));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.CC3Current));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 12. CC1 Current (16-bit)
             System::uart_ui.nputs(ARRANDN("CC1 Current (userA): "));
-            System::uart_ui.putu32d(static_cast<uint32_t>(v.CC1Current));
+            System::uart_ui.putu32d(static_cast<uint32_t>(dastatus5.CC1Current));
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 13. CC2 Counts (32-bit)
             System::uart_ui.nputs(ARRANDN("CC2 Counts (ADC counts): "));
-            System::uart_ui.putu32d(v.CC2Counts);
+            System::uart_ui.putu32d(dastatus5.CC2Counts);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 14. CC3 Counts (32-bit)
             System::uart_ui.nputs(ARRANDN("CC3 Counts (ADC counts): "));
-            System::uart_ui.putu32d(v.CC3Counts);
+            System::uart_ui.putu32d(dastatus5.CC3Counts);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
         }
 
+        BQ76952::DAStatus6 dastatus6;
         {
-            struct {
-                int32_t  AccumCharge;
-                int32_t AccumChargeFraction;
-                int32_t AccumTime;
-                int32_t  CFETOFF_Counts;
-                int32_t  DFETOFF_Counts;
-                int32_t  ALERT_Counts;
-                int32_t  TS1_Counts;
-                int32_t  TS2_Counts;
-            } v6;
 
             // Read the data block for DASTATUS6 (Subcommand 0x0076)
-            bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS6, &v6, sizeof(v6));
+            bq.spi->takeResource(0);
+            bool success = bq.sendSubcommandR(BQ769X2_PROTOCOL::Cmd::DASTATUS6, &dastatus6, sizeof(dastatus6));
+            bq.spi->giveResource();
 
             // Print Header
             System::uart_ui.nputs(ARRANDN(CLIRESET "--- Battery Data Block 6 ---" NEWLINE));
 
             // 1. Accum Charge (32-bit, signed)
             System::uart_ui.nputs(ARRANDN("Accum Charge (userAh): "));
-            System::uart_ui.put32d(v6.AccumCharge);
+            System::uart_ui.put32d(dastatus6.AccumCharge);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 2. Accum Charge Fraction (32-bit, unsigned)
             System::uart_ui.nputs(ARRANDN("Accum Charge Fraction (U4): "));
-            System::uart_ui.put32d(v6.AccumChargeFraction);
+            System::uart_ui.put32d(dastatus6.AccumChargeFraction);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 3. Accum Time (32-bit, unsigned)
             System::uart_ui.nputs(ARRANDN("Accum Time (s): "));
-            System::uart_ui.putu32d(v6.AccumTime);
+            System::uart_ui.putu32d(dastatus6.AccumTime);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 4. CFETOFF Counts (32-bit, signed)
             System::uart_ui.nputs(ARRANDN("CFETOFF Counts (ADC counts): "));
-            System::uart_ui.putu32d(v6.CFETOFF_Counts);
+            System::uart_ui.putu32d(dastatus6.CFETOFF_Counts);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 5. DFETOFF Counts (32-bit, signed)
             System::uart_ui.nputs(ARRANDN("DFETOFF Counts (ADC counts): "));
-            System::uart_ui.putu32d(v6.DFETOFF_Counts);
+            System::uart_ui.putu32d(dastatus6.DFETOFF_Counts);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 6. ALERT Counts (32-bit, signed)
             System::uart_ui.nputs(ARRANDN("ALERT Counts (ADC counts): "));
-            System::uart_ui.putu32d(v6.ALERT_Counts);
+            System::uart_ui.putu32d(dastatus6.ALERT_Counts);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 7. TS1 Counts (32-bit, signed)
             System::uart_ui.nputs(ARRANDN("TS1 Counts (ADC counts): "));
-            System::uart_ui.putu32d(v6.TS1_Counts);
+            System::uart_ui.putu32d(dastatus6.TS1_Counts);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
             // 8. TS2 Counts (32-bit, signed)
             System::uart_ui.nputs(ARRANDN("TS2 Counts (ADC counts): "));
-            System::uart_ui.putu32d(v6.TS2_Counts);
+            System::uart_ui.putu32d(dastatus6.TS2_Counts);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
         }
 
         // print out all cell V's
         System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "--- other stuff ---"));
+        uint16_t cellmV[16];
         {
 
             System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "CELLS: "));
@@ -571,63 +557,114 @@ void Task::BMS_task(void *){
             for(uint8_t i = 0; i < 16; i++){
                 System::uart_ui.nputs(ARRANDN(CLIRESET "\t"));
 
-                uint16_t mv = 0;
-
+                bq.spi->takeResource(0);
                 if(!bq.sendDirectCommandR(
                         (BQ769X2_PROTOCOL::CmdDrt)(BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage + 2 * i),
-                        &mv,
-                        sizeof(mv)
+                        cellmV + i,
+                        sizeof(cellmV[0])
                     ))
                     System::uart_ui.nputs(ARRANDN(CLIBAD));
+                bq.spi->giveResource();
 
-                System::uart_ui.putu32d(mv);
+                System::uart_ui.putu32d(cellmV[i]);
             }
 
-            System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE  "bal?:  "));
-            {
-                uint16_t activeBalMask = 0;
-                if(!bq.sendCommandR(
-                        BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS,
-                        &activeBalMask,
-                        sizeof(activeBalMask)
-                    )){
-                    System::uart_ui.nputs(ARRANDN(CLIBAD));
-                } else {
-                    for(uint8_t i = 0; i < 16; i++){
-                        System::uart_ui.nputs(ARRANDN("\t"));
-                        System::uart_ui.putu32d((activeBalMask & BV(i)) != 0);
-                    }
+        }
+
+        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE  "bal?:  "));
+        uint16_t activeBalMask = 0;
+        {
+            bq.spi->takeResource(0);
+            if(!bq.sendCommandR(
+                    BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS,
+                    &activeBalMask,
+                    sizeof(activeBalMask)
+                )){
+                System::uart_ui.nputs(ARRANDN(CLIBAD));
+            bq.spi->giveResource();
+            } else {
+                for(uint8_t i = 0; i < 16; i++){
+                    System::uart_ui.nputs(ARRANDN("\t"));
+                    System::uart_ui.putu32d((activeBalMask & BV(i)) != 0);
                 }
             }
         }
 
+        uint16_t internalTempRaw = 0;
         {
             System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "internal temp (0.1 K): "));
-            uint16_t internalTempRaw = 0;
+            bq.spi->takeResource(0);
             if(!bq.sendDirectCommandR(
                 BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68
                 &internalTempRaw,
                 sizeof(internalTempRaw)
             ))
                 System::uart_ui.nputs(ARRANDN(CLIBAD));
+            bq.spi->giveResource();
 
             System::uart_ui.put32d(internalTempRaw);
 
         }
 
+        uint16_t balTime = 0;
         {
             System::uart_ui.nputs(ARRANDN(NEWLINE CLIRESET "bal time: "));
-            uint16_t balTime = 0;
+            bq.spi->takeResource(0);
             if(!bq.sendSubcommandR(
                 BQ769X2_PROTOCOL::Cmd::CBSTATUS1,
                 &balTime,
                 sizeof(balTime)
             ))
                 System::uart_ui.nputs(ARRANDN(CLIBAD));
+            bq.spi->giveResource();
 
             System::uart_ui.putu32d(balTime);
-
         }
+
+
+        // pack stuff and tx
+        {
+            DL_MCAN_TxBufElement txmsg = {
+                .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
+                .rtr    = 0,        // 0: data frame, 1: remote frame
+                .xtd    = 1,        // 0: 11b id, 1: 29b id
+                .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
+                .dlc    = 3,        // data byte count, see DL comments
+                .brs    = 0,        // 0: no bit rate switching, 1: yes brs
+                .fdf    = 1,        // FD format, 0: classic CAN, 1: CAN FD format
+                .efc    = 0,        // 0: dont store Tx events, 1: store
+                .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
+            };
+
+            BMSComms::PacketHeader * header = reinterpret_cast<BMSComms::PacketHeader *>(txmsg.data);
+            header->typeSM = BMSComms::PktTypeSM_t::TEST_1;
+            header->slaveID = 2;
+
+            BMSComms::PktSM_Test1 * pktms = reinterpret_cast<BMSComms::PktSM_Test1 *>(header->data);
+            { // populate
+                for(uint8_t i = 0; i < 16; i++){
+                    pktms->cellInfo[i].cellmV = cellmV[i];
+                    pktms->cellInfo[i].balancing = (BV(i) & activeBalMask) != 0;
+                }
+                pktms->MaxCellVoltage = dastatus5.MaxCellVoltage;
+                pktms->MinCellVoltage = dastatus5.MinCellVoltage;
+                pktms->BatteryVoltageSum = dastatus5.BatteryVoltageSum;
+            }
+
+            txmsg.dlc = System::CANFD::len2DLC(sizeof(*pktms)) + sizeof(*header);
+
+            DL_MCAN_TxFIFOStatus tf;
+            DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
+
+            uint32_t bufferIndex = tf.putIdx;
+
+            DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
+            DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
+
+            System::uart_ui.nputs(ARRANDN("meow" NEWLINE));
+        }
+
+
 
         vTaskDelay(pdMS_TO_TICKS(2e3));
     }
@@ -659,88 +696,6 @@ void Task::BMS_task(void *){
      *      }
      * }
      */
-
-/*
-    DL_MCAN_TxBufElement txmsg = {
-           .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
-           .rtr    = 0,        // 0: data frame, 1: remote frame
-           .xtd    = 1,        // 0: 11b id, 1: 29b id
-           .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-           .dlc    = 8,        // data byte count, see DL comments
-           .brs    = 0,        // 0: no bit rate switching, 1: yes brs
-           .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
-           .efc    = 0,        // 0: dont store Tx events, 1: store
-           .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
-       };
-
-    while(1){
-        for(uint8_t i = 0; i < sizeof(cmds); i++){
-            uint16_t v = 0xBEEF;
-            bool success = bq.sendDirectCommandR(cmds[i], &v);
-            vTaskDelay(pdMS_TO_TICKS(1e6));
-
-            snprintf(ARRANDN(str), "%6d,", v);
-
-            System::uart_ui.nputs(ARRANDN(str));
-
-            if(!success)
-                v = 0;
-
-            ((uint16_t*)txmsg.data)[i % 8] = v;
-
-            // transmit in 8B packets
-            if((i+1) % 8 == 0)
-            {
-               DL_MCAN_TxFIFOStatus tf;
-               DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
-
-               uint32_t bufferIndex = tf.putIdx;
-
-               DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-               DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
-            }
-        }
-        System::uart_ui.nputs(ARRANDN(NEWLINE));
-
-        vTaskDelay(pdMS_TO_TICKS(1e6));
-    }
-
-
-
-
-    while(1)
-    {
-        // Canned CAN TX
-        DL_MCAN_TxBufElement txmsg = {
-                .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
-                .rtr    = 0,        // 0: data frame, 1: remote frame
-                .xtd    = 1,        // 0: 11b id, 1: 29b id
-                .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-                .dlc    = 3,        // data byte count, see DL comments
-                .brs    = 0,        // 0: no bit rate switching, 1: yes brs
-                .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
-                .efc    = 0,        // 0: dont store Tx events, 1: store
-                .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
-            };
-
-
-
-//        txmsg.data[0] = 6;
-//        txmsg.data[1] = 7;
-//        txmsg.data[2] = 8;
-
-        DL_MCAN_TxFIFOStatus tf;
-        DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
-
-        uint32_t bufferIndex = tf.putIdx;
-
-        DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-        DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
-
-        vTaskDelay(pdMS_TO_TICKS(400));
-    };
-    */
-
 
     System::FailHard("BMS_task ended" NEWLINE);
     vTaskDelete(NULL);

@@ -15,6 +15,7 @@ public:
     static constexpr uint8_t STR_LEN_COMMON = MAX_STR_LEN_COMMON;
     static constexpr uint8_t STR_LEN_SMALL  = MAX_STR_LEN_COMMON / 2;
 
+    /** returns true if was valid input */
     typedef bool(*NodeAccept)(char * userInput, uint8_t strlen, char * msg, uint8_t msglen);
 
     /* epic rendation of dog water cli
