@@ -14,48 +14,10 @@
 #include "Core/common.h"
 #include "Core/BMS/BMSMaster.hpp"
 
-volatile BMSMaster<10> master;
-
-#define SW2 (System::GPIO::PB21)
+volatile BMSMaster<10> beeMaster;
 
 void Task::BMS_task(void *){
     System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
-
-    DL_GPIO_initDigitalInputFeatures(
-            SW2.iomux,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
-            DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
-            DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
-        );
-
-    /* pesudo code
-     * {
-     *      - POST
-     *
-     *      - use existing model if available
-     *
-     *      while(1){
-     *
-     *          - DAQ
-     *
-     *          - safety check
-     *              - cell balance
-     *              - fan pwm
-     *
-     *          - iterate model
-     *              - rebase model if needed
-     *              - periodically save model, like ~1h
-     *
-     *          - periodically/as-necessary TX to CAN ...
-     *              - ~1s, DAQ
-     *              - ~5s, safe operating ranges
-     *
-     *          - check and respond to ...
-     *              - CAN
-     *      }
-     * }
-     */
 
     do {
         static DL_MCAN_RxFIFOStatus rf;
@@ -73,12 +35,12 @@ void Task::BMS_task(void *){
 
             System::uart_ui.nputs(ARRANDN("ID: "));
             System::uart_ui.putu32d(id);
-//            System::uart_ui.nputs(ARRANDN(" \tData: "));
-//
-//            for(uint8_t i = 0, len = System::CANFD::DLC2Len(&e); i < len; i++) {
-//                System::uart_ui.nputs(ARRANDN(" \t"));
-//                System::uart_ui.putu32h(e.data[i]);
-//            }
+            System::uart_ui.nputs(ARRANDN(" \tData: "));
+
+            for(uint8_t i = 0, len = System::CANFD::DLC2Len(&e); i < len; i++) {
+                System::uart_ui.nputs(ARRANDN(" \t"));
+                System::uart_ui.putu32h(e.data[i]);
+            }
             System::uart_ui.nputs(ARRANDN(NEWLINE));
 
 
@@ -87,8 +49,8 @@ void Task::BMS_task(void *){
 
             if(header->typeSM == BMSComms::PktTypeSM_t::TEST_1){
                 // 3. Print the structure's variables using the required custom functions
-                System::uart_ui.nputs(ARRANDN("--- PktSM_Test1 Contents --- slave #"));
-                System::uart_ui.putu32d(header->slaveID);
+                System::uart_ui.nputs(ARRANDN("--- PktSM_Test1 Contents ---"));
+//                System::uart_ui.putu32d(header->);
                 System::uart_ui.nputs(ARRANDN(NEWLINE));
 
                 // Max Cell Voltage

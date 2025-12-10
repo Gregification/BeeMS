@@ -13,8 +13,8 @@
 
 namespace Task {
 
-    /** */
-    void non_BMS_ethModbus_task(void *);
+    /** provides a Modbus-TCP interface */
+    void ethModbus_task(void *);
 }
 
 #endif /* SRC_CORE_FIDDLE_HPP_ */

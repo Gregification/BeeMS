@@ -13,6 +13,8 @@ void Task::MCAN_test_task(void *){
 
     //--- TX --------------------------------------------------
     do {
+
+
         DL_MCAN_TxBufElement txmsg = {
                 .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
                 .rtr    = 0,        // 0: data frame, 1: remote frame

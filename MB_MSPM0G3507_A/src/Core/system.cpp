@@ -44,7 +44,7 @@ void System::init() {
     delay_cycles(POWER_STARTUP_DELAY);
 
     #ifdef PROJECT_ENABLE_MCAN0
-    // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
+    // MCAN has to be enabled before the clocks are modified or the ram wont initialize
 
         // pins for v: 2.2, 3.0
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12

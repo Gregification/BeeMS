@@ -14,13 +14,16 @@
 
 //--- unit conversions ---------------------------------------
 
-#define KELVIN_TO_CELSIUS(C) (C - 273.15);
-#define K2C(C) KELVIN_TO_CELSIUS(C)
+#define KELVIN_TO_CELSIUS(K)    ((K) - 273.15)
+#define K2C(K)                  KELVIN_TO_CELSIUS(K)
+#define CELSIUS_TO_KELVIN(C)    ((C) + 273.15)
+#define C2K(C)                  CELSIUS_TO_KELVIN(C)
 
 //--- program macros ------------------------------------------
 
 #define ARRANDN(ARR)                (ARR),sizeof(ARR)
-#define PTRANDN(ARR)                (&(ARR)),sizeof(ARR)  // for pointer to a object
+#define PT2ANDN(ARR)                (&(ARR)),sizeof(ARR)  // for pointer to a object
+#define ARRLEN(ARR)                 (sizeof((ARR))/sizeof((ARR)[0]))
 
 //--- program constants ---------------------------------------
 
@@ -45,5 +48,11 @@ typedef uint16_t buffersize_t;
 //--- functions -----------------------------------------------
 
 bool arrCmp(void const * a, void const * b, buffersize_t len);
+
+//--- general macros ------------------------------------------
+
+#define SWAP_BYTES_16(X) ( (((X) & 0x00FF) << 8) | (((X) & 0xFF00) >> 8) )
+#define hton16(X) SWAP_BYTES_16(X)
+#define ntoh16(X) SWAP_BYTES_16(X)
 
 #endif /* SRC_CORE_COMMON_H_ */

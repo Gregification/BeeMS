@@ -25,22 +25,23 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-#include <Tasks/task_BMS.hpp>
-#include <Tasks/task_non_BMS.hpp>
-#include "Tasks/examples/example_blink_task.hpp"
-#include "Tasks/examples/example_BQ769x2_PROTOCOL_V.hpp"
-
 #include "system.hpp"
 #include "Core/Networking/CANComm.hpp"
-#include "FancyCli.hpp"
+#include "Core/VT.hpp"
+
+#include <Tasks/task_BMS.hpp>
+#include <Tasks/task_bqCanInterface.hpp>
+#include "Tasks/examples/example_blink_task.hpp"
+
 
 int main(){
-
     System::init();
 
     System::uart_ui.setBaudTarget(115200);
     System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
     System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
+
+
 
     // don't have this task on release
     // used a an sanity check
@@ -65,7 +66,7 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-    xTaskCreate(Task::non_BMS_functions_task,
+    xTaskCreate(Task::bqCanInterface_task,
             "non_BMS_functions_task",
             configMINIMAL_STACK_SIZE * 2,
             NULL,

@@ -7,7 +7,10 @@ BMS for University Of Texas At Arlington's FSAE Race team's E27 vehicle.
 
 ## Development
 - Code Composer Studio 12
+    - dependency on Driver Lib
+    - projects are stand alone, no dependencies on other projects in this repo.
 - Kicad 9
+    - common symbol and footprint library shared amongst all Kicad projects. "zzLocal".
 
 ---
 <i>

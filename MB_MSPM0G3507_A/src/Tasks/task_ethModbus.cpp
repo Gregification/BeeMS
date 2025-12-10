@@ -6,8 +6,6 @@
  *
  *  This task is the interface with RapidSCADA.
  *  Achieved by a Modbus-TCP connection through the W5500.
- *  A non-standard interpretation of Modbus packets is needed since the master-board
- *      needs to bridge it over a CAN-bus connection.
  *
  *  RESOURCES:
  *      - Modbus-TCP : https://www.prosoft-technology.com/kb/assets/intro_modbustcp.pdf
@@ -31,8 +29,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
-
-#include "Tasks/task_non_BMS.hpp"
+#include <Tasks/task_ethModbus.hpp>
 
 #include "Core/system.hpp"
 #include "Core/std alternatives/string.hpp"
@@ -47,8 +44,8 @@ System::SPI::SPI         &wiz_spi   = System::spi1;
 System::GPIO::GPIO const &wiz_cs    = System::GPIO::PA8;
 System::GPIO::GPIO const &wiz_reset = System::GPIO::PA15;
 
-uint16_t const modbusTCPPort = 502;   // arbitrary, must match RapidSCADA settings
-uint8_t const socketNum = 0;          // [0,8], arbitrary
+uint16_t const modbusTCPPort = 502;   // arbitrary, must match RapidSCADA connection settings
+uint8_t const socketNum = 0;          // [0,8], arbitrary, socket must not be used elsewhere
 
 wiz_NetInfo netConfig = {
            .mac = {0xBE,0xEE,0xEE,0x00,0x00,0x00}, // arbitrary
@@ -67,14 +64,47 @@ void wiz_print_sockerror(int8_t error);
 
 /*** main ****************************************************/
 
-void Task::non_BMS_ethModbus_task(void *){
-    System::uart_ui.nputs(ARRANDN("non_BMS_ethModbus_task start" NEWLINE));
+System::UART::UART &uart = System::uart_ui;
+
+void Task::ethModbus_task(void *){
+    uart.nputs(ARRANDN("ethModbus_task start" NEWLINE));
+
+    do {
+        DL_MCAN_TxBufElement txmsg = {
+                .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
+                .rtr    = 0,        // 0: data frame, 1: remote frame
+                .xtd    = 1,        // 0: 11b id, 1: 29b id
+                .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
+                .dlc    = 3,        // data byte count, see DL comments
+                .brs    = 0,        // 0: no bit rate switching, 1: yes brs
+                .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
+                .efc    = 0,        // 0: dont store Tx events, 1: store
+                .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
+            };
+        txmsg.data[0] = 6;
+        txmsg.data[1] = 7;
+        txmsg.dlc = 2;
+
+        DL_MCAN_TxFIFOStatus tf;
+        DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
+
+        uint32_t bufferIndex = tf.putIdx;
+        uart.nputs(ARRANDN("TX from buffer "));
+        uart.putu32d(bufferIndex);
+        uart.nputs(ARRANDN("" NEWLINE));
+
+        DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
+        DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
+
+        vTaskDelay(pdMS_TO_TICKS(400));
+    } while(1);
 
     wiz_spi.setSCLKTarget(25e6);
 
     /*** W5500 init *****************/
     while(!setupWizchip()) {
-        System::uart_ui.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed!" CLIRESET NEWLINE));
+        uart.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed!" CLIRESET NEWLINE));
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
     wizchip_setnetinfo(&netConfig);
@@ -87,27 +117,36 @@ void Task::non_BMS_ethModbus_task(void *){
     }
 
     /********************************/
-    System::uart_ui.nputs(ARRANDN("IP: \t"));
+    uart.nputs(ARRANDN(CLIHIGHLIGHT "IP: \t"));
     for(int i = 0; i < 4; i++){
-        System::uart_ui.putu32d(netConfig.ip[i]);
-        System::uart_ui.nputs(ARRANDN("."));
+        uart.putu32d(netConfig.ip[i]);
+        uart.nputs(ARRANDN("."));
     }
-    System::uart_ui.nputs(ARRANDN(NEWLINE "SNM: \t"));
+    uart.nputs(ARRANDN(NEWLINE "SNM: \t"));
     for(int i = 0; i < 4; i++){
-        System::uart_ui.putu32d(netConfig.sn[i]);
-        System::uart_ui.nputs(ARRANDN("."));
+        uart.putu32d(netConfig.sn[i]);
+        uart.nputs(ARRANDN("."));
     }
-    System::uart_ui.nputs(ARRANDN(NEWLINE "MAC: \t"));
+    uart.nputs(ARRANDN(NEWLINE "MAC: \t"));
     for(int i = 0; i < 6; i++){
-        System::uart_ui.putu32h(netConfig.mac[i]);
-        System::uart_ui.nputs(ARRANDN(" "));
+        uart.putu32h(netConfig.mac[i]);
+        uart.nputs(ARRANDN(" "));
     }
-    System::uart_ui.nputs(ARRANDN(NEWLINE));
+    uart.nputs(ARRANDN(CLIRESET NEWLINE));
 
 
     /********************************/
-    /* we just wait for a connection, only support single connection. not sure how to get the w5500 to both listen and receive packets
-     * listen is blocking only. probably could just do it anyways and be fine but thats extra work. someone else can do it later
+    /* we just wait for a connection, only support single connection.
+     * 1. init socket
+     * 2. setup socket to listen for incoming tcp
+     * 3. wait for incoming connection
+     * 4. receive packet
+     * 5. process request
+     * 6(7). if necessary, transmit back data
+     * 7. go to step 4
+     *
+     * - to add support for multiple connections just make more sockets.
+     * - if a error happens reset connection and restart from step one
      */
 
     int8_t error;
@@ -126,15 +165,15 @@ void Task::non_BMS_ethModbus_task(void *){
                     // yippie
                     break;
 
-                System::uart_ui.nputs(ARRANDN("W5500 unknown response to socket!" NEWLINE));
+                uart.nputs(ARRANDN("W5500 unknown response to socket!" NEWLINE));
 
             case SOCKERR_SOCKMODE:
             case SOCKERR_SOCKFLAG:
             case SOCKERR_SOCKNUM:
                 // failed to init socket, retry
-                System::uart_ui.nputs(ARRANDN(CLIERROR "Modbus TCP: failed to init socket : " ));
+                uart.nputs(ARRANDN(CLIERROR "Modbus TCP: failed to init socket : " ));
                 wiz_print_sockerror(error);
-                System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+                uart.nputs(ARRANDN(CLIRESET NEWLINE));
                 vTaskDelay(pdMS_TO_TICKS(1e3));
                 close(sn);
                 continue;
@@ -147,10 +186,10 @@ void Task::non_BMS_ethModbus_task(void *){
         switch(error) {
             default:
             case SOCKERR_SOCKINIT:
-                System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKINIT , "));
+                uart.nputs(ARRANDN("SOCKERR_SOCKINIT , "));
             case SOCKERR_SOCKCLOSED:
-                System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKCLOSED , "));
-                System::uart_ui.nputs(ARRANDN("Modbus TCP listen connection failed." NEWLINE));
+                uart.nputs(ARRANDN("SOCKERR_SOCKCLOSED , "));
+                uart.nputs(ARRANDN("Modbus: TCP listen connection failed." NEWLINE));
 
                 // bad connection, ignore
                 continue;
@@ -163,9 +202,9 @@ void Task::non_BMS_ethModbus_task(void *){
 
         /*** wait for incoming connection ***/
 
-        System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "Modbus listening for TCP connection on port: " ));
-        System::uart_ui.putu32d(modbusTCPPort);
-        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+        uart.nputs(ARRANDN("Modbus: listening for TCP connection on port: " ));
+        uart.putu32d(modbusTCPPort);
+        uart.nputs(ARRANDN(CLIRESET NEWLINE));
 
         while((error = getSn_SR(sn)) != SOCK_ESTABLISHED){ // get socket status
             switch(error){
@@ -173,8 +212,7 @@ void Task::non_BMS_ethModbus_task(void *){
 
                 case SOCK_LISTEN:
                     // keep waiting
-//                    System::uart_ui.nputs(ARRANDN("sock listening..." NEWLINE));
-                    vTaskDelay(pdMS_TO_TICKS(10));
+                    vTaskDelay(pdMS_TO_TICKS(100));
                     continue;
 
                 default:
@@ -190,9 +228,9 @@ void Task::non_BMS_ethModbus_task(void *){
 
         /*** receive packets ******************/
 
-        System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "Modbus: accepted incoming TCP connection on port: " ));
-        System::uart_ui.putu32d(modbusTCPPort);
-        System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+        uart.nputs(ARRANDN("Modbus: accepted incoming TCP connection on port: " ));
+        uart.putu32d(modbusTCPPort);
+        uart.nputs(ARRANDN(CLIRESET NEWLINE));
 
         static uint8_t rxbuf[60]; // 260B MAX standard Modbus-TCP len (MBAP + PDU), we can get away with smaller for 99% of stuff
         static uint8_t txbuf[70]; // see comment above. idk. what do u want from me. go find the campus cat. ("mmmm" (Microwave imitation))
@@ -206,28 +244,28 @@ void Task::non_BMS_ethModbus_task(void *){
             // rx packet
             int32_t status = recv(sn, ARRANDN(rxbuf));
             switch(status){
-                static uint8_t cycles = 0; // exponential back off style wait times
+                static uint8_t cycles = 1; // 'exponential'(allegedly) back off wait times
 
                 case SOCK_BUSY:
-                    if(cycles < 10) // back off max cap at 10mS
+                    if(cycles < 20) // back off max cap at 20mS
                         cycles++;
 
                     vTaskDelay(pdMS_TO_TICKS(cycles));
                     continue;
                 case SOCKERR_DATALEN:
-                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: zero data length" CLIRESET NEWLINE));
+                    uart.nputs(ARRANDN(CLIWARN "Modbus: zero data length" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKNUM:
-                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket number" CLIRESET NEWLINE));
+                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket number" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKMODE:
-                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid operation in the socket" CLIRESET NEWLINE));
+                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid operation in the socket" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 case SOCKERR_SOCKSTATUS:
-                    System::uart_ui.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
+                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
                     reset = true;
                     continue;
                 default:
@@ -238,9 +276,9 @@ void Task::non_BMS_ethModbus_task(void *){
                         break;
                     }
 
-                    System::uart_ui.nputs(ARRANDN(CLIERROR "Modbus: unknown receive status!? -> "));
-                    System::uart_ui.put32d(status);
-                    System::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
+                    uart.nputs(ARRANDN(CLIERROR "Modbus: unknown receive status!? -> "));
+                    uart.put32d(status);
+                    uart.nputs(ARRANDN(CLIRESET NEWLINE));
                     reset = true;
                     continue;
             }
@@ -252,14 +290,14 @@ void Task::non_BMS_ethModbus_task(void *){
             void const * const rxend = (void*)(rxbuf + rxlen);
 
             // dump packet
-//            System::uart_ui.nputs(ARRANDN("Modbus: dump packet" NEWLINE));
+//            uart.nputs(ARRANDN("Modbus: dump packet" NEWLINE));
 //            for(uint16_t i = 0; i < rxlen; i++){
-//                System::uart_ui.nputs(ARRANDN(" \t"));
-//                System::uart_ui.putu32h(rxbuf[i]);
+//                uart.nputs(ARRANDN(" \t"));
+//                uart.putu32h(rxbuf[i]);
 //                if(i % 8 == 0 && i != 0)
-//                    System::uart_ui.nputs(ARRANDN(NEWLINE));
+//                    uart.nputs(ARRANDN(NEWLINE));
 //            }
-//            System::uart_ui.nputs(ARRANDN(NEWLINE));
+//            uart.nputs(ARRANDN(NEWLINE));
 
             do {
                 // make life simple
@@ -285,8 +323,6 @@ void Task::non_BMS_ethModbus_task(void *){
 
 
                 /*** process packet *************/
-                /* rxheader and rxbuff is not guaranteed to be unmodified by the code after this point.
-                 */
 
                 switch (rxadu->func) {
                     case Function::R_COILS:
@@ -314,7 +350,7 @@ void Task::non_BMS_ethModbus_task(void *){
                             *txadu      = *rxadu;
                             resp->byteCount = 0;
 
-                            for(uint16_t i = 0; i < ntoh16(query->len); i++){
+                            for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
                                 if((void*)(resp->values + i) >= txend) // constrain to tx buffer size
                                     break;
 
@@ -327,7 +363,7 @@ void Task::non_BMS_ethModbus_task(void *){
                             }
 
                             // tx response
-                            txheader->len = hton16(resp->byteCount + 3); // +3 = [unit id] + [function] + [1 byte error]
+                            txheader->len = hton16(resp->byteCount + 3); // +3 = [unit id] + [function] + [1: next empty position convention]
                             uint16_t _len = sizeof(*txheader) + sizeof(*txadu) + sizeof(*resp) + resp->byteCount;
                             send(sn, txbuf, _len);
 
@@ -365,10 +401,10 @@ void Task::non_BMS_ethModbus_task(void *){
 
         // connection was lost / terminated
         // wait some time, maybe something went bonkers
-        vTaskDelay(pdMS_TO_TICKS(2e3));
+        vTaskDelay(pdMS_TO_TICKS(1e3));
     }
 
-    System::FailHard("non_BMS_functions_task ended" NEWLINE);
+    System::FailHard("ethModbus_task ended" NEWLINE);
     vTaskDelete(NULL);
 }
 
@@ -395,22 +431,22 @@ void wiz_write_burst(uint8_t *buf, uint16_t len) {
     wiz_spi.transfer(buf, NULL, len);
     while(wiz_spi.isBusy());
 }
-void wiz_enter_critical(){ } // DO NOT USE FRERTOS TASK CRITICAL! just claim the spi bus
+void wiz_enter_critical(){ } // DO NOT USE FRERTOS TASK CRITICAL!
 void wiz_exit_critical(){ }
 void wiz_print_sockerror(int8_t error) {
     switch(error){
-        case SOCKERR_SOCKNUM:   System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKNUM")); break;
-        case SOCKERR_SOCKMODE:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKMODE")); break;
-        case SOCKERR_SOCKFLAG:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKFLAG")); break;
-        case SOCKERR_SOCKCLOSED:System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKCLOSED")); break;
-        case SOCKERR_SOCKINIT:  System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKINIT")); break;
-        case SOCKERR_SOCKOPT:   System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKOPT")); break;
-        case SOCKERR_SOCKSTATUS:System::uart_ui.nputs(ARRANDN("SOCKERR_SOCKSTATUS")); break;
-        case SOCKERR_DATALEN:   System::uart_ui.nputs(ARRANDN("SOCKERR_DATALEN")); break;
-        case SOCKERR_PORTZERO:  System::uart_ui.nputs(ARRANDN("SOCKERR_PORTZERO")); break;
-        case SOCKERR_TIMEOUT:   System::uart_ui.nputs(ARRANDN("SOCKERR_TIMEOUT")); break;
-        case SOCK_BUSY:         System::uart_ui.nputs(ARRANDN("SOCK_BUSY")); break;
-        default:                System::uart_ui.nputs(ARRANDN("no switch case")); break;
+        case SOCKERR_SOCKNUM:   uart.nputs(ARRANDN("SOCKERR_SOCKNUM")); break;
+        case SOCKERR_SOCKMODE:  uart.nputs(ARRANDN("SOCKERR_SOCKMODE")); break;
+        case SOCKERR_SOCKFLAG:  uart.nputs(ARRANDN("SOCKERR_SOCKFLAG")); break;
+        case SOCKERR_SOCKCLOSED:uart.nputs(ARRANDN("SOCKERR_SOCKCLOSED")); break;
+        case SOCKERR_SOCKINIT:  uart.nputs(ARRANDN("SOCKERR_SOCKINIT")); break;
+        case SOCKERR_SOCKOPT:   uart.nputs(ARRANDN("SOCKERR_SOCKOPT")); break;
+        case SOCKERR_SOCKSTATUS:uart.nputs(ARRANDN("SOCKERR_SOCKSTATUS")); break;
+        case SOCKERR_DATALEN:   uart.nputs(ARRANDN("SOCKERR_DATALEN")); break;
+        case SOCKERR_PORTZERO:  uart.nputs(ARRANDN("SOCKERR_PORTZERO")); break;
+        case SOCKERR_TIMEOUT:   uart.nputs(ARRANDN("SOCKERR_TIMEOUT")); break;
+        case SOCK_BUSY:         uart.nputs(ARRANDN("SOCK_BUSY")); break;
+        default:                uart.nputs(ARRANDN("no switch case")); break;
     }
 }
 

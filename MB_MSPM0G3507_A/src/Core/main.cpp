@@ -26,7 +26,7 @@
 #include <task.h>
 
 #include <Tasks/task_BMS.hpp>
-#include <Tasks/task_non_BMS.hpp>
+#include <Tasks/task_ethModbus.hpp>
 #include "Tasks/examples/example_blink_task.hpp"
 #include "Tasks/examples/example_BQ769x2_PROTOCOL_V.hpp"
 
@@ -66,9 +66,9 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-    xTaskCreate(Task::non_BMS_ethModbus_task,
+    xTaskCreate(Task::ethModbus_task,
             "non_BMS_functions_task",
-            configMINIMAL_STACK_SIZE * 10,
+            configMINIMAL_STACK_SIZE * 4,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
