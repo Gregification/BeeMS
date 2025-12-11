@@ -30,14 +30,14 @@ namespace Networking {
              * image of bit layout : https://www.csselectronics.com/cdn/shop/files/j1939-pgn-18-bit-extended-can-identifier-pdu.svg
              */
             struct __attribute__((__packed__)) ID {
-                unsigned int src_addr       : 8;
-                unsigned int pdu_specific   : 8;
-                unsigned int pdu_format     : 8;
-                unsigned int data_page      : 1;
-                unsigned int                : 1; // reserved by protocol
-                unsigned int prioroty       : 3;
+                uint8_t src_addr       : 8;
+                uint8_t pdu_specific   : 8;
+                uint8_t pdu_format     : 8;
+                uint8_t data_page      : 1;
+                uint8_t                : 1; // reserved by protocol
+                uint8_t prioroty       : 3;
             };
-            static_assert(sizeof(ID) == sizeof(uint32_t), "a J1939 ID is 29 bits");
+            static_assert(sizeof(ID) == sizeof(int32_t), "a J1939 ID is 29 bits");
         }
 
     }

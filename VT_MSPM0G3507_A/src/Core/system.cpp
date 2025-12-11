@@ -403,9 +403,9 @@ void System::init() {
                     .rxFIFO1waterMark     = 3,  /* Level for Rx FIFO 1 watermark interrupt. */
                     .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
                     .rxBufStartAddr       = 208,  /* Rx Buffer Start Address. */
-                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx Buffer Element Size. */
+                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx Buffer Element Size. */
                     .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO0 Element Size. */
-                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO1 Element Size. */
+                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx FIFO1 Element Size. */
                 };
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
         }
@@ -433,11 +433,11 @@ void System::init() {
 
 }
 
-inline bool System::Lockable::takeResource(TickType_t timeout) {
+bool System::Lockable::takeResource(TickType_t timeout) {
     return pdTRUE == xSemaphoreTake(mutex, timeout);
 }
 
-inline void System::Lockable::giveResource() {
+void System::Lockable::giveResource() {
     xSemaphoreGive(mutex);
 }
 
@@ -662,7 +662,7 @@ void System::SPI::SPI::_irq() {
                 if(_trxBuffer.tx) { // TX array contents
                     _trxBuffer.tx_i +=  DL_SPI_fillTXFIFO8(
                             reg,
-                            (uint8_t *)_trxBuffer.tx,
+                            _trxBuffer.tx + _trxBuffer.tx_i,
                             _trxBuffer.len - _trxBuffer.tx_i
                         );
                 } else { // TX bogus data

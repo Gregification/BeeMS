@@ -146,20 +146,11 @@ public:
 
             /* BATRM.13.3.2.9/140 */
             BQ76952PinConfig cfetoffPinConfig;
-// I am getting an error when I do this, I think its because in BQ76952.cpp we are doing .raw, but in operator not doing raw
-//            union {
-//                uint8_t Raw;
-//                struct __attribute__((packed)) {
-//                    unsigned int OPT5_OPT0 : 6;
-//                    unsigned int PIN_FXN1_PIN_FXN0 : 2;
-//                };
-//            } cfetoffPinConfig;
-//
-//            static_assert(sizeof(cfetoffPinConfig) == sizeof(uint8_t));
 
 
             /* BATRM.13.3.2.10/142 */
             BQ76952PinConfig dfetoffPinConfig;
+
 
             /* BATRM.13.3.2.11/144 */
             BQ76952PinConfig alertPinConfig;
@@ -178,6 +169,7 @@ public:
 
             /* BATRM.13.3.2.16/150 */
             BQ76952PinConfig DCHGPinConfig;
+
 
             /* BATRM.13.3.2.17/152 */
             BQ76952PinConfig DDSGPinConfig;

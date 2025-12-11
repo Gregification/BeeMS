@@ -35,7 +35,7 @@ namespace Networking {
                 unsigned int pdu_format     : 8;
                 unsigned int data_page      : 1;
                 unsigned int                : 1; // reserved by protocol
-                unsigned int prioroty       : 3;
+                unsigned int priority       : 3;
             };
             static_assert(sizeof(ID) == sizeof(uint32_t), "a J1939 ID is 29 bits");
         }

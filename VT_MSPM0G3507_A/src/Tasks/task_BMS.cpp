@@ -15,7 +15,7 @@
 #include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/common.h"
 #include "Core/BMS/BMSComms.hpp"   // adjust path if needed
-
+#include "Core/VT.hpp"
 
 // user amp to centiamp scale (10mA)
 // using 10mA scale (determined by DAConfiguration)
@@ -26,13 +26,8 @@
 #define userVto10mV(X) (X)
 
 // only 1 BQ on the voltage tap board
-BQ76952 bq = {
-        .spi  = &System::spi1,
-        .cs   = &System::GPIO::PB19, // v3
-//        .cs   = &System::GPIO::PA15, // v2.2
-    };
-auto &bqReset = System::GPIO::PA15; // v3
-//auto &bqReset = System::GPIO::PA21; // v2.2
+BQ76952 & bq = VT::bq;
+auto &bqReset = VT::bqReset;
 
 BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {

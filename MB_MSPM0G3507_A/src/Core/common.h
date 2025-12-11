@@ -14,13 +14,15 @@
 
 //--- unit conversions ---------------------------------------
 
-#define KELVIN_TO_CELSIUS(C) (C - 273.15);
-#define K2C(C) KELVIN_TO_CELSIUS(C)
+#define KELVIN_TO_CELSIUS(K)    ((K) - 273.15)
+#define K2C(K)                  KELVIN_TO_CELSIUS(K)
+#define CELSIUS_TO_KELVIN(C)    ((C) + 273.15)
+#define C2K(C)                  CELSIUS_TO_KELVIN(C)
 
 //--- program macros ------------------------------------------
 
 #define ARRANDN(ARR)                (ARR),sizeof(ARR)
-#define PTRANDN(ARR)                (&(ARR)),sizeof(ARR)  // for pointer to a object
+#define PT2ANDN(ARR)                (&(ARR)),sizeof(ARR)  // for pointer to a object
 #define ARRLEN(ARR)                 (sizeof((ARR))/sizeof((ARR)[0]))
 
 //--- program constants ---------------------------------------
