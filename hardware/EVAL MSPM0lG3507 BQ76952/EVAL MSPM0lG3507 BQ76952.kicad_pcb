@@ -927,7 +927,7 @@
 		(descr "low profile wire loop as test point, loop diameter 2.5mm, hole diameter 1.0mm")
 		(tags "test point wire loop bead")
 		(property "Reference" "TP12"
-			(at -0.1 -3.8 0)
+			(at 2.5 0 180)
 			(layer "F.SilkS")
 			(uuid "ea03cd9b-3269-492a-97d0-c3723a47cabb")
 			(effects
@@ -1480,7 +1480,7 @@
 	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "F.Cu")
 		(uuid "0ab3326c-f156-4026-a52e-5e3d673faeb8")
-		(at 177.5 76 -90)
+		(at 177 76 -90)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R13"
@@ -8376,7 +8376,7 @@
 	(footprint "LED_SMD:LED_0603_1608Metric"
 		(layer "F.Cu")
 		(uuid "2ea57eac-f3d2-495b-93fd-1418145adce3")
-		(at 113.5 82.4 -45)
+		(at 113 83.5 -45)
 		(descr "LED SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator")
 		(tags "LED")
 		(property "Reference" "D1"
@@ -25700,11 +25700,11 @@
 	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "F.Cu")
 		(uuid "8e84ff7f-5e57-4ac0-9cd6-c27fbd8a31c9")
-		(at 116 86.5)
+		(at 114 82 -45)
 		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R7"
-			(at 0 -1.65 0)
+			(at 0 -1.65 135)
 			(layer "F.SilkS")
 			(uuid "cc474586-2ca1-45ef-ba72-2b19e8792211")
 			(effects
@@ -25715,7 +25715,7 @@
 			)
 		)
 		(property "Value" "3.32k"
-			(at 0 1.65 0)
+			(at 0 1.65 135)
 			(layer "F.Fab")
 			(uuid "56bbee36-6f92-4f44-be06-c804cbdc146a")
 			(effects
@@ -25726,7 +25726,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 0)
+			(at 0 0 135)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "514d97d8-aa91-4df8-87c6-5e9e8e4f8ac9")
@@ -25738,7 +25738,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 0 0 0)
+			(at 0 0 135)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a1f15010-f1f3-41e2-90b0-f5fa6c40f4b5")
@@ -25750,7 +25750,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 0 0 0)
+			(at 0 0 315)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -25763,7 +25763,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 0 0 0)
+			(at 0 0 315)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -25776,7 +25776,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Walsin/WR08X3321FTL?qs=sGAEpiMZZMvdGkrng054twKDKoBh%252BscnhzVUopLjNIsmzZlnTa4U1w%3D%3D"
-			(at 0 0 0)
+			(at 0 0 315)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -25789,7 +25789,7 @@
 			)
 		)
 		(property "specs" "3.32kOhm, 1%, 150V, 125mW, 100ppm, -55C, 155C"
-			(at 0 0 0)
+			(at 0 0 315)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -25802,7 +25802,7 @@
 			)
 		)
 		(property "unit x10" "0.019"
-			(at 0 0 0)
+			(at 0 0 315)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -25815,7 +25815,7 @@
 			)
 		)
 		(property "unit x1" "0.1"
-			(at 0 0 0)
+			(at 0 0 315)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
@@ -25832,16 +25832,6 @@
 		(sheetfile "EVAL MSPM0lG3507 BQ76952.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.227064 -0.735)
-			(end 0.227064 -0.735)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "6aea93b9-b634-4c88-b762-ad69ae7007ed")
-		)
-		(fp_line
 			(start -0.227064 0.735)
 			(end 0.227064 0.735)
 			(stroke
@@ -25852,14 +25842,14 @@
 			(uuid "3553467e-9b9c-4a47-92c4-067be50d6d83")
 		)
 		(fp_line
-			(start -1.85 -0.95)
-			(end 1.85 -0.95)
+			(start -0.227064 -0.735)
+			(end 0.227064 -0.735)
 			(stroke
-				(width 0.05)
+				(width 0.12)
 				(type solid)
 			)
-			(layer "F.CrtYd")
-			(uuid "601fc18b-cb86-4b49-86b4-491207e4ae97")
+			(layer "F.SilkS")
+			(uuid "6aea93b9-b634-4c88-b762-ad69ae7007ed")
 		)
 		(fp_line
 			(start -1.85 0.95)
@@ -25872,14 +25862,14 @@
 			(uuid "18e65cfe-d83e-453d-8c1f-964848f07264")
 		)
 		(fp_line
-			(start 1.85 -0.95)
-			(end 1.85 0.95)
+			(start -1.85 -0.95)
+			(end 1.85 -0.95)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "46785011-7ce9-4e23-8172-7a9ec31574c1")
+			(uuid "601fc18b-cb86-4b49-86b4-491207e4ae97")
 		)
 		(fp_line
 			(start 1.85 0.95)
@@ -25892,14 +25882,14 @@
 			(uuid "49a59bd4-5f6b-487f-b8cc-85b8f5a4fb12")
 		)
 		(fp_line
-			(start -1 -0.625)
-			(end 1 -0.625)
+			(start 1.85 -0.95)
+			(end 1.85 0.95)
 			(stroke
-				(width 0.1)
+				(width 0.05)
 				(type solid)
 			)
-			(layer "F.Fab")
-			(uuid "88d36ddf-e059-44e3-bc94-f89481045dab")
+			(layer "F.CrtYd")
+			(uuid "46785011-7ce9-4e23-8172-7a9ec31574c1")
 		)
 		(fp_line
 			(start -1 0.625)
@@ -25912,14 +25902,14 @@
 			(uuid "7bd4cdfa-2bff-4bcb-b73e-70cdff1311a1")
 		)
 		(fp_line
-			(start 1 -0.625)
-			(end 1 0.625)
+			(start -1 -0.625)
+			(end 1 -0.625)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "F.Fab")
-			(uuid "4d7bd495-9132-43e0-a5ed-43dcc0aa5524")
+			(uuid "88d36ddf-e059-44e3-bc94-f89481045dab")
 		)
 		(fp_line
 			(start 1 0.625)
@@ -25931,8 +25921,18 @@
 			(layer "F.Fab")
 			(uuid "cbcf2417-c24a-4c6d-a464-347397c5fba7")
 		)
+		(fp_line
+			(start 1 -0.625)
+			(end 1 0.625)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+			(uuid "4d7bd495-9132-43e0-a5ed-43dcc0aa5524")
+		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 0 135)
 			(layer "F.Fab")
 			(uuid "d053d7b3-09ce-4947-a72c-7afa190cbc0b")
 			(effects
@@ -25943,7 +25943,7 @@
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1 0)
+			(at -1 0 315)
 			(size 1.2 1.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.208333)
@@ -25952,7 +25952,7 @@
 			(uuid "0469ae52-ab26-4a7f-bb20-45a23f2c9a42")
 		)
 		(pad "2" smd roundrect
-			(at 1 0)
+			(at 1 0 315)
 			(size 1.2 1.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.208333)
@@ -39636,7 +39636,7 @@
 	(footprint "TestPoint:TestPoint_Loop_D2.50mm_Drill1.0mm_LowProfile"
 		(layer "F.Cu")
 		(uuid "e8f3f2a2-511d-4f11-96d0-1dda24993127")
-		(at 161 66)
+		(at 104.5 73.5)
 		(descr "low profile wire loop as test point, loop diameter 2.5mm, hole diameter 1.0mm")
 		(tags "test point wire loop bead")
 		(property "Reference" "TP1"
@@ -46018,7 +46018,7 @@
 		(uuid "753b1092-7c30-48d4-9bca-afecab37780b")
 	)
 	(via
-		(at 112.75 85.35)
+		(at 111.5 84)
 		(size 0.6)
 		(drill 0.3)
 		(layers "F.Cu" "B.Cu")
@@ -46388,6 +46388,14 @@
 		(uuid "31d9c15c-dbc1-488e-8bf8-ed37eef65b6d")
 	)
 	(segment
+		(start 114.503984 80.081802)
+		(end 113.292893 81.292893)
+		(width 0.3)
+		(layer "F.Cu")
+		(net 3)
+		(uuid "3f00dc0b-8213-4b14-a176-0610c6eac629")
+	)
+	(segment
 		(start 140.4 81.1)
 		(end 139.5 81.1)
 		(width 0.3)
@@ -46442,6 +46450,14 @@
 		(layer "F.Cu")
 		(net 3)
 		(uuid "7935fb8b-3c4e-427d-a93f-16ff42825e8a")
+	)
+	(segment
+		(start 114.503984 79.203984)
+		(end 114.503984 80.081802)
+		(width 0.3)
+		(layer "F.Cu")
+		(net 3)
+		(uuid "9ac89ee8-d859-4f96-b8dd-96aaf157bfd0")
 	)
 	(segment
 		(start 124.523223 86.423223)
@@ -49995,20 +50011,36 @@
 		(uuid "12b0bed5-db6d-4909-8ab3-2bb2f358f429")
 	)
 	(segment
-		(start 116.696016 81.396016)
-		(end 115.617678 81.396016)
+		(start 113.556847 84.056847)
+		(end 113.556847 83.857367)
 		(width 0.3)
 		(layer "F.Cu")
 		(net 85)
-		(uuid "b9aa84b7-bcf4-4e81-8ee3-c7c62ce9dfe9")
+		(uuid "0fddd279-8be7-4179-800c-44794459f1d7")
 	)
 	(segment
-		(start 115.617678 81.396016)
-		(end 114.056847 82.956847)
+		(start 116.696016 81.396016)
+		(end 116.018198 81.396016)
 		(width 0.3)
 		(layer "F.Cu")
 		(net 85)
-		(uuid "f8494a9e-f2a5-44dc-a106-b300e647c052")
+		(uuid "73648df6-f153-489a-ad74-cfd09948390c")
+	)
+	(segment
+		(start 116.018198 81.396016)
+		(end 114.707107 82.707107)
+		(width 0.3)
+		(layer "F.Cu")
+		(net 85)
+		(uuid "75b444c2-973d-4232-98ae-01f0a5d98fc4")
+	)
+	(segment
+		(start 113.556847 83.857367)
+		(end 114.707107 82.707107)
+		(width 0.3)
+		(layer "F.Cu")
+		(net 85)
+		(uuid "f4f9546e-1910-4edf-8c96-1400692aa2ed")
 	)
 	(segment
 		(start 168.5 74.099999)
