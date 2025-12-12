@@ -29,7 +29,7 @@ namespace Networking {
             R_HOLDING_REGS      = 3,
             R_INPUT_REGS        = 4,
             W_COIL              = 5,
-            W_REG               = 6, // \-
+            W_REG               = 6,    // \-
             W_COILS             = 0x0F, // -/
             W_REGS              = 0x10,
         };
@@ -56,8 +56,8 @@ namespace Networking {
 
             uint16_t transactionID;
             uint16_t protocolID = PROTOCOL_ID_MODBUS;
-            uint16_t len;               // includes 'funciton code' and 'unit id'. (+2 bytes)
-            uint8_t  unitID;
+            uint16_t len;               // always has + sizeof(ADUPacket) + sizeof(unitID) . (+2 total)
+            uint8_t  unitID;            // 0x00 or 0xFF for Modbus-TCP/IP
             ADUPacket adu[0];
         };
         static_assert(sizeof(MBAPHeader) == 7);
@@ -73,9 +73,12 @@ namespace Networking {
 
         struct __attribute__((__packed__)) F_Range_RES {
             uint8_t byteCount;
-            uint16_t values[0];
+
+            uint16_t    valu16[0];
+            uint8_t     valu8[0];
         };
-        static_assert(sizeof(F_Range_REQ) == sizeof(uint32_t));
+        static_assert(sizeof(F_Range_RES) == sizeof(uint8_t));
+
 
         /*** functions ***************************************/
 

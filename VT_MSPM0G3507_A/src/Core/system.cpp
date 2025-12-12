@@ -32,9 +32,15 @@ namespace System {
     #ifdef PROJECT_ENABLE_I2C1
         I2C::I2C i2c1 = {.reg = I2C1};
     #endif
+
+    #ifdef PROJECT_ENABLE_MCAN0
+        CANFD::CANFD canFD0 = {.reg = CANFD0};
+    #endif
 }
 
 void System::init() {
+    mcuID = DL_FactoryRegion_getTraceID();
+
     DL_GPIO_disablePower(GPIOA);
     DL_GPIO_disablePower(GPIOB);
     DL_GPIO_reset(GPIOA);

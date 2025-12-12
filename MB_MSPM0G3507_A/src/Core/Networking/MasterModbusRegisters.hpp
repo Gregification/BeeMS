@@ -4,7 +4,8 @@
  *  Created on: Dec 2, 2025
  *      Author: turtl
  *
- * mildly long file name but ill fight u on it
+ * - mildly long file name but ill fight u on it
+ * - must be run from within a FreeRTOS task
  */
 
 #ifndef SRC_TASKS_MASTERMODBUSREGISTERS_HPP_
@@ -14,7 +15,7 @@
 
 /**
  * Master board "registers" available on the Modbus interface
- * Modbus register convention
+ * Modbus register naming convention
  *      - Holding   : 16b read/write
  *      - Input     : 16b read only . non intuitive name? go pester Schneider Electric
  *      - Coil      : 1b read/write

@@ -19,7 +19,7 @@ namespace VT {
 }
 
 void VT::preScheduler_init(){
-    mcuID = DL_FactoryRegion_getTraceID();
+
 }
 
 void VT::postScheduler_init(){

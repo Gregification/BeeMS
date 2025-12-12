@@ -14,6 +14,7 @@
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
+    uint16_t mcuID = 0;
 
     // we should move to uboot one bright sunny day
 
@@ -32,9 +33,15 @@ namespace System {
     #ifdef PROJECT_ENABLE_I2C1
         I2C::I2C i2c1 = {.reg = I2C1};
     #endif
+
+    #ifdef PROJECT_ENABLE_MCAN0
+        CANFD::CANFD canFD0 = {.reg = CANFD0};
+    #endif
 }
 
 void System::init() {
+    mcuID = DL_FactoryRegion_getTraceID();
+
     DL_GPIO_disablePower(GPIOA);
     DL_GPIO_disablePower(GPIOB);
     DL_GPIO_reset(GPIOA);
@@ -44,7 +51,7 @@ void System::init() {
     delay_cycles(POWER_STARTUP_DELAY);
 
     #ifdef PROJECT_ENABLE_MCAN0
-    // MCAN has to be enabled before the clocks are modified or the ram wont initialize
+    // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
 
         // pins for v: 2.2, 3.0
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
@@ -403,9 +410,9 @@ void System::init() {
                     .rxFIFO1waterMark     = 3,  /* Level for Rx FIFO 1 watermark interrupt. */
                     .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
                     .rxBufStartAddr       = 208,  /* Rx Buffer Start Address. */
-                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx Buffer Element Size. */
+                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx Buffer Element Size. */
                     .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO0 Element Size. */
-                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO1 Element Size. */
+                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx FIFO1 Element Size. */
                 };
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
         }

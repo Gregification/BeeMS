@@ -20,13 +20,13 @@
  * good luck getting the CCS RTOS debugger working. I couldn't.
  */
 
+#include <Core/Networking/CAN.hpp>
 #include <stdint.h>
 
 #include <FreeRTOS.h>
 #include <task.h>
 
 #include "system.hpp"
-#include "Core/Networking/CANComm.hpp"
 #include "Core/VT.hpp"
 
 #include <Tasks/task_BMS.hpp>
@@ -40,7 +40,6 @@ int main(){
     System::uart_ui.setBaudTarget(115200);
     System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
     System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
-
 
 
     // don't have this task on release

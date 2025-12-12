@@ -18,6 +18,8 @@ namespace ALT {
     buffersize_t srtCpy(char * to, buffersize_t maxLen, char const * from);
 
     //buffersize_t strLen(char const * str, buffersize_t maxLen);
+
+    void memcpy(void const * from, void * to, buffersize_t len);
 }
 
 #endif /* SRC_CORE_STD_ALTERNATIVES_STRING_HPP_ */

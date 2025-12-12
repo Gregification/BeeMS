@@ -19,7 +19,7 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, uint16_t * out) 
         default: return false;
 
         case RegAddr::SOFTWARE_VERSION: // <input>
-            *out = PROJECT_VERSION_N;
+            *out = 67;
             break;
     }
 

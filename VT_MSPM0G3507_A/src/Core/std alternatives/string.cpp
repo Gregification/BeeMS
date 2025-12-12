@@ -6,6 +6,7 @@
  */
 
 #include "string.hpp"
+#include "stdint.h"
 
 buffersize_t ALT::srtCpy(char * to, buffersize_t maxLen, char const * from) {
     buffersize_t i;
@@ -16,4 +17,9 @@ buffersize_t ALT::srtCpy(char * to, buffersize_t maxLen, char const * from) {
     }
     to[i] = '\0';
     return i;
+}
+
+void ALT::memcpy(void const * from, void * to, buffersize_t len) {
+    for(buffersize_t i = 0; i < len; i++)
+        ((uint8_t *)to)[i] = ((uint8_t *)from)[i];
 }

@@ -34,9 +34,10 @@
 #include "Core/system.hpp"
 #include "Core/std alternatives/string.hpp"
 #include "Core/Networking/Modbus.hpp"
+#include "Core/Networking/MasterModbusRegisters.hpp"
 #include "Middleware/W5500/socket.h"
 #include "Middleware/W5500/wizchip_conf.h"
-#include "Tasks/MasterModbusRegisters.hpp"
+
 
 /*** wixchip setup *******************************************/
 
@@ -69,39 +70,40 @@ System::UART::UART &uart = System::uart_ui;
 void Task::ethModbus_task(void *){
     uart.nputs(ARRANDN("ethModbus_task start" NEWLINE));
 
-    do {
-        DL_MCAN_TxBufElement txmsg = {
-                .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
-                .rtr    = 0,        // 0: data frame, 1: remote frame
-                .xtd    = 1,        // 0: 11b id, 1: 29b id
-                .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-                .dlc    = 3,        // data byte count, see DL comments
-                .brs    = 0,        // 0: no bit rate switching, 1: yes brs
-                .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
-                .efc    = 0,        // 0: dont store Tx events, 1: store
-                .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
-            };
-        txmsg.data[0] = 6;
-        txmsg.data[1] = 7;
-        txmsg.dlc = 2;
-
-        DL_MCAN_TxFIFOStatus tf;
-        DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
-
-        uint32_t bufferIndex = tf.putIdx;
-        uart.nputs(ARRANDN("TX from buffer "));
-        uart.putu32d(bufferIndex);
-        uart.nputs(ARRANDN("" NEWLINE));
-
-        DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-        DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
-
-        vTaskDelay(pdMS_TO_TICKS(400));
-    } while(1);
+//    do {
+//        DL_MCAN_TxBufElement txmsg = {
+//                .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
+//                .rtr    = 0,        // 0: data frame, 1: remote frame
+//                .xtd    = 1,        // 0: 11b id, 1: 29b id
+//                .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
+//                .dlc    = 3,        // data byte count, see DL comments
+//                .brs    = 0,        // 0: no bit rate switching, 1: yes brs
+//                .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
+//                .efc    = 0,        // 0: dont store Tx events, 1: store
+//                .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
+//            };
+//        txmsg.data[0] = 6;
+//        txmsg.data[1] = 7;
+//        txmsg.dlc = 2;
+//
+//        DL_MCAN_TxFIFOStatus tf;
+//        DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
+//
+//        uint32_t bufferIndex = tf.putIdx;
+//        uart.nputs(ARRANDN("TX from buffer "));
+//        uart.putu32d(bufferIndex);
+//        uart.nputs(ARRANDN("" NEWLINE));
+//
+//        DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
+//        DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
+//
+//        vTaskDelay(pdMS_TO_TICKS(400));
+//    } while(1);
 
     wiz_spi.setSCLKTarget(25e6);
 
     /*** W5500 init *****************/
+
     while(!setupWizchip()) {
         uart.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed!" CLIRESET NEWLINE));
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -115,6 +117,7 @@ void Task::ethModbus_task(void *){
             };
         wizchip_settimeout(&timeout);
     }
+
 
     /********************************/
     uart.nputs(ARRANDN(CLIHIGHLIGHT "IP: \t"));
@@ -318,25 +321,25 @@ void Task::ethModbus_task(void *){
                 if(ntoh16(rxheader->protocolID) != MBAPHeader::PROTOCOL_ID_MODBUS) // is protocol not Modbus ?
                     break; // ignore packet
 
-                if(! (rxheader->unitID == 0x00 || rxheader->unitID == 0xFF)) // is not Modbus-TCP/IP ?
-                    break; // ignore packet
-
+                uart.nputs(ARRANDN("unitID: "));
+                uart.putu32h(rxheader->unitID);
+                uart.nputs(ARRANDN(NEWLINE));
 
                 /*** process packet *************/
 
                 switch (rxadu->func) {
                     case Function::R_COILS:
-                        uart_ui.nputs(ARRANDN("R_COILS" NEWLINE));
+                        uart_ui.nputs(ARRANDN("R_COILS unhandled" NEWLINE));
                         break;
 
                     case Function::R_DISRETE_INPUTS:
-                        uart_ui.nputs(ARRANDN("R_DISRETE_INPUTS" NEWLINE));
+                        uart_ui.nputs(ARRANDN("R_DISRETE_INPUTS unhandled" NEWLINE));
                         break;
 
                     case Function::R_HOLDING_REGS: {
 //                            uart_ui.nputs(ARRANDN("R_HOLDING_REGS" NEWLINE));
-                            F_Holding_REQ const * query = reinterpret_cast<F_Holding_REQ const *>(rxadu->data);
-                            F_Holding_RES * resp = reinterpret_cast<F_Holding_RES *>(txadu->data);
+                            F_Range_REQ const * query = reinterpret_cast<F_Range_REQ const *>(rxadu->data);
+                            F_Range_RES * resp = reinterpret_cast<F_Range_RES *>(txadu->data);
 
                             /*** validation ***********/
 
@@ -363,30 +366,30 @@ void Task::ethModbus_task(void *){
                             }
 
                             // tx response
-                            txheader->len = hton16(resp->byteCount + 3); // +3 = [unit id] + [function] + [1: next empty position convention]
+                            txheader->len = hton16(resp->byteCount + 2 + sizeof(*resp)); // +3 = [unit id] + [function] + [size of "byte count" variable]
                             uint16_t _len = sizeof(*txheader) + sizeof(*txadu) + sizeof(*resp) + resp->byteCount;
                             send(sn, txbuf, _len);
 
                         } break;
 
                     case Function::R_INPUT_REGS:
-                        uart_ui.nputs(ARRANDN("R_INPUT_REGS" NEWLINE));
+                        uart_ui.nputs(ARRANDN("R_INPUT_REGS unhandled" NEWLINE));
                         break;
 
                     case Function::W_COIL:
-                        uart_ui.nputs(ARRANDN("W_COIL" NEWLINE));
+                        uart_ui.nputs(ARRANDN("W_COIL unhandled" NEWLINE));
                         break;
 
                     case Function::W_REG:
-                        uart_ui.nputs(ARRANDN("W_REG" NEWLINE));
+                        uart_ui.nputs(ARRANDN("W_REG unhandled" NEWLINE));
                         break;
 
                     case Function::W_COILS:
-                        uart_ui.nputs(ARRANDN("W_COILS" NEWLINE));
+                        uart_ui.nputs(ARRANDN("W_COILS unhandled" NEWLINE));
                         break;
 
                     case Function::W_REGS:
-                        uart_ui.nputs(ARRANDN("W_REGS" NEWLINE));
+                        uart_ui.nputs(ARRANDN("W_REGS unhandled" NEWLINE));
                         break;
 
                     default:

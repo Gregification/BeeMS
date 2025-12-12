@@ -56,10 +56,9 @@
 
 /*--- meta ---------------------------------------------*/
 
-#define PROJECT_NAME                    "Voltage Tap"
-#define PROJECT_DESCRIPTION             "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION                 "3.1"
-constexpr uint16_t PROJECT_VERSION_N    = 67;
+#define PROJECT_NAME            "Voltage Tap"
+#define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
+#define PROJECT_VERSION         "3.0" // [project version].[hardware version].[software version]
 
 /*--- IC footprint -------------------------------------*/
 
@@ -131,6 +130,7 @@ namespace System {
 /*------------------------------------------------------*/
 
 namespace System {
+    extern uint16_t mcuID; // unique ID of the MCU. different for every chip
 
     /** wrapper for controlling access to limited hardware resource.
      * purpose is to standardize resource access.
@@ -239,7 +239,7 @@ namespace System {
          * - functions here are general and are nowhere near peak performance
          * - master only device
          */
-        struct SPI : public Lockable {
+        struct SPI : Lockable {
             SPI_Regs * const reg;
             const IRQn_Type irq_type;
 
@@ -300,6 +300,10 @@ namespace System {
          * just use the DL funcitons, its good enough
          */
 
+        struct CANFD : Lockable {
+            MCAN_Regs * const reg;
+        };
+
         struct __attribute__((__packed__)) CAN_ID_J1939 {
             unsigned int src_addr       : 8;
             unsigned int pdu_specific   : 8;
@@ -329,6 +333,7 @@ namespace System {
     #ifdef PROJECT_ENABLE_UART0
         extern UART::UART uart0;
     #endif
+
     #ifdef PROJECT_ENABLE_SPI0
         extern SPI::SPI spi0;
     #endif
@@ -343,6 +348,9 @@ namespace System {
         extern I2C::I2C i2c1;
     #endif
 
+    #ifdef PROJECT_ENABLE_MCAN0
+        extern CANFD::CANFD canFD0;
+    #endif
 }
 
 #endif /* SRC_CORE_SYSTEM_HPP_ */

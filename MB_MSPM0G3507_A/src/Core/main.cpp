@@ -25,23 +25,21 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-#include <Tasks/task_BMS.hpp>
-#include <Tasks/task_ethModbus.hpp>
+#include "Core/system.hpp"
+#include "Tasks/task_BMS.hpp"
+#include "Tasks/task_ethModbus.hpp"
 #include "Tasks/examples/example_blink_task.hpp"
-#include "Tasks/examples/example_BQ769x2_PROTOCOL_V.hpp"
-
-#include "system.hpp"
-#include "Core/Networking/CANComm.hpp"
-#include "FancyCli.hpp"
 
 
 int main(){
-
     System::init();
 
     System::uart_ui.setBaudTarget(115200);
     System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
     System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
+    System::uart_ui.nputs(ARRANDN("\t Device: "));
+    System::uart_ui.putu32h(System::mcuID);
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
 
     // don't have this task on release
     // used a an sanity check
