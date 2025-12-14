@@ -5,8 +5,7 @@
  *      Author: turtl
  */
 
-#include "MasterModbusRegisters.hpp"
-
+#include <Core/Networking/ModbusRegisters.hpp>
 #include "Core/system.hpp"
 
 using namespace Networking::Modbus::MasterRegisters;

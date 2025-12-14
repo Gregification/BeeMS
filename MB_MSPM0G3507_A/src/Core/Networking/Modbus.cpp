@@ -5,8 +5,8 @@
  *      Author: turtl
  */
 
+#include <Core/Networking/ModbusRegisters.hpp>
 #include "Modbus.hpp"
-#include "Core/Networking/MasterModbusRegisters.hpp"
 #include "Core/system.hpp"
 
 
@@ -70,7 +70,7 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                     resp->byteCount += sizeof(res);
                 }
 
-                txheader->len = hton16(resp->byteCount + sizeof(ADUPacket) + sizeof(F_Range_RES));
+                txheader->len = hton16(resp->byteCount + sizeof(F_Range_RES) + sizeof(ADUPacket));
 
                 return true;
             } break;

@@ -25,7 +25,9 @@ namespace Networking {
              *      - Discrete  : 1b read only
              */
             enum RegAddr : uint16_t {
-                SOFTWARE_VERSION            = 0, // <input>
+                MCU_HARDWARE_ID             = 0, // <input>
+                SOFTWARE_VERSION            = 1, // <input>
+                DELETE_ME                   = 2, // <input>
             };
 
             /** returns true if is valid operation */

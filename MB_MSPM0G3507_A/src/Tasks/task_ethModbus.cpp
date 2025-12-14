@@ -25,6 +25,7 @@
  * TODO: look at later : https://www.tij.co.jp/jp/lit/ml/slyp847/slyp847.pdf
  */
 
+#include <Core/Networking/ModbusRegisters.hpp>
 #include <cstdint>
 #include <FreeRTOS.h>
 #include <task.h>
@@ -36,7 +37,6 @@
 #include "Core/std alternatives/string.hpp"
 #include "Core/Networking/Modbus.hpp"
 #include "Core/Networking/bridge_CAN_Modbus.hpp"
-#include "Core/Networking/MasterModbusRegisters.hpp"
 #include "Middleware/W5500/socket.h"
 #include "Middleware/W5500/wizchip_conf.h"
 
@@ -258,15 +258,34 @@ void Task::ethModbus_task(void *){
                     /*** forward to ModbusTCP *********/
 
                     uart.nputs(ARRANDN("CAN rx: " ));
+                    uart.nputs(ARRANDN(NEWLINE "dump: "));
+                    for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf.canrx); j++){
+                        if(j % 10 == 0)
+                            uart.nputs(ARRANDN(NEWLINE));
+
+                        uart.nputs(ARRANDN(" "));
+                        uart.putu32h(rxbuf.canrx.data[j]);
+                    }
+                    uart.nputs(ARRANDN(NEWLINE));
 
                     if(CAN_to_ModbusTCP(&rxbuf.canrx, &txbuf.mbap)) {
-                        send(sn, txbuf.arr, sizeof(MBAPHeader) - sizeof(ADUPacket) + ntoh16(txbuf.mbap.len));
+                        send(sn, txbuf.arr, sizeof(MBAPHeader) + ntoh16(txbuf.mbap.len));
                         uart.nputs(ARRANDN("forwarded to ModbusTCP"));
                     } else {
                         uart.nputs(ARRANDN("not forwarded to ModbusTCP"));
                     }
                     uart.nputs(ARRANDN(NEWLINE));
 
+                    // already bad
+//                    uart.nputs(ARRANDN("dump: "));
+//                    for(uint8_t j = 0; j < sizeof(MBAPHeader) + ntoh16(txbuf.mbap.len); j++){
+//                        if(j % 10 == 0)
+//                            uart.nputs(ARRANDN(NEWLINE));
+//
+//                        uart.nputs(ARRANDN(" "));
+//                        uart.putu32h(txbuf.arr[j]);
+//                    }
+//                    uart.nputs(ARRANDN(NEWLINE));
 
                     DL_MCAN_getRxFIFOStatus(can.reg, &rf);
                 }

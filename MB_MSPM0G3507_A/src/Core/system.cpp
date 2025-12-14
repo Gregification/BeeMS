@@ -349,7 +349,7 @@ void System::init() {
                   .wdcPreload        = 255,     // start value of message ram WDT
 
                   /* Transmitter Delay Compensation parameters. tm.26.4.6/1439 */
-                  .tdcEnable         = false,   // transmitter delay compensation, oscilloscope the time diff between edges of TX->RX signals
+                  .tdcEnable         = false,   // transmitter delay compensation
                   .tdcConfig.tdcf    = 10,      // filter length
                   .tdcConfig.tdco    = 6,       // filter offset
                 };
@@ -374,16 +374,29 @@ void System::init() {
         }
 
         { /* Configure Bit timings. */
+            // arb 500k, data 500k
+//            constexpr DL_MCAN_BitTimingParams   bitTimeingParams = {
+//                    .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
+//                    .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
+//                    .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
+//                    .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
+//                    .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
+//                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
+//                    .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
+//                    .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
+//                };
+            // arb 500k, data 2M
             constexpr DL_MCAN_BitTimingParams   bitTimeingParams = {
-                    .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
-                    .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
-                    .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
-                    .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
-                    .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
-                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
-                    .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
-                    .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
+                    .nomRatePrescalar   = 1,    /* Arbitration Baud Rate Pre-scaler. */
+                    .nomTimeSeg1        = 68,   /* Arbitration Time segment before sample point. */
+                    .nomTimeSeg2        = 9,    /* Arbitration Time segment after sample point. */
+                    .nomSynchJumpWidth  = 9,    /* Arbitration (Re)Synchronization Jump Width Range. */
+                    .dataRatePrescalar  = 1,    /* Data Baud Rate Pre-scaler. */
+                    .dataTimeSeg1       = 16,    /* Data Time segment before sample point. */
+                    .dataTimeSeg2       = 1,    /* Data Time segment after sample point. */
+                    .dataSynchJumpWidth = 1,    /* Data (Re)Synchronization Jump Width.   */
                 };
+
             DL_MCAN_setBitTime(CANFD0, &bitTimeingParams);
         }
 

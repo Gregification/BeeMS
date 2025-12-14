@@ -46,9 +46,15 @@ void Task::bqCanInterface_task(void *){
 
     union _TRXBuffer {
         Modbus::MBAPHeader mbap;
+        DL_MCAN_TxBufElement cantx;
 
         uint8_t arr[Bridge::CANModbus::PKTBUFFSIZE];
-    } rxbuf = {0}, txbuf = {0};
+    } rxbuf = {0};
+    union _TXBuffer {
+        Modbus::MBAPHeader mbap;
+
+        uint8_t arr[Bridge::CANModbus::PKTBUFFSIZE];
+    } txbuf = {0};
 
 
     while(true){
@@ -100,18 +106,43 @@ void Task::bqCanInterface_task(void *){
 
             /*** process packet *******************/
 
-            // TODO: this line has a memory leak. explodes!
             if(Modbus::ProcessRequest(&rxbuf.mbap, sizeof(rxbuf), &txbuf.mbap, sizeof(txbuf))) {
-//                DL_MCAN_TxBufElement cantx;
-//                uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
-//                if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &cantx)){
-//                    // transmit CAN
-//                    uart.nputs(ARRANDN(" response sent to CAN" NEWLINE));
-//
-//                } else
-//                    uart.nputs(ARRANDN("failed to translate ModbusTCP response to CAN " NEWLINE));
+                uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
+
+                if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx)){
+                    // transmit CAN
+                    uart.nputs(ARRANDN("  response CAN packet ready to send" NEWLINE));
+
+                    uart.nputs(ARRANDN(NEWLINE " \tdump: "));
+                    for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf.cantx); j++){
+                        if(j % 10 == 0)
+                            uart.nputs(ARRANDN(NEWLINE " \t"));
+
+                        uart.nputs(ARRANDN(" "));
+                        uart.putu32h(rxbuf.cantx.data[j]);
+                    }
+                    uart.nputs(ARRANDN(NEWLINE));
+
+                    DL_MCAN_TxFIFOStatus tf;
+
+                    for(uint8_t i = 3; i != 0; i--) {
+                        DL_MCAN_getTxFIFOQueStatus(can.reg, &tf);
+
+                        if(tf.fifoFull){
+                            vTaskDelay(pdMS_TO_TICKS(2));
+                            continue;
+                        }
+
+                        DL_MCAN_writeMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, tf.putIdx, &rxbuf.cantx);
+                        DL_MCAN_TXBufAddReq(can.reg, tf.getIdx);
+
+                        break;
+                    }
+
+                } else
+                    uart.nputs(ARRANDN("  failed to translate ModbusTCP response to CAN " NEWLINE));
             } else
-                uart.nputs(ARRANDN("failed to process Modbus request" NEWLINE));
+                uart.nputs(ARRANDN(" failed to process Modbus request" NEWLINE));
         } else
             uart.nputs(ARRANDN("failed to parse Modbus over CAN." NEWLINE));
 
