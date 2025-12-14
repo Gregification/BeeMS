@@ -6,9 +6,12 @@
  */
 
 #include "VT.hpp"
+#include "Core/system.hpp"
 
 // variables
 namespace VT {
+    uint8_t id = 0;
+
     BQ76952 bq = {
             .spi  = &System::spi1,
             .cs   = &System::GPIO::PB19, // v3
@@ -19,7 +22,7 @@ namespace VT {
 }
 
 void VT::preScheduler_init(){
-
+    id = System::mcuID;
 }
 
 void VT::postScheduler_init(){

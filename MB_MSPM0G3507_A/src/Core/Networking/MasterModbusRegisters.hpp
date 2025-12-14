@@ -26,7 +26,8 @@ namespace Networking {
         namespace MasterRegisters {
 
             enum RegAddr : uint16_t {
-                SOFTWARE_VERSION            = 0, // <input>
+                MCU_HARDWARE_ID             = 0, // <input>
+                SOFTWARE_VERSION            = 1, // <input>
             };
 
             /** returns true if is valid operation */

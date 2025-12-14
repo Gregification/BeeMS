@@ -17,7 +17,7 @@
 namespace Networking {
     namespace Bridge {
         namespace CANModbus {
-            constexpr uint8_t PKTBUFFSIZE = DL_MCAN_MAX_PAYLOAD_BYTES;
+            constexpr uint8_t PKTBUFFSIZE = DL_MCAN_MAX_PAYLOAD_BYTES + sizeof(CAN::J1939::ID);
 
             /** PDU-format value used to indicate Modbus-TCP translation */
             constexpr uint8_t J1939_PDU_FORMAT   = 0x67;
@@ -25,7 +25,7 @@ namespace Networking {
             /** PDU-specific value is just the Modbus::Funciton */
 
             /** populates CAN data buffer from a ModbusTCP packet and sets the length. nothing else is set.
-             * - CAN ID is not modified by this function!
+             * - CAN ID j1939::pdu is modified
              * - "in" is assumed to be in network byte format
              * returns true if success. only reason it would fail is if packet to large */
             bool ModbusTCP_to_CAN(Modbus::MBAPHeader const * in, DL_MCAN_TxBufElement * out);

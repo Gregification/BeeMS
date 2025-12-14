@@ -13,7 +13,7 @@
 
 namespace Task {
 
-    /** provides a Modbus-TCP interface */
+    /** provides a Modbus-TCP <-> CAN interface */
     void ethModbus_task(void *);
 }
 

@@ -40,24 +40,25 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
 
     txpkt->header.transactionID = mbap->transactionID;
     txpkt->header.mbatlen   = ntoh16(mbap->len);
-    txpkt->header.unitID    = mbap->unitID;
+    txpkt->header.unitID    = mbap->adu[0].unitID;
 
     static_assert(sizeof(txid->pdu_format) == sizeof(J1939_PDU_FORMAT));
     static_assert(sizeof(txid->pdu_specific) == sizeof(mbap->adu[0].func));
     static_assert(sizeof(txpkt->header.transactionID) == sizeof(mbap->transactionID));
 
     // copy ADU
-    uint8_t aduDatalen = txpkt->header.mbatlen - sizeof(ADUPacket) - 1;//-1 for unitID
+    uint8_t adulen = txpkt->header.mbatlen - sizeof(ADUPacket);//-1 for unitID
+    if(adulen > PKTBUFFSIZE) return false;
     ALT::memcpy(
             mbap->adu[0].data,
             txpkt->header.adudata,
-            aduDatalen
+            adulen
         );
 
 
     /*** tx buffer settings ***/
 
-    tx->dlc = System::CANFD::len2DLC(aduDatalen);
+    tx->dlc = System::CANFD::len2DLC(adulen);
     tx->xtd = true; // use 29b CAN ID
     tx->fdf = true; // use CAN-FD format
 
@@ -91,20 +92,20 @@ bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const 
         return false;
 
     // is Modbus packet larger than CAN packet
-    if(System::CANFD::DLC2Len(rx) < rxpkt->header.mbatlen + sizeof(CANPacket::_Header) - 1) // -1 for unitID
+    if(System::CANFD::DLC2Len(rx) < rxpkt->header.mbatlen - sizeof(Modbus::ADUPacket))
         return false;
-
 
     /*** translation **********/
 
     mbap->transactionID     = rxpkt->header.transactionID;
     mbap->protocolID        = MBAPHeader::PROTOCOL_ID_MODBUS;
-    mbap->len               = ntoh16((uint16_t)rxpkt->header.mbatlen);
-    mbap->unitID            = rxpkt->header.unitID;
+    mbap->len               = hton16((uint16_t)rxpkt->header.mbatlen);
+    mbap->adu[0].unitID     = rxpkt->header.unitID;
     mbap->adu[0].func       = (Function)rxid->pdu_specific;
 
     // restore ADU
-    uint8_t adulen = rxpkt->header.mbatlen - sizeof(ADUPacket) - sizeof(mbap->unitID);
+    uint8_t adulen = rxpkt->header.mbatlen - sizeof(ADUPacket);
+    if(adulen > PKTBUFFSIZE) return false;
     ALT::memcpy(
             rxpkt->header.adudata,
             mbap->adu[0].data,

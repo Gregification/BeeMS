@@ -14,6 +14,7 @@
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
+    uint16_t mcuID = 0;
 
     // we should move to uboot one bright sunny day
 
@@ -56,6 +57,7 @@ void System::init() {
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
 
+        DL_MCAN_reset(CANFD0);
         DL_MCAN_enablePower(CANFD0);
         delay_cycles(POWER_STARTUP_DELAY);
     #endif
@@ -830,7 +832,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     return true;
 }
 
-uint8_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
+uint32_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
     if(ele->dlc < 9)
         return ele->dlc;
 
@@ -849,7 +851,7 @@ uint8_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
         return 8;
 }
 
-uint8_t System::CANFD::DLC2Len(DL_MCAN_TxBufElement const * ele) {
+uint32_t System::CANFD::DLC2Len(DL_MCAN_TxBufElement const * ele) {
     if(ele->dlc < 9)
         return ele->dlc;
 

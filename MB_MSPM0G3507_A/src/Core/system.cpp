@@ -831,6 +831,19 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     return true;
 }
 
+void System::CANFD::CANFD::emptyRXFIFO(DL_MCAN_RX_FIFO_NUM fifonum) {
+    DL_MCAN_RxFIFOStatus rf;
+    rf.num = fifonum;
+
+    while(true) {
+        DL_MCAN_getRxFIFOStatus(reg, &rf);
+        if(rf.fillLvl == 0)
+            break;
+        DL_MCAN_writeRxFIFOAck(reg, rf.num, rf.getIdx);
+    }
+
+}
+
 uint8_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
     if(ele->dlc < 9)
         return ele->dlc;

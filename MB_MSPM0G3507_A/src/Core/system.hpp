@@ -302,6 +302,8 @@ namespace System {
 
         struct CANFD : Lockable {
             MCAN_Regs * const reg;
+
+            void emptyRXFIFO(DL_MCAN_RX_FIFO_NUM);
         };
 
         struct __attribute__((__packed__)) CAN_ID_J1939 {
