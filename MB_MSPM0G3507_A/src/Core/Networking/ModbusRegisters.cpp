@@ -5,8 +5,7 @@
  *      Author: turtl
  */
 
-#include "MasterModbusRegisters.hpp"
-
+#include <Core/Networking/ModbusRegisters.hpp>
 #include "Core/system.hpp"
 
 using namespace Networking::Modbus::MasterRegisters;
@@ -18,8 +17,12 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, uint16_t * out) 
     switch(addr){
         default: return false;
 
+        case RegAddr::MCU_HARDWARE_ID: // <input>
+            *out = System::mcuID;
+            break;
+
         case RegAddr::SOFTWARE_VERSION: // <input>
-            *out = PROJECT_VERSION_N;
+            *out = 67;
             break;
     }
 

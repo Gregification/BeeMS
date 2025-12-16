@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DeviceTemplate>
+  <Options>
+    <ZeroAddr>false</ZeroAddr>
+    <DecAddr>true</DecAddr>
+    <DefByteOrder2 />
+    <DefByteOrder4 />
+    <DefByteOrder8 />
+  </Options>
+  <ElemGroups>
+    <ElemGroup active="true" dataBlock="InputRegisters" address="0" name="Device">
+      <Elem type="ushort" isBitMask="false" tagCode="MCU HARDWARE ID" name="MCU HARDWARE ID" />
+      <Elem type="ushort" isBitMask="false" tagCode="Software Version" name="Software Version" />
+      <Elem type="ushort" isBitMask="false" tagCode="moo" name="delete me" />
+    </ElemGroup>
+  </ElemGroups>
+  <Cmds />
+</DeviceTemplate>

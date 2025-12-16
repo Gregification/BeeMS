@@ -15,7 +15,6 @@
 /** variables, functions, stuff... focused on the voltage tap. exists for organizational reasons */
 namespace VT {
     extern uint8_t id; // slave id . must be uint8_t to meet J1939 CAN standards
-    extern uint16_t mcuID; // unique ID of the MCU. different for every chip
 
     extern BQ76952 bq;
     extern System::GPIO::GPIO const & bqReset;

@@ -14,6 +14,7 @@
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
+    uint16_t mcuID = 0;
 
     // we should move to uboot one bright sunny day
 
@@ -32,9 +33,15 @@ namespace System {
     #ifdef PROJECT_ENABLE_I2C1
         I2C::I2C i2c1 = {.reg = I2C1};
     #endif
+
+    #ifdef PROJECT_ENABLE_MCAN0
+        CANFD::CANFD canFD0 = {.reg = CANFD0};
+    #endif
 }
 
 void System::init() {
+    mcuID = DL_FactoryRegion_getTraceID();
+
     DL_GPIO_disablePower(GPIOA);
     DL_GPIO_disablePower(GPIOB);
     DL_GPIO_reset(GPIOA);
@@ -50,6 +57,7 @@ void System::init() {
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
 
+        DL_MCAN_reset(CANFD0);
         DL_MCAN_enablePower(CANFD0);
         delay_cycles(POWER_STARTUP_DELAY);
     #endif
@@ -367,16 +375,29 @@ void System::init() {
         }
 
         { /* Configure Bit timings. */
+            // arb 500k, data 500k
+//            constexpr DL_MCAN_BitTimingParams   bitTimeingParams = {
+//                    .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
+//                    .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
+//                    .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
+//                    .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
+//                    .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
+//                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
+//                    .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
+//                    .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
+//                };
+            // arb 500k, data 2M
             constexpr DL_MCAN_BitTimingParams   bitTimeingParams = {
-                    .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
-                    .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
-                    .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
-                    .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
-                    .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
-                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
-                    .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
-                    .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
+                    .nomRatePrescalar   = 1,    /* Arbitration Baud Rate Pre-scaler. */
+                    .nomTimeSeg1        = 68,   /* Arbitration Time segment before sample point. */
+                    .nomTimeSeg2        = 9,    /* Arbitration Time segment after sample point. */
+                    .nomSynchJumpWidth  = 9,    /* Arbitration (Re)Synchronization Jump Width Range. */
+                    .dataRatePrescalar  = 1,    /* Data Baud Rate Pre-scaler. */
+                    .dataTimeSeg1       = 16,    /* Data Time segment before sample point. */
+                    .dataTimeSeg2       = 1,    /* Data Time segment after sample point. */
+                    .dataSynchJumpWidth = 1,    /* Data (Re)Synchronization Jump Width.   */
                 };
+
             DL_MCAN_setBitTime(CANFD0, &bitTimeingParams);
         }
 
@@ -824,7 +845,7 @@ bool System::I2C::I2C::rx_blocking(uint8_t addr, void * data, buffersize_t size,
     return true;
 }
 
-uint8_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
+uint32_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
     if(ele->dlc < 9)
         return ele->dlc;
 
@@ -843,7 +864,7 @@ uint8_t System::CANFD::DLC2Len(DL_MCAN_RxBufElement const * ele) {
         return 8;
 }
 
-uint8_t System::CANFD::DLC2Len(DL_MCAN_TxBufElement const * ele) {
+uint32_t System::CANFD::DLC2Len(DL_MCAN_TxBufElement const * ele) {
     if(ele->dlc < 9)
         return ele->dlc;
 

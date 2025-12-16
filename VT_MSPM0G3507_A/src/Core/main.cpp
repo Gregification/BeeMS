@@ -20,13 +20,13 @@
  * good luck getting the CCS RTOS debugger working. I couldn't.
  */
 
+#include <Core/Networking/CAN.hpp>
 #include <stdint.h>
 
 #include <FreeRTOS.h>
 #include <task.h>
 
 #include "system.hpp"
-#include "Core/Networking/CANComm.hpp"
 #include "Core/VT.hpp"
 
 #include <Tasks/task_BMS.hpp>
@@ -36,12 +36,16 @@
 
 int main(){
     System::init();
+    VT::preScheduler_init();
 
     System::uart_ui.setBaudTarget(115200);
     System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
     System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
-
-
+    System::uart_ui.nputs(ARRANDN("\t - MCU HARDWARE ID: "));
+    System::uart_ui.putu32d(System::mcuID);
+    System::uart_ui.nputs(ARRANDN(NEWLINE "\t - MCU unit ID: "));
+    System::uart_ui.putu32d(VT::id);
+    System::uart_ui.nputs(ARRANDN(NEWLINE));
 
     // don't have this task on release
     // used a an sanity check
@@ -68,7 +72,7 @@ int main(){
 
     xTaskCreate(Task::bqCanInterface_task,
             "non_BMS_functions_task",
-            configMINIMAL_STACK_SIZE * 2,
+            configMINIMAL_STACK_SIZE * 20,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);

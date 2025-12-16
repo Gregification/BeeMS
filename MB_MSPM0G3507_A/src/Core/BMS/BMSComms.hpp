@@ -9,7 +9,7 @@
 #define SRC_CORE_BMS_BMSCOMMS_HPP_
 
 #include "Core/common.h"
-#include "Core/Networking/CANComm.hpp"
+#include "Core/Networking/CAN.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
 
 /**

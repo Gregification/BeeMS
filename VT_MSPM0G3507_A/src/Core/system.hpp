@@ -130,6 +130,7 @@ namespace System {
 /*------------------------------------------------------*/
 
 namespace System {
+    extern uint16_t mcuID; // unique ID of the MCU. different for every chip
 
     /** wrapper for controlling access to limited hardware resource.
      * purpose is to standardize resource access.
@@ -299,6 +300,10 @@ namespace System {
          * just use the DL funcitons, its good enough
          */
 
+        struct CANFD : Lockable {
+            MCAN_Regs * const reg;
+        };
+
         struct __attribute__((__packed__)) CAN_ID_J1939 {
             unsigned int src_addr       : 8;
             unsigned int pdu_specific   : 8;
@@ -309,8 +314,8 @@ namespace System {
         };
         static_assert(sizeof(CAN_ID_J1939) == sizeof(uint32_t));
 
-        uint8_t DLC2Len(DL_MCAN_RxBufElement const *);
-        uint8_t DLC2Len(DL_MCAN_TxBufElement const *);
+        uint32_t DLC2Len(DL_MCAN_RxBufElement const *);
+        uint32_t DLC2Len(DL_MCAN_TxBufElement const *);
         uint32_t len2DLC(uint32_t size);
     }
 
@@ -328,6 +333,7 @@ namespace System {
     #ifdef PROJECT_ENABLE_UART0
         extern UART::UART uart0;
     #endif
+
     #ifdef PROJECT_ENABLE_SPI0
         extern SPI::SPI spi0;
     #endif
@@ -342,6 +348,9 @@ namespace System {
         extern I2C::I2C i2c1;
     #endif
 
+    #ifdef PROJECT_ENABLE_MCAN0
+        extern CANFD::CANFD canFD0;
+    #endif
 }
 
 #endif /* SRC_CORE_SYSTEM_HPP_ */

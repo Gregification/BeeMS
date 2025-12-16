@@ -4,65 +4,148 @@
  *  Created on: Jun 6, 2025
  *      Author: FSAE
  *
- * responsible for can packets
+ * - responsible for most can packets
+ * - uses Modbus-TCP like packets. limited to 64B of data.
+ *      - so long the Modbus-TCP packets fits within 64B it can be transmitted
+ *          over CAN bus to this task. Response will be teh data of a Modbus-TCP packet.
+ *      - IS NOT A 1:1 TRANSLATION OF MODBUS-TCP.
+ *      - CAN-FD handles CRC checking in the absence of actual TCP control.
  */
 
 /*
  * TODO: look at later : https://www.tij.co.jp/jp/lit/ml/slyp847/slyp847.pdf
  */
 
+#include <Core/Networking/CAN.hpp>
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
 #include <Tasks/task_bqCanInterface.hpp>
 
 #include "Core/system.hpp"
+#include "Core/VT.hpp"
 #include "Core/std alternatives/string.hpp"
-#include "Core/Networking/CANComm.hpp"
+#include "Core/Networking/bridge_CAN_Modbus.hpp"
+#include "Core/Networking/ModbusRegisters.hpp"
 
-System::UART::UART &uart = System::uart_ui;
+auto & uart     = System::uart_ui;
+auto & can      = System::canFD0;
+constexpr DL_MCAN_RX_FIFO_NUM canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_0;
 
 void Task::bqCanInterface_task(void *){
+    using namespace Networking;
+
     /*
      * handles all non essential functions
      */
     uart.nputs(ARRANDN("bqCanInterface_task start" NEWLINE));
 
-    while(1){
-        using namespace Networking::CAN;
 
-        do {
-            DL_MCAN_TxBufElement txmsg = {
-                    .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[28:0]
-                    .rtr    = 0,        // 0: data frame, 1: remote frame
-                    .xtd    = 1,        // 0: 11b id, 1: 29b id
-                    .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-                    .dlc    = 3,        // data byte count, see DL comments
-                    .brs    = 0,        // 0: no bit rate switching, 1: yes brs
-                    .fdf    = 0,        // FD format, 0: classic CAN, 1: CAN FD format
-                    .efc    = 0,        // 0: dont store Tx events, 1: store
-                    .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
-                };
-            txmsg.data[0] = 6;
-            txmsg.data[1] = 7;
-            txmsg.data[2] = 8;
+    DL_MCAN_RxBufElement canrx;
+    DL_MCAN_RxFIFOStatus canrxf = { .num = canfifo };
 
-            J1939::ID canID;
-            canID.priority = 0b111;
+    union _TRXBuffer {
+        Modbus::MBAPHeader mbap;
+        DL_MCAN_TxBufElement cantx;
 
-            DL_MCAN_TxFIFOStatus tf;
-            DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
+        uint8_t arr[Bridge::CANModbus::PKTBUFFSIZE];
+    } rxbuf = {0};
+    union _TXBuffer {
+        Modbus::MBAPHeader mbap;
 
-            uint32_t bufferIndex = tf.putIdx;
-            uart.nputs(ARRANDN("TX from buffer "));
-            uart.putu32d(bufferIndex);
-            uart.nputs(ARRANDN("" NEWLINE));
+        uint8_t arr[Bridge::CANModbus::PKTBUFFSIZE];
+    } txbuf = {0};
 
-            DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-            DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
 
-            vTaskDelay(pdMS_TO_TICKS(400));
-        } while(1);
+    while(true){
+
+        /*** poll for incoming request ********/
+
+        if(can.takeResource(pdMS_TO_TICKS(3e3))) {
+            DL_MCAN_getRxFIFOStatus(can.reg, &canrxf);
+
+            if(canrxf.fillLvl == 0) { // is fifo empty?
+                can.giveResource();
+                vTaskDelay(pdMS_TO_TICKS(10)); // eye-balled value
+                continue;
+            }
+
+            DL_MCAN_readMsgRam(
+                    can.reg,
+                    DL_MCAN_MEM_TYPE::DL_MCAN_MEM_TYPE_FIFO,
+                    0, // arbitrary. value ignored
+                    canfifo,
+                    &canrx
+                );
+            DL_MCAN_writeRxFIFOAck(can.reg, canrxf.num, canrxf.getIdx);
+
+            can.giveResource();
+        } else {
+            vTaskDelay(pdMS_TO_TICKS(10)); // eye-balled value
+            System::uart_ui.nputs(ARRANDN("can timeout" NEWLINE));
+            continue;
+        }
+
+
+        /*** parse packet *********************/
+
+        if(Bridge::CANModbus::CAN_to_ModbusTCP(&canrx, &rxbuf.mbap)) {
+            uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
+
+            /*** validation ***********************/
+
+            if(rxbuf.mbap.adu[0].unitID != VT::id) {
+                uart.nputs(ARRANDN("not my("));
+                uart.put32d(VT::id);
+                uart.nputs(ARRANDN(") id: "));
+                uart.put32d(rxbuf.mbap.adu[0].unitID);
+                uart.nputs(ARRANDN(NEWLINE));
+
+                continue; // ignore packet
+            }
+
+            /*** process packet *******************/
+
+            if(Modbus::ProcessRequest(&rxbuf.mbap, sizeof(rxbuf), &txbuf.mbap, sizeof(txbuf))) {
+                uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
+
+                if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx)){
+                    // transmit CAN
+                    uart.nputs(ARRANDN("  response CAN packet ready to send" NEWLINE));
+
+                    uart.nputs(ARRANDN(NEWLINE " \tdump: "));
+                    for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf.cantx); j++){
+                        if(j % 10 == 0)
+                            uart.nputs(ARRANDN(NEWLINE " \t"));
+
+                        uart.nputs(ARRANDN(" "));
+                        uart.putu32h(rxbuf.cantx.data[j]);
+                    }
+                    uart.nputs(ARRANDN(NEWLINE));
+
+                    DL_MCAN_TxFIFOStatus tf;
+
+                    for(uint8_t i = 3; i != 0; i--) {
+                        DL_MCAN_getTxFIFOQueStatus(can.reg, &tf);
+
+                        if(tf.fifoFull){
+                            vTaskDelay(pdMS_TO_TICKS(2));
+                            continue;
+                        }
+
+                        DL_MCAN_writeMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, tf.putIdx, &rxbuf.cantx);
+                        DL_MCAN_TXBufAddReq(can.reg, tf.getIdx);
+
+                        break;
+                    }
+
+                } else
+                    uart.nputs(ARRANDN("  failed to translate ModbusTCP response to CAN " NEWLINE));
+            } else
+                uart.nputs(ARRANDN(" failed to process Modbus request" NEWLINE));
+        } else
+            uart.nputs(ARRANDN("failed to parse Modbus over CAN." NEWLINE));
+
     }
 
     System::FailHard("bqCanInterface_task ended" NEWLINE);
