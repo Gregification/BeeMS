@@ -456,7 +456,7 @@
       "no_connect_dangling": "warning",
       "pin_not_connected": "error",
       "pin_not_driven": "error",
-      "pin_to_pin": "error",
+      "pin_to_pin": "warning",
       "power_pin_not_driven": "error",
       "same_local_global_label": "warning",
       "similar_label_and_power": "warning",
@@ -605,7 +605,7 @@
           "group_by": false,
           "label": "Description",
           "name": "Description",
-          "show": true
+          "show": false
         },
         {
           "group_by": false,
@@ -684,8 +684,8 @@
       "group_symbols": true,
       "include_excluded_from_bom": true,
       "name": "",
-      "sort_asc": false,
-      "sort_field": "Value"
+      "sort_asc": true,
+      "sort_field": "Reference"
     },
     "connection_grid_size": 50.0,
     "drawing": {
@@ -755,10 +755,6 @@
     [
       "258b64a8-9b08-463b-aff1-8236af04e061",
       "HRLV interface"
-    ],
-    [
-      "6e75dfa0-cf7b-4d5e-ad19-82ddb4ed72a7",
-      "PWM sig bank 2"
     ],
     [
       "e647e6c7-d2c9-4086-bd05-45f6d07d327b",
