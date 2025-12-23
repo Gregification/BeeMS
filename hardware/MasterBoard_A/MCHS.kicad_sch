@@ -2126,7 +2126,7 @@
 					)
 				)
 			)
-			(property "Footprint" "Package_SO:TSOP-6_1.65x3.05mm_P0.95mm"
+			(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-6"
 				(at 0 0 0)
 				(effects
 					(font
@@ -2496,7 +2496,7 @@
 	(text_box "5V 30mA source"
 		(exclude_from_sim no)
 		(at 34.29 105.41 0)
-		(size 67.31 49.53)
+		(size -67.31 49.53)
 		(margins 0.9525 0.9525 0.9525 0.9525)
 		(stroke
 			(width 0)
@@ -2510,7 +2510,7 @@
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left top)
+			(justify right top)
 		)
 		(uuid "ba4a4b6e-a08a-4d5b-9a8e-60187d8e7cc6")
 	)
@@ -2563,16 +2563,10 @@
 		(uuid "02b59386-3c89-4fc0-af35-19d5540bef69")
 	)
 	(junction
-		(at 87.63 139.7)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "03a03cd3-670a-417a-a38a-3d642fe819b5")
-	)
-	(junction
 		(at 87.63 149.86)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "0af48664-e600-4cfa-bce9-cd2e273f2e39")
+		(uuid "092b6300-a1e5-4ab9-a775-d1d4defa9b63")
 	)
 	(junction
 		(at 59.69 30.48)
@@ -2725,7 +2719,7 @@
 		(uuid "af95d4d9-7e45-4ecc-b9bb-1edccce4e683")
 	)
 	(junction
-		(at 91.44 139.7)
+		(at 87.63 139.7)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c0fdb23f-18dc-49e3-9b12-4d652b844192")
@@ -2747,12 +2741,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c9ed3a28-e262-4119-b42d-c1bafef81500")
-	)
-	(junction
-		(at 91.44 149.86)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "cc5d8f16-da97-40b8-8742-6ed583366820")
 	)
 	(junction
 		(at 140.97 17.78)
@@ -2814,7 +2802,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 139.7) (xy 91.44 142.24)
+			(xy 87.63 139.7) (xy 87.63 142.24)
 		)
 		(stroke
 			(width 0)
@@ -2894,16 +2882,6 @@
 	)
 	(wire
 		(pts
-			(xy 113.03 149.86) (xy 91.44 149.86)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "14537335-fdbc-49fd-84b7-696a0c3392e3")
-	)
-	(wire
-		(pts
 			(xy 45.72 146.05) (xy 45.72 149.86)
 		)
 		(stroke
@@ -2931,16 +2909,6 @@
 			(type default)
 		)
 		(uuid "184f4d71-188a-407a-beb8-cd5e578466da")
-	)
-	(wire
-		(pts
-			(xy 87.63 147.32) (xy 87.63 149.86)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "18b3deb8-e4ef-445c-a1a0-11ca0747c24e")
 	)
 	(wire
 		(pts
@@ -3364,7 +3332,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 138.43) (xy 91.44 139.7)
+			(xy 87.63 138.43) (xy 87.63 139.7)
 		)
 		(stroke
 			(width 0)
@@ -3454,7 +3422,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 149.86) (xy 87.63 149.86)
+			(xy 53.34 149.86) (xy 87.63 149.86)
 		)
 		(stroke
 			(width 0)
@@ -3544,23 +3512,13 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 130.81) (xy 91.44 133.35)
+			(xy 87.63 130.81) (xy 87.63 133.35)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "9636df97-f2eb-4fd8-b0ec-f0c3409f78be")
-	)
-	(wire
-		(pts
-			(xy 87.63 149.86) (xy 53.34 149.86)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "98d237e5-705f-415b-8e5c-79cd1d155518")
 	)
 	(wire
 		(pts
@@ -3574,17 +3532,7 @@
 	)
 	(wire
 		(pts
-			(xy 87.63 139.7) (xy 87.63 142.24)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9c54a377-8959-4b85-b5be-e66309fe27fb")
-	)
-	(wire
-		(pts
-			(xy 91.44 130.81) (xy 92.71 130.81)
+			(xy 87.63 130.81) (xy 88.9 130.81)
 		)
 		(stroke
 			(width 0)
@@ -3604,7 +3552,7 @@
 	)
 	(wire
 		(pts
-			(xy 87.63 139.7) (xy 81.28 139.7)
+			(xy 81.28 139.7) (xy 87.63 139.7)
 		)
 		(stroke
 			(width 0)
@@ -3631,16 +3579,6 @@
 			(type default)
 		)
 		(uuid "a08bc229-745c-4364-959f-6903cdb7f5e3")
-	)
-	(wire
-		(pts
-			(xy 91.44 139.7) (xy 87.63 139.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a26ca197-867f-4c16-af2d-2fae595d9b73")
 	)
 	(wire
 		(pts
@@ -3734,7 +3672,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 147.32) (xy 91.44 149.86)
+			(xy 87.63 147.32) (xy 87.63 149.86)
 		)
 		(stroke
 			(width 0)
@@ -3984,6 +3922,16 @@
 	)
 	(wire
 		(pts
+			(xy 87.63 149.86) (xy 113.03 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e498b463-a6ca-45f1-b1ad-1b81b5e34cac")
+	)
+	(wire
+		(pts
 			(xy 45.72 125.73) (xy 45.72 124.46)
 		)
 		(stroke
@@ -4064,6 +4012,16 @@
 			(justify left bottom)
 		)
 		(uuid "8ddd8888-93f3-437c-8039-dffe99a0623a")
+	)
+	(label "Vreg"
+		(at 88.9 124.46 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "9f40daf4-a744-4df6-b00e-191137fa0803")
 	)
 	(hierarchical_label "Vio"
 		(shape input)
@@ -4163,18 +4121,6 @@
 	)
 	(hierarchical_label "GND"
 		(shape input)
-		(at 119.38 96.52 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(thickness 0.1588)
-			)
-			(justify left)
-		)
-		(uuid "4f758c63-de9f-498c-bec9-2994c2d34e71")
-	)
-	(hierarchical_label "GND"
-		(shape input)
 		(at 115.57 76.2 180)
 		(effects
 			(font
@@ -4184,18 +4130,6 @@
 			(justify right)
 		)
 		(uuid "6c950886-dc0a-4373-95f9-bc2a56ec75f0")
-	)
-	(hierarchical_label "GND"
-		(shape input)
-		(at 119.38 64.77 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-				(thickness 0.1588)
-			)
-			(justify left)
-		)
-		(uuid "6daf5d68-6e17-44bf-a933-bef5cc409249")
 	)
 	(hierarchical_label "(8, 45)Vin"
 		(shape input)
@@ -4223,7 +4157,7 @@
 	)
 	(hierarchical_label "5Vin"
 		(shape input)
-		(at 92.71 130.81 0)
+		(at 88.9 130.81 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4256,6 +4190,30 @@
 			(justify right)
 		)
 		(uuid "8f2bf137-ca6b-4c32-963c-74042cd7a472")
+	)
+	(hierarchical_label "GND_out"
+		(shape output)
+		(at 119.38 64.77 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.1588)
+			)
+			(justify left)
+		)
+		(uuid "901cecdb-5714-47cc-be31-62bbeef0d7c6")
+	)
+	(hierarchical_label "GND_out"
+		(shape output)
+		(at 119.38 96.52 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.1588)
+			)
+			(justify left)
+		)
+		(uuid "96869cb0-9e12-4ae4-9619-c3a5f6f4a9e6")
 	)
 	(hierarchical_label "GND_out"
 		(shape output)
@@ -5278,7 +5236,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 91.44 144.78 0)
+		(at 87.63 144.78 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5286,7 +5244,7 @@
 		(dnp no)
 		(uuid "67965c2a-e685-42a5-a24c-9b5f9a0c2e51")
 		(property "Reference" "C21"
-			(at 93.98 143.5162 0)
+			(at 90.17 143.5162 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5295,7 +5253,7 @@
 			)
 		)
 		(property "Value" "220n"
-			(at 93.98 146.0562 0)
+			(at 90.17 146.0562 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5304,7 +5262,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5313,7 +5271,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5322,7 +5280,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5331,7 +5289,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5340,7 +5298,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5349,7 +5307,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21B224KCFSFNE?qs=664zcAxDQ0l4Y1eUk6Zc1g%3D%3D"
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5358,7 +5316,7 @@
 			)
 		)
 		(property "specs" "100VDC, X7R, 10%, -55C, +125C, 220nF"
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5367,7 +5325,7 @@
 			)
 		)
 		(property "unit x10" "0.054"
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5376,7 +5334,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5385,7 +5343,7 @@
 			)
 		)
 		(property "note" ""
-			(at 91.44 144.78 0)
+			(at 87.63 144.78 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5434,7 +5392,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "NetTie:NetTie-2_SMD_Pad0.5mm"
+		(property "Footprint" "NetTie:NetTie-2_SMD_Pad2.0mm"
 			(at 130.81 149.86 0)
 			(effects
 				(font
@@ -6041,7 +5999,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Package_SO:TSOP-6_1.65x3.05mm_P0.95mm"
+		(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-6"
 			(at 110.49 138.43 0)
 			(effects
 				(font
@@ -6413,7 +6371,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 91.44 135.89 180)
+		(at 87.63 135.89 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -6421,7 +6379,7 @@
 		(dnp no)
 		(uuid "a08f6da5-f9fc-4d40-a204-744db4315a0b")
 		(property "Reference" "R28"
-			(at 93.218 134.62 0)
+			(at 89.408 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6430,7 +6388,7 @@
 			)
 		)
 		(property "Value" "39k"
-			(at 97.028 136.398 0)
+			(at 93.218 136.398 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6439,7 +6397,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6448,7 +6406,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6457,7 +6415,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6466,7 +6424,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6475,7 +6433,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6484,7 +6442,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73B2ATTD393J?qs=sGAEpiMZZMvdGkrng054t7JT%252BZ6rIJkYnQBIQ0nUEPI%3D"
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6493,7 +6451,7 @@
 			)
 		)
 		(property "specs" "39k Ohm,250mW, 150V, 5%, 200ppm, -55C, +155C"
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6502,7 +6460,7 @@
 			)
 		)
 		(property "unit x10" "0.017"
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6511,7 +6469,7 @@
 			)
 		)
 		(property "unit x1" "0.1"
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6520,7 +6478,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6529,7 +6487,7 @@
 			)
 		)
 		(property "note" ""
-			(at 91.44 135.89 0)
+			(at 87.63 135.89 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6547,119 +6505,6 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/d0eed94f-9d43-4b87-adab-de47b85cc6fc"
 					(reference "R28")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 87.63 144.78 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "b247fdba-16e2-42ab-b769-7a18431696a1")
-		(property "Reference" "D1"
-			(at 83.82 143.256 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "5.1V"
-			(at 83.82 145.796 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
-			(at 87.63 144.78 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 87.63 144.78 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "5.1V, 500mW, 50Ohm, 2%, -55C, +155C"
-			(at 87.63 144.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Taiwan-Semiconductor/BZY55B10-RBG?qs=mAH9sUMRCtu4NcimqnPZZw%3D%3D"
-			(at 87.63 144.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.21"
-			(at 87.63 144.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.31"
-			(at 87.63 144.78 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 87.63 144.78 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 87.63 144.78 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "e6890918-9384-42eb-a824-6e91d9034199")
-		)
-		(pin "1"
-			(uuid "c8f1c5cf-00b8-4f2d-8741-ecc4e4c07703")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/d0eed94f-9d43-4b87-adab-de47b85cc6fc"
-					(reference "D1")
 					(unit 1)
 				)
 			)
