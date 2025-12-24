@@ -9151,6 +9151,16 @@
 		)
 		(uuid "0500a2ad-7e58-4fdc-8d80-4e9218c29368")
 	)
+	(label "swd.SWCLK"
+		(at 358.14 245.11 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "0976f315-5fc0-4dc0-b66a-825db2b4b2f6")
+	)
 	(label "G_IL_I"
 		(at 22.86 24.13 180)
 		(effects
@@ -9441,23 +9451,13 @@
 		)
 		(uuid "6f90da1b-ea0b-47f4-a843-16fc2473d531")
 	)
-	(label "SWDIO"
-		(at 335.28 91.44 180)
+	(label "swd.reset"
+		(at 321.31 58.42 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
-		)
-		(uuid "71f121bf-d55d-4728-9c1f-1e60b35ec88a")
-	)
-	(label "reset"
-		(at 321.31 58.42 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
+			(justify left bottom)
 		)
 		(uuid "7eb71dc9-d6f1-4de3-bb26-719493c959c4")
 	)
@@ -9470,16 +9470,6 @@
 			(justify left bottom)
 		)
 		(uuid "801b2b59-205f-4e8b-81f5-15e248feef62")
-	)
-	(label "SWCLK"
-		(at 358.14 245.11 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "81c0bfe5-39f4-4de1-8e57-1075a4de7a51")
 	)
 	(label "spi1.SCLK"
 		(at 93.98 227.33 0)
@@ -9501,7 +9491,7 @@
 		)
 		(uuid "89534c6a-515b-428a-a205-95c81fe7f33a")
 	)
-	(label "reset"
+	(label "swd.reset"
 		(at 358.14 240.03 0)
 		(effects
 			(font
@@ -9651,6 +9641,16 @@
 		)
 		(uuid "b80e111a-6790-4ab3-8e84-ddffb0d0acbe")
 	)
+	(label "swd.SWDIO"
+		(at 335.28 91.44 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "b8aab659-277a-4305-ba57-35b1913e9938")
+	)
 	(label "spi1.SCLK"
 		(at 335.28 86.36 180)
 		(effects
@@ -9700,6 +9700,16 @@
 			(justify left bottom)
 		)
 		(uuid "cc9c8dd0-e54a-4c80-b58c-5f31f12ff1db")
+	)
+	(label "swd.SWCLK"
+		(at 335.28 93.98 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d0328951-ae31-4a6c-ae21-eec3195457e6")
 	)
 	(label "G_CAN_+"
 		(at 22.86 21.59 180)
@@ -9781,16 +9791,6 @@
 		)
 		(uuid "dfb34c2d-3b36-4eb4-959d-9250368f1554")
 	)
-	(label "SWCLK"
-		(at 335.28 93.98 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "e012258b-e4f1-437c-ba21-fa6516410ab4")
-	)
 	(label "{CAN+ CAN-}"
 		(at 281.94 87.63 0)
 		(effects
@@ -9841,7 +9841,7 @@
 		)
 		(uuid "f24689fc-35cf-490a-b186-0b1a357157a5")
 	)
-	(label "{SWDIO SWCLK reset}"
+	(label "swd{SWDIO SWCLK reset}"
 		(at 320.04 248.92 0)
 		(effects
 			(font
