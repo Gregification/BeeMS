@@ -64,12 +64,12 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-    xTaskCreate(Task::ethModbus_task,
-            "non_BMS_functions_task",
-            configMINIMAL_STACK_SIZE * 4,
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    xTaskCreate(Task::ethModbus_task,
+//            "non_BMS_functions_task",
+//            configMINIMAL_STACK_SIZE * 4,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
     vTaskStartScheduler();
 
