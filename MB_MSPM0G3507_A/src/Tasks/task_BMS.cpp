@@ -17,7 +17,7 @@
 volatile BMSMaster<10> beeMaster;
 
 void Task::BMS_task(void *){
-    System::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
 
     do {
         static DL_MCAN_RxFIFOStatus rf;
@@ -33,15 +33,15 @@ void Task::BMS_task(void *){
             if(e.xtd)   id = e.id;
             else        id = (e.id & 0x1FFC'0000) >> 18;
 
-            System::uart_ui.nputs(ARRANDN("ID: "));
-            System::uart_ui.putu32d(id);
-            System::uart_ui.nputs(ARRANDN(" \tData: "));
+            System::UART::uart_ui.nputs(ARRANDN("ID: "));
+            System::UART::uart_ui.putu32d(id);
+            System::UART::uart_ui.nputs(ARRANDN(" \tData: "));
 
             for(uint8_t i = 0, len = System::CANFD::DLC2Len(&e); i < len; i++) {
-                System::uart_ui.nputs(ARRANDN(" \t"));
-                System::uart_ui.putu32h(e.data[i]);
+                System::UART::uart_ui.nputs(ARRANDN(" \t"));
+                System::UART::uart_ui.putu32h(e.data[i]);
             }
-            System::uart_ui.nputs(ARRANDN(NEWLINE));
+            System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
 
             BMSComms::PacketHeader * header = reinterpret_cast<BMSComms::PacketHeader *>(e.data);
@@ -49,41 +49,41 @@ void Task::BMS_task(void *){
 
             if(header->typeSM == BMSComms::PktTypeSM_t::TEST_1){
                 // 3. Print the structure's variables using the required custom functions
-                System::uart_ui.nputs(ARRANDN("--- PktSM_Test1 Contents ---"));
-//                System::uart_ui.putu32d(header->);
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                System::UART::uart_ui.nputs(ARRANDN("--- PktSM_Test1 Contents ---"));
+//                System::UART::uart_ui.putu32d(header->);
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
                 // Max Cell Voltage
-                System::uart_ui.nputs(ARRANDN("Max Cell Voltage (mV): "));
-                System::uart_ui.putu32d(pktsm->MaxCellVoltage);
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                System::UART::uart_ui.nputs(ARRANDN("Max Cell Voltage (mV): "));
+                System::UART::uart_ui.putu32d(pktsm->MaxCellVoltage);
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
                 // Min Cell Voltage
-                System::uart_ui.nputs(ARRANDN("Min Cell Voltage (mV): "));
-                System::uart_ui.putu32d(pktsm->MinCellVoltage);
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                System::UART::uart_ui.nputs(ARRANDN("Min Cell Voltage (mV): "));
+                System::UART::uart_ui.putu32d(pktsm->MinCellVoltage);
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
                 // Battery Voltage Sum
-                System::uart_ui.nputs(ARRANDN("Battery Voltage Sum (cV): "));
-                System::uart_ui.putu32d(pktsm->BatteryVoltageSum);
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                System::UART::uart_ui.nputs(ARRANDN("Battery Voltage Sum (cV): "));
+                System::UART::uart_ui.putu32d(pktsm->BatteryVoltageSum);
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
-                System::uart_ui.nputs(ARRANDN("CELL"));
+                System::UART::uart_ui.nputs(ARRANDN("CELL"));
                 for (int i = 0; i < 16; i++) {
-                    System::uart_ui.nputs(ARRANDN(" \t"));
-                    System::uart_ui.putu32d(i);
+                    System::UART::uart_ui.nputs(ARRANDN(" \t"));
+                    System::UART::uart_ui.putu32d(i);
                 }
-                System::uart_ui.nputs(ARRANDN(NEWLINE "mV"));
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE "mV"));
                 for (int i = 0; i < 16; i++) {
-                    System::uart_ui.nputs(ARRANDN(" \t"));
-                    System::uart_ui.putu32d(pktsm->cellInfo[i].cellmV);
+                    System::UART::uart_ui.nputs(ARRANDN(" \t"));
+                    System::UART::uart_ui.putu32d(pktsm->cellInfo[i].cellmV);
                 }
-                System::uart_ui.nputs(ARRANDN(NEWLINE "bal?"));
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE "bal?"));
                 for (int i = 0; i < 16; i++) {
-                    System::uart_ui.nputs(ARRANDN(" \t"));
-                    System::uart_ui.putu32d(pktsm->cellInfo[i].balancing != 0);
+                    System::UART::uart_ui.nputs(ARRANDN(" \t"));
+                    System::UART::uart_ui.putu32d(pktsm->cellInfo[i].balancing != 0);
                 }
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
             }
         }
 
@@ -117,7 +117,7 @@ void Task::BMS_task(void *){
         DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
 
         vTaskDelay(pdMS_TO_TICKS(400));
-        System::uart_ui.nputs(ARRANDN("meow" NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("meow" NEWLINE));
     };
 
 

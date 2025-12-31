@@ -8,9 +8,69 @@
 #ifndef SRC_MASTERBOARD_HPP_
 #define SRC_MASTERBOARD_HPP_
 
-#include <stdint.h>
+#include "system.hpp"
 
-namespace MasterBoard {
+namespace System {
+    OCCUPY(ADC0); // used by TempSense
+}
+
+namespace MstrB {
+    using namespace System;
+
+    /** sets up remaining peripherals & pins not handled by "System::init()";
+     */
+    void init();
+
+    /** Main Current Hall Sensor */
+    namespace MHCS {
+        extern SPI::SPI spi;
+        const GPIO::GPIO
+            cs_precise      = GPIO::PB13,
+            cs_imprecise    = GPIO::PB7;
+    }
+
+    /** Indicator LEDs */
+    namespace Indi {
+        const GPIO::GPIO
+            i1          = GPIO::PB1,
+            i2          = GPIO::PA5,
+            bmsFault    = GPIO::PA6,
+            RTOSRunning = GPIO::PB0;
+    }
+
+    /** Inter-lock */
+    namespace IL {
+        const GPIO::GPIO
+            control     = GPIO::PB3,
+            sense       = GPIO::PB2;
+    }
+
+    /** on board temperature sensors */
+    // TODO: test if adc code actually does anything. do it as a modbus register
+    namespace TempSense {
+        extern ADC12_Regs * const adc;
+
+        const ADC::ChannelMap ts1 = {
+            .mem = DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_0,
+            .chan = DL_ADC12_INPUT_CHAN_3,
+        };
+    }
+
+    /** High Risk Low Voltage system , aka TSBP LV */
+    namespace HRLV {
+        const GPIO::GPIO
+            HRLVSense   = GPIO::PB26,
+            ILSense     = GPIO::PB27;
+    }
+
+    /** Ethernet interface */
+    namespace Eth {
+        extern SPI::SPI spi;
+        const GPIO::GPIO
+            cs          = GPIO::PA15,
+            irq         = GPIO::PB16, // W5500 -> MCU
+            reset       = GPIO::PB15; // MCU <- W5500
+    }
 
     /** gets a 8b number that represents the board.
      * - unit ID is physically configurable on the board

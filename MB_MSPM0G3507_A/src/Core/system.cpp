@@ -16,26 +16,26 @@
 namespace System {
     uint16_t mcuID = 0;
 
-    // we should move to uboot one bright sunny day
-
-    UART::UART &uart_ui = uart0;
-
     #ifdef PROJECT_ENABLE_UART0
-        UART::UART uart0 = {.reg = UART0};
+        UART::UART UART::uart0 = {.reg = UART0};
+    #endif
+
+    #ifdef PROJECT_ENABLE_UART2
+        UART::UART UART::uart2 = {.reg = UART2};
     #endif
 
     #ifdef PROJECT_ENABLE_SPI0
-        SPI::SPI spi0 = {.reg = SPI0, .irq_type = IRQn_Type::SPI0_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
+        SPI::SPI SPI::spi0 = {.reg = SPI0, .irq_type = IRQn_Type::SPI0_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
     #endif
     #ifdef PROJECT_ENABLE_SPI1
-        SPI::SPI spi1 = {.reg = SPI1, .irq_type = IRQn_Type::SPI1_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
+        SPI::SPI SPI::spi1 = {.reg = SPI1, .irq_type = IRQn_Type::SPI1_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
     #endif
     #ifdef PROJECT_ENABLE_I2C1
-        I2C::I2C i2c1 = {.reg = I2C1};
+        I2C::I2C I2C::i2c1 = {.reg = I2C1};
     #endif
 
     #ifdef PROJECT_ENABLE_MCAN0
-        CANFD::CANFD canFD0 = {.reg = CANFD0};
+        CANFD::CANFD CANFD::canFD0 = {.reg = CANFD0};
     #endif
 }
 
@@ -104,10 +104,23 @@ void System::init() {
 //    DL_FlashCTL_executeClearStatus(); // ERRNO thing
 
     #ifdef PROJECT_ENABLE_UART0
-        System::uart0.partialInit();
+    {
+        using namespace UART;
+        uart0.partialInit();
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
-        DL_UART_enable(System::uart0.reg);
+        DL_UART_enable(uart0.reg);
+    }
+    #endif
+
+    #ifdef PROJECT_ENABLE_UART2
+    {
+        using namespace UART;
+        uart2.partialInit();
+        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM46, IOMUX_PINCM46_PF_UART2_TX); // PA21
+        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM47, IOMUX_PINCM47_PF_UART2_RX); // PA22
+        DL_UART_enable(uart2.reg);
+    }
     #endif
 
     #ifdef PROJECT_ENABLE_I2C0
@@ -115,6 +128,8 @@ void System::init() {
     #endif
     #ifdef PROJECT_ENABLE_I2C1
     {
+        using namespace I2C;
+
         DL_I2C_enablePower(System::i2c1.reg);
         delay_cycles(POWER_STARTUP_DELAY);
         /* timeout calculation. TDS.20.2.3.6/1520. or see the DL comments in their api.
@@ -167,6 +182,7 @@ void System::init() {
 
     #ifdef PROJECT_ENABLE_SPI0
     {
+        using namespace SPI;
         // high speed SPI
 
         DL_SPI_enablePower(spi0.reg);
@@ -182,9 +198,9 @@ void System::init() {
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
-        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PA9
-                IOMUX_PINCM20,
-                IOMUX_PINCM20_PF_SPI0_PICO,
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PA14
+                IOMUX_PINCM36,
+                IOMUX_PINCM36_PF_SPI0_PICO,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
@@ -201,7 +217,7 @@ void System::init() {
         DL_GPIO_enableHiZ(IOMUX_PINCM35);
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA12));
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
-        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA9));
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA14));
 
         /*--- SPI config -----------------*/
 
@@ -227,7 +243,7 @@ void System::init() {
         spi0._trxBuffer.rx_i = -1;
 
         NVIC_EnableIRQ(SPI0_INT_IRQn);
-        DL_SPI_enableInterrupt(System::spi0.reg,
+        DL_SPI_enableInterrupt(spi0.reg,
                   DL_SPI_INTERRUPT_RX
                 | DL_SPI_INTERRUPT_TX
                 | DL_SPI_INTERRUPT_IDLE
@@ -237,6 +253,7 @@ void System::init() {
 
     #ifdef PROJECT_ENABLE_SPI1
     {
+        using namespace SPI;
         // high speed SPI
 
         DL_SPI_enablePower(spi1.reg);
@@ -532,10 +549,10 @@ void System::FailHard(const char *str) {
 
     static uint32_t count = 0;
     while(1) {
-        System::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
-        System::uart_ui.putu32d(count);
-        System::uart_ui.nputs(ARRANDN(" : " CLIRESET));
-        System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
+        System::UART::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
+        System::UART::uart_ui.putu32d(count);
+        System::UART::uart_ui.nputs(ARRANDN(" : " CLIRESET));
+        System::UART::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
 
         delay_cycles(System::CLK::CPUCLK * 10);
         count++;
@@ -912,10 +929,10 @@ uint32_t System::CANFD::len2DLC(uint32_t size) {
  */
 
 #ifdef PROJECT_ENABLE_SPI0
-    extern "C" void SPI0_IRQHandler(void){ System::spi0._irq(); }
+    extern "C" void SPI0_IRQHandler(void){ System::SPI::spi0._irq(); }
 #endif
 #ifdef PROJECT_ENABLE_SPI1
-    extern "C" void SPI1_IRQHandler(void){ System::spi1._irq(); }
+    extern "C" void SPI1_IRQHandler(void){ System::SPI::spi1._irq(); }
 #endif
 
 
@@ -925,7 +942,7 @@ uint32_t System::CANFD::len2DLC(uint32_t size) {
     { while(1){} }
     extern "C" void HardFault_Handler(void) // if this is giving u a problem check if your using IRQ safe funcitons in your IRQ
     { while(1){
-        System::uart_ui.nputs(ARRANDN("HARD FAULT" NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("HARD FAULT" NEWLINE));
         delay_cycles(System::CLK::CPUCLK);
     } }
     extern "C" void GROUP0_IRQHandler(void)
@@ -974,10 +991,10 @@ uint32_t System::CANFD::len2DLC(uint32_t size) {
 
 /*--- idiot detection ------------------------------------------------------------------*/
 
-#if !defined(PROJECT_ENABLE_UART0)
-    #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
+//#if !defined(PROJECT_ENABLE_UART0)
+//    #error "uart0 should always be enabled and used for the UI. better be a good reason otherwise."
     /* uart0 is used by the LP */
-#endif
+//#endif
 
 // i fear for the day this happens
 static_assert(pdTRUE == true,

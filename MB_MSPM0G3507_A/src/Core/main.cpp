@@ -26,6 +26,7 @@
 #include <task.h>
 
 #include "Core/system.hpp"
+#include "Core/MasterBoard.hpp"
 #include "Tasks/task_BMS.hpp"
 #include "Tasks/task_ethModbus.hpp"
 #include "Tasks/examples/example_blink_task.hpp"
@@ -33,13 +34,14 @@
 
 int main(){
     System::init();
+    MstrB::init();
 
-    System::uart_ui.setBaudTarget(115200);
-    System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
-    System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
-    System::uart_ui.nputs(ARRANDN("\t Device: "));
-    System::uart_ui.putu32h(System::mcuID);
-    System::uart_ui.nputs(ARRANDN(NEWLINE));
+    System::UART::uart_ui.setBaudTarget(115200);
+    System::UART::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
+    System::UART::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
+    System::UART::uart_ui.nputs(ARRANDN("\t Device: "));
+    System::UART::uart_ui.putu32h(System::mcuID);
+    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     // don't have this task on release
     // used a an sanity check
@@ -101,7 +103,7 @@ void vApplicationMallocFailedHook(void)
      */
     taskDISABLE_INTERRUPTS();
     for (;;) {
-        System::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
         delay_cycles(20e6);
     }
 }
@@ -122,7 +124,7 @@ void vApplicationIdleHook(void)
      * idle task to clean up memory allocated by the kernel to any task that
      * has since been deleted.
      */
-    System::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
 }
 
 /*-----------------------------------------------------------*/
@@ -149,9 +151,9 @@ vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
     taskDISABLE_INTERRUPTS();
 
     for (;;){
-        System::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
-        System::uart_ui.nputs(ARRANDN(pcTaskName));
-        System::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
+        System::UART::uart_ui.nputs(ARRANDN(pcTaskName));
+        System::UART::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE));
         delay_cycles(20e6);
     }
 }

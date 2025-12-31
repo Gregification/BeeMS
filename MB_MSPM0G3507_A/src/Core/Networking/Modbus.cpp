@@ -11,7 +11,7 @@
 
 
 bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_t rxlen, MBAPHeader * txheader, buffersize_t txlen) {
-    auto & uart = System::uart_ui;
+    auto & uart = System::UART::uart_ui;
     auto & rxadu = rxheader->adu[0];
     auto & txadu = txheader->adu[0];
 
