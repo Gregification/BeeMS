@@ -42,17 +42,17 @@
 
 
 /*** setup ***************************************************/
-System::UART::UART &            uart = System::uart_ui;
+System::UART::UART &            uart = System::UART::uart_ui;
 
 /*** CAN ***************/
-System::CANFD::CANFD &          can = System::canFD0;
+System::CANFD::CANFD &          can = System::CANFD::canFD0;
 DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_0;
 
 
 /*** wizchip setup ****/
-System::SPI::SPI &              wiz_spi   = System::spi1;
-System::GPIO::GPIO const &      wiz_cs    = System::GPIO::PA8;
-System::GPIO::GPIO const &      wiz_reset = System::GPIO::PA15;
+System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi;
+System::GPIO::GPIO const &      wiz_cs    = MstrB::Eth::cs;
+System::GPIO::GPIO const &      wiz_reset = MstrB::Eth::reset;
 uint16_t const                  modbusTCPPort = 502;   // arbitrary, must match RapidSCADA connection settings
 uint8_t const                   socketNum = 0;          // [0,8], arbitrary, socket must not be used elsewhere
 
@@ -97,18 +97,23 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rxbuff, _TXBuffer * txbuff);
 
 void Task::ethModbus_task(void *){
     uart.nputs(ARRANDN("ethModbus_task start" NEWLINE));
-
     _RXBuffer rxbuf = {0};
     _TXBuffer txbuf = {0};
 
-    wiz_spi.setSCLKTarget(25e6);
+    wiz_spi.setSCLKTarget(2e6);
 
 
     /*** W5500 init *****************/
 
+    uart.nputs(ARRANDN(CLIHIGHLIGHT "awaiting W5500 response ..." CLIRESET NEWLINE));
     while(!setupWizchip()) {
         uart.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed!" CLIRESET NEWLINE));
         vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+
+    for(int i = 0; i < 100; i++){
+        DL_GPIO_togglePins(GPIOPINPUX(MstrB::Indi::i1));
+        vTaskDelay(pdMS_TO_TICKS(200));
     }
 
     wizchip_setnetinfo(&netConfig);
@@ -363,7 +368,7 @@ void Task::ethModbus_task(void *){
                 uart.nputs(ARRANDN(NEWLINE));
 
                 // is intended for this device?
-                if(rxheader->adu[0].unitID != MasterBoard::getUnitBoardID()) {
+                if(rxheader->adu[0].unitID != MstrB::getUnitBoardID()) {
                     //  forward packet over CAN to intended device
                     uart.nputs(ARRANDN("\t forwarded to CAN bus." NEWLINE));
                     if(forwardModbusTCP2CAN(&rxbuf, &txbuf)) {
@@ -420,7 +425,7 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf) {
             return false;
         }
 
-        id->src_addr = MasterBoard::getUnitBoardID();
+        id->src_addr = MstrB::getUnitBoardID();
         id->priority = 0b110;
 
         // send CAN packet

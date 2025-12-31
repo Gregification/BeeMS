@@ -210,11 +210,11 @@ namespace Task {
 
     /** idk yet */
     void UART_Task(void *) {
-        System::uart_ui.nputs(ARRANDN("kajccajjaeclnaecae" NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("kajccajjaeclnaecae" NEWLINE));
 
         char str[20];
-        System::uart_ui.ngets(ARRANDN(str));
+        System::UART::uart_ui.ngets(ARRANDN(str));
 
-        System::uart_ui.nputs(ARRANDN(str));
+        System::UART::uart_ui.nputs(ARRANDN(str));
     }
 }

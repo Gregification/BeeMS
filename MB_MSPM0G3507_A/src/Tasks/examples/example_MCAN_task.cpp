@@ -9,7 +9,7 @@
 #include "Core/system.hpp"
 
 void Task::MCAN_test_task(void *){
-    System::uart_ui.nputs(ARRANDN("MCAN_test_task start" NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN("MCAN_test_task start" NEWLINE));
 
     //--- TX --------------------------------------------------
     do {
@@ -32,9 +32,9 @@ void Task::MCAN_test_task(void *){
         DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
 
         uint32_t bufferIndex = tf.putIdx;
-        System::uart_ui.nputs(ARRANDN("TX from buffer "));
-        System::uart_ui.putu32d(bufferIndex);
-        System::uart_ui.nputs(ARRANDN("" NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
+        System::UART::uart_ui.putu32d(bufferIndex);
+        System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
 
         DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
         DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
@@ -44,7 +44,7 @@ void Task::MCAN_test_task(void *){
 
     //--- RX --------------------------------------------------
 
-    System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "RX start" NEWLINE CLIRESET));
+    System::UART::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "RX start" NEWLINE CLIRESET));
     do {
         static DL_MCAN_RxFIFOStatus rf;
         rf.num = DL_MCAN_RX_FIFO_NUM_0;
@@ -59,14 +59,14 @@ void Task::MCAN_test_task(void *){
             if(e.xtd)   id = e.id;
             else        id = (e.id & 0x1FFC'0000) >> 18;
 
-            System::uart_ui.nputs(ARRANDN("ID: "));
-            System::uart_ui.putu32d(id);
-            System::uart_ui.nputs(ARRANDN("" NEWLINE));
+            System::UART::uart_ui.nputs(ARRANDN("ID: "));
+            System::UART::uart_ui.putu32d(id);
+            System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
         }
 
         vTaskDelay(pdMS_TO_TICKS(400));
     } while(1);
 
-    System::uart_ui.nputs(ARRANDN("MCAN_test_task end" NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN("MCAN_test_task end" NEWLINE));
     vTaskDelete(NULL);
 }

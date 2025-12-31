@@ -100,10 +100,11 @@
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
 
-#define PROJECT_ENABLE_UART0        // LP
+//#define PROJECT_ENABLE_UART0        // LP
+#define PROJECT_ENABLE_UART2        // MB_A 1.0
 
-//#define PROJECT_ENABLE_SPI0         // up to 2Mhz
-#define PROJECT_ENABLE_SPI1         // up to 32Mhz, restrictions based on CPU clock. FDS.19.2.1/1428 , TDS.7.20.1/46
+#define PROJECT_ENABLE_SPI0
+#define PROJECT_ENABLE_SPI1
 
 //#define PROJECT_ENABLE_I2C0
 //#define PROJECT_ENABLE_I2C1
@@ -112,17 +113,39 @@
 
 
 /*--- common peripheral pins ---------------------------*/
+// should match what ever's in the "Meta" excel sheet of the hardware folder for the board
+// this is redundant and should match whats in the board specific h file. its only used
+//      for sanity checking and one way to force a compiler error when adding new pins
 
 namespace System {
+    #ifdef PROJECT_ENABLE_I2C0
+    #error "should not be used"
+    #endif
+    #ifdef PROJECT_ENABLE_I2C1
+    #error "should not be used"
+    #endif
     #ifdef PROJECT_ENABLE_UART0
-    OCCUPY(PA10)
-    OCCUPY(PA11)
+    #error "should not be used"
+    #endif
+    #ifdef PROJECT_ENABLE_UART1
+    #error "should not be used"
+    #endif
+
+    #ifdef PROJECT_ENABLE_UART2
+    OCCUPY(PA21)    // tx
+    OCCUPY(PA22)    // rx
     #endif
 
     #ifdef PROJECT_ENABLE_SPI0
-    OCCUPY(PA9)
-    OCCUPY(PA12)
-    OCCUPY(PA13)
+    OCCUPY(PA12)    // sclk
+    OCCUPY(PA13)    // miso/poci
+    OCCUPY(PA14)    // mosi/pico
+    #endif
+
+    #ifdef PROJECT_ENABLE_SPI1
+    OCCUPY(PA17)    // sclk
+    OCCUPY(PA16)    // miso/poci
+    OCCUPY(PA18)    // mosi/pico
     #endif
 }
 
@@ -167,6 +190,15 @@ namespace System {
         constexpr uint32_t CANCLK   = 80e6;
         constexpr uint32_t MFPCLK   = 4e6;
         constexpr uint32_t MFCLK    = 4e6;
+        constexpr uint32_t SYSOSC   = 32e6;
+    }
+
+    namespace ADC {
+        struct ChannelMap {
+            DL_ADC12_MEM_IDX mem;
+            // type e.g DL_ADC12_INPUT_CHAN_2
+            uint32_t chan;
+        };
     }
 
     namespace UART {
@@ -196,6 +228,8 @@ namespace System {
 
             void inline set() const { DL_GPIO_setPins(port, pin); }
             void inline clear() const { DL_GPIO_clearPins(port, pin); }
+
+            bool inline get() const { DL_GPIO_readPins(port, pin); }
         };
 
 //#define MSPM0G3507_LQFP64   // UG.6.1/6
@@ -330,29 +364,41 @@ namespace System {
     /*--- system globals -----------------------------------*/
 
     /** a reference to the UART acting as the main text UI */
-    extern UART::UART &uart_ui;
+    namespace UART {
+        extern UART &uart_ui;
 
-    #ifdef PROJECT_ENABLE_UART0
-        extern UART::UART uart0;
-    #endif
+        #ifdef PROJECT_ENABLE_UART0
+            extern UART uart0;
+        #endif
 
-    #ifdef PROJECT_ENABLE_SPI0
-        extern SPI::SPI spi0;
-    #endif
-    #ifdef PROJECT_ENABLE_SPI1
-        extern SPI::SPI spi1;
-    #endif
+        #ifdef PROJECT_ENABLE_UART2
+            extern UART uart2;
+        #endif
+    }
 
-    #ifdef PROJECT_ENABLE_I2C0
-        #error "I2C0 not implimented"
-    #endif
-    #ifdef PROJECT_ENABLE_I2C1
-        extern I2C::I2C i2c1;
-    #endif
+    namespace SPI {
+        #ifdef PROJECT_ENABLE_SPI0
+            extern SPI spi0;
+        #endif
+        #ifdef PROJECT_ENABLE_SPI1
+            extern SPI spi1;
+        #endif
+    }
 
-    #ifdef PROJECT_ENABLE_MCAN0
-        extern CANFD::CANFD canFD0;
-    #endif
+    namespace I2C {
+        #ifdef PROJECT_ENABLE_I2C0
+            #error "I2C0 not implimented"
+        #endif
+        #ifdef PROJECT_ENABLE_I2C1
+            extern I2C::I2C i2c1;
+        #endif
+    }
+
+    namespace CANFD {
+        #ifdef PROJECT_ENABLE_MCAN0
+            extern CANFD canFD0;
+        #endif
+    }
 }
 
 #endif /* SRC_CORE_SYSTEM_HPP_ */
