@@ -1474,6 +1474,155 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Device:FerriteBead"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "FB"
+				(at -3.81 0.635 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "FerriteBead"
+				(at 3.81 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Ferrite bead"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "L ferrite bead inductor filter"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Inductor_* L_* *Ferrite*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "FerriteBead_0_1"
+				(polyline
+					(pts
+						(xy -2.7686 0.4064) (xy -1.7018 2.2606) (xy 2.7686 -0.3048) (xy 1.6764 -2.159) (xy -2.7686 0.4064)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 1.27) (xy 0 1.2954)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -1.27) (xy 0 -1.2192)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "FerriteBead_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Device:LED_Small"
 			(pin_numbers
 				(hide yes)
@@ -8400,7 +8549,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "06547437-c73b-476d-9d3c-fe0c94eae8e9")
-		(property "Reference" "R43"
+		(property "Reference" "R31"
 			(at 240.538 135.89 0)
 			(effects
 				(font
@@ -8524,15 +8673,27 @@
 			(uuid "6a7f6241-0fb9-443e-9629-4f43ddfda7b6")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R31")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R39")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R43")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -8548,7 +8709,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "06a5de91-bd61-409f-af5e-e3f5b6d88537")
-		(property "Reference" "D16"
+		(property "Reference" "D12"
 			(at 227.076 88.646 0)
 			(effects
 				(font
@@ -8654,15 +8815,27 @@
 			(uuid "ac7b6c7a-37dd-46cd-9745-00a63e49c770")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D12")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D11")
+					(reference "D?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D16")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -8677,7 +8850,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0c57ef22-bdf1-4f92-923c-5ec49d4fb6c9")
-		(property "Reference" "R40"
+		(property "Reference" "R28"
 			(at 239.268 154.94 0)
 			(effects
 				(font
@@ -8765,15 +8938,27 @@
 			(uuid "c75edc8d-5276-4072-8eef-e0a67da1813c")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R28")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R36")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R40")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -8789,7 +8974,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "16405aef-42f7-467d-9c5d-f77f06fec5f4")
-		(property "Reference" "R30"
+		(property "Reference" "R18"
 			(at 109.22 77.4699 0)
 			(effects
 				(font
@@ -8897,19 +9082,25 @@
 		(instances
 			(project ""
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R17")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project ""
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R18")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R26")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R30")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -8924,7 +9115,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1709978c-5eeb-47f7-84a5-df3eec00ae3b")
-		(property "Reference" "R39"
+		(property "Reference" "R27"
 			(at 220.218 48.26 0)
 			(effects
 				(font
@@ -9050,19 +9241,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R45")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R27")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R35")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R39")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -9078,7 +9269,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "17da5545-40d4-41db-90c4-ba4cae66ff2c")
-		(property "Reference" "R20"
+		(property "Reference" "R7"
 			(at 74.93 77.4699 0)
 			(effects
 				(font
@@ -9186,19 +9377,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R119")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R7")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R16")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R20")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -9311,19 +9502,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "L5")
+					(reference "L?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "L3")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "L3")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "L3")
+					(reference "L?")
 					(unit 1)
 				)
 			)
@@ -9338,7 +9529,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1b6aa634-ec73-4ff6-be50-3f9839222617")
-		(property "Reference" "R18"
+		(property "Reference" "R5"
 			(at 66.548 92.71 0)
 			(effects
 				(font
@@ -9426,15 +9617,27 @@
 			(uuid "7d4e4c85-63b5-4280-82a3-e5e35ced86fd")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R5")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R14")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R18")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -9448,7 +9651,7 @@
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
-		(dnp no)
+		(dnp yes)
 		(uuid "1c1f8fec-57aa-44bc-88ca-5639c8cabdb7")
 		(property "Reference" "C5"
 			(at 73.66 55.8862 0)
@@ -9576,19 +9779,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C85")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C5")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C10")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C5")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -9604,7 +9807,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1f121611-0904-40a4-aab0-e0ae7b4db463")
-		(property "Reference" "U23"
+		(property "Reference" "U18"
 			(at 219.075 118.11 0)
 			(effects
 				(font
@@ -9702,15 +9905,27 @@
 			(uuid "2936964b-6450-402f-ad69-0c002c241621")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U18")
+					(unit 1)
+				)
+			)
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U19")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U23")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -9726,7 +9941,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "22efc97b-5cb1-4bad-bd22-c41b1f54b974")
-		(property "Reference" "R28"
+		(property "Reference" "R15"
 			(at 95.504 85.344 0)
 			(effects
 				(font
@@ -9852,19 +10067,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R126")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R15")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R24")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R28")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -9879,7 +10094,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "24f11829-1c33-46b1-b341-7bae8c380422")
-		(property "Reference" "J9"
+		(property "Reference" "J3"
 			(at 38.1 28.194 0)
 			(effects
 				(font
@@ -9989,19 +10204,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "J14")
+					(reference "J?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "J3")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "J8")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "J9")
+					(reference "J?")
 					(unit 1)
 				)
 			)
@@ -10016,7 +10231,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "25f02434-9454-408c-85c8-4bafb0eaabe4")
-		(property "Reference" "R33"
+		(property "Reference" "R21"
 			(at 128.778 31.75 0)
 			(effects
 				(font
@@ -10140,15 +10355,27 @@
 			(uuid "90adbde2-b5ff-499c-83f6-5cab2097d642")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R21")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R29")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R33")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -10164,7 +10391,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "26891c96-883d-4ae9-ab2e-dccce005e21d")
-		(property "Reference" "R36"
+		(property "Reference" "R24"
 			(at 151.13 88.8999 0)
 			(effects
 				(font
@@ -10272,19 +10499,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R13")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R24")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R32")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R36")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -10300,7 +10527,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "281e10ca-b377-44e4-bb22-8ce7f0fe3539")
-		(property "Reference" "D17"
+		(property "Reference" "D13"
 			(at 240.03 74.6759 90)
 			(effects
 				(font
@@ -10408,19 +10635,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D1")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D13")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D12")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D17")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -10436,7 +10663,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2ab0341c-842b-4c00-9c5a-127d8f288325")
-		(property "Reference" "D14"
+		(property "Reference" "D10"
 			(at 120.65 40.894 0)
 			(effects
 				(font
@@ -10549,15 +10776,27 @@
 			(uuid "7c8f57f3-a7b9-4a73-b081-f8df7bbe2315")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D10")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D9")
+					(reference "D?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D14")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -10573,7 +10812,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2bf71e78-29f1-4422-9ea4-abd02dc41f89")
-		(property "Reference" "R19"
+		(property "Reference" "R6"
 			(at 75.438 72.898 0)
 			(effects
 				(font
@@ -10699,19 +10938,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R118")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R6")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R15")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R19")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -10727,7 +10966,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2c7c6f7f-511f-42f3-96d4-83a6e5e388d4")
-		(property "Reference" "U9"
+		(property "Reference" "U4"
 			(at 29.972 154.432 0)
 			(effects
 				(font
@@ -10855,15 +11094,27 @@
 			(uuid "26615755-7c80-4d1d-ae36-76fae1b8927f")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U4")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U5")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U9")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -10878,7 +11129,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2ee49c91-49b0-4ddc-9c03-051ee0546936")
-		(property "Reference" "R37"
+		(property "Reference" "R25"
 			(at 151.638 98.552 0)
 			(effects
 				(font
@@ -11004,19 +11255,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R16")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R25")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R33")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R37")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -11031,7 +11282,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3053f787-a3da-4b52-91f6-236283c17aad")
-		(property "Reference" "J7"
+		(property "Reference" "J1"
 			(at 20.828 23.622 0)
 			(effects
 				(font
@@ -11120,19 +11371,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "J12")
+					(reference "J?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "J1")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "J6")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "J7")
+					(reference "J?")
 					(unit 1)
 				)
 			)
@@ -11148,7 +11399,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "375e115f-4669-4f64-a838-44f517827235")
-		(property "Reference" "U18"
+		(property "Reference" "U13"
 			(at 184.7215 26.67 90)
 			(effects
 				(font
@@ -11257,19 +11508,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U41")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U13")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U14")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U18")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -11285,7 +11536,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "392329a4-e141-410c-93ab-ee01e1aeb330")
-		(property "Reference" "R16"
+		(property "Reference" "R3"
 			(at 60.452 77.47 0)
 			(effects
 				(font
@@ -11411,19 +11662,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R116")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R3")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R12")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R16")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -11439,7 +11690,7 @@
 		(on_board yes)
 		(dnp yes)
 		(uuid "3992dce7-037b-4364-be41-4ec6adb3922f")
-		(property "Reference" "R17"
+		(property "Reference" "R4"
 			(at 62.992 85.09 0)
 			(effects
 				(font
@@ -11565,19 +11816,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R117")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R4")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R13")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R17")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -11680,19 +11931,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "TP6")
+					(reference "TP?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "TP1")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "TP1")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "TP1")
+					(reference "TP?")
 					(unit 1)
 				)
 			)
@@ -11708,7 +11959,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3bc20b5f-8f80-4518-b3a2-850d3e61960e")
-		(property "Reference" "D7"
+		(property "Reference" "D3"
 			(at 35.56 100.3934 90)
 			(effects
 				(font
@@ -11825,19 +12076,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D41")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D3")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D3")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D7")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -11853,7 +12104,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "415b1702-1ee8-4a87-af0d-6ee762020326")
-		(property "Reference" "U22"
+		(property "Reference" "U17"
 			(at 217.805 142.24 0)
 			(effects
 				(font
@@ -11951,15 +12202,27 @@
 			(uuid "df9363a5-02d2-4f68-860d-7837a50e3f87")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U17")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U18")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U22")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -12098,15 +12361,27 @@
 			(uuid "38186fcf-15ce-49d5-b23c-0df9962db842")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C14")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C19")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C14")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -12122,7 +12397,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "48311564-4e88-46f4-8e2b-304a7e8f48bd")
-		(property "Reference" "D15"
+		(property "Reference" "D11"
 			(at 148.5265 22.86 0)
 			(effects
 				(font
@@ -12237,19 +12512,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D36")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D11")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D10")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D15")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -12380,15 +12655,27 @@
 			(uuid "9c5f569e-32bc-478a-993a-08be165e0284")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C19")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C24")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C19")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -12507,19 +12794,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "Q22")
+					(reference "Q?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "Q1")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "Q1")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "Q1")
+					(reference "Q?")
 					(unit 1)
 				)
 			)
@@ -12535,7 +12822,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4d17fa3c-de5b-416d-8088-da4e36a9d429")
-		(property "Reference" "U16"
+		(property "Reference" "U11"
 			(at 175.26 66.04 90)
 			(effects
 				(font
@@ -12635,19 +12922,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
 					(reference "U11")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U12")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U16")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -12663,7 +12950,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "4e348e20-eeab-4c84-865d-747a34cb4151")
-		(property "Reference" "U12"
+		(property "Reference" "U7"
 			(at 48.26 63.5 0)
 			(effects
 				(font
@@ -12763,19 +13050,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U34")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U7")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U8")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U12")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -12791,7 +13078,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "509a5264-4cab-45c6-b5fd-d762bfa9af4b")
-		(property "Reference" "U7"
+		(property "Reference" "U2"
 			(at 27.94 115.57 0)
 			(effects
 				(font
@@ -12897,173 +13184,25 @@
 		(instances
 			(project ""
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U37")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project ""
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U2")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U3")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 87.63 86.36 0)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "50c05065-0738-41c9-ad68-d53fb8b14fdc")
-		(property "Reference" "R25"
-			(at 85.852 85.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "10"
-			(at 82.042 86.868 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2BTTD10R0F?qs=sGAEpiMZZMvdGkrng054t5lOknjIQAOXyrbkC5%252B9uLU%3D"
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "10 ohm,250mW, 1%, 200V"
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.026"
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 87.63 86.36 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "543c01c5-7bdf-436c-89fb-99b46d54c516")
-		)
-		(pin "1"
-			(uuid "7a49c151-5c54-495a-a308-2402d6dc4ef9")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R123")
-					(unit 1)
-				)
-			)
-			(project "VoltageTap_A"
-				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R21")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R25")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -13079,7 +13218,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "51c0bca7-1222-4c53-a59b-e5cdabe9c4f8")
-		(property "Reference" "R21"
+		(property "Reference" "R8"
 			(at 75.692 85.09 0)
 			(effects
 				(font
@@ -13205,19 +13344,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R120")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R8")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R17")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R21")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -13233,7 +13372,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "55f1f569-3e2c-4a38-9234-57265b10643c")
-		(property "Reference" "D10"
+		(property "Reference" "D6"
 			(at 62.23 111.7599 90)
 			(effects
 				(font
@@ -13348,9 +13487,21 @@
 			(uuid "d8009284-1a70-48c1-9138-2611fc42c661")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D6")
+					(unit 1)
+				)
+			)
 			(project ""
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D10")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -13365,7 +13516,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "566de58d-1865-4325-b704-0ad1d4d27592")
-		(property "Reference" "D18"
+		(property "Reference" "D14"
 			(at 265.3665 67.31 90)
 			(effects
 				(font
@@ -13480,19 +13631,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D9")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D14")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D13")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D18")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -13507,7 +13658,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "56b82100-d3c7-4a41-9d02-ada98cf54cd8")
-		(property "Reference" "R22"
+		(property "Reference" "R9"
 			(at 79.248 92.71 0)
 			(effects
 				(font
@@ -13595,15 +13746,27 @@
 			(uuid "bd7bcbe9-f4ea-41ed-a5c2-a1d3eaae4964")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R9")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R18")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R22")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -13723,19 +13886,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "Q21")
+					(reference "Q?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "Q3")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "Q3")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "Q3")
+					(reference "Q?")
 					(unit 1)
 				)
 			)
@@ -13750,7 +13913,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "61ef4ee9-f89c-4960-b57e-017ff1a8765b")
-		(property "Reference" "R14"
+		(property "Reference" "R1"
 			(at 50.038 172.72 0)
 			(effects
 				(font
@@ -13874,15 +14037,27 @@
 			(uuid "430d0905-66d9-463d-a7aa-aeac8d5cd12a")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R1")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R10")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R14")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -13897,7 +14072,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "647fc6e6-4fec-4c89-a5aa-0f136795b7fb")
-		(property "Reference" "R26"
+		(property "Reference" "R13"
 			(at 95.758 69.342 0)
 			(effects
 				(font
@@ -14023,19 +14198,179 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R124")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R13")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R22")
+					(reference "R?")
 					(unit 1)
 				)
 			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R26")
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 76.2 40.64 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "64d60c5c-55fb-4326-923c-77c20ecc04d7")
+		(property "Reference" "C3"
+			(at 73.66 39.3762 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 73.66 41.9162 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Wurth-Elektronik/885012206095?qs=0KOYDY2FL2%2FIErXVpcsrTQ%3D%3D"
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100nF, 10%, 50V, X7R, -55C, +125C"
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.029"
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x50" "0.02"
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.017"
+			(at 76.2 40.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "34070a51-a86e-4392-8f16-05093e8e9f03")
+		)
+		(pin "1"
+			(uuid "0a74ac96-6859-4a62-9619-8447444f07b6")
+		)
+		(instances
+			(project "W5500 testing"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -14051,7 +14386,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "65bca9ae-3472-4e15-b216-048026b7296d")
-		(property "Reference" "C2"
+		(property "Reference" "C1"
 			(at 62.23 48.2662 0)
 			(effects
 				(font
@@ -14168,19 +14503,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C82")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C1")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C7")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C2")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -14196,7 +14531,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "67466363-db04-4d0c-bbc5-cb2772ed5ce7")
-		(property "Reference" "U15"
+		(property "Reference" "U10"
 			(at 172.72 148.59 0)
 			(effects
 				(font
@@ -14276,15 +14611,27 @@
 			(uuid "61d99f04-b4bb-412b-bab9-9a1654ef7163")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U10")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U11")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U15")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -14299,7 +14646,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6af44a75-cf28-461b-9cc2-b7c108ba0241")
-		(property "Reference" "R41"
+		(property "Reference" "R29"
 			(at 239.268 160.02 0)
 			(effects
 				(font
@@ -14423,15 +14770,27 @@
 			(uuid "8128d0fd-06ae-4b5c-8cad-3fe5ebab57bb")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R29")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R37")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R41")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -14446,7 +14805,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6e9b413b-8ffc-4b38-8401-d019c6357648")
-		(property "Reference" "R31"
+		(property "Reference" "R19"
 			(at 108.458 85.09 0)
 			(effects
 				(font
@@ -14552,15 +14911,27 @@
 			(uuid "8cd6939c-bd82-4a6e-b8b6-c74bc966e201")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R19")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R27")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R31")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -14575,7 +14946,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "756edaf4-fce3-4a2a-b728-31751c15e186")
-		(property "Reference" "R44"
+		(property "Reference" "R32"
 			(at 246.888 101.6 90)
 			(effects
 				(font
@@ -14681,15 +15052,139 @@
 			(uuid "769b30e0-e8ea-4de6-bdeb-d794279ab787")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R32")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R40")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R44")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:FerriteBead")
+		(at 118.11 71.12 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "785372a4-fe3c-473a-959a-8ccc4060d174")
+		(property "Reference" "FB1"
+			(at 117.856 66.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "~"
+			(at 118.0592 66.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Inductor_SMD:L_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
+			(at 118.11 72.898 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 118.11 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Ferrite bead"
+			(at 118.11 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "150R@100Mhz +-25%, 0.1@DC, 2A max, -55C, +125C"
+			(at 118.11 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Bourns/MH1608-151Y?qs=aqFbwuCjQomGpgiGtpDD0g%3D%3D"
+			(at 118.11 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 118.11 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.07"
+			(at 118.11 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x25" "0.055"
+			(at 118.11 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "88fcd193-b124-438b-99a1-2d8af65e4104")
+		)
+		(pin "2"
+			(uuid "0814df70-28a6-446e-875a-99aa205a476b")
+		)
+		(instances
+			(project "W5500 testing"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "FB1")
 					(unit 1)
 				)
 			)
@@ -14831,19 +15326,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C84")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C4")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C9")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C4")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -14859,7 +15354,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7abb4249-a1e5-47e9-b31f-69810cd5ca0c")
-		(property "Reference" "U24"
+		(property "Reference" "U19"
 			(at 238.76 62.2299 90)
 			(effects
 				(font
@@ -14967,19 +15462,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U36")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U19")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U20")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U24")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -15100,19 +15595,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "Q20")
+					(reference "Q?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "Q2")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "Q2")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "Q2")
+					(reference "Q?")
 					(unit 1)
 				)
 			)
@@ -15127,7 +15622,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7d350c19-bc6d-4116-96ac-bc822f62875a")
-		(property "Reference" "R38"
+		(property "Reference" "R26"
 			(at 193.04 88.8999 0)
 			(effects
 				(font
@@ -15235,19 +15730,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R18")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R26")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R34")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R38")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -15262,7 +15757,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7ea6a513-b0ac-4d1d-a86d-d1246ab18183")
-		(property "Reference" "R42"
+		(property "Reference" "R30"
 			(at 240.538 130.81 0)
 			(effects
 				(font
@@ -15350,15 +15845,27 @@
 			(uuid "eac4ea04-cdd6-4552-b4a4-539718e1fb19")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R30")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R38")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R42")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -15374,7 +15881,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8309df30-43c4-4799-b001-3c7209b2b765")
-		(property "Reference" "U13"
+		(property "Reference" "U8"
 			(at 57.15 130.8099 0)
 			(effects
 				(font
@@ -15476,19 +15983,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U12")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U8")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U9")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U13")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -15503,7 +16010,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8338c29e-39bd-4174-ae74-7fbd04de0638")
-		(property "Reference" "D12"
+		(property "Reference" "D8"
 			(at 81.28 101.346 90)
 			(effects
 				(font
@@ -15600,19 +16107,134 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D39")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D8")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D7")
+					(reference "D?")
 					(unit 1)
 				)
 			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D12")
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 97.79 93.98 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8358682f-0cf5-47c2-ae54-c4e30e3cd901")
+		(property "Reference" "R16"
+			(at 95.758 93.218 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "14.3"
+			(at 95.758 95.758 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 97.79 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 97.79 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 97.79 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD14R3F?qs=sGAEpiMZZMvdGkrng054tzl5geC4ftCS2xF%2Fs66%2F7iY%3D"
+			(at 97.79 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "14.3R, 250mW, 1%, 100ppm, 150V, -55C, +155C"
+			(at 97.79 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 97.79 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.02"
+			(at 97.79 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 97.79 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "91e6e20f-eb33-4a34-9a42-db4c90df8468")
+		)
+		(pin "1"
+			(uuid "93ebf602-f39d-4b3e-aab4-631de9446348")
+		)
+		(instances
+			(project "W5500 testing"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R16")
 					(unit 1)
 				)
 			)
@@ -15743,15 +16365,27 @@
 			(uuid "7d379e75-93b4-48ed-b987-7cc5d7de9609")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C17")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C22")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C17")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -15767,7 +16401,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "890dffff-b7ab-44a1-8f75-2e80eac4b34f")
-		(property "Reference" "U21"
+		(property "Reference" "U16"
 			(at 214.63 20.32 0)
 			(effects
 				(font
@@ -15883,19 +16517,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U49")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U16")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U17")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U21")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -16026,15 +16660,27 @@
 			(uuid "7844e0de-0b30-4d9b-af1d-34901f9d19c9")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C11")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C16")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C11")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -16050,7 +16696,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8b8563fe-f8fd-449f-b6f7-61b167e28e73")
-		(property "Reference" "D9"
+		(property "Reference" "D5"
 			(at 57.15 101.3459 90)
 			(effects
 				(font
@@ -16158,19 +16804,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D44")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D5")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D5")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D9")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -16186,7 +16832,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8d2dc954-22fa-410e-ab04-6f92c34b0db1")
-		(property "Reference" "U17"
+		(property "Reference" "U12"
 			(at 176.53 101.6 0)
 			(effects
 				(font
@@ -16301,19 +16947,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U24")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U12")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U13")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U17")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -16329,7 +16975,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8f44a3bb-42f1-44f1-8336-76a003c5ae08")
-		(property "Reference" "D8"
+		(property "Reference" "D4"
 			(at 35.56 108.0134 90)
 			(effects
 				(font
@@ -16446,19 +17092,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D42")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D4")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D4")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D8")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -16473,7 +17119,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8f89d0ed-dc81-4605-8a41-c7915b2132e7")
-		(property "Reference" "R32"
+		(property "Reference" "R20"
 			(at 108.458 92.71 0)
 			(effects
 				(font
@@ -16579,15 +17225,27 @@
 			(uuid "5f753929-9b2c-4525-a062-393206dfa5dd")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R20")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R28")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R32")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -16719,19 +17377,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C59")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C16")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C21")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C16")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -16747,7 +17405,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "90ecc080-123f-48e4-9591-09fd0b027b69")
-		(property "Reference" "R27"
+		(property "Reference" "R14"
 			(at 95.758 77.978 0)
 			(effects
 				(font
@@ -16765,7 +17423,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
 			(at 97.79 78.74 0)
 			(effects
 				(font
@@ -16873,19 +17531,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R125")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R14")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R23")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R27")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -16901,7 +17559,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "93018c20-23c7-4927-8d8f-dcb4e6840256")
-		(property "Reference" "U19"
+		(property "Reference" "U14"
 			(at 190.5 43.8149 90)
 			(effects
 				(font
@@ -17012,19 +17670,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U43")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U14")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U15")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U19")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -17166,19 +17824,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C88")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C8")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C13")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C8")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -17194,7 +17852,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "93bd9145-8269-4502-bf86-6f58d89d6b8f")
-		(property "Reference" "R24"
+		(property "Reference" "R11"
 			(at 85.852 77.47 0)
 			(effects
 				(font
@@ -17320,19 +17978,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R122")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R11")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R20")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R24")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -17348,7 +18006,7 @@
 		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "93f23074-288d-4270-b9c7-d435f7e9ab34")
-		(property "Reference" "U10"
+		(property "Reference" "U5"
 			(at 36.2585 63.5 90)
 			(effects
 				(font
@@ -17457,19 +18115,25 @@
 		(instances
 			(project ""
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U40")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project ""
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U5")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U6")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U10")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -17485,7 +18149,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "98c463d4-df41-40fc-ab9c-4f2e1c37b9a8")
-		(property "Reference" "U20"
+		(property "Reference" "U15"
 			(at 187.96 66.04 90)
 			(effects
 				(font
@@ -17585,19 +18249,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U25")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U15")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U16")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U20")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -17613,7 +18277,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "996f48e0-37db-45ec-b6de-2f111ec7ced0")
-		(property "Reference" "U11"
+		(property "Reference" "U6"
 			(at 35.56 80.01 90)
 			(effects
 				(font
@@ -17702,15 +18366,27 @@
 			(uuid "53a74e24-7df9-40b1-9e15-04d5ae7fd9b7")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U6")
+					(unit 1)
+				)
+			)
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U7")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U11")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -17726,7 +18402,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "997f94ad-8ae7-42af-921f-b18d5e6ca1b9")
-		(property "Reference" "R34"
+		(property "Reference" "R22"
 			(at 143.002 30.48 0)
 			(effects
 				(font
@@ -17814,15 +18490,27 @@
 			(uuid "023116b9-8fda-4176-b415-2c00f0c2a5fe")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R22")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R30")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R34")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -17838,7 +18526,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9b1ec372-8db6-4b31-8751-4275a7009e9d")
-		(property "Reference" "U14"
+		(property "Reference" "U9"
 			(at 114.3 22.86 0)
 			(effects
 				(font
@@ -17918,15 +18606,27 @@
 			(uuid "558a8568-2cc5-4262-8e80-fa4b6343678f")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U9")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U10")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U14")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -17941,7 +18641,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9e02b37b-7718-43d1-ac75-0e8c5e8b8d94")
-		(property "Reference" "R35"
+		(property "Reference" "R23"
 			(at 154.432 41.148 0)
 			(effects
 				(font
@@ -18065,15 +18765,27 @@
 			(uuid "0c3f187a-989f-4e0f-8662-943f6a2b69e3")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R23")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R31")
+					(reference "R?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R35")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -18089,7 +18801,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9ec4bb23-bf2c-454e-8476-4a444e9b8c21")
-		(property "Reference" "U25"
+		(property "Reference" "U20"
 			(at 229.87 96.52 0)
 			(effects
 				(font
@@ -18178,15 +18890,27 @@
 			(uuid "d32f24ac-5bc1-4300-ba75-a596bb1f66d7")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U20")
+					(unit 1)
+				)
+			)
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U21")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U25")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -18201,7 +18925,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a2e49670-0b83-41f2-ac9c-8d42bbae4ed8")
-		(property "Reference" "D13"
+		(property "Reference" "D9"
 			(at 90.17 101.346 90)
 			(effects
 				(font
@@ -18298,19 +19022,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D40")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D9")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D8")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D13")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -18452,19 +19176,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C87")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C7")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C12")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C7")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -18480,7 +19204,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "aa22e07b-df17-4e8c-a878-6302dd937383")
-		(property "Reference" "U8"
+		(property "Reference" "U3"
 			(at 27.94 130.81 0)
 			(effects
 				(font
@@ -18595,19 +19319,25 @@
 		(instances
 			(project ""
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U42")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project ""
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U3")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U4")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U8")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -18623,7 +19353,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "aa64e8c5-5298-4911-8ce7-5541e2b963a9")
-		(property "Reference" "D5"
+		(property "Reference" "D1"
 			(at 24.13 100.3934 90)
 			(effects
 				(font
@@ -18740,19 +19470,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D37")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D1")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D1")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D5")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -18767,7 +19497,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b63a5920-be0c-44ab-b64b-85cac2b68b39")
-		(property "Reference" "D11"
+		(property "Reference" "D7"
 			(at 72.39 101.346 90)
 			(effects
 				(font
@@ -18844,15 +19574,27 @@
 			(uuid "223943d1-dc6f-404f-94c5-dc95e88b46a9")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D7")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D6")
+					(reference "D?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D11")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -18983,15 +19725,27 @@
 			(uuid "63fdbe47-8db0-4960-a983-b24f55233d61")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C18")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C23")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C18")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -19007,7 +19761,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bad43325-5f79-4151-9906-3c03f3344d03")
-		(property "Reference" "U26"
+		(property "Reference" "U21"
 			(at 262.89 105.4099 0)
 			(effects
 				(font
@@ -19098,15 +19852,27 @@
 			(uuid "43602611-4c53-4361-b5ce-be96c8b9ecd2")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U21")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U22")
+					(reference "U?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U26")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -19237,15 +20003,27 @@
 			(uuid "16c152af-43e0-4cdf-b69e-1b2881df62c2")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C21")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C26")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C21")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -19384,15 +20162,27 @@
 			(uuid "c90a3e38-6acf-4ce4-bb4c-01e04bc0741b")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C15")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C20")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C15")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -19408,7 +20198,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c5187ec2-6882-4eb8-a6cd-325e3d0c7ba7")
-		(property "Reference" "U6"
+		(property "Reference" "U1"
 			(at 22.86 63.5 90)
 			(effects
 				(font
@@ -19508,19 +20298,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U44")
+					(reference "U?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "U1")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U2")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U6")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -19651,15 +20441,27 @@
 			(uuid "5e119d69-1414-40c3-9e0f-23d492a3a420")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C20")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C25")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C20")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -19675,7 +20477,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d0cf760d-28f8-4f95-8d16-e7ce45244b9f")
-		(property "Reference" "R23"
+		(property "Reference" "R10"
 			(at 85.852 69.85 0)
 			(effects
 				(font
@@ -19801,19 +20603,134 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R121")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R10")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R19")
+					(reference "R?")
 					(unit 1)
 				)
 			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R23")
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 87.63 86.36 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d9672f0a-139c-4132-b247-c3c0b03c604d")
+		(property "Reference" "R12"
+			(at 85.598 85.598 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10"
+			(at 85.598 88.138 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 87.63 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 87.63 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 87.63 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD10R0F?qs=sGAEpiMZZMvdGkrng054t0qbyaLLndygtMfKrqE8ToI%3D"
+			(at 87.63 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "10R, 150V, 250mW, 1%, 100ppm, -55C, +155C"
+			(at 87.63 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 87.63 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.02"
+			(at 87.63 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 87.63 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "3a595fa5-a71a-4d28-9898-fb6d135db48b")
+		)
+		(pin "1"
+			(uuid "df813988-fbfe-41ef-bf7f-81d8a78b35cf")
+		)
+		(instances
+			(project "W5500 testing"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R12")
 					(unit 1)
 				)
 			)
@@ -19946,19 +20863,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C58")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C13")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C18")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C13")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -20097,15 +21014,27 @@
 			(uuid "4552c33e-b0a2-446c-9368-2cf5ba0c48c9")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C12")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C17")
+					(reference "C?")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C12")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -20198,15 +21127,27 @@
 			(uuid "910f9cb1-120a-4b05-b967-cbb3618fa9bb")
 		)
 		(instances
-			(project "VoltageTap_A"
-				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "L?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
 					(reference "L1")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
+					(reference "L?")
+					(unit 1)
+				)
+			)
+			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "L1")
+					(reference "L?")
 					(unit 1)
 				)
 			)
@@ -20308,15 +21249,27 @@
 			(uuid "6687ffb3-293e-41a3-b0a7-4117dbf72cbd")
 		)
 		(instances
-			(project "VoltageTap_A"
-				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "L?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
 					(reference "L2")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
+					(reference "L?")
+					(unit 1)
+				)
+			)
+			(project "VoltageTap_A"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "L2")
+					(reference "L?")
 					(unit 1)
 				)
 			)
@@ -20458,19 +21411,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C86")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C6")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C11")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C6")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -20486,7 +21439,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e92dfa6e-9dc0-45df-a847-8c379b9f58d7")
-		(property "Reference" "C3"
+		(property "Reference" "C2"
 			(at 62.23 55.8862 0)
 			(effects
 				(font
@@ -20603,19 +21556,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C83")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C2")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C8")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C3")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -20631,7 +21584,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eaba39bc-0926-40a2-a882-b25cc9e4aa24")
-		(property "Reference" "D6"
+		(property "Reference" "D2"
 			(at 24.13 108.0134 90)
 			(effects
 				(font
@@ -20748,19 +21701,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "D38")
+					(reference "D?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "D2")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "D2")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "D6")
+					(reference "D?")
 					(unit 1)
 				)
 			)
@@ -20902,19 +21855,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C89")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C9")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C14")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C9")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -21047,19 +22000,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C8")
+					(reference "C?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "C10")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "C15")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "C10")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -21075,7 +22028,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f2a7b51d-2ee0-4913-92bd-e4830b3f8ab6")
-		(property "Reference" "R15"
+		(property "Reference" "R2"
 			(at 62.23 69.8499 0)
 			(effects
 				(font
@@ -21183,19 +22136,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R115")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R2")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R11")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R15")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -21211,7 +22164,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f70c4cf9-4361-466d-8322-6f6941fece56")
-		(property "Reference" "R29"
+		(property "Reference" "R17"
 			(at 104.902 69.85 0)
 			(effects
 				(font
@@ -21337,19 +22290,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R127")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R17")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R25")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R29")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -21365,7 +22318,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fa90cd19-7e29-4437-8587-97f30cb121be")
-		(property "Reference" "R45"
+		(property "Reference" "R33"
 			(at 262.128 61.214 0)
 			(effects
 				(font
@@ -21491,19 +22444,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R47")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "R33")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R41")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R45")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -21519,7 +22472,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fd3efad5-0323-42be-9113-63a8ceaf6ee1")
-		(property "Reference" "J8"
+		(property "Reference" "J2"
 			(at 38.1 15.24 0)
 			(effects
 				(font
@@ -21623,19 +22576,19 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "J13")
+					(reference "J?")
+					(unit 1)
+				)
+			)
+			(project "MasterBoard_A"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/9a919d5c-4b79-446a-888b-0ddf9bea382a"
+					(reference "J2")
 					(unit 1)
 				)
 			)
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "J7")
-					(unit 1)
-				)
-			)
-			(project "MasterBoard_A"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "J8")
+					(reference "J?")
 					(unit 1)
 				)
 			)
