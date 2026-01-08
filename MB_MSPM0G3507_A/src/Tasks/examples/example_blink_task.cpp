@@ -21,14 +21,14 @@ void Task::blink_task(void*) {
 //    auto &led = System::GPIO::PA14; // EVAL purple board
 //    auto &led = System::GPIO::PB27; // EVAL blue board
 //    auto &led = System::GPIO::PA14; // EVAL green board
-//    auto &led = System::GPIO::PB26; // LP RED
+    auto &led = System::GPIO::PB26; // LP RED
 //    auto &led = System::GPIO::PB27; // LP GREEN
 //    auto &led = System::GPIO::PA7; // EVAL v3
 //    auto &led = System::GPIO::PB1; // MB_A 1.0 indicator : 1
 //    auto &led = System::GPIO::PA5; // MB_A 1.0 indicator : 2
 //    auto &led = System::GPIO::PA6; // MB_A 1.0 indicator : bms fault
 //    auto &led = System::GPIO::PB0; // MB_A 1.0 indicator : rtos running
-    auto &led = MstrB::Indi::RTOSRunning;
+//    auto &led = MstrB::Indi::RTOSRunning;
 
     DL_GPIO_initDigitalOutputFeatures(
             led.iomux,

@@ -22,7 +22,6 @@ namespace System::UART {
  * Everything would probably be fine without the explicit GPIO setup, mostly for consistency
  */
 void MstrB::init() {
-    return;
     {
         using namespace MHCS;
 

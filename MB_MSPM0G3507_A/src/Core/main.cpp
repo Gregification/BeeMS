@@ -34,7 +34,7 @@
 
 int main(){
     System::init();
-    MstrB::init();
+//    MstrB::init();
 
     System::UART::uart_ui.setBaudTarget(115200);
     System::UART::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));

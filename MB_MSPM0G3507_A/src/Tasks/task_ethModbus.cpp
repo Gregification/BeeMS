@@ -50,9 +50,12 @@ DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_N
 
 
 /*** wizchip setup ****/
-System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi;
-System::GPIO::GPIO const &      wiz_cs    = MstrB::Eth::cs;
-System::GPIO::GPIO const &      wiz_reset = MstrB::Eth::reset;
+//System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi;
+//System::GPIO::GPIO const &      wiz_cs    = MstrB::Eth::cs;
+//System::GPIO::GPIO const &      wiz_reset = MstrB::Eth::reset;
+System::SPI::SPI &              wiz_spi   = System::SPI::spi1;
+System::GPIO::GPIO const &      wiz_cs    = System::GPIO::PB3;
+System::GPIO::GPIO const &      wiz_reset = System::GPIO::PB2;
 uint16_t const                  modbusTCPPort = 502;   // arbitrary, must match RapidSCADA connection settings
 uint8_t const                   socketNum = 0;          // [0,8], arbitrary, socket must not be used elsewhere
 
@@ -109,11 +112,6 @@ void Task::ethModbus_task(void *){
     while(!setupWizchip()) {
         uart.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed!" CLIRESET NEWLINE));
         vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-
-    for(int i = 0; i < 100; i++){
-        DL_GPIO_togglePins(GPIOPINPUX(MstrB::Indi::i1));
-        vTaskDelay(pdMS_TO_TICKS(200));
     }
 
     wizchip_setnetinfo(&netConfig);
