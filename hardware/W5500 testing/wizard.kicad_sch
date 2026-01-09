@@ -6,6 +6,7 @@
 	(paper "A4")
 	(title_block
 		(title "spi ethernet controller")
+		(date "2025-12-26")
 		(rev "1.0")
 		(company "BeeMS")
 		(comment 1 "Wizchip has reference schematics & layout docs. not always in sync, use own judgement\n")
@@ -3368,7 +3369,7 @@
 		)
 		(uuid "34454907-4ffc-4de8-b4d6-7efa90ae2eb9")
 	)
-	(text_box "sheilding note\n- rj45 sheilding sucks. sheild goes elsewhere"
+	(text_box "miscellaneous\n- rj45 sheilding sucks. sheild goes elsewhere\n- FSAE rule (updated 2026) : \"\"\"\n		EV.5.2.5 Each wire used in a Tractive Battery Container, whether it is part of the GLV or Tractive System, must be rated to the maximum Tractive System voltage\n	\"\"\"\n	i know other teams use ethernet for segment interconnects, not sure how they get away with it.\n- smallest part 0805 inch. is hand solderable\n- suggest paste + heatgun oscillator on first, then iron everything else starting with w5500 and ending with rj45 jack\n- \"RSVD\" pins can be GND to for routing ease"
 		(exclude_from_sim no)
 		(at 119.38 154.94 0)
 		(size 55.88 40.64)
@@ -3711,12 +3712,16 @@
 		(uuid "faddde69-f76a-4f46-8fbb-15f1c822c243")
 	)
 	(no_connect
-		(at 92.71 125.73)
-		(uuid "192eb7ec-2ee7-4db6-8821-57d3d7ccc58f")
+		(at 92.71 115.57)
+		(uuid "041e5dd9-f18c-41a0-a778-102cb0f10857")
+	)
+	(no_connect
+		(at 92.71 123.19)
+		(uuid "3841949c-5d20-421f-aafd-b05195ae88da")
 	)
 	(no_connect
 		(at 92.71 120.65)
-		(uuid "280a5e8d-feea-4598-9dfd-69596e25f344")
+		(uuid "3f6bc020-44fa-4fd6-8c7d-892ce3ba98e6")
 	)
 	(no_connect
 		(at 92.71 100.33)
@@ -3739,24 +3744,20 @@
 		(uuid "793863c2-9aa2-46c5-b49f-0e7cf223fa3c")
 	)
 	(no_connect
-		(at 92.71 115.57)
-		(uuid "99fb8e1f-5d06-4744-bb65-a48cc1f70ada")
+		(at 92.71 130.81)
+		(uuid "99cb57d6-5f82-464d-afe9-930b6d870c44")
 	)
 	(no_connect
-		(at 92.71 118.11)
-		(uuid "aaa9bc5d-3770-4614-98f5-0a569dbdd466")
+		(at 92.71 125.73)
+		(uuid "b5de02ad-ee94-4888-814e-da844d6a2729")
 	)
 	(no_connect
 		(at 92.71 97.79)
 		(uuid "c8bb191a-954d-4f12-9eed-9d1604f6bdb5")
 	)
 	(no_connect
-		(at 92.71 130.81)
-		(uuid "ced85fb6-f4f8-4a59-aaec-89bfdbf4b878")
-	)
-	(no_connect
-		(at 92.71 123.19)
-		(uuid "d7c8b934-6a7c-4f89-a200-42157f92478b")
+		(at 92.71 118.11)
+		(uuid "dfa3bbeb-76c5-41e1-8300-417ec051fb70")
 	)
 	(no_connect
 		(at 123.19 115.57)
@@ -6547,6 +6548,121 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
+		(at 81.28 119.38 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2f054801-7654-4252-b304-6237d504b1d5")
+		(property "Reference" "R35"
+			(at 86.868 118.364 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "14.3"
+			(at 86.868 120.142 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 81.28 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 81.28 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 81.28 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD14R3F?qs=sGAEpiMZZMvdGkrng054tzl5geC4ftCS2xF%2Fs66%2F7iY%3D"
+			(at 81.28 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "14.3R, 250mW, 1%, 100ppm, 150V, -55C, +155C"
+			(at 81.28 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 81.28 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.02"
+			(at 81.28 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 81.28 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "39e5be8e-8661-473e-80e3-25113fc9ad1b")
+		)
+		(pin "1"
+			(uuid "b0d0799d-38d5-49ff-a96e-677f797498d6")
+		)
+		(instances
+			(project "W5500 testing"
+				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
+					(reference "R35")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
 		(at 157.48 118.11 270)
 		(mirror x)
 		(unit 1)
@@ -8654,9 +8770,9 @@
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+		(in_bom no)
+		(on_board no)
+		(dnp yes)
 		(uuid "8da21bfe-6dbe-4f45-b8e9-d2a0e62a63d4")
 		(property "Reference" "C37"
 			(at 202.438 99.822 90)
@@ -10446,147 +10562,6 @@
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
 					(reference "J5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 81.28 119.38 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "d84b006f-0e1e-475b-91c8-8a67ac739c6e")
-		(property "Reference" "R35"
-			(at 82.804 118.618 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "0"
-			(at 82.804 120.396 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" ""
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "usr a random resistor or something"
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" ""
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" ""
-			(at 81.28 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 81.28 119.38 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 81.28 119.38 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "9b436259-0667-4dd7-8304-5a330effa9f8")
-		)
-		(pin "1"
-			(uuid "01ad0692-db0c-4621-8a1b-efe1c63cb201")
-		)
-		(instances
-			(project "W5500 testing"
-				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R35")
 					(unit 1)
 				)
 			)
