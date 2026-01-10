@@ -7,7 +7,9 @@
 	(title_block
 		(title "spi ethernet controller")
 		(date "2026-01-08")
-		(rev "1.0")
+		(rev "1.1")
+		(company "UTA Racing")
+		(comment 1 "Files at github.com/Gregification/BeeMS")
 	)
 	(lib_symbols
 		(symbol "Connector:RJ45_Amphenol_RJMG1BD3B8K1ANR"
@@ -3500,6 +3502,12 @@
 		(uuid "1fce6c1d-3093-45e8-b49d-3c27925d8431")
 	)
 	(junction
+		(at 130.81 27.94)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2103751f-fbda-4100-8338-1bbb1c6016b3")
+	)
+	(junction
 		(at 69.85 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3524,22 +3532,10 @@
 		(uuid "33767d1a-98f2-4d9e-a930-61799c1d8238")
 	)
 	(junction
-		(at 130.81 27.94)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3455fea7-cca6-4216-8449-f0b0247e1df2")
-	)
-	(junction
 		(at 66.04 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "40e47124-0cb1-41f2-ac9d-0f36e234bbff")
-	)
-	(junction
-		(at 130.81 33.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4248dc03-e00c-46c7-a54c-a527baba589c")
 	)
 	(junction
 		(at 182.88 71.12)
@@ -3624,6 +3620,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "9c217b4d-b280-4e92-a5d5-642c6aaf1fb4")
+	)
+	(junction
+		(at 130.81 33.02)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a4691f6d-ed05-43ba-a317-ec36e9ecb21a")
 	)
 	(junction
 		(at 110.49 33.02)
@@ -4373,16 +4375,6 @@
 	)
 	(wire
 		(pts
-			(xy 130.81 27.94) (xy 134.62 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "67583837-5b3d-4adb-8273-b49c65a20e0f")
-	)
-	(wire
-		(pts
 			(xy 163.83 71.12) (xy 163.83 73.66)
 		)
 		(stroke
@@ -4530,6 +4522,16 @@
 			(type default)
 		)
 		(uuid "77da84c4-fdb2-47d6-b051-c9d8a3feea97")
+	)
+	(wire
+		(pts
+			(xy 130.81 27.94) (xy 135.89 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "781e51d0-c504-4e84-9405-790f6ceff604")
 	)
 	(wire
 		(pts
@@ -4743,6 +4745,16 @@
 	)
 	(wire
 		(pts
+			(xy 140.97 27.94) (xy 143.51 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a6fd9310-965a-44e8-82d6-f26e3be85c1b")
+	)
+	(wire
+		(pts
 			(xy 233.68 81.28) (xy 242.57 81.28)
 		)
 		(stroke
@@ -4850,6 +4862,16 @@
 			(type default)
 		)
 		(uuid "c2f1ddfc-3600-45c7-9b77-de3b7ad232f8")
+	)
+	(wire
+		(pts
+			(xy 130.81 33.02) (xy 143.51 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c3aa6fd0-e831-4c48-9b4b-c2c753d64e3e")
 	)
 	(wire
 		(pts
@@ -5120,16 +5142,6 @@
 			(type default)
 		)
 		(uuid "f31950df-a9f5-4587-8248-6a84e7a9beec")
-	)
-	(wire
-		(pts
-			(xy 130.81 33.02) (xy 134.62 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f451b103-143b-4768-81f3-a4ab6ad3747a")
 	)
 	(wire
 		(pts
@@ -5552,7 +5564,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "04c310e5-ee5f-4455-867c-b1b9abc572e2")
-		(property "Reference" "C38"
+		(property "Reference" "C309"
 			(at 128.27 29.2162 0)
 			(effects
 				(font
@@ -5696,13 +5708,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C38")
+					(reference "C309")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C38")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -5718,7 +5730,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0de0cef3-71e6-485f-bee8-cb16fb9e1bdb")
-		(property "Reference" "R47"
+		(property "Reference" "R301"
 			(at 180.848 74.168 0)
 			(effects
 				(font
@@ -5817,13 +5829,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R47")
+					(reference "R301")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R47")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -5839,7 +5851,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1483c27c-fc97-46a5-b318-30753157741a")
-		(property "Reference" "R38"
+		(property "Reference" "R305"
 			(at 133.096 84.836 90)
 			(effects
 				(font
@@ -5938,13 +5950,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R38")
+					(reference "R305")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R38")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -5960,7 +5972,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "169f9c84-1f76-4d0e-9204-8681576719b3")
-		(property "Reference" "U22"
+		(property "Reference" "U301"
 			(at 112.6333 72.39 0)
 			(effects
 				(font
@@ -6197,13 +6209,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "U22")
+					(reference "U301")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "U22")
+					(reference "U?")
 					(unit 1)
 				)
 			)
@@ -6219,7 +6231,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "21fb8c50-7cd4-403d-a56f-abcbd2e0ad59")
-		(property "Reference" "C22"
+		(property "Reference" "C301"
 			(at 49.53 29.2162 0)
 			(effects
 				(font
@@ -6336,13 +6348,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C22")
+					(reference "C301")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C22")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -6358,7 +6370,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "22cf91d0-7cb2-4af7-ba38-a0122e059e5b")
-		(property "Reference" "R49"
+		(property "Reference" "R311"
 			(at 254 99.0599 0)
 			(effects
 				(font
@@ -6466,131 +6478,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R49")
+					(reference "R311")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R49")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:FerriteBead")
-		(at 34.29 27.94 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "267c4830-1396-4b18-90e9-ecdb1c2cd84e")
-		(property "Reference" "FB2"
-			(at 34.036 22.86 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "~"
-			(at 34.2392 22.86 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Inductor_SMD:L_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
-			(at 34.29 29.718 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 34.29 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Ferrite bead"
-			(at 34.29 27.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "150R@100Mhz +-25%, 0.1@DC, 2A max, -55C, +125C"
-			(at 34.29 27.94 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Bourns/MH1608-151Y?qs=aqFbwuCjQomGpgiGtpDD0g%3D%3D"
-			(at 34.29 27.94 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.10"
-			(at 34.29 27.94 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.07"
-			(at 34.29 27.94 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x25" "0.055"
-			(at 34.29 27.94 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "874d050b-1831-4715-a3e4-9f1911821327")
-		)
-		(pin "2"
-			(uuid "d9e4f2a4-7f2d-4001-891f-b96bc902453c")
-		)
-		(instances
-			(project ""
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "FB2")
-					(unit 1)
-				)
-			)
-			(project ""
-				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "FB2")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -6606,7 +6500,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2f054801-7654-4252-b304-6237d504b1d5")
-		(property "Reference" "R35"
+		(property "Reference" "R315"
 			(at 86.868 118.364 0)
 			(effects
 				(font
@@ -6705,13 +6599,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R35")
+					(reference "R315")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R35")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -6727,7 +6621,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2f73773e-b360-412f-857f-37a5f711fad5")
-		(property "Reference" "R44"
+		(property "Reference" "R314"
 			(at 155.448 120.65 90)
 			(effects
 				(font
@@ -6853,13 +6747,125 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R44")
+					(reference "R314")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R44")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:FerriteBead")
+		(at 34.29 27.94 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3536c640-bf16-4758-922c-465308fca5fe")
+		(property "Reference" "FB301"
+			(at 34.3408 21.844 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "MH1608-151Y"
+			(at 34.29 23.876 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Inductor_SMD:L_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
+			(at 34.29 29.718 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 34.29 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Ferrite bead"
+			(at 34.29 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "150R@100Mhz +-25%, 0.1@DC, 2A max, -55C, +125C"
+			(at 34.29 27.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Bourns/MH1608-151Y?qs=aqFbwuCjQomGpgiGtpDD0g%3D%3D"
+			(at 34.29 27.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 34.29 27.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.07"
+			(at 34.29 27.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x25" "0.055"
+			(at 34.29 27.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8ac18a94-f700-4a85-892b-164bd16fddff")
+		)
+		(pin "2"
+			(uuid "4167f34c-8cc0-4421-96aa-075d377a525d")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
+					(reference "FB301")
 					(unit 1)
 				)
 			)
@@ -6875,7 +6881,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3aa98a08-5b9d-40b9-9220-b124898e106f")
-		(property "Reference" "C28"
+		(property "Reference" "C307"
 			(at 107.95 29.2162 0)
 			(effects
 				(font
@@ -7019,13 +7025,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C28")
+					(reference "C307")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C28")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -7041,7 +7047,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3d372c84-ad19-4ef7-a0e1-40c9e2b7ce54")
-		(property "Reference" "C35"
+		(property "Reference" "C313"
 			(at 180.34 100.3362 0)
 			(effects
 				(font
@@ -7167,13 +7173,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C35")
+					(reference "C313")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C35")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -7189,7 +7195,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3da51d42-7f83-4d40-86cb-9ece63fad98c")
-		(property "Reference" "R42"
+		(property "Reference" "R308"
 			(at 153.162 92.71 0)
 			(effects
 				(font
@@ -7315,13 +7321,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R42")
+					(reference "R308")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R42")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -7337,7 +7343,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "45c4b79d-d869-4ebe-b0ef-ffb4fbf3d4c8")
-		(property "Reference" "Q5"
+		(property "Reference" "Q302"
 			(at 254 116.8399 0)
 			(effects
 				(font
@@ -7442,13 +7448,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "Q5")
+					(reference "Q302")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "Q5")
+					(reference "Q?")
 					(unit 1)
 				)
 			)
@@ -7464,7 +7470,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "476034aa-d45d-4589-9187-78bad693b08d")
-		(property "Reference" "C27"
+		(property "Reference" "C306"
 			(at 97.79 29.2162 0)
 			(effects
 				(font
@@ -7608,13 +7614,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C27")
+					(reference "C306")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C27")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -7629,7 +7635,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "47d1df4f-70ea-4516-8619-8bee880b881a")
-		(property "Reference" "Y1"
+		(property "Reference" "Y301"
 			(at 75.946 119.126 0)
 			(effects
 				(font
@@ -7724,13 +7730,13 @@
 		(instances
 			(project ""
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "Y1")
+					(reference "Y301")
 					(unit 1)
 				)
 			)
 			(project ""
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "Y1")
+					(reference "Y?")
 					(unit 1)
 				)
 			)
@@ -7746,7 +7752,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "592162c3-10be-4a28-8eeb-6d352ae13ab2")
-		(property "Reference" "C40"
+		(property "Reference" "C303"
 			(at 67.31 29.2162 0)
 			(effects
 				(font
@@ -7890,13 +7896,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C40")
+					(reference "C303")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C40")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -7912,7 +7918,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "67068532-520c-432c-bac4-3a419532fdef")
-		(property "Reference" "C33"
+		(property "Reference" "C311"
 			(at 168.148 90.678 90)
 			(effects
 				(font
@@ -8038,13 +8044,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C33")
+					(reference "C311")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C33")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -8060,7 +8066,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6d63be18-790d-4889-aaf6-5c18a727e818")
-		(property "Reference" "R36"
+		(property "Reference" "R316"
 			(at 127.762 119.38 90)
 			(effects
 				(font
@@ -8186,13 +8192,145 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R36")
+					(reference "R316")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R36")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 143.51 30.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6ec89dcc-30b0-44f6-94e1-fefb2a063f28")
+		(property "Reference" "C320"
+			(at 146.05 29.2162 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "220n"
+			(at 146.05 31.7562 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21B224KCFSFNE?qs=664zcAxDQ0l4Y1eUk6Zc1g%3D%3D"
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100VDC, X7R, 10%, -55C, +125C, 220nF"
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.054"
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 143.51 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "326d19d0-9550-4e3a-a51e-c50d1aec9bdc")
+		)
+		(pin "1"
+			(uuid "2e9407e7-5755-4e52-a8b9-66cdf72f08f8")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
+					(reference "C320")
 					(unit 1)
 				)
 			)
@@ -8208,7 +8346,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "79c4aad2-f7e1-4a17-859d-85cd02629273")
-		(property "Reference" "R41"
+		(property "Reference" "R302"
 			(at 153.162 74.93 0)
 			(effects
 				(font
@@ -8334,13 +8472,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R41")
+					(reference "R302")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R41")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -8356,7 +8494,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "79eae763-c211-4fc2-b632-fc767bfe1bb4")
-		(property "Reference" "C30"
+		(property "Reference" "C308"
 			(at 118.11 29.2162 0)
 			(effects
 				(font
@@ -8500,13 +8638,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C30")
+					(reference "C308")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C30")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -8522,7 +8660,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7abbdb18-fb96-455c-a623-c46bee2b2873")
-		(property "Reference" "R48"
+		(property "Reference" "R310"
 			(at 245.11 99.0599 0)
 			(effects
 				(font
@@ -8630,13 +8768,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R48")
+					(reference "R310")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R48")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -8652,7 +8790,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7f1b4868-610e-4ea3-ae5b-75717da3c9ad")
-		(property "Reference" "C31"
+		(property "Reference" "C319"
 			(at 125.73 133.3562 0)
 			(effects
 				(font
@@ -8778,13 +8916,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C31")
+					(reference "C319")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C31")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -8800,7 +8938,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8853609f-a8c7-4e1a-a6b1-4d67e13bd189")
-		(property "Reference" "R37"
+		(property "Reference" "R304"
 			(at 133.096 76.2 90)
 			(effects
 				(font
@@ -8899,13 +9037,126 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R37")
+					(reference "R304")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R37")
+					(reference "R?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 138.43 27.94 270)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8b184f4b-8bfd-45a0-bb02-7a5692a9f7d1")
+		(property "Reference" "R317"
+			(at 138.43 23.114 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10"
+			(at 138.43 25.654 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 138.43 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 138.43 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 138.43 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD10R0F?qs=sGAEpiMZZMvdGkrng054t0qbyaLLndygtMfKrqE8ToI%3D"
+			(at 138.43 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "10R, 150V, 250mW, 1%, 100ppm, -55C, +155C"
+			(at 138.43 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 138.43 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.02"
+			(at 138.43 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 138.43 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "57cc4584-716e-43a8-aeef-7b2e873b70be")
+		)
+		(pin "1"
+			(uuid "7bbc2ecd-2da4-4d92-8764-6cab5afde787")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
+					(reference "R317")
 					(unit 1)
 				)
 			)
@@ -8921,7 +9172,7 @@
 		(on_board no)
 		(dnp yes)
 		(uuid "8da21bfe-6dbe-4f45-b8e9-d2a0e62a63d4")
-		(property "Reference" "C37"
+		(property "Reference" "C315"
 			(at 202.438 99.822 90)
 			(effects
 				(font
@@ -9047,13 +9298,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C37")
+					(reference "C315")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C37")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -9069,7 +9320,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8ea9043e-5642-413b-b04e-30180053f8ac")
-		(property "Reference" "R39"
+		(property "Reference" "R306"
 			(at 139.446 83.82 90)
 			(effects
 				(font
@@ -9168,13 +9419,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R39")
+					(reference "R306")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R39")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -9190,7 +9441,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a3c3da2b-6d39-434c-8488-fd18558df1cc")
-		(property "Reference" "C24"
+		(property "Reference" "C316"
 			(at 63.5 127.0062 0)
 			(effects
 				(font
@@ -9316,13 +9567,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C24")
+					(reference "C316")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C24")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -9338,7 +9589,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b04667c4-dc5c-41ed-b793-8104a836efd3")
-		(property "Reference" "R45"
+		(property "Reference" "R303"
 			(at 162.052 74.93 0)
 			(effects
 				(font
@@ -9464,13 +9715,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R45")
+					(reference "R303")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R45")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -9486,7 +9737,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b22cc13a-c46c-4451-8d75-f549fbeeeccd")
-		(property "Reference" "R40"
+		(property "Reference" "R307"
 			(at 139.446 92.456 90)
 			(effects
 				(font
@@ -9585,13 +9836,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R40")
+					(reference "R307")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R40")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -9607,7 +9858,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b3ac0cac-8fdd-494f-a022-4f0d933a30a6")
-		(property "Reference" "C39"
+		(property "Reference" "C302"
 			(at 58.42 29.2162 0)
 			(effects
 				(font
@@ -9724,13 +9975,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C39")
+					(reference "C302")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C39")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -9745,7 +9996,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b9a668ff-779b-41a6-a705-be75ddf1b511")
-		(property "Reference" "C36"
+		(property "Reference" "C314"
 			(at 190.5 100.3362 0)
 			(effects
 				(font
@@ -9871,13 +10122,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C36")
+					(reference "C314")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C36")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -9893,7 +10144,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bd1b6a21-5030-44ad-b3d5-0f598218fd81")
-		(property "Reference" "C25"
+		(property "Reference" "C305"
 			(at 87.63 29.2162 0)
 			(effects
 				(font
@@ -10037,13 +10288,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C25")
+					(reference "C305")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C25")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -10058,7 +10309,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bffc711a-fe80-4626-9d27-a00cfba68962")
-		(property "Reference" "C26"
+		(property "Reference" "C317"
 			(at 83.82 127.0062 0)
 			(effects
 				(font
@@ -10184,13 +10435,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C26")
+					(reference "C317")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C26")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -10206,7 +10457,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c2a34a6d-7c93-458c-8994-dde8266b3b8c")
-		(property "Reference" "C34"
+		(property "Reference" "C312"
 			(at 174.498 93.218 90)
 			(effects
 				(font
@@ -10332,13 +10583,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C34")
+					(reference "C312")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C34")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -10354,7 +10605,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c649788a-7d32-4864-b340-d361269ebbda")
-		(property "Reference" "R34"
+		(property "Reference" "R313"
 			(at 71.628 110.236 90)
 			(effects
 				(font
@@ -10480,13 +10731,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R34")
+					(reference "R313")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R34")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -10502,7 +10753,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c65a6218-ad09-40db-9717-5af09c531e4c")
-		(property "Reference" "R43"
+		(property "Reference" "R312"
 			(at 155.448 108.712 90)
 			(effects
 				(font
@@ -10628,13 +10879,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R43")
+					(reference "R312")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R43")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -10650,7 +10901,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d3b3d9a3-f420-437a-9735-33ef844abb81")
-		(property "Reference" "J5"
+		(property "Reference" "J301"
 			(at 212.09 72.39 0)
 			(effects
 				(font
@@ -10780,13 +11031,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "J5")
+					(reference "J301")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "J5")
+					(reference "J?")
 					(unit 1)
 				)
 			)
@@ -10802,7 +11053,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d91f3237-b00c-408c-a922-ec82c67092a3")
-		(property "Reference" "C23"
+		(property "Reference" "C304"
 			(at 77.47 29.2162 0)
 			(effects
 				(font
@@ -10946,13 +11197,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C23")
+					(reference "C304")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C23")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -10968,7 +11219,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "dcd7f14c-595d-43de-b283-12a9c6332cf5")
-		(property "Reference" "C32"
+		(property "Reference" "C318"
 			(at 137.668 131.318 90)
 			(effects
 				(font
@@ -11094,13 +11345,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C32")
+					(reference "C318")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C32")
+					(reference "C?")
 					(unit 1)
 				)
 			)
@@ -11116,7 +11367,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e7727d8c-550e-4203-be78-d9da4f85e244")
-		(property "Reference" "R46"
+		(property "Reference" "R309"
 			(at 162.052 92.71 0)
 			(effects
 				(font
@@ -11242,13 +11493,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R46")
+					(reference "R309")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R46")
+					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -11264,7 +11515,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eada7884-d155-4010-a705-bb96263a6852")
-		(property "Reference" "Q4"
+		(property "Reference" "Q301"
 			(at 245.11 109.2199 0)
 			(effects
 				(font
@@ -11369,13 +11620,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "Q4")
+					(reference "Q301")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "Q4")
+					(reference "Q?")
 					(unit 1)
 				)
 			)
@@ -11391,7 +11642,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "eb057add-14e4-4fd3-91f3-fec07f516818")
-		(property "Reference" "C29"
+		(property "Reference" "C310"
 			(at 99.06 66.0462 0)
 			(effects
 				(font
@@ -11508,13 +11759,13 @@
 		(instances
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C29")
+					(reference "C310")
 					(unit 1)
 				)
 			)
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "C29")
+					(reference "C?")
 					(unit 1)
 				)
 			)
