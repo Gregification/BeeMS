@@ -1295,7 +1295,7 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Device:D_Schottky_Small"
+		(symbol "Device:D_Small"
 			(pin_numbers
 				(hide yes)
 			)
@@ -1315,8 +1315,8 @@
 					(justify left)
 				)
 			)
-			(property "Value" "D_Schottky_Small"
-				(at -7.112 -2.032 0)
+			(property "Value" "D_Small"
+				(at -3.81 -2.032 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1342,7 +1342,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Schottky diode, small symbol"
+			(property "Description" "Diode, small symbol"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1351,7 +1351,25 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "diode Schottky"
+			(property "Sim.Device" "D"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Sim.Pins" "1=K 2=A"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "diode"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1369,13 +1387,13 @@
 					(hide yes)
 				)
 			)
-			(symbol "D_Schottky_Small_0_1"
+			(symbol "D_Small_0_1"
 				(polyline
 					(pts
-						(xy -1.27 0.762) (xy -1.27 1.016) (xy -0.762 1.016) (xy -0.762 -1.016) (xy -0.254 -1.016) (xy -0.254 -0.762)
+						(xy -0.762 0) (xy 0.762 0)
 					)
 					(stroke
-						(width 0.254)
+						(width 0)
 						(type default)
 					)
 					(fill
@@ -1384,10 +1402,10 @@
 				)
 				(polyline
 					(pts
-						(xy -0.762 0) (xy 0.762 0)
+						(xy -0.762 -1.016) (xy -0.762 1.016)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -1407,7 +1425,7 @@
 					)
 				)
 			)
-			(symbol "D_Schottky_Small_1_1"
+			(symbol "D_Small_1_1"
 				(pin passive line
 					(at -2.54 0 0)
 					(length 1.778)
@@ -5212,12 +5230,6 @@
 		(uuid "b4e5c852-593a-448a-8888-6eee8fcfeb83")
 	)
 	(junction
-		(at 66.04 30.48)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bda3ef8e-99b7-4ff7-a229-72c2e09e8cdc")
-	)
-	(junction
 		(at 368.3 35.56)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5240,12 +5252,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "eef2f26d-06a5-42a4-9275-967b8c8a01cf")
-	)
-	(junction
-		(at 66.04 22.86)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f8c2a72b-1a99-4138-94d7-ae37b132ec47")
 	)
 	(no_connect
 		(at 237.49 30.48)
@@ -5625,16 +5631,6 @@
 			(type default)
 		)
 		(uuid "0f2528b4-70fe-4041-b954-1b275937aff8")
-	)
-	(wire
-		(pts
-			(xy 66.04 30.48) (xy 72.39 30.48)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0f5411a7-98eb-4132-8469-c60eeb8199f9")
 	)
 	(wire
 		(pts
@@ -6108,16 +6104,6 @@
 	)
 	(wire
 		(pts
-			(xy 66.04 22.86) (xy 68.58 22.86)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4584c160-86d4-47b2-9131-7cd8f0ecd2fd")
-	)
-	(wire
-		(pts
 			(xy 248.92 243.84) (xy 255.27 243.84)
 		)
 		(stroke
@@ -6298,7 +6284,7 @@
 	)
 	(wire
 		(pts
-			(xy 49.53 30.48) (xy 66.04 30.48)
+			(xy 49.53 30.48) (xy 72.39 30.48)
 		)
 		(stroke
 			(width 0)
@@ -6338,7 +6324,7 @@
 	)
 	(wire
 		(pts
-			(xy 46.99 22.86) (xy 66.04 22.86)
+			(xy 46.99 22.86) (xy 68.58 22.86)
 		)
 		(stroke
 			(width 0)
@@ -6435,16 +6421,6 @@
 			(type default)
 		)
 		(uuid "63c1be42-a3fc-4d57-a0c2-9dc404c12662")
-	)
-	(wire
-		(pts
-			(xy 66.04 29.21) (xy 66.04 30.48)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "64c31205-308e-4824-94b7-214e7cd3b3ca")
 	)
 	(bus
 		(pts
@@ -7358,16 +7334,6 @@
 	)
 	(wire
 		(pts
-			(xy 66.04 22.86) (xy 66.04 24.13)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bcc23548-6d30-48cc-bd74-f918164e30eb")
-	)
-	(wire
-		(pts
 			(xy 389.89 55.88) (xy 391.16 55.88)
 		)
 		(stroke
@@ -8046,16 +8012,6 @@
 		)
 		(uuid "0976f315-5fc0-4dc0-b66a-825db2b4b2f6")
 	)
-	(label "G_IL_I"
-		(at 22.86 24.13 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "09953aff-150f-491a-aaa2-364baa8ffe6c")
-	)
 	(label "led.BMSFault"
 		(at 161.29 54.61 0)
 		(effects
@@ -8125,6 +8081,16 @@
 			(justify left bottom)
 		)
 		(uuid "28feb626-ba4d-40ee-991e-20134d4d2975")
+	)
+	(label "G_IL-"
+		(at 35.56 21.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "29c0e459-29fa-4dc8-9a68-6aed63485226")
 	)
 	(label "mchs.SHTDN"
 		(at 93.98 234.95 0)
@@ -8327,7 +8293,7 @@
 		(uuid "65f07fac-919b-4898-89a8-239aa5b00719")
 	)
 	(label "G_CAN_-"
-		(at 35.56 21.59 0)
+		(at 35.56 26.67 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8335,16 +8301,6 @@
 			(justify left bottom)
 		)
 		(uuid "6d277c8b-3022-4a1b-98c1-1a4966ff365c")
-	)
-	(label "G_IL_O"
-		(at 35.56 24.13 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "6de166de-be71-4683-8533-555e1e338041")
 	)
 	(label "can.tx"
 		(at 88.9 93.98 0)
@@ -8477,7 +8433,7 @@
 		(uuid "8f2bcb23-8c42-4e67-9fed-2e6b2bbc4bf6")
 	)
 	(label "GLV-"
-		(at 22.86 26.67 180)
+		(at 22.86 24.13 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8647,7 +8603,7 @@
 		(uuid "cbaa3240-5a32-47d1-9cfa-4073ea5b8f8c")
 	)
 	(label "GLV+"
-		(at 35.56 26.67 0)
+		(at 35.56 24.13 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8666,6 +8622,16 @@
 		)
 		(uuid "cd032a61-d2f3-4367-9cb2-97a2047fb4b0")
 	)
+	(label "G_IL+"
+		(at 22.86 21.59 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "cf2b3874-64a6-4171-88a9-d5de49aed7cc")
+	)
 	(label "obtherm{1}"
 		(at 276.86 90.17 0)
 		(effects
@@ -8677,7 +8643,7 @@
 		(uuid "d06f6ab2-8031-4d91-9b84-6b35d6403523")
 	)
 	(label "G_CAN_+"
-		(at 22.86 21.59 180)
+		(at 22.86 26.67 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -8854,7 +8820,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 24.13 59.69 0)
+		(at 22.86 66.04 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom no)
@@ -8863,7 +8829,7 @@
 		(fields_autoplaced yes)
 		(uuid "00e670d1-0998-4372-9cd0-710aa6d4ff8f")
 		(property "Reference" "H101"
-			(at 26.67 58.4199 0)
+			(at 25.4 64.7699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8872,7 +8838,7 @@
 			)
 		)
 		(property "Value" "MountingHole"
-			(at 26.67 60.9599 0)
+			(at 25.4 67.3099 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8880,8 +8846,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
-			(at 24.13 59.69 0)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 22.86 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8890,7 +8856,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 24.13 59.69 0)
+			(at 22.86 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8899,7 +8865,7 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 24.13 59.69 0)
+			(at 22.86 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8908,7 +8874,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 24.13 59.69 0)
+			(at 22.86 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8917,7 +8883,7 @@
 			)
 		)
 		(property "note" ""
-			(at 24.13 59.69 0)
+			(at 22.86 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8943,7 +8909,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0178e946-25b3-40ec-b1b3-73e557eb114e")
-		(property "Reference" "C111"
+		(property "Reference" "C110"
 			(at 302.26 35.5662 0)
 			(effects
 				(font
@@ -9069,7 +9035,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C111")
+					(reference "C110")
 					(unit 1)
 				)
 			)
@@ -9156,7 +9122,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "02c225c9-3788-4913-a9cb-6250e208ba8b")
-		(property "Reference" "C107"
+		(property "Reference" "C106"
 			(at 257.81 276.8662 0)
 			(effects
 				(font
@@ -9273,7 +9239,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C107")
+					(reference "C106")
 					(unit 1)
 				)
 			)
@@ -9731,6 +9697,88 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
 					(reference "#PWR0118")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 22.86 78.74 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "13b7f7a4-43c5-4b88-948e-339f6d5aef93")
+		(property "Reference" "H103"
+			(at 25.4 77.4699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 25.4 80.0099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 22.86 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 22.86 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 22.86 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 22.86 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 22.86 78.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
+					(reference "H103")
 					(unit 1)
 				)
 			)
@@ -10664,7 +10712,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2a5a93f7-7696-49ab-9430-61d65b1b058d")
-		(property "Reference" "C103"
+		(property "Reference" "C102"
 			(at 88.9 154.9462 0)
 			(effects
 				(font
@@ -10790,7 +10838,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C103")
+					(reference "C102")
 					(unit 1)
 				)
 			)
@@ -11062,6 +11110,88 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 22.86 72.39 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "33b50ba8-873b-4ff2-a8bb-9e0ece9a5746")
+		(property "Reference" "H102"
+			(at 25.4 71.1199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "MountingHole"
+			(at 25.4 73.6599 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
+			(at 22.86 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 22.86 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 22.86 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 22.86 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 22.86 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
+					(reference "H102")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:GND")
 		(at 361.95 223.52 270)
 		(mirror x)
@@ -11240,7 +11370,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "39a04e2f-a649-4d3c-8146-15f158058cb4")
-		(property "Reference" "C109"
+		(property "Reference" "C108"
 			(at 292.1 35.5662 0)
 			(effects
 				(font
@@ -11366,7 +11496,7 @@
 		(instances
 			(project "VT MSPM0lG3507 BQ7962 layout test"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C109")
+					(reference "C108")
 					(unit 1)
 				)
 			)
@@ -12281,6 +12411,138 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Small")
+		(at 66.04 52.07 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5b616ec0-9b07-4ebc-98cc-f70d8a412795")
+		(property "Reference" "D101"
+			(at 63.5 53.3401 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "TS4148"
+			(at 63.5 50.8001 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
+			(at 66.04 52.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://services.taiwansemi.com/storage/resources/datasheet/TS4148%20SERIES_A2301.pdf"
+			(at 66.04 52.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Diode, small symbol"
+			(at 66.04 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" "D"
+			(at 66.04 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" "1=K 2=A"
+			(at 66.04 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "1Vf, 75Vr, 150mA, 2A surge, 500mW, 5pF, 5uAr , 4ns recov, -55C, +175C"
+			(at 66.04 52.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Taiwan-Semiconductor/TS4148-RBG?qs=sGAEpiMZZMtbRapU8LlZD%252B6h%2FWulpAkrjAQjxa2xmp6CGEuOYHRSog%3D%3D"
+			(at 66.04 52.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 66.04 52.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.054"
+			(at 66.04 52.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.046"
+			(at 66.04 52.07 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "71290c92-3c4b-476b-b049-4036858a63dd")
+		)
+		(pin "2"
+			(uuid "0c66d94e-92fd-4725-ad28-42ebf4da020e")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
+					(reference "D101")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5V")
 		(at 66.04 153.67 90)
 		(mirror x)
@@ -12937,7 +13199,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "72fd6b98-cdf7-437f-a020-41ab6cb312ef")
-		(property "Reference" "C110"
+		(property "Reference" "C109"
 			(at 302.26 25.4062 0)
 			(effects
 				(font
@@ -13063,7 +13325,7 @@
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C110")
+					(reference "C109")
 					(unit 1)
 				)
 			)
@@ -13322,7 +13584,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7433a1a7-1956-49d9-8fa4-5241421e9371")
-		(property "Reference" "C108"
+		(property "Reference" "C107"
 			(at 292.1 25.4062 0)
 			(effects
 				(font
@@ -13439,7 +13701,7 @@
 		(instances
 			(project "EVAL MSPM0lG3507 BQ7962"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C108")
+					(reference "C107")
 					(unit 1)
 				)
 			)
@@ -13454,7 +13716,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "75725151-5f5c-4e15-b975-52237f4eface")
-		(property "Reference" "C102"
+		(property "Reference" "C101"
 			(at 69.85 154.9462 0)
 			(effects
 				(font
@@ -13576,148 +13838,6 @@
 		)
 		(pin "1"
 			(uuid "a46da16c-4abd-4235-99d7-28dccef1a713")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C102")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 66.04 26.67 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "7579035f-7bb6-4603-8b11-7a95d8b9bc34")
-		(property "Reference" "C101"
-			(at 63.5 25.654 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1n 2kV"
-			(at 63.5 28.194 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/CC1206JKX7RDBB102?qs=57cj7OiSijkgvK2TDpNpEA%3D%3D"
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "1n, 2kVDC, 5%, x7r, mlcc"
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.11"
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.26"
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 66.04 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "ea90f0bf-df8a-4436-97c4-1154b50af0fb")
-		)
-		(pin "1"
-			(uuid "749d06f3-1155-4628-9eb3-13e7082cfbb8")
 		)
 		(instances
 			(project "MasterBoard_A"
@@ -14145,7 +14265,7 @@
 		(on_board no)
 		(dnp yes)
 		(uuid "7aaa8829-728a-407d-ab1c-5a5a09c4a013")
-		(property "Reference" "C106"
+		(property "Reference" "C105"
 			(at 257.81 259.0862 0)
 			(effects
 				(font
@@ -14262,7 +14382,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C106")
+					(reference "C105")
 					(unit 1)
 				)
 			)
@@ -15970,7 +16090,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b99af424-eab8-4c7b-8e0b-5aa6a34112e6")
-		(property "Reference" "C105"
+		(property "Reference" "C104"
 			(at 102.87 107.9562 0)
 			(effects
 				(font
@@ -16096,7 +16216,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C105")
+					(reference "C104")
 					(unit 1)
 				)
 			)
@@ -16979,88 +17099,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Mechanical:MountingHole")
-		(at 24.13 66.04 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d6ab5fb3-5c59-41b8-98af-3dfaa11595e3")
-		(property "Reference" "H102"
-			(at 26.67 64.7699 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MountingHole"
-			(at 26.67 67.3099 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_Pad_Via"
-			(at 24.13 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 24.13 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Mounting Hole without connection"
-			(at 24.13 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 24.13 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 24.13 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "H102")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 107.95 43.18 0)
 		(mirror x)
@@ -17851,130 +17889,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Schottky_Small")
-		(at 66.04 52.07 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "effec94c-0aef-4fd4-93cc-b4cc95ee3f91")
-		(property "Reference" "D101"
-			(at 63.5 50.5459 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "ES1D"
-			(at 63.5 53.0859 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SMA"
-			(at 66.04 52.07 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 66.04 52.07 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Schottky diode, small symbol"
-			(at 66.04 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/onsemi-Fairchild/ES1C?qs=sGAEpiMZZMtbRapU8LlZDwxyh3P6uVi9ZaZE%252B629d7E%3D"
-			(at 66.04 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.086"
-			(at 66.04 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "920mVf, 150Vr, 1Aconstant, 15nSr,15Ar, 1.47W -50C, +150C"
-			(at 66.04 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.10"
-			(at 66.04 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 66.04 52.07 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 66.04 52.07 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "78d41b8c-a5e4-4229-9836-7171f3268371")
-		)
-		(pin "1"
-			(uuid "b7a0bda5-c11e-4901-8b87-c1d981510795")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "D101")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_US")
 		(at 290.83 48.26 90)
 		(mirror x)
@@ -18245,7 +18159,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f8cb5e37-160b-4cc7-9dd3-c236df18f1e2")
-		(property "Reference" "C104"
+		(property "Reference" "C103"
 			(at 102.87 83.8262 0)
 			(effects
 				(font
@@ -18371,7 +18285,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "C104")
+					(reference "C103")
 					(unit 1)
 				)
 			)

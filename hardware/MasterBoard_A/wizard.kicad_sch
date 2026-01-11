@@ -3646,6 +3646,12 @@
 		(uuid "aa7be69e-d380-4a77-9f60-ae8bbbb140c1")
 	)
 	(junction
+		(at 91.44 139.7)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "acafc079-1ac4-4b90-a51e-7001c3147b09")
+	)
+	(junction
 		(at 66.04 133.35)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3742,10 +3748,6 @@
 	(no_connect
 		(at 123.19 110.49)
 		(uuid "793863c2-9aa2-46c5-b49f-0e7cf223fa3c")
-	)
-	(no_connect
-		(at 92.71 130.81)
-		(uuid "99cb57d6-5f82-464d-afe9-930b6d870c44")
 	)
 	(no_connect
 		(at 92.71 125.73)
@@ -3955,16 +3957,6 @@
 	)
 	(wire
 		(pts
-			(xy 160.02 118.11) (xy 243.84 118.11)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1e02225f-ba8a-4d6a-885c-d85d45a6c216")
-	)
-	(wire
-		(pts
 			(xy 38.1 27.94) (xy 52.07 27.94)
 		)
 		(stroke
@@ -4105,7 +4097,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 113.03) (xy 154.94 113.03)
+			(xy 123.19 113.03) (xy 233.68 113.03)
 		)
 		(stroke
 			(width 0)
@@ -4275,6 +4267,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 130.81) (xy 91.44 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "53437663-c6c0-4a6a-a6b9-b7f014a4531d")
+	)
+	(wire
+		(pts
 			(xy 142.24 128.27) (xy 142.24 139.7)
 		)
 		(stroke
@@ -4362,16 +4364,6 @@
 			(type default)
 		)
 		(uuid "612f65ae-2034-40b6-b101-15a4ffb04116")
-	)
-	(wire
-		(pts
-			(xy 160.02 113.03) (xy 233.68 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "66385c73-0cab-4a92-9368-8d2d4254ebbd")
 	)
 	(wire
 		(pts
@@ -4745,7 +4737,7 @@
 	)
 	(wire
 		(pts
-			(xy 102.87 139.7) (xy 105.41 139.7)
+			(xy 87.63 139.7) (xy 91.44 139.7)
 		)
 		(stroke
 			(width 0)
@@ -4772,6 +4764,16 @@
 			(type default)
 		)
 		(uuid "a7b5aac6-1687-4d44-8dbe-6cc63c0b93b9")
+	)
+	(wire
+		(pts
+			(xy 91.44 130.81) (xy 92.71 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8d69ec3-79aa-4b32-a7bc-56c9587f51a1")
 	)
 	(wire
 		(pts
@@ -4865,7 +4867,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 118.11) (xy 154.94 118.11)
+			(xy 123.19 118.11) (xy 243.84 118.11)
 		)
 		(stroke
 			(width 0)
@@ -5155,6 +5157,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 139.7) (xy 105.41 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f727cfce-1f6c-469e-b66d-a90888f1f31b")
+	)
+	(wire
+		(pts
 			(xy 105.41 63.5) (xy 105.41 74.93)
 		)
 		(stroke
@@ -5424,7 +5436,7 @@
 		(uuid "c9764d00-e171-4db5-9f8d-a9ece1d61c3c")
 	)
 	(label "GND"
-		(at 102.87 139.7 180)
+		(at 87.63 139.7 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6600,154 +6612,6 @@
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
 					(reference "R302")
-					(unit 1)
-				)
-			)
-			(project "W5500 testing"
-				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R?")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 157.48 118.11 270)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "2f73773e-b360-412f-857f-37a5f711fad5")
-		(property "Reference" "R312"
-			(at 155.448 120.65 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "4.99k"
-			(at 155.448 122.682 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP1206FTD4K99?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ95yR%2FF2bQQIaAb5UdPiGbTtQ%3D%3D"
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "4.99kOhm, 200V, 500mW, 1%, 100PPM, -55C, +155C"
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.016"
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 157.48 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "2aee09d4-c47b-4605-a7b1-f30bed587ea9")
-		)
-		(pin "1"
-			(uuid "98923c94-68b1-4c44-8630-339180d9f30c")
-		)
-		(instances
-			(project "W5500 testing"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R312")
 					(unit 1)
 				)
 			)
@@ -10732,154 +10596,6 @@
 			(project "W5500 testing"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
 					(reference "R301")
-					(unit 1)
-				)
-			)
-			(project "W5500 testing"
-				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R?")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 157.48 113.03 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "c65a6218-ad09-40db-9717-5af09c531e4c")
-		(property "Reference" "R311"
-			(at 155.448 108.712 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "4.99k"
-			(at 155.448 110.744 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP1206FTD4K99?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ95yR%2FF2bQQIaAb5UdPiGbTtQ%3D%3D"
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "4.99kOhm, 200V, 500mW, 1%, 100PPM, -55C, +155C"
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.016"
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 157.48 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "3fd279d3-5407-47d4-b8e4-6dfecf155afc")
-		)
-		(pin "1"
-			(uuid "e8dc9cd1-1908-463e-827b-cba6e6972ec8")
-		)
-		(instances
-			(project "W5500 testing"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R311")
 					(unit 1)
 				)
 			)
