@@ -2805,16 +2805,16 @@
 		(uuid "687ce30a-94cc-4bbd-88e2-a85b36c4aa73")
 	)
 	(junction
+		(at 68.58 91.44)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "719bdbf8-11c3-4034-9f3f-a1312d066007")
+	)
+	(junction
 		(at 86.36 57.15)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "98084b90-d43c-400a-a230-3557658ae1c9")
-	)
-	(junction
-		(at 68.58 91.44)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "a3dd7395-27b9-41f7-80f5-aa69323458a0")
 	)
 	(junction
 		(at 36.83 31.75)
@@ -2888,6 +2888,16 @@
 	)
 	(wire
 		(pts
+			(xy 68.58 91.44) (xy 77.47 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "05b710fd-97a4-4eb3-987a-865853808407")
+	)
+	(wire
+		(pts
 			(xy 60.96 120.65) (xy 60.96 119.38)
 		)
 		(stroke
@@ -2908,7 +2918,7 @@
 	)
 	(wire
 		(pts
-			(xy 68.58 85.09) (xy 68.58 86.36)
+			(xy 68.58 85.09) (xy 68.58 91.44)
 		)
 		(stroke
 			(width 0)
@@ -3515,16 +3525,6 @@
 			(type default)
 		)
 		(uuid "b2d0426f-158f-4b6f-9de7-5b4021a26459")
-	)
-	(wire
-		(pts
-			(xy 68.58 91.44) (xy 77.47 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b4e34c44-9373-40b3-91a4-ba6c78cb77d9")
 	)
 	(wire
 		(pts
@@ -5086,111 +5086,6 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/258b64a8-9b08-463b-aff1-8236af04e061"
 					(reference "U508")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 68.58 88.9 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "48c28fc7-722a-456a-be1d-3950f3285858")
-		(property "Reference" "R504"
-			(at 70.358 87.63 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "40.2k"
-			(at 70.358 90.17 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 68.58 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 68.58 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 68.58 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD4022F?qs=sGAEpiMZZMvdGkrng054txknJuA7M8fa4wn7EqIHwNI%3D"
-			(at 68.58 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "40.2k ohm, 250mW, 1%, 150V, 100ppm, -55C, +155C"
-			(at 68.58 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.02"
-			(at 68.58 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 68.58 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "b9de6ab1-9169-4c1d-b6e0-d912d3406482")
-		)
-		(pin "1"
-			(uuid "7c47ca24-0c13-42ec-b9df-10f769b61e5e")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/258b64a8-9b08-463b-aff1-8236af04e061"
-					(reference "R504")
 					(unit 1)
 				)
 			)
