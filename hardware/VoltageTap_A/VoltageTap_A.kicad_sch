@@ -4472,6 +4472,12 @@
 		(uuid "47af709f-1b6a-4cf6-ae02-cb15463b011d")
 	)
 	(junction
+		(at 46.99 171.45)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "48a0aed3-622d-400e-b954-b3787146f6df")
+	)
+	(junction
 		(at 179.07 17.78)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4482,6 +4488,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4eddd1f8-7c90-4273-bb67-f9ddaacc19bc")
+	)
+	(junction
+		(at 46.99 168.91)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6645cd45-3a82-4792-9b37-a57fc974020b")
 	)
 	(junction
 		(at 132.08 100.33)
@@ -4829,7 +4841,7 @@
 	)
 	(wire
 		(pts
-			(xy 44.45 168.91) (xy 50.8 168.91)
+			(xy 44.45 168.91) (xy 46.99 168.91)
 		)
 		(stroke
 			(width 0)
@@ -4996,6 +5008,16 @@
 			(type default)
 		)
 		(uuid "4ea28030-c0ca-4fca-b3f2-a0de47d3aad2")
+	)
+	(wire
+		(pts
+			(xy 46.99 168.91) (xy 50.8 168.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f9e4d51-36de-4e8c-8bcb-90b1c6c17928")
 	)
 	(wire
 		(pts
@@ -5676,6 +5698,16 @@
 			(type default)
 		)
 		(uuid "cc538e2f-deb1-4515-99f0-591d28738470")
+	)
+	(wire
+		(pts
+			(xy 46.99 168.91) (xy 46.99 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ce88b13f-5b25-41cd-863f-b234aeb2bda8")
 	)
 	(wire
 		(pts
@@ -6387,6 +6419,28 @@
 			)
 		)
 	)
+	(global_label "PA11_UART0-RX_XDS"
+		(shape input)
+		(at 187.96 68.58 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "3b4ceb50-1e8f-467b-baa8-24be41206dad")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 164.6549 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "PA20_SWCLK_EN{slash}FLT"
 		(shape input)
 		(at 142.24 115.57 0)
@@ -6433,7 +6487,7 @@
 	)
 	(global_label "PA20_SWCLK_EN{slash}FLT"
 		(shape input)
-		(at 187.96 91.44 180)
+		(at 182.88 96.52 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6443,7 +6497,7 @@
 		)
 		(uuid "504ef80d-918c-4544-b562-7a73fb436555")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 165.1387 91.44 0)
+			(at 160.0587 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6466,6 +6520,28 @@
 		(uuid "5cf399de-0798-4b76-aa05-1560c0f27582")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 169.372 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "PA10_UART0-TX_XDS"
+		(shape input)
+		(at 187.96 66.04 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "735b0c3e-27f5-4315-95c1-0c885b8c586f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 164.9573 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6541,6 +6617,28 @@
 			)
 		)
 	)
+	(global_label "PA19_SWDIO"
+		(shape input)
+		(at 187.96 88.9 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "ab8bc2f5-beca-40da-999f-a55d141a4e3d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 173.3634 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "PB17_BBQ_CS"
 		(shape input)
 		(at 187.96 142.24 180)
@@ -6554,6 +6652,28 @@
 		(uuid "af1a6898-a56b-440b-b837-afea2a414190")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
 			(at 171.7306 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "PA20_SWCLK"
+		(shape input)
+		(at 187.96 91.44 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "baa99f79-dbe1-4bb8-832a-f2288225e3ec")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 173.0006 91.44 0)
 			(effects
 				(font
 					(size 1.27 1.27)
