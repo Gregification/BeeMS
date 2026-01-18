@@ -1246,148 +1246,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Connector_Generic:Conn_02x01"
-			(pin_names
-				(offset 1.016)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 1.27 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Conn_02x01"
-				(at 1.27 -2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Generic connector, double row, 02x01, this symbol is compatible with counter-clockwise, top-bottom and odd-even numbering schemes., script generated (kicad-library-utils/schlib/autogen/connector/)"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "connector"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Connector*:*_2x??_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Conn_02x01_1_1"
-				(rectangle
-					(start -1.27 1.27)
-					(end 3.81 -1.27)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(rectangle
-					(start -1.27 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 3.81 0.127)
-					(end 2.54 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 0 180)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Connector_Generic:Conn_02x03_Top_Bottom"
 			(pin_names
 				(offset 1.016)
@@ -2579,6 +2437,143 @@
 				(pin passive line
 					(at 0 -3.81 90)
 					(length 1.27)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Device:Thermistor"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "TH"
+				(at 2.54 1.27 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Thermistor"
+				(at -2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify bottom)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Temperature dependent resistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "R res thermistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Thermistor_0_1"
+				(polyline
+					(pts
+						(xy -1.905 3.175) (xy -1.905 1.905) (xy 1.905 -1.905) (xy 1.905 -3.175) (xy 1.905 -3.175)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(rectangle
+					(start -1.016 2.54)
+					(end 1.016 -2.54)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Thermistor_1_1"
+				(pin passive line
+					(at 0 5.08 270)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -5.08 90)
+					(length 2.54)
 					(name "~"
 						(effects
 							(font
@@ -4987,7 +4982,7 @@
 	)
 	(text "thermistors"
 		(exclude_from_sim no)
-		(at 98.552 153.162 0)
+		(at 101.854 151.13 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5164,6 +5159,10 @@
 		(uuid "52d2eae0-4f1c-49ba-be05-8a6550c4cd35")
 	)
 	(no_connect
+		(at 142.24 115.57)
+		(uuid "5a63578e-db82-41fd-835c-be7ad500c8a9")
+	)
+	(no_connect
 		(at 44.45 125.73)
 		(uuid "7c14a52c-15f2-4348-a81c-6d21cc53f33f")
 	)
@@ -5184,10 +5183,6 @@
 		(uuid "b890a6a3-b6eb-46fb-81e3-4d1bde9ae66a")
 	)
 	(no_connect
-		(at 142.24 115.57)
-		(uuid "c976bda8-90b1-4b88-aef6-7ab95088cf92")
-	)
-	(no_connect
 		(at 80.01 153.67)
 		(uuid "d0ed8093-0875-44f1-9c36-b7d75983e56e")
 	)
@@ -5201,13 +5196,13 @@
 	)
 	(wire
 		(pts
-			(xy 97.79 163.83) (xy 88.9 163.83)
+			(xy 88.9 166.37) (xy 88.9 168.91)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "056438ed-6e76-4cf0-8e10-4b98e3cdf995")
+		(uuid "01a23681-3db2-40a2-babe-42ca326256c0")
 	)
 	(polyline
 		(pts
@@ -5413,6 +5408,26 @@
 	)
 	(wire
 		(pts
+			(xy 135.89 21.59) (xy 135.89 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "281b8e38-8b0c-4941-b4ab-c1e88c51e038")
+	)
+	(wire
+		(pts
+			(xy 133.35 30.48) (xy 133.35 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2d2ff416-aafb-4c59-8736-d80c73a44025")
+	)
+	(wire
+		(pts
 			(xy 146.05 88.9) (xy 146.05 86.36)
 		)
 		(stroke
@@ -5420,16 +5435,6 @@
 			(type default)
 		)
 		(uuid "302cb3c6-e4f4-46c3-a013-1252917a896f")
-	)
-	(wire
-		(pts
-			(xy 80.01 156.21) (xy 97.79 156.21)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "306d2757-ab4d-4ed5-aff2-6c4094d4ff8e")
 	)
 	(wire
 		(pts
@@ -5453,7 +5458,7 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 171.45) (xy 91.44 171.45)
+			(xy 80.01 171.45) (xy 95.25 171.45)
 		)
 		(stroke
 			(width 0)
@@ -5543,6 +5548,16 @@
 	)
 	(wire
 		(pts
+			(xy 88.9 166.37) (xy 96.52 166.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3e21e89a-f72e-4748-8a4d-efaf186013a6")
+	)
+	(wire
+		(pts
 			(xy 162.56 30.48) (xy 162.56 27.94)
 		)
 		(stroke
@@ -5570,6 +5585,16 @@
 			(type default)
 		)
 		(uuid "40eff36e-f097-4670-bc05-8aad51178ed2")
+	)
+	(wire
+		(pts
+			(xy 95.25 154.94) (xy 95.25 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "41e2595c-c126-499a-bbc0-d0b188e9462f")
 	)
 	(wire
 		(pts
@@ -5663,7 +5688,7 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 161.29) (xy 97.79 161.29)
+			(xy 80.01 161.29) (xy 95.25 161.29)
 		)
 		(stroke
 			(width 0)
@@ -5693,16 +5718,6 @@
 	)
 	(wire
 		(pts
-			(xy 97.79 171.45) (xy 96.52 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5d7fb2af-e0b1-4422-ade4-3ba5cda1530d")
-	)
-	(wire
-		(pts
 			(xy 46.99 171.45) (xy 50.8 171.45)
 		)
 		(stroke
@@ -5710,6 +5725,16 @@
 			(type default)
 		)
 		(uuid "5ef24328-31c7-4e12-be52-0ebcc7ad4552")
+	)
+	(wire
+		(pts
+			(xy 109.22 30.48) (xy 133.35 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5f7caa18-e3d9-462d-a60e-23aec3a7af00")
 	)
 	(wire
 		(pts
@@ -5773,6 +5798,16 @@
 	)
 	(wire
 		(pts
+			(xy 135.89 71.12) (xy 187.96 71.12)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "68513ed4-a183-4a44-a11d-1809fa3257e0")
+	)
+	(wire
+		(pts
 			(xy 66.04 36.83) (xy 66.04 24.13)
 		)
 		(stroke
@@ -5780,6 +5815,16 @@
 			(type default)
 		)
 		(uuid "6943abfa-fa95-40aa-992f-1d4ee95be1ae")
+	)
+	(wire
+		(pts
+			(xy 134.62 24.13) (xy 109.22 24.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "697425e5-c3e8-4bea-83a8-60a47908dd60")
 	)
 	(wire
 		(pts
@@ -5863,6 +5908,16 @@
 	)
 	(wire
 		(pts
+			(xy 95.25 171.45) (xy 95.25 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73a269a1-9387-48a1-91a5-e05877a26198")
+	)
+	(wire
+		(pts
 			(xy 110.49 88.9) (xy 110.49 107.95)
 		)
 		(stroke
@@ -5870,6 +5925,16 @@
 			(type default)
 		)
 		(uuid "74a899f5-605b-42b5-be4d-5912d602ab5f")
+	)
+	(wire
+		(pts
+			(xy 95.25 156.21) (xy 80.01 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7679c2b5-a808-4e32-9f41-050aea3bbecd")
 	)
 	(wire
 		(pts
@@ -5913,13 +5978,13 @@
 	)
 	(wire
 		(pts
-			(xy 96.52 171.45) (xy 96.52 176.53)
+			(xy 95.25 154.94) (xy 96.52 154.94)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7c80d518-baa8-4854-b676-f32173bca964")
+		(uuid "7d373e9a-00f6-4045-a456-67e723c7526c")
 	)
 	(wire
 		(pts
@@ -5950,16 +6015,6 @@
 			(type default)
 		)
 		(uuid "8278a783-1be7-4bf3-b947-52070e89f2c8")
-	)
-	(wire
-		(pts
-			(xy 81.28 59.69) (xy 53.34 59.69)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "83224e59-e858-4fee-8765-b279c0753c3a")
 	)
 	(wire
 		(pts
@@ -6063,7 +6118,7 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 158.75) (xy 97.79 158.75)
+			(xy 80.01 158.75) (xy 96.52 158.75)
 		)
 		(stroke
 			(width 0)
@@ -6120,16 +6175,6 @@
 			(type default)
 		)
 		(uuid "9d742e72-550a-4a99-aded-ede34b0d4d48")
-	)
-	(wire
-		(pts
-			(xy 53.34 62.23) (xy 54.61 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9d9bb7cd-29e3-4d0b-ac91-86d47fef088e")
 	)
 	(wire
 		(pts
@@ -6243,6 +6288,16 @@
 	)
 	(wire
 		(pts
+			(xy 95.25 176.53) (xy 80.01 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b0a5b93b-1c22-4621-ba74-6da65b1759ff")
+	)
+	(wire
+		(pts
 			(xy 172.72 33.02) (xy 163.83 33.02)
 		)
 		(stroke
@@ -6273,16 +6328,6 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 166.37) (xy 91.44 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b8c48ca1-c981-432d-b80e-e0723bb7a915")
-	)
-	(wire
-		(pts
 			(xy 248.92 127) (xy 248.92 124.46)
 		)
 		(stroke
@@ -6293,13 +6338,23 @@
 	)
 	(wire
 		(pts
-			(xy 53.34 59.69) (xy 53.34 62.23)
+			(xy 95.25 177.8) (xy 95.25 176.53)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bbee74b4-46b1-4907-abe8-954f8b1ffceb")
+		(uuid "b9a4ceec-893a-4702-8369-f0fe1df41af8")
+	)
+	(wire
+		(pts
+			(xy 95.25 170.18) (xy 96.52 170.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bbbd435a-6cbd-48ee-b320-e055e7dab503")
 	)
 	(wire
 		(pts
@@ -6323,7 +6378,7 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 176.53) (xy 96.52 176.53)
+			(xy 95.25 177.8) (xy 96.52 177.8)
 		)
 		(stroke
 			(width 0)
@@ -6373,6 +6428,26 @@
 	)
 	(wire
 		(pts
+			(xy 95.25 162.56) (xy 96.52 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c7cf46e3-2e21-4974-a9f4-e48eba31c93f")
+	)
+	(wire
+		(pts
+			(xy 134.62 73.66) (xy 134.62 24.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ca8b6a23-0b0c-4b8b-ba8b-f61b6e8166f1")
+	)
+	(wire
+		(pts
 			(xy 87.63 184.15) (xy 87.63 186.69)
 		)
 		(stroke
@@ -6380,26 +6455,6 @@
 			(type default)
 		)
 		(uuid "cc538e2f-deb1-4515-99f0-591d28738470")
-	)
-	(wire
-		(pts
-			(xy 88.9 163.83) (xy 88.9 168.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cd0402b4-ad08-4165-8acb-b4dcde46ac36")
-	)
-	(wire
-		(pts
-			(xy 97.79 166.37) (xy 91.44 166.37)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cff9be99-0593-43c8-a4b7-2b3df959a682")
 	)
 	(wire
 		(pts
@@ -6443,7 +6498,7 @@
 	)
 	(wire
 		(pts
-			(xy 80.01 173.99) (xy 93.98 173.99)
+			(xy 80.01 173.99) (xy 96.52 173.99)
 		)
 		(stroke
 			(width 0)
@@ -6513,6 +6568,16 @@
 	)
 	(wire
 		(pts
+			(xy 109.22 21.59) (xy 135.89 21.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e0d84b17-d5d3-40b0-84f1-69302370c285")
+	)
+	(wire
+		(pts
 			(xy 44.45 158.75) (xy 50.8 158.75)
 		)
 		(stroke
@@ -6530,6 +6595,26 @@
 			(type default)
 		)
 		(uuid "e3fc882a-c80d-46ad-9f48-f46a07c6398a")
+	)
+	(wire
+		(pts
+			(xy 187.96 73.66) (xy 134.62 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e440d207-22a1-4c85-9f70-bee9ec973f4a")
+	)
+	(wire
+		(pts
+			(xy 95.25 161.29) (xy 95.25 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5e55b68-47ee-47d5-a34e-7f9a8948e7f8")
 	)
 	(wire
 		(pts
@@ -6643,16 +6728,6 @@
 	)
 	(wire
 		(pts
-			(xy 93.98 168.91) (xy 97.79 168.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f4884216-bfc2-4c21-ac50-8e7f590c4c08")
-	)
-	(wire
-		(pts
 			(xy 44.45 163.83) (xy 50.8 163.83)
 		)
 		(stroke
@@ -6660,16 +6735,6 @@
 			(type default)
 		)
 		(uuid "f77ab829-4a83-449c-bf45-caf66abfcae4")
-	)
-	(wire
-		(pts
-			(xy 93.98 173.99) (xy 93.98 168.91)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f9101634-9b67-4ddd-bd15-3bb7ef1087ce")
 	)
 	(wire
 		(pts
@@ -6700,16 +6765,6 @@
 			(type default)
 		)
 		(uuid "fb13f0ed-861f-4364-ac82-c853b21c6d5d")
-	)
-	(wire
-		(pts
-			(xy 67.31 62.23) (xy 81.28 62.23)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fdcf6876-6b5a-46b5-8eb2-0d1be8956390")
 	)
 	(wire
 		(pts
@@ -7113,6 +7168,28 @@
 			)
 		)
 	)
+	(global_label "PA18_SPI1_MOSI"
+		(shape input)
+		(at 187.96 86.36 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5cf399de-0798-4b76-aa05-1560c0f27582")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 169.372 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
 	(global_label "PA17_SPI1_SCK"
 		(shape input)
 		(at 142.24 128.27 0)
@@ -7175,6 +7252,50 @@
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "PA17_SPI1_SCK"
+		(shape input)
+		(at 187.96 83.82 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "caec4dc0-98e3-47b1-9af4-c0a1e440c59e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 170.2187 83.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "PA16_SPI1_MISO"
+		(shape input)
+		(at 187.96 81.28 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "eb53ce32-2d8e-4a86-bc53-a02931303b97")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 169.372 81.28 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -7428,6 +7549,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:-BATT")
+		(at 124.46 143.51 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "145fd8ef-45be-47d8-a7e2-625f123c785d")
+		(property "Reference" "#PWR025"
+			(at 124.46 139.7 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-BATT"
+			(at 122.682 145.542 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 124.46 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 124.46 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-BATT\""
+			(at 124.46 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1ccd80be-8a99-4ebc-80b1-fe8d8b48c4ab")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR025")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Connector:Conn_01x08_Socket")
 		(at 58.42 46.99 180)
 		(unit 1)
@@ -7544,6 +7731,204 @@
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
 					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:-BATT")
+		(at 106.68 166.37 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "15427ed9-69d6-4b80-a4f6-79f9f4569512")
+		(property "Reference" "#PWR021"
+			(at 102.87 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-BATT"
+			(at 110.49 166.3701 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-BATT\""
+			(at 106.68 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "069171b9-0726-411d-88df-8c57ecab4fdd")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR021")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:-BATT")
+		(at 106.68 170.18 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1715627b-ac18-4afb-8079-6f2699dd4d07")
+		(property "Reference" "#PWR022"
+			(at 102.87 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-BATT"
+			(at 110.49 170.1801 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-BATT\""
+			(at 106.68 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3e751aed-7595-4b50-a4aa-6eb317869eab")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR022")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:-BATT")
+		(at 106.68 158.75 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1a509766-32ca-4841-8bcd-4444b2afbc33")
+		(property "Reference" "#PWR019"
+			(at 102.87 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-BATT"
+			(at 110.49 158.7501 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-BATT\""
+			(at 106.68 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3e2ee1cd-324e-41d9-9887-102ee6f85cc0")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -7676,6 +8061,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:-BATT")
+		(at 106.68 173.99 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2a012bd8-4127-4daf-8037-638f2666230b")
+		(property "Reference" "#PWR023"
+			(at 102.87 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-BATT"
+			(at 110.49 173.9901 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-BATT\""
+			(at 106.68 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8af94817-2201-4513-a8f5-f6c5bb827e2b")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR023")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+3V3")
 		(at 144.78 30.48 90)
 		(unit 1)
@@ -7737,6 +8188,82 @@
 			(project ""
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
 					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Thermistor")
+		(at 101.6 177.8 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2cc7a370-b4ba-40d0-941b-8cfc6934a265")
+		(property "Reference" "TH7"
+			(at 122.174 176.022 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Thermistor"
+			(at 122.174 177.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 101.6 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/semitec_atthermistor.pdf"
+			(at 101.6 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Temperature dependent resistor"
+			(at 101.6 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Semitec/103AT-2?qs=wgO0AD0o1vvcDzsKguD%2Bew%3D%3D&srsltid=AfmBOooUcbWOzFYbR_yLlES88fRwyUsa0gc9wqxUpY0n7HWnXUXQ11PP"
+			(at 101.6 177.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "997a536b-83d0-4bbe-a457-2eb95f0f0a92")
+		)
+		(pin "2"
+			(uuid "11e5a775-b199-4535-b48a-05eb72dc94f4")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "TH7")
 					(unit 1)
 				)
 			)
@@ -7982,6 +8509,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:-BATT")
+		(at 106.68 177.8 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "40e77a59-2d5c-41b5-9af7-e8eb3f30a2be")
+		(property "Reference" "#PWR024"
+			(at 102.87 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-BATT"
+			(at 110.49 177.8001 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-BATT\""
+			(at 106.68 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "beb5aa5e-ffb0-43ac-abe6-cd73e1b4ebd6")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR024")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+BATT")
 		(at 41.91 121.92 90)
 		(unit 1)
@@ -8041,6 +8634,72 @@
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
 					(reference "#PWR01")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:-BATT")
+		(at 106.68 154.94 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "44958fee-6090-49a8-b353-efaff71a8872")
+		(property "Reference" "#PWR018"
+			(at 102.87 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-BATT"
+			(at 110.49 154.9401 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-BATT\""
+			(at 106.68 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b4c9cd12-6857-4229-b1c7-1aaba64775c4")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -8408,6 +9067,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Thermistor")
+		(at 101.6 173.99 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "64d64823-9dc2-4667-b341-45764a644da5")
+		(property "Reference" "TH6"
+			(at 122.174 172.212 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Thermistor"
+			(at 122.174 173.99 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 101.6 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/semitec_atthermistor.pdf"
+			(at 101.6 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Temperature dependent resistor"
+			(at 101.6 173.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Semitec/103AT-2?qs=wgO0AD0o1vvcDzsKguD%2Bew%3D%3D&srsltid=AfmBOooUcbWOzFYbR_yLlES88fRwyUsa0gc9wqxUpY0n7HWnXUXQ11PP"
+			(at 101.6 173.99 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0d9c8f4b-f9a9-419a-992f-65b387eab30f")
+		)
+		(pin "2"
+			(uuid "ecd24772-e489-4728-88eb-b4263f264589")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "TH6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 87.63 181.61 180)
 		(unit 1)
@@ -8757,6 +9492,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Thermistor")
+		(at 101.6 162.56 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "75e605ed-5013-4a30-bd10-3e3a399a8966")
+		(property "Reference" "TH3"
+			(at 122.174 160.782 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Thermistor"
+			(at 122.174 162.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 101.6 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/semitec_atthermistor.pdf"
+			(at 101.6 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Temperature dependent resistor"
+			(at 101.6 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Semitec/103AT-2?qs=wgO0AD0o1vvcDzsKguD%2Bew%3D%3D&srsltid=AfmBOooUcbWOzFYbR_yLlES88fRwyUsa0gc9wqxUpY0n7HWnXUXQ11PP"
+			(at 101.6 162.56 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b93636f1-962d-471f-b802-ed0fa4f14d48")
+		)
+		(pin "2"
+			(uuid "0fe1bc5d-4439-4d51-993f-319fb0c735f3")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "TH3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_US")
 		(at 177.8 40.64 90)
 		(mirror x)
@@ -9070,6 +9881,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Thermistor")
+		(at 101.6 170.18 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8940e8b8-3b3f-4b81-a872-c58e770660c2")
+		(property "Reference" "TH5"
+			(at 122.174 168.402 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Thermistor"
+			(at 122.174 170.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 101.6 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/semitec_atthermistor.pdf"
+			(at 101.6 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Temperature dependent resistor"
+			(at 101.6 170.18 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Semitec/103AT-2?qs=wgO0AD0o1vvcDzsKguD%2Bew%3D%3D&srsltid=AfmBOooUcbWOzFYbR_yLlES88fRwyUsa0gc9wqxUpY0n7HWnXUXQ11PP"
+			(at 101.6 170.18 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "e5658aea-0392-48af-b463-17c899b19d59")
+		)
+		(pin "2"
+			(uuid "3e6dd120-6b37-4365-bd5a-26e358a2bb18")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "TH5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 172.72 36.83 0)
 		(mirror y)
@@ -9282,6 +10169,82 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Thermistor")
+		(at 101.6 158.75 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "bb9897c8-0060-4a4d-90b4-1d5634df0bf2")
+		(property "Reference" "TH2"
+			(at 122.174 156.972 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Thermistor"
+			(at 122.174 158.75 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 101.6 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/semitec_atthermistor.pdf"
+			(at 101.6 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Temperature dependent resistor"
+			(at 101.6 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Semitec/103AT-2?qs=wgO0AD0o1vvcDzsKguD%2Bew%3D%3D&srsltid=AfmBOooUcbWOzFYbR_yLlES88fRwyUsa0gc9wqxUpY0n7HWnXUXQ11PP"
+			(at 101.6 158.75 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a7d11dc5-561d-4b8b-a1f1-1d3a7a7eb05c")
+		)
+		(pin "2"
+			(uuid "a5ebcd5a-3860-4766-8574-0fb4c34bbd2f")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "TH2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 166.37 27.94 90)
 		(mirror x)
@@ -9418,6 +10381,82 @@
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
 					(reference "R8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Thermistor")
+		(at 101.6 154.94 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c5d263d8-13c5-482d-acff-b1af05483a69")
+		(property "Reference" "TH1"
+			(at 122.174 153.162 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Thermistor"
+			(at 122.174 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 101.6 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/semitec_atthermistor.pdf"
+			(at 101.6 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Temperature dependent resistor"
+			(at 101.6 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Semitec/103AT-2?qs=wgO0AD0o1vvcDzsKguD%2Bew%3D%3D&srsltid=AfmBOooUcbWOzFYbR_yLlES88fRwyUsa0gc9wqxUpY0n7HWnXUXQ11PP"
+			(at 101.6 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2c9bfc62-a58c-4b7f-a6c8-80750331ae9a")
+		)
+		(pin "2"
+			(uuid "fa05a3b3-0a3e-4084-9bea-bf89240b3652")
+		)
+		(instances
+			(project ""
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "TH1")
 					(unit 1)
 				)
 			)
@@ -9656,6 +10695,72 @@
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
 					(reference "#PWR014")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:-BATT")
+		(at 106.68 162.56 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "cb9abcfd-c06c-4f15-8072-519e48d5b0fb")
+		(property "Reference" "#PWR020"
+			(at 102.87 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "-BATT"
+			(at 110.49 162.5601 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 106.68 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 106.68 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"-BATT\""
+			(at 106.68 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "4cf49bb3-6688-4647-85b4-2f5073aeb2f9")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -9998,6 +11103,82 @@
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
 					(reference "C59")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Thermistor")
+		(at 101.6 166.37 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d59e8ba0-80f1-4750-818a-72c3cad7fb02")
+		(property "Reference" "TH4"
+			(at 122.174 164.592 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Thermistor"
+			(at 122.174 166.37 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
+			(at 101.6 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/catalog/specsheets/semitec_atthermistor.pdf"
+			(at 101.6 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Temperature dependent resistor"
+			(at 101.6 166.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Semitec/103AT-2?qs=wgO0AD0o1vvcDzsKguD%2Bew%3D%3D&srsltid=AfmBOooUcbWOzFYbR_yLlES88fRwyUsa0gc9wqxUpY0n7HWnXUXQ11PP"
+			(at 101.6 166.37 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c98a0899-0157-4ac0-bc88-4d0455d8c46a")
+		)
+		(pin "2"
+			(uuid "5676ed02-b2c7-45fc-8655-40789fb803d4")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "TH4")
 					(unit 1)
 				)
 			)
@@ -10575,101 +11756,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_02x01")
-		(at 62.23 62.23 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "eb201547-5a90-4bdf-b815-fbfcbc4111ac")
-		(property "Reference" "J3"
-			(at 60.96 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "fan"
-			(at 60.96 66.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Connector_Molex:Molex_Micro-Fit_3.0_43650-0200_1x02_P3.00mm_Horizontal"
-			(at 62.23 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 62.23 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, double row, 02x01, this symbol is compatible with counter-clockwise, top-bottom and odd-even numbering schemes., script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 62.23 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Molex/43650-0200?qs=HlEFOAM0q6XGaAJJj3Pssw%3D%3D"
-			(at 62.23 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.888"
-			(at 62.23 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "1.05"
-			(at 62.23 62.23 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b3164108-ffe7-4ee7-9233-999b14217efc")
-		)
-		(pin "2"
-			(uuid "68ab26d0-ebee-4685-8f66-24e82859170f")
-		)
-		(instances
-			(project ""
-				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
-					(reference "J3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Connector:Conn_01x18_Pin")
 		(at 39.37 148.59 0)
 		(mirror x)
@@ -11136,36 +12222,6 @@
 				(justify right)
 			)
 		)
-		(pin "fan PWM" input
-			(at 109.22 27.94 0)
-			(uuid "a9bd2212-aff9-4cd0-a054-9f0122f1de48")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "FAN+" input
-			(at 81.28 59.69 180)
-			(uuid "5e965a89-5343-4403-940c-088aa20b593c")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "FAN-" input
-			(at 81.28 62.23 180)
-			(uuid "20a00e1f-87fa-44fd-bc8b-45efb00d47cf")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
 		(pin "IL enable" input
 			(at 109.22 30.48 0)
 			(uuid "f898259f-4520-4107-935c-85838eaf8be0")
@@ -11194,16 +12250,6 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
-			)
-		)
-		(pin "IL_I" input
-			(at 81.28 21.59 180)
-			(uuid "8eadf432-2881-4676-98b9-a3f0c6c57884")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
 			)
 		)
 		(pin "IL_O" output
@@ -11249,6 +12295,16 @@
 		(pin "LV-" input
 			(at 81.28 52.07 180)
 			(uuid "5452f08f-079a-43cb-9a88-ed1c716972f5")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "IL_I" output
+			(at 81.28 21.59 180)
+			(uuid "7b07b4e4-6509-4927-903c-b52a1079ba11")
 			(effects
 				(font
 					(size 1.27 1.27)
