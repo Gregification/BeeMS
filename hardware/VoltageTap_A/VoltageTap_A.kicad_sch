@@ -4454,6 +4454,12 @@
 		(uuid "06bb11c4-b9c4-4df4-a545-97d7b63f9b9a")
 	)
 	(junction
+		(at 185.42 38.1)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2487ccb9-cfd9-4d90-bc29-299783ba9d66")
+	)
+	(junction
 		(at 248.92 124.46)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4721,13 +4727,23 @@
 	)
 	(wire
 		(pts
-			(xy 256.54 148.59) (xy 257.81 148.59)
+			(xy 256.54 153.67) (xy 257.81 153.67)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "1f79672c-7a08-4443-b46c-10db7fab08be")
+	)
+	(wire
+		(pts
+			(xy 180.34 45.72) (xy 185.42 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1f86197c-728d-4ac0-af44-905d2e7aebc0")
 	)
 	(wire
 		(pts
@@ -4801,13 +4817,23 @@
 	)
 	(wire
 		(pts
-			(xy 256.54 146.05) (xy 257.81 146.05)
+			(xy 256.54 151.13) (xy 257.81 151.13)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "3107af52-6dee-4d23-97ea-963f33041037")
+	)
+	(wire
+		(pts
+			(xy 185.42 38.1) (xy 185.42 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "350ded33-fcb7-455b-9a3d-102868668b23")
 	)
 	(wire
 		(pts
@@ -4921,7 +4947,7 @@
 	)
 	(wire
 		(pts
-			(xy 256.54 153.67) (xy 257.81 153.67)
+			(xy 256.54 158.75) (xy 257.81 158.75)
 		)
 		(stroke
 			(width 0)
@@ -4991,7 +5017,7 @@
 	)
 	(wire
 		(pts
-			(xy 256.54 151.13) (xy 257.81 151.13)
+			(xy 256.54 156.21) (xy 257.81 156.21)
 		)
 		(stroke
 			(width 0)
@@ -5128,6 +5154,16 @@
 			(type default)
 		)
 		(uuid "6097e57d-9812-465f-abe1-31922831d7c8")
+	)
+	(wire
+		(pts
+			(xy 256.54 143.51) (xy 257.81 143.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "64df94c4-3d36-4658-a17d-57701a82f493")
 	)
 	(wire
 		(pts
@@ -5301,7 +5337,7 @@
 	)
 	(wire
 		(pts
-			(xy 256.54 140.97) (xy 257.81 140.97)
+			(xy 256.54 146.05) (xy 257.81 146.05)
 		)
 		(stroke
 			(width 0)
@@ -5451,7 +5487,7 @@
 	)
 	(wire
 		(pts
-			(xy 256.54 143.51) (xy 257.81 143.51)
+			(xy 256.54 148.59) (xy 257.81 148.59)
 		)
 		(stroke
 			(width 0)
@@ -6140,7 +6176,7 @@
 		(uuid "740449f8-9fe1-4b97-8fd5-4fc3d19dda10")
 	)
 	(label "XDS_TMS_SWDIO"
-		(at 256.54 151.13 180)
+		(at 256.54 156.21 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6210,7 +6246,7 @@
 		(uuid "ae929bd0-3888-4d71-8e6d-0dccc7316035")
 	)
 	(label "XDS_TCK_SWDCLK"
-		(at 256.54 153.67 180)
+		(at 256.54 158.75 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6230,7 +6266,7 @@
 		(uuid "c2f03bf7-bdf1-49c2-85e0-9a4b89f89b89")
 	)
 	(label "XDS_RXD"
-		(at 256.54 146.05 180)
+		(at 256.54 151.13 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6240,7 +6276,7 @@
 		(uuid "c5256427-9122-4e6f-aecc-1abc5ab68c5d")
 	)
 	(label "XDS_RESET_OUT"
-		(at 256.54 148.59 180)
+		(at 256.54 153.67 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6270,7 +6306,7 @@
 		(uuid "cfcd9b41-4ded-4895-9548-180ef7913704")
 	)
 	(label "XDS_TXD"
-		(at 256.54 143.51 180)
+		(at 256.54 148.59 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6280,7 +6316,7 @@
 		(uuid "d468a011-5cac-4a9c-bf8e-2cf04c419fdf")
 	)
 	(label "XDS_GND"
-		(at 256.54 140.97 180)
+		(at 256.54 146.05 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6299,6 +6335,16 @@
 		)
 		(uuid "f3b867c9-aef7-4873-a04f-93797bccff4d")
 	)
+	(label "XDS_3v_supply"
+		(at 256.54 143.51 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ff061ff9-e0f7-4692-be1c-5b6d14a424d6")
+	)
 	(label "CAN+"
 		(at 33.02 33.02 0)
 		(effects
@@ -6311,7 +6357,7 @@
 	)
 	(global_label "PA11_UART0-RX_XDS"
 		(shape input)
-		(at 257.81 143.51 0)
+		(at 257.81 148.59 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6321,7 +6367,7 @@
 		)
 		(uuid "012ea141-1372-4c7f-8ec0-06e7d2c2e253")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 281.1151 143.51 0)
+			(at 281.1151 148.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6333,7 +6379,7 @@
 	)
 	(global_label "RST_N"
 		(shape input)
-		(at 257.81 148.59 0)
+		(at 257.81 153.67 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6343,7 +6389,7 @@
 		)
 		(uuid "0132326c-c879-40fc-bad3-60f9f7403a92")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 266.5404 148.59 0)
+			(at 266.5404 153.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6377,7 +6423,7 @@
 	)
 	(global_label "PA20_SWCLK"
 		(shape input)
-		(at 257.81 153.67 0)
+		(at 257.81 158.75 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6387,7 +6433,7 @@
 		)
 		(uuid "05f13ea6-4bd9-45db-b211-b9ba3102fd3e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 272.7694 153.67 0)
+			(at 272.7694 158.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6399,7 +6445,7 @@
 	)
 	(global_label "PA10_UART0-TX_XDS"
 		(shape input)
-		(at 257.81 146.05 0)
+		(at 257.81 151.13 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6409,12 +6455,34 @@
 		)
 		(uuid "12da48a3-01ae-4e74-bb21-1f5a9093fca1")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 280.8127 146.05 0)
+			(at 280.8127 151.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 				(justify left)
+				(hide yes)
+			)
+		)
+	)
+	(global_label "RST_N"
+		(shape input)
+		(at 180.34 45.72 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "1f3bebd7-3ca2-4faa-874b-415f71fb20ce")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 171.6096 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 				(hide yes)
 			)
 		)
@@ -6575,7 +6643,7 @@
 	)
 	(global_label "PA19_SWDIO"
 		(shape input)
-		(at 257.81 151.13 0)
+		(at 257.81 156.21 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -6585,7 +6653,7 @@
 		)
 		(uuid "9027c898-d63a-441e-950c-2e35a9be9c00")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 272.4066 151.13 0)
+			(at 272.4066 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9631,7 +9699,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 257.81 140.97 90)
+		(at 257.81 146.05 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -9640,7 +9708,7 @@
 		(fields_autoplaced yes)
 		(uuid "c81b2815-66a1-40de-8d5d-b15d66caee96")
 		(property "Reference" "#PWR03"
-			(at 264.16 140.97 0)
+			(at 264.16 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9649,7 +9717,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 261.62 140.9699 90)
+			(at 261.62 146.0499 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9658,7 +9726,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 257.81 140.97 0)
+			(at 257.81 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9667,7 +9735,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 257.81 140.97 0)
+			(at 257.81 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9676,7 +9744,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 257.81 140.97 0)
+			(at 257.81 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10679,6 +10747,73 @@
 			(project "VoltageTap_A"
 				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
 					(reference "SW2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 257.81 143.51 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e1c674b2-561f-4d69-9a8c-789a9f21ed7f")
+		(property "Reference" "#PWR026"
+			(at 254 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 261.62 143.5099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 257.81 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 257.81 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 257.81 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "da0522e2-afb8-468c-b3e2-4c7ed5bae64c")
+		)
+		(instances
+			(project "VoltageTap_A"
+				(path "/4b33f365-f3e6-4257-876a-be65258e9424"
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
