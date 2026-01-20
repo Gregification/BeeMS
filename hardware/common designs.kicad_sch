@@ -7331,12 +7331,6 @@
 		(uuid "108a0748-c6fe-403d-9b6f-58ca97e774ab")
 	)
 	(junction
-		(at 48.2004 176.53)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "10c40452-1942-4cb2-b3ff-4bb0fc025795")
-	)
-	(junction
 		(at 157.48 83.82)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7630,12 +7624,6 @@
 		(color 0 0 0 0)
 		(uuid "ff26c6db-2ac0-4ece-96d1-52aab9bb1516")
 	)
-	(junction
-		(at 48.2004 171.45)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ffaa92ae-7287-4d7a-a429-abd0619c7538")
-	)
 	(wire
 		(pts
 			(xy 166.37 90.17) (xy 168.91 90.17)
@@ -7895,6 +7883,16 @@
 			(type default)
 		)
 		(uuid "37f88798-b47a-42f2-bba4-9968395dcd23")
+	)
+	(wire
+		(pts
+			(xy 48.26 171.45) (xy 48.26 176.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3885e814-c571-4b10-9f1c-db10b342bd28")
 	)
 	(wire
 		(pts
@@ -8178,7 +8176,7 @@
 	)
 	(wire
 		(pts
-			(xy 48.2004 176.53) (xy 48.26 176.53)
+			(xy 33.02 176.53) (xy 48.26 176.53)
 		)
 		(stroke
 			(width 0)
@@ -8225,16 +8223,6 @@
 			(type default)
 		)
 		(uuid "664fa3fd-2a15-43ea-b447-8ed6c5905fa1")
-	)
-	(wire
-		(pts
-			(xy 33.02 176.53) (xy 48.2004 176.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "66b3db45-65b9-42a8-b5ea-7da05d9afa0a")
 	)
 	(wire
 		(pts
@@ -8708,16 +8696,6 @@
 	)
 	(wire
 		(pts
-			(xy 45.72 171.45) (xy 48.2004 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a67a88f8-1220-4c78-b471-f801e5f80552")
-	)
-	(wire
-		(pts
 			(xy 254 69.85) (xy 254 71.12)
 		)
 		(stroke
@@ -8878,7 +8856,7 @@
 	)
 	(wire
 		(pts
-			(xy 48.2004 171.45) (xy 48.26 171.45)
+			(xy 45.72 171.45) (xy 48.26 171.45)
 		)
 		(stroke
 			(width 0)
@@ -13565,123 +13543,6 @@
 			(project "Cell Balancing testing"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
 					(reference "D?")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 48.2004 173.99 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "3beba727-ffce-4568-b7c3-f2bc5910461a")
-		(property "Reference" "R401"
-			(at 49.9784 172.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "40.2k"
-			(at 49.9784 175.26 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 48.2004 173.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 48.2004 173.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 48.2004 173.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD4022F?qs=sGAEpiMZZMvdGkrng054txknJuA7M8fa4wn7EqIHwNI%3D"
-			(at 48.2004 173.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "40.2k ohm, 250mW, 1%, 150V, 100ppm, -55C, +155C"
-			(at 48.2004 173.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.02"
-			(at 48.2004 173.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 48.2004 173.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "b9de6ab1-9169-4c1d-b6e0-d912d3406482")
-		)
-		(pin "1"
-			(uuid "7c47ca24-0c13-42ec-b9df-10f769b61e5e")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "R801")
-					(unit 1)
-				)
-			)
-			(project "VoltageTap_A"
-				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "R401")
-					(unit 1)
-				)
-			)
-			(project "Cell Balancing testing"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "R?")
 					(unit 1)
 				)
 			)
