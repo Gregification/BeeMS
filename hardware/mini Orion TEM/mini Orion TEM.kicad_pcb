@@ -102,7 +102,7 @@
 	(net 22 "Net-(C307-Pad1)")
 	(net 23 "Net-(C308-Pad1)")
 	(net 24 "/GLV+")
-	(net 25 "Net-(D102-A)")
+	(net 25 "unconnected-(D102-A-Pad2)")
 	(net 26 "Net-(D102-K)")
 	(net 27 "/VT32")
 	(net 28 "Net-(F101-Pad2)")
@@ -193,15 +193,15 @@
 	(net 113 "unconnected-(U105-PA22{slash}CLK_OUT{slash}A0_7-Pad25)")
 	(net 114 "unconnected-(U105-PA5{slash}HFXIN{slash}FCC_IN-Pad12)")
 	(net 115 "unconnected-(U105-PA14{slash}CLK_OUT{slash}A0_12-Pad17)")
-	(net 116 "unconnected-(U105-PA0-Pad4)")
-	(net 117 "unconnected-(U105-PA20{slash}SWCLK-Pad23)")
-	(net 118 "unconnected-(U105-PA19{slash}SWDIO-Pad22)")
+	(net 116 "Net-(U105-NRST)")
+	(net 117 "/UART_TX")
+	(net 118 "/SWCLK")
 	(net 119 "unconnected-(U105-PA17{slash}A1_2-Pad20)")
 	(net 120 "unconnected-(U105-PA21{slash}A1_7{slash}VREF--Pad24)")
-	(net 121 "unconnected-(U105-PA1-Pad5)")
+	(net 121 "/SWDIO")
 	(net 122 "unconnected-(U105-PA24{slash}A0_3-Pad27)")
 	(net 123 "unconnected-(U105-PA16{slash}A1_1{slash}FCC_IN-Pad19)")
-	(net 124 "unconnected-(U105-NRST-Pad6)")
+	(net 124 "/UART_A1")
 	(net 125 "unconnected-(U105-PA10{slash}CLK_OUT-Pad15)")
 	(net 126 "unconnected-(U105-PA11-Pad16)")
 	(net 127 "unconnected-(U105-PA3_{slash}_LFXIN-Pad10)")
@@ -212,6 +212,7 @@
 	(net 132 "/thermistor bank 1/A")
 	(net 133 "/thermistor bank 1/C")
 	(net 134 "/thermistor bank 2/Aout1")
+	(net 135 "unconnected-(U105-PA9_{slash}_RTC_OUT_{slash}_CLK_OUT-Pad14)")
 	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "F.Cu")
 		(uuid "006b50a3-aff3-4db8-b9a8-18837461bd84")
@@ -1379,7 +1380,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/46c9bc4e-8853-456c-9b99-3aca30629720")
+		(path "/3ba82787-4361-4b21-8e02-34dabd97393e")
 		(sheetname "/")
 		(sheetfile "mini Orion TEM.kicad_sch")
 		(attr smd)
@@ -1508,7 +1509,7 @@
 			(size 1.175 1.45)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.212766)
-			(net 6 "+3V3")
+			(net 7 "Net-(U105-VCORE)")
 			(pintype "passive")
 			(uuid "78664e53-7b79-4aba-8da0-bcf2fb6eebcd")
 		)
@@ -1814,25 +1815,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "11531c46-fa18-4e5f-beb3-dcc4be4aa72e")
 		(at 152.8 203.16)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH304"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "4f7c7ea9-a00e-4f4e-be9f-7093e99c724d")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "1cb144bb-bcba-4b24-a864-3db1b9499fe8")
 			(effects
@@ -1844,174 +1845,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "9c163907-09a6-4dc2-b515-9e60a6ee8c38")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "4a9cebab-d0bc-4db7-9bd2-1c7309bf4e32")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/00bb2868-c659-44f7-b8dd-21cc4541db0a")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/2f09ae07-3961-4aee-8296-c303aaa6ccfe")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "1d2222ba-709e-4731-9ecf-7191fa90b07e")
+			(uuid "2b44ba00-8336-45e8-bd72-c6f0e5c52da0")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "b007f1ec-2870-4543-9693-c8ad861c0d88")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "bac01cb8-0d31-4409-89ad-aa4e6a00d60c")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "c5e77cfb-abc8-4698-8e5e-d57c067a8a24")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "b4300322-457a-44ba-bb49-d3ceb2a4f1da")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "37a459c2-cb9f-4cf3-92ab-c74c4984a944")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "7b72c2d6-7235-4579-9589-a2dcc79b609c")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "563d9917-c085-4a55-bb47-9980ba7ab15f")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "d73db203-0d6d-4e59-a402-32d9771b8579")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "58cf88ba-d31c-4385-bfe0-a78290c51546")
+			(uuid "56857a39-23d5-4cdb-83c2-78daf60b0365")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "27eeff81-e122-40f4-b56e-ccc364926406")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 19 "Net-(C304-Pad1)")
 			(pintype "passive")
 			(uuid "d275ee55-05d5-4733-be37-c20b8035a0e0")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "da0468be-3754-48f9-951b-1e92ab91404f")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 		(layer "F.Cu")
@@ -2303,25 +2216,25 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "17f6e406-7e2a-480f-91ed-529ae23338b7")
 		(at 148.158101 80.35)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH203"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "bd7118a9-3438-442b-a0ee-c8bc7272ded5")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "c1c53e3e-aaad-4aa3-858d-be674ec66849")
 			(effects
@@ -2333,174 +2246,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "16518ba8-47aa-4bc5-a3d0-dd4a8ba0bb94")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "72b0e654-39d5-4fca-84e5-985ba65b0848")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/75ca6363-8146-4556-9dd0-4320d3f8bba7")
+		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/3c35381f-3c24-44cf-9abf-92aaac244f53")
 		(sheetname "/thermistor bank 1/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "a7df0703-8aea-478a-95a6-1ad8cf57ccd0")
+			(uuid "6def33aa-519e-41db-a3ec-5c36ae455005")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "97d52377-7ff8-4c70-813c-be4860fb7460")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "a8f34668-9352-4616-b7ed-a342a8285e90")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "c0e334b4-b483-4fe3-8120-8e9e587e3ea7")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "f43bb057-4efb-4f58-9e59-1126f5213bb3")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "7e04c7e3-82f4-4d19-a154-09d404ebdd81")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "b3078fbe-eba0-4623-8a08-ec184e34e70e")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "c9fc9c80-b434-4ca8-a8aa-a0e674757837")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "185ce0a8-a1cf-4da0-a2c5-652a4b7afcb2")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "da71efb7-6db3-4a6b-a6d2-33a1e4658461")
+			(uuid "7db88ee4-8ab6-4078-9749-0e2e8e25122d")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "2795e75a-6cc2-48f4-af04-1585fb0a6502")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 10 "Net-(C203-Pad1)")
 			(pintype "passive")
 			(uuid "16fdf85e-4781-4e83-b50a-394ad07ff0dc")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "1e62eb4e-8ce5-470d-855d-f4178440f77e")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "F.Cu")
@@ -2633,7 +2458,7 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/68825be2-b343-4948-989f-d823cc0b7e51")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/68825be2-b343-4948-989f-d823cc0b7e51")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -2923,7 +2748,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/2533bfb2-c88e-4e7e-bdf5-43c0f39f6388")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/2533bfb2-c88e-4e7e-bdf5-43c0f39f6388")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -3358,25 +3183,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "2f48b185-3cf7-40ea-9487-54dd81dd28fe")
 		(at 152.8 199.85)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH303"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "a473ce0f-8bdb-42b8-8db9-4cd9c414c796")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "e2da3d35-a66d-496a-b22a-9c6c98f47450")
 			(effects
@@ -3388,174 +3213,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "1183c66d-b8cd-4e83-8d60-9f139219d2b7")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "ad4c019b-8c00-4fa4-a3d1-b075f1f2d370")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/75ca6363-8146-4556-9dd0-4320d3f8bba7")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/3c35381f-3c24-44cf-9abf-92aaac244f53")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "70f6ff80-ce50-4657-8687-6a39e3e51246")
+			(uuid "3aa88088-c1a0-4519-b09a-cff8dde9ab3b")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "e094cdbe-15c0-41fe-896c-b71712c06434")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "3b78907b-81c3-4411-83fe-2f4b8cb607b6")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "0b9837c8-1fd9-4f11-baba-bbeabf6fe9b6")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "9f68553f-4a8b-4c7d-b36b-3779a8f0d6ee")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "5e016edb-74f7-423e-b212-39dc3b725440")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "6d6cc6dc-8f74-4c8e-bd6b-292c8a74463e")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "fdf9e32a-f18a-43bd-b8c7-e17d02a8a201")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "576f6780-9fdd-4219-93de-06b4578ec328")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "ea024e2c-6927-444c-a6f8-0eabc0f2efca")
+			(uuid "e9977c72-1fc8-49e2-93b0-10f00ba96bc5")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "9bc283de-9c53-48c9-bf02-8b8149a93383")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 18 "Net-(C303-Pad1)")
 			(pintype "passive")
 			(uuid "24587e23-c3ce-4adc-ba91-93305c8b12da")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "6415935c-26ed-4e9e-959c-9a125bb33754")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "F.Cu")
@@ -3688,7 +3425,7 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/9a51deb9-ded4-44ee-b0d0-8071960ca7f8")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/9a51deb9-ded4-44ee-b0d0-8071960ca7f8")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -3851,7 +3588,7 @@
 				)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "4.99k"
 			(at 0 1.83 0)
 			(layer "F.Fab")
 			(uuid "b949323c-9ccb-4a37-a24d-6f9912d88070")
@@ -3862,7 +3599,7 @@
 				)
 			)
 		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Bourns/CHV1206-FX-1003EST?qs=QNEnbhJQKvb7tN9X9nEnDA%3D%3D"
+		(property "Datasheet" ""
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
@@ -3912,7 +3649,7 @@
 				)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Bourns/CHV1206-FX-1003EST?qs=QNEnbhJQKvb7tN9X9nEnDA%3D%3D"
+		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP1206FTD4K99?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ95yR%2FF2bQQIaAb5UdPiGbTtQ%3D%3D"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3925,7 +3662,7 @@
 				)
 			)
 		)
-		(property "specs" "100kOhm, 800V, 250mW, 100PPM, 1%, -55C, 155C"
+		(property "specs" "4.99kOhm, 200V, 500mW, 1%, 100PPM, -55C, +155C"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3938,7 +3675,7 @@
 				)
 			)
 		)
-		(property "unit x10" "0.083"
+		(property "unit x10" "0.016"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3977,8 +3714,21 @@
 				)
 			)
 		)
+		(property "unit x1" "0.1"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "f1420034-8b45-4bd4-a626-8ee2f998b583")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property ki_fp_filters "R_*")
-		(path "/79c628ff-7b18-4777-9087-7341f277c643")
+		(path "/84f27068-f8c1-4198-97a5-ab44135c61a7")
 		(sheetname "/")
 		(sheetfile "mini Orion TEM.kicad_sch")
 		(attr smd)
@@ -4098,7 +3848,7 @@
 			(size 1.3 1.75)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.192308)
-			(net 61 "Net-(U105-PA2_{slash}_ROSC)")
+			(net 4 "GND")
 			(pintype "passive")
 			(uuid "a77a07c7-ee33-4d71-9a1a-8e75dd9d0786")
 		)
@@ -4107,7 +3857,7 @@
 			(size 1.3 1.75)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.192308)
-			(net 4 "GND")
+			(net 26 "Net-(D102-K)")
 			(pintype "passive")
 			(uuid "999e3a38-1d3f-471b-93f2-af6e51db36a3")
 		)
@@ -4124,25 +3874,25 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "35629b69-79d5-482c-877d-263e9f27f73a")
 		(at 148.158101 86.97)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH205"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "86f20d0a-7a0a-4123-b1a4-35dbecf0e899")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "b45f5a14-dd33-4bd5-b6db-2303fa29e55c")
 			(effects
@@ -4154,174 +3904,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "bd4aff03-0ad3-4c81-9190-ae9ef63b8c7e")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "00f80ed3-6e67-478d-808e-c4ea085f33f4")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/1cc10126-14ec-4020-a348-1becb277266d")
+		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/23b2a345-2ebf-4dec-b9f3-449b022a6a89")
 		(sheetname "/thermistor bank 1/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "c72eaa68-e50f-49b1-a818-1166d22e7b6c")
+			(uuid "82e33225-0a98-4e55-903d-122215f00ee1")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "8069d032-ab05-451b-83ad-d72c8d822d26")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "c8d21d9f-7fa3-4042-9cef-dab188967682")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "5a932d8d-99d9-4cbb-a0f7-a3b7128ae00f")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "32e225b5-7367-4703-91bc-5baa1e40e7c0")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "13b55d61-7c79-40eb-ac0a-2fa7d819c070")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "9b7d3032-047a-42a8-8bfa-2c6365a0af85")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "ad83857a-c752-421a-b13a-222b469536e5")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "5269ee57-3b1c-4f63-9033-d7fc9df1f436")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "a36ec2b2-b5e2-482e-8d3e-d579f3f9fa3f")
+			(uuid "e15536b9-e1d4-4563-ab64-04f9e9667740")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "e0e8bf80-49e1-4298-9f47-b559ed90ad42")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 12 "Net-(C205-Pad1)")
 			(pintype "passive")
 			(uuid "172081ee-f8d0-428e-8ae9-0f71302173d5")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "2bb8ce9f-3751-4648-9353-3bd33b33a8b4")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Package_TO_SOT_SMD:SOT-23"
 		(layer "F.Cu")
@@ -4753,25 +4415,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "3a23717c-e2ae-465f-99fc-7a6743dfda9c")
 		(at 148.158101 77.04)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH202"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "8cce902d-1aaf-42d4-9123-2aaa60d602da")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "c6a5e43e-eca3-4663-bbc1-a70fdcb311cb")
 			(effects
@@ -4783,185 +4445,10 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "76423c92-8964-49d0-981e-9d61dd5cc028")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "21ee0a4f-86ff-4790-a915-d2f6633fd0ab")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "R_*")
-		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/5dee0ba8-a72f-40dd-a9a3-9e66516a197a")
-		(sheetname "/thermistor bank 1/")
-		(sheetfile "thermistors.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8c911db8-c265-4230-8b95-2d13b5005190")
-		)
-		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "8cb6d44f-6adf-4598-ab09-e0ba0f941f16")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "959d2c59-e038-41e6-8286-f08c2419b431")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "09e0e191-2b68-4fbc-85bc-e8b7f1553fb3")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "83b19a68-c018-4d6d-a18c-d414a415ac23")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "538745a1-b83e-445b-bae5-d2d36a4c598c")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "c53a1112-0a31-4fa0-b082-d0921ced1e8a")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "5eba0172-db2b-4c81-ab79-2f303bd5555a")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "a978208d-c942-46ae-a1d4-779a4d8ec4c6")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "a390ece9-02e2-4cec-a401-6d9c1184360d")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "F.Fab")
-			(uuid "001d8721-73c9-4b31-8270-6be7069c8606")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
-			(net 9 "Net-(C202-Pad1)")
-			(pintype "passive")
-			(uuid "4785d69f-834c-43bb-9309-93f4fd3f4796")
-		)
-		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
-			(net 4 "GND")
-			(pintype "passive")
-			(uuid "6a61b89f-12d0-4683-b3a6-f4fccf41e441")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
-		(layer "F.Cu")
-		(uuid "3dde9451-768b-4737-b530-d0be15200ada")
-		(at 148.158101 96.9)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
-		(property "Reference" "TH208"
-			(at 0 -1.83 0)
-			(layer "F.SilkS")
-			(uuid "78bbbef8-fc5b-4bee-b452-6ae793518e56")
 			(effects
 				(font
 					(size 1 1)
@@ -4969,8 +4456,95 @@
 				)
 			)
 		)
+		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "21ee0a4f-86ff-4790-a915-d2f6633fd0ab")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/6c1ab6fb-ffc5-4557-ad76-4e9e1d9cbc12")
+		(sheetname "/thermistor bank 1/")
+		(sheetfile "thermistors.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "f90136bf-a097-410a-9f0e-d8d290c6908d")
+		)
+		(fp_line
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "7bdc0e2d-fef4-4f03-8944-916e17d7187a")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 2.5 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(uuid "001d8721-73c9-4b31-8270-6be7069c8606")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.9 0)
+			(size 0.6 2)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.192308)
+			(net 9 "Net-(C202-Pad1)")
+			(pintype "passive")
+			(uuid "4785d69f-834c-43bb-9309-93f4fd3f4796")
+		)
+		(pad "2" smd roundrect
+			(at 0.9 0)
+			(size 0.6 2)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.192308)
+			(net 4 "GND")
+			(pintype "passive")
+			(uuid "6a61b89f-12d0-4683-b3a6-f4fccf41e441")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
+		(layer "F.Cu")
+		(uuid "3dde9451-768b-4737-b530-d0be15200ada")
+		(at 148.158101 96.9)
+		(property "Reference" "TH208"
+			(at 0 -2.4 0)
+			(unlocked yes)
+			(layer "F.SilkS")
+			(uuid "78bbbef8-fc5b-4bee-b452-6ae793518e56")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.1)
+				)
+			)
+		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "d39d3436-211b-40df-bd85-47259192831f")
 			(effects
@@ -4982,174 +4556,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f679fdae-7d7a-4c57-b333-a246b7e750f6")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "5a42bc8f-6179-4c3e-b0cd-e42b497d7378")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/97108ec1-c591-4620-ac68-590dba5526b9")
+		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/b6986e9c-8518-49d8-981a-9e64c8a86b7e")
 		(sheetname "/thermistor bank 1/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "95b37e53-a830-4b41-a5e1-4a3e7f9c4d03")
+			(uuid "462f9149-5981-4a3f-b1f2-2f62387ac36d")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "f040ca99-4f3a-43c8-989f-d6517cf4d513")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "7c1a8372-9026-4486-9e7d-d2afe356cc93")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "715338d0-ea7b-4302-ad3c-8bd67153d6d5")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "576575bf-60bf-4f57-843c-d03c552aebab")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "e82fab10-d2e4-421c-b9e2-777a0eacb78e")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "5d13d5d6-ebf8-4bcb-ac1d-5d1a196bd839")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "1935dd1b-f616-4833-9b5c-1992c4fcde6a")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "05d7d1fc-a465-4256-9868-c7e378ee7ba3")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "f06276b6-cd74-4f14-9029-9b90f04b1f3c")
+			(uuid "1f58a9a5-b326-4cb8-bd46-4d86d0c72931")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "ac769e94-cf3d-4313-9c4a-82c5b2921e89")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 15 "Net-(C208-Pad1)")
 			(pintype "passive")
 			(uuid "8e891830-57d9-4cc4-9c5e-8d961a3e7d68")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "9fcc2523-c761-4de7-b2c2-4b4aa3ef4b4d")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "zzLocalLibraries-Footprints:pad 2.667x6.472mm"
 		(layer "F.Cu")
@@ -5234,25 +4720,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "45546def-7da3-4373-8bc0-a79f14578448")
 		(at 152.8 206.47)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH305"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "36df327e-402d-4cd8-b10e-eed86e81e696")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "6dd23ad9-38f9-4756-9fc4-269ca48b8386")
 			(effects
@@ -5264,174 +4750,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b03bf756-ac2a-427f-af16-9a3821c10fb2")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "331adea4-9787-4417-aba2-a47072ea032a")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/1cc10126-14ec-4020-a348-1becb277266d")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/23b2a345-2ebf-4dec-b9f3-449b022a6a89")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "107b5566-2d37-4e77-bd43-5afa659a6a18")
+			(uuid "9fd73301-b497-47b4-8aba-f05649b64d72")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "e4edc3c3-7f73-45d8-8746-14a2c29aaa6d")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "a2db3bcc-a2db-4922-9062-8e865845fde2")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "0f9a6fc6-5265-44cb-a0ea-2ca5ff2a3521")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "0ddf3e85-e518-47b8-8379-bc5e7d204167")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "174b1ccb-51ee-4514-9ccf-9d4b1cadac10")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "a8b21e77-76b6-4dee-a314-dd35b6fdd965")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "e3c89523-3052-41ea-a053-67880abca60d")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "d13847f7-465c-4169-a854-b2c545144b2a")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "3532489f-08fa-457d-b788-40f5a6554567")
+			(uuid "7830e2a7-baa0-4b40-80ea-df4cfcc71e33")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "c54ca756-cfa9-4c83-ac0e-6ebca39dd20b")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 20 "Net-(C305-Pad1)")
 			(pintype "passive")
 			(uuid "2db348a3-c846-434f-aba2-56aad0285bca")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "692ddc78-6da8-44bf-9996-46d641e036f6")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 		(layer "F.Cu")
@@ -5577,7 +4975,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/2679f297-c5ae-45ca-bdcf-d4e17897c7b6")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/2679f297-c5ae-45ca-bdcf-d4e17897c7b6")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -5732,7 +5130,7 @@
 		(property "Reference" "H105"
 			(at 0 -4.45 0)
 			(layer "F.SilkS")
-			(uuid "597e17f5-b948-4014-bce9-b1e252fa0ba5")
+			(uuid "ec712bbd-ead1-4e1a-9b2d-2b9e142f3cd4")
 			(effects
 				(font
 					(size 1 1)
@@ -5743,7 +5141,7 @@
 		(property "Value" "MountingHole"
 			(at 0 4.45 0)
 			(layer "F.Fab")
-			(uuid "e4f4459f-6719-48cc-9ad8-ef5def601a50")
+			(uuid "66e27949-2484-402f-81e0-26440e57be93")
 			(effects
 				(font
 					(size 1 1)
@@ -5755,7 +5153,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "698d5d7a-a715-4ee5-9531-47cede7021e1")
+			(uuid "ad339b25-6d79-40e3-9f9f-a5e733295dcf")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5767,7 +5165,7 @@
 			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "890b538e-37c6-4a10-8683-dcea70496f13")
+			(uuid "b292c30a-5260-49d7-9517-6b0b078534a5")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5825,7 +5223,7 @@
 	(footprint "zzLocalLibraries-Footprints:13761132"
 		(layer "F.Cu")
 		(uuid "4afe570c-3588-4c4e-8c0c-e36d5d5470d7")
-		(at 57.199999 124.100001 -90)
+		(at 53.150001 123.9 -90)
 		(descr "1376113-2-2")
 		(tags "Connector")
 		(property "Reference" "U101"
@@ -6958,7 +6356,7 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/9553f905-3b4d-4dcd-a91e-f1cdd01c8ed6")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/9553f905-3b4d-4dcd-a91e-f1cdd01c8ed6")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -7673,7 +7071,7 @@
 	(footprint "zzLocalLibraries-Footprints:pad 2.667x6.472mm"
 		(layer "F.Cu")
 		(uuid "56d0b05f-5255-42a1-aab3-e32eea500cf0")
-		(at 45.2 169.6)
+		(at 44 169.6)
 		(property "Reference" "TP101"
 			(at 0 -4 0)
 			(unlocked yes)
@@ -8337,6 +7735,296 @@
 		)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_1206_3216Metric.step"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
+	)
+	(footprint "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+		(layer "F.Cu")
+		(uuid "5ce65d24-81fd-4d57-88ed-35ae7534d3ee")
+		(at 153.4 99.6)
+		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(tags "resistor handsolder")
+		(property "Reference" "R104"
+			(at 0 -1.83 0)
+			(layer "F.SilkS")
+			(uuid "913306f8-67b8-42de-853f-52bf22072ec6")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Value" "100k"
+			(at 0 1.83 0)
+			(layer "F.Fab")
+			(uuid "2aec86a9-3ba7-4618-bb95-2315f53a83aa")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/ProductDetail/Bourns/CHV1206-FX-1003EST?qs=QNEnbhJQKvb7tN9X9nEnDA%3D%3D"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bdf5d48d-2c11-45f2-a31a-593d9a544817")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9178cd52-67ef-4f5a-9506-149fa78cbc7d")
+			(effects
+				(font
+					(size 1.27 1.27)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "35d2222e-f00c-4383-928d-1775289f39d3")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "fb3a7da4-16e4-4bfb-8655-35596fc53dfa")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Bourns/CHV1206-FX-1003EST?qs=QNEnbhJQKvb7tN9X9nEnDA%3D%3D"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "1c6150d4-7e1f-4e55-8da4-3057dd242df4")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "specs" "100kOhm, 800V, 250mW, 100PPM, 1%, -55C, 155C"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "4f5f763b-94a3-4010-a874-f3c09a5a3795")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "unit x10" "0.083"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9aba76f3-442a-4194-899c-3b0404b38763")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "3787dafb-dfaf-4064-9638-68a2c795e63a")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property "note" ""
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "ab2c64c3-7f61-4e91-849f-805b115c5292")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/79c628ff-7b18-4777-9087-7341f277c643")
+		(sheetname "/")
+		(sheetfile "mini Orion TEM.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -0.727064 -0.91)
+			(end 0.727064 -0.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "860f78a3-f6f9-4f8d-91a0-82db6cc55912")
+		)
+		(fp_line
+			(start -0.727064 0.91)
+			(end 0.727064 0.91)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "87765b4d-afd1-47d5-af69-5679056c887a")
+		)
+		(fp_line
+			(start -2.45 -1.13)
+			(end 2.45 -1.13)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "227a56ac-ca51-4b1a-92cb-501cd5dbd73e")
+		)
+		(fp_line
+			(start -2.45 1.13)
+			(end -2.45 -1.13)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "d3a6eaef-53c9-40dd-83c6-1e175da0a3c3")
+		)
+		(fp_line
+			(start 2.45 -1.13)
+			(end 2.45 1.13)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "fa702d0b-140b-4ee4-aa8b-279c6cb9ff81")
+		)
+		(fp_line
+			(start 2.45 1.13)
+			(end -2.45 1.13)
+			(stroke
+				(width 0.05)
+				(type solid)
+			)
+			(layer "F.CrtYd")
+			(uuid "87311437-193c-417c-9bde-c8b44c57dcec")
+		)
+		(fp_line
+			(start -1.6 -0.8)
+			(end 1.6 -0.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+			(uuid "d007beba-698d-4af8-8722-ef4bf1143aaf")
+		)
+		(fp_line
+			(start -1.6 0.8)
+			(end -1.6 -0.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+			(uuid "be184e4c-8d3c-451c-a473-d0da04861cb7")
+		)
+		(fp_line
+			(start 1.6 -0.8)
+			(end 1.6 0.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+			(uuid "87cf5476-ac25-468f-bd10-cd368972bac5")
+		)
+		(fp_line
+			(start 1.6 0.8)
+			(end -1.6 0.8)
+			(stroke
+				(width 0.1)
+				(type solid)
+			)
+			(layer "F.Fab")
+			(uuid "75f746e8-423d-4aea-9eea-1487f23c9dbb")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 0 0)
+			(layer "F.Fab")
+			(uuid "198a65c7-b66f-4d5c-953c-bb4017b86edb")
+			(effects
+				(font
+					(size 0.8 0.8)
+					(thickness 0.12)
+				)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -1.55 0)
+			(size 1.3 1.75)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.192308)
+			(net 61 "Net-(U105-PA2_{slash}_ROSC)")
+			(pintype "passive")
+			(uuid "49024245-9c8e-4707-9b19-43f434dc4fa0")
+		)
+		(pad "2" smd roundrect
+			(at 1.55 0)
+			(size 1.3 1.75)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.192308)
+			(net 4 "GND")
+			(pintype "passive")
+			(uuid "e55ee6cf-c902-4d95-a417-3fb12f22547e")
+		)
+		(embedded_fonts no)
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -9222,7 +8910,7 @@
 			(size 1.15 1.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.217391)
-			(net 25 "Net-(D102-A)")
+			(net 25 "unconnected-(D102-A-Pad2)")
 			(pinfunction "A")
 			(pintype "passive")
 			(uuid "655faa3d-1dfa-4707-ba1f-25a69283d5b9")
@@ -10576,7 +10264,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/7a620eee-1a6b-4833-964f-c15bf0779149")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/7a620eee-1a6b-4833-964f-c15bf0779149")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -11568,7 +11256,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/9920e84b-de90-49ff-ad88-db572d492618")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/9920e84b-de90-49ff-ad88-db572d492618")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -11714,25 +11402,25 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "7ca68a15-7e3a-4ac7-91b3-3bbfc6840ebd")
 		(at 148.158101 93.59)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH207"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "cc35c876-3b9d-4739-893d-e4a4245686cf")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "a02db231-e710-43f8-8cf8-0233008fca98")
 			(effects
@@ -11744,174 +11432,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "03f80af7-871e-47e3-8f7b-58a5821c5a1c")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "8fa6dfc8-20e9-45f4-afd5-2131fea5bba7")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/7be9b7e6-729d-4723-9c2b-71cbd6d6a240")
+		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/f43c80bd-47d4-40bd-91f0-f971227f8426")
 		(sheetname "/thermistor bank 1/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "58b2620a-f222-4641-816a-0151b022f4c3")
+			(uuid "58200d8e-8ed7-4538-b5bb-eff7845a9193")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "ee19e105-db19-473b-b322-4de85a644d34")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "719813dd-35ba-493d-a3ea-a2dbde25eebe")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "9fcd56c7-6979-420e-aa90-67b562136a7a")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "928aa7fa-42b5-4686-8e60-32b8805e87e0")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "90165093-5598-4931-b2cb-8d50807b400f")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "86226d38-3032-401f-bff1-e701f6f90cd5")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "db18be03-96ba-4e29-b413-43e7f7e895f9")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "9b917c58-51f6-4d4e-afbd-0214939d4d46")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "82f1bfed-3f34-4e04-9cc5-77cd47455ca6")
+			(uuid "eed76420-a802-4650-ac31-2711a7d55350")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "48528b5c-a7cb-4d64-badb-b277d6e73466")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 14 "Net-(C207-Pad1)")
 			(pintype "passive")
 			(uuid "f8d57349-4150-4fe7-91ca-8a7ca7b59f57")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "5cbefe21-fd90-4bed-b4bf-ab283b68a53d")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
 		(layer "F.Cu")
@@ -13645,7 +13245,7 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/400b4a01-bae7-4993-9a53-e1c7f9e2307f")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/400b4a01-bae7-4993-9a53-e1c7f9e2307f")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -14128,7 +13728,7 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/f44321ba-3a9f-4f8e-bab6-b18291797793")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/f44321ba-3a9f-4f8e-bab6-b18291797793")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -14274,25 +13874,25 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "981363af-b77c-430e-9250-aa79d8383399")
 		(at 148.158101 73.73)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH201"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "ece6ae15-361b-4251-b26d-558ea0ad9546")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "3356de8c-3638-4ecf-bc06-92ca70b63e00")
 			(effects
@@ -14304,24 +13904,26 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "62a6cee3-c802-4a8e-a385-abc47134d9ac")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "45ab64c4-ab8c-4bd2-8a3a-9446a7229b8b")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
@@ -14332,146 +13934,56 @@
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "e52849c7-0f1f-4878-9357-2a8dc220559d")
+			(uuid "ec5f0e1d-c652-449d-919f-098992409211")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "973e6612-82db-429b-9911-99d1c5f4f6f3")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "87b6f696-8ba2-4fb1-9ef6-69d11c4a90fb")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "880b3c7e-a931-4555-a291-12d2cb00c6f8")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "8e7c5492-691d-4c7b-b372-be3ce0c8e474")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "b250032c-31a3-4f94-b629-cd1bd833d349")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "20fd8827-ec79-41b0-8d02-c9c5846e569d")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "b74b3f1b-ba84-41ed-b7ca-4d61f84ad938")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "14196403-1269-45a1-9b38-d05c731586e2")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "33d5db22-8d51-4c2b-a17f-b22946159e7b")
+			(uuid "17233c68-d006-4e82-b774-63bb0003ee51")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "5b070f07-0cf3-451d-bb32-24dc2d88cad1")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 8 "Net-(C201-Pad1)")
 			(pintype "passive")
 			(uuid "4d562a76-1e3d-4f97-a60c-5a5313dc6900")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "f8be8337-d976-45af-83da-f3be7092bfd1")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "zzLocalLibraries-Footprints:yageo fuse 6.1x2.5mm midplane"
 		(layer "F.Cu")
@@ -14682,7 +14194,7 @@
 	(footprint "zzLocalLibraries-Footprints:pad 2.667x6.472mm"
 		(layer "F.Cu")
 		(uuid "9d00c7b2-8847-41d7-a30c-c49314439e31")
-		(at 45.2 120.2)
+		(at 44 120.2)
 		(property "Reference" "TP115"
 			(at 0 -4 0)
 			(unlocked yes)
@@ -15154,7 +14666,7 @@
 	(footprint "MountingHole:MountingHole_3.5mm"
 		(layer "F.Cu")
 		(uuid "9f9ce161-a3a2-41cb-80f0-03cf30d37873")
-		(at 86 157.2)
+		(at 76.6 160.2)
 		(descr "Mounting Hole 3.5mm, no annular, generated by kicad-footprint-generator mountinghole.py")
 		(tags "mountinghole")
 		(property "Reference" "H101"
@@ -15250,25 +14762,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "a4935f41-3b5d-4c10-899a-965dbc0f7040")
 		(at 152.8 196.54)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH302"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "be3079da-1de5-4f32-a7d2-bad97a3f2b51")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "bb6df74d-2216-4d25-95fb-2e6bc51d2648")
 			(effects
@@ -15280,174 +14792,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "34cf1c4b-12d7-4bea-93dc-0484655b294c")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a06d764e-adf7-4347-832e-54d6d88c6b7d")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/5dee0ba8-a72f-40dd-a9a3-9e66516a197a")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/6c1ab6fb-ffc5-4557-ad76-4e9e1d9cbc12")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "e4e94e93-3f24-4057-ab76-1272b996d0bc")
+			(uuid "159a0f14-d1b3-40d0-a9f5-24e315b1a08f")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "9ec218f2-3fc5-4edb-abef-7a5c00bd4fa3")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "a181c676-43b6-48a8-8e56-45256f65da2f")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "03c3a2ad-ddda-47a3-9e35-326f38fdf066")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "dae7189f-a2a5-4586-906b-22bec56961c0")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "41ad7639-487b-4d94-b9cc-0be3b60664ff")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "96e4724f-0111-4bdf-a4aa-c8585f20d0cd")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "b79d0c5f-527b-4563-831d-51219a38408c")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "b9829fd9-d032-4436-9a2f-60bcfbe8593b")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "ee596894-6f23-4351-bd3b-cdcc63654a93")
+			(uuid "2985e58d-71b7-4636-89c2-08f6f0b6a1f5")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "be94d018-c385-43dc-a8aa-9ccf07624823")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 17 "Net-(C302-Pad1)")
 			(pintype "passive")
 			(uuid "51195239-ca94-41eb-9fbe-9029bdd2c4ec")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "85378b1b-dece-46c7-b38d-723feb9ff708")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "F.Cu")
@@ -15580,7 +15004,7 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/4dcc915d-ab0f-4c2a-8d85-8ef89eb29bfd")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/4dcc915d-ab0f-4c2a-8d85-8ef89eb29bfd")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -16217,7 +15641,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/918c071c-8720-41d9-b19b-08868a88600e")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/918c071c-8720-41d9-b19b-08868a88600e")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -17157,7 +16581,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/5dcf274d-cbe0-4612-aedd-8af0a3240511")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/5dcf274d-cbe0-4612-aedd-8af0a3240511")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -17580,25 +17004,25 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "b5750015-4a6e-4243-8151-4fdf96036179")
 		(at 148.158101 83.66)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH204"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "92a70033-9846-4145-b0c4-bc175f3028e2")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "1fcc471a-8647-440b-bb50-ae31a0d0d940")
 			(effects
@@ -17610,174 +17034,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b76020a9-fd17-4414-b35d-7095bd63dd63")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "131b0845-c57c-42e4-8fce-4553057c2e98")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/00bb2868-c659-44f7-b8dd-21cc4541db0a")
+		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/2f09ae07-3961-4aee-8296-c303aaa6ccfe")
 		(sheetname "/thermistor bank 1/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "e95d3407-b090-4532-9b4b-7366e0513212")
+			(uuid "c8eb777e-607b-474e-930b-960a8a6fd1dd")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "0e2bfbd6-0308-4e21-b275-28a2f16669cf")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "d74965b8-e414-4b89-b673-83e085cf1aa5")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "2f813658-328f-4138-a460-661348b8d25f")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "b61da051-accc-4c60-ae2c-7ed007f64a86")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "3357cf1e-b946-42a4-a1c5-6778f4633ccd")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "772e6bc7-0c5b-4d3d-a781-c1de9ce0a98e")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "08bc0083-90d2-4122-af24-80f7a16d0a54")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "1a64883e-65f7-4f5b-bf9e-2cc7a7f6debf")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "205f85bd-ec34-4ce2-828e-54972cf0440e")
+			(uuid "7112ad72-9102-4554-a876-97b2996409f4")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "4f4212d1-08fe-4e6c-9b3d-66baf15220a6")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 11 "Net-(C204-Pad1)")
 			(pintype "passive")
 			(uuid "e27d75c4-52c7-45e0-835d-a4a248d2a409")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "77a3692f-957f-4838-9ec2-cd7f0629131d")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 		(layer "F.Cu")
@@ -18658,7 +17994,7 @@
 			)
 		)
 		(property ki_fp_filters "DIP?16*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/734cdbb2-e885-4b5c-aa53-112f27e8ba66")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/734cdbb2-e885-4b5c-aa53-112f27e8ba66")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -19921,7 +19257,7 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/738620e3-4ca1-4ccb-ab09-853783fa67b3")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/738620e3-4ca1-4ccb-ab09-853783fa67b3")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -20211,7 +19547,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/4662c4c5-02fc-4fad-8931-63fb78d69973")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/4662c4c5-02fc-4fad-8931-63fb78d69973")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -22301,7 +21637,7 @@
 			(at -2.326051 -1.750441)
 			(size 1.553299 0.2794)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 116 "unconnected-(U105-PA0-Pad4)")
+			(net 117 "/UART_TX")
 			(pinfunction "PA0")
 			(pintype "bidirectional")
 			(uuid "521ab749-b9d3-4005-a2c3-6160326666cc")
@@ -22310,7 +21646,7 @@
 			(at -2.326051 -1.250315)
 			(size 1.553299 0.2794)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 121 "unconnected-(U105-PA1-Pad5)")
+			(net 124 "/UART_A1")
 			(pinfunction "PA1")
 			(pintype "bidirectional")
 			(uuid "800fdf21-e364-4bc0-ae80-6eae30cfa1cd")
@@ -22319,7 +21655,7 @@
 			(at -2.326051 -0.750189)
 			(size 1.553299 0.2794)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 124 "unconnected-(U105-NRST-Pad6)")
+			(net 116 "Net-(U105-NRST)")
 			(pinfunction "NRST")
 			(pintype "unspecified")
 			(uuid "b9e286ba-03f4-4c8c-951d-9368d13e5e21")
@@ -22391,7 +21727,7 @@
 			(at -2.326051 3.250819)
 			(size 1.553299 0.2794)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 25 "Net-(D102-A)")
+			(net 135 "unconnected-(U105-PA9_{slash}_RTC_OUT_{slash}_CLK_OUT-Pad14)")
 			(pinfunction "PA9_/_RTC_OUT_/_CLK_OUT")
 			(pintype "bidirectional")
 			(uuid "8ef8416c-747e-4202-8a16-01faa5418eef")
@@ -22463,7 +21799,7 @@
 			(at 2.326051 -0.250063)
 			(size 1.553299 0.2794)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 118 "unconnected-(U105-PA19{slash}SWDIO-Pad22)")
+			(net 121 "/SWDIO")
 			(pinfunction "PA19/SWDIO")
 			(pintype "bidirectional")
 			(uuid "6a19fce0-5ae6-44b3-8a53-f259efb0056f")
@@ -22472,7 +21808,7 @@
 			(at 2.326051 -0.750189)
 			(size 1.553299 0.2794)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 117 "unconnected-(U105-PA20{slash}SWCLK-Pad23)")
+			(net 118 "/SWCLK")
 			(pinfunction "PA20/SWCLK")
 			(pintype "bidirectional")
 			(uuid "53e46548-98ed-4534-851b-eb62855b2598")
@@ -22524,25 +21860,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "d16cbb5c-00e6-4be3-9eee-2626f34c72fd")
 		(at 148.158101 90.28)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH206"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "73f01f0b-3025-4f3e-ab4b-8651c40ec343")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "c963e7ee-7f84-4292-9af4-5a08112cc7fd")
 			(effects
@@ -22554,174 +21890,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "2462160a-4c39-41e2-a3d4-81297804ea68")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "44345d08-acd5-4882-aa18-d7cb438dc485")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/32200c5f-dcbe-4df0-a302-fd6f6af9d8da")
+		(path "/627895a4-f1e0-44f0-8821-afd2a90a8a3a/5cc8c598-36fd-4e3b-a62e-12c028266821")
 		(sheetname "/thermistor bank 1/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "a014c9a8-f691-49e4-a3d7-3046d901bee3")
+			(uuid "a602e524-ed57-487c-ae27-546f2d00c962")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "e0ba18d3-cc22-44db-81e9-cd82288e37fb")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "9597eeab-0c44-493b-8f8a-e4c6c312ac4d")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "d087ce04-dc6b-4b73-a172-44345a218860")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "a86b4c7e-ebaa-4a73-b547-e5806c3e6710")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "ff789530-e509-471a-9cba-ad11ac9b65c1")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "e66f2a50-a012-441f-ac69-88ad8e4f8dd6")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "67668d3d-a021-456c-a7d5-af96033e9cbf")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "a50c26c9-f018-4c1b-a685-4381f710d1e2")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "23ef9056-c016-41de-971d-db407ed3e9e9")
+			(uuid "3c43d825-bc47-4890-ade3-fbaa9a4074de")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "b6822e40-479b-420b-ad84-125ed117c08f")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 13 "Net-(C206-Pad1)")
 			(pintype "passive")
 			(uuid "5d7a81f9-2041-4bf2-bfe9-d0bd7f17b8ac")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "9a856b27-3774-447a-b3f8-9a5734a2af9e")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Package_SO:SOIC-20W_7.5x12.8mm_P1.27mm"
 		(layer "F.Cu")
@@ -23518,14 +22766,14 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+	(footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 		(layer "F.Cu")
 		(uuid "d8cd3582-d749-43e7-9d39-d8d44e808499")
 		(at 226.6 147.09)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
+		(descr "Resistor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC-7351 nominal with elongated pad for handsoldering. (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor handsolder")
 		(property "Reference" "R102"
-			(at 0 -1.83 0)
+			(at 0 -1.65 0)
 			(layer "F.SilkS")
 			(uuid "a6ccf1ed-760c-4403-bae3-33b7b9677ff4")
 			(effects
@@ -23535,8 +22783,8 @@
 				)
 			)
 		)
-		(property "Value" "4.99k"
-			(at 0 1.83 0)
+		(property "Value" "22.1k"
+			(at 0 1.65 0)
 			(layer "F.Fab")
 			(uuid "5c489c43-3f80-4083-a4c6-984c7a7a574d")
 			(effects
@@ -23570,12 +22818,12 @@
 				)
 			)
 		)
-		(property "Sim.Device" ""
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AC0805FR-0722K1L?qs=sGAEpiMZZMvdGkrng054txZnKwhPFOhA%2Fb1BRlUBP24%3D"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "5ca7afe5-44b0-41b7-8f8e-abc95e56b2f9")
+			(uuid "b156c7ca-924b-45d4-9f24-10ae23105e0e")
 			(effects
 				(font
 					(size 1 1)
@@ -23583,12 +22831,12 @@
 				)
 			)
 		)
-		(property "Sim.Type" ""
+		(property "specs" "22.1kR, 1%, 125mW, 150V, 100ppm, -55C, +155C"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "3a196a2f-ddfa-45b9-b48e-772d3fee1d1d")
+			(uuid "2cb204b7-6859-4c65-b35a-73a9f0d20058")
 			(effects
 				(font
 					(size 1 1)
@@ -23596,12 +22844,12 @@
 				)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP1206FTD4K99?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ95yR%2FF2bQQIaAb5UdPiGbTtQ%3D%3D"
+		(property "unit x10" "0.011"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "2bcb77a9-7e78-4b35-89fd-e0a43ac6138e")
+			(uuid "6c491206-f655-4919-9588-2ec1ef4b8b91")
 			(effects
 				(font
 					(size 1 1)
@@ -23609,64 +22857,12 @@
 				)
 			)
 		)
-		(property "specs" "4.99kOhm, 200V, 500mW, 1%, 100PPM, -55C, +155C"
+		(property "unit x1" "0.10"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "1ba39cd3-411a-46f7-b5d1-846441aba1e1")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "unit x10" "0.016"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "7ad04ced-4daa-4303-8f3f-1e687d3578fe")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "3f31feb2-8b9e-4a1e-a3e1-52cdc4824b09")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "4e4203d7-019e-4120-b653-5152c4ef1d2c")
-			(effects
-				(font
-					(size 1 1)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "note" ""
-			(at 0 0 0)
-			(unlocked yes)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "cb01ac53-6fe0-4571-9520-b289a7848ed6")
+			(uuid "360b1842-60be-4f0c-b5d1-ac841334c3a7")
 			(effects
 				(font
 					(size 1 1)
@@ -23675,109 +22871,109 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/84f27068-f8c1-4198-97a5-ab44135c61a7")
+		(path "/2dcdaad2-51e0-4524-a6e4-2b985c110cc7")
 		(sheetname "/")
 		(sheetfile "mini Orion TEM.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -0.227064 -0.735)
+			(end 0.227064 -0.735)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "0cef843d-7206-4470-9763-dada5d9611a5")
+			(uuid "1818daf9-ac76-42f3-b525-53f343c64fed")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -0.227064 0.735)
+			(end 0.227064 0.735)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "711aad14-2dad-4cec-b4c9-f2d7142325df")
+			(uuid "9a46f4e6-9544-48c2-8690-9f1920d478b1")
 		)
 		(fp_line
-			(start -2.45 -1.13)
-			(end 2.45 -1.13)
+			(start -1.85 -0.95)
+			(end 1.85 -0.95)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "ebfc5727-592a-4755-a258-76f7d73043b8")
+			(uuid "a8896073-606d-4fe7-af63-85aa536f1197")
 		)
 		(fp_line
-			(start -2.45 1.13)
-			(end -2.45 -1.13)
+			(start -1.85 0.95)
+			(end -1.85 -0.95)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "04680df1-e003-4b78-bb0a-d1357cc099c3")
+			(uuid "cf66b8a5-c726-486b-8d8f-32065915d8ed")
 		)
 		(fp_line
-			(start 2.45 -1.13)
-			(end 2.45 1.13)
+			(start 1.85 -0.95)
+			(end 1.85 0.95)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "9b575d3c-6321-4740-aa1c-8b4a9ec79b7a")
+			(uuid "25bd29a3-ae4a-44e2-8bb6-664a2b45c024")
 		)
 		(fp_line
-			(start 2.45 1.13)
-			(end -2.45 1.13)
+			(start 1.85 0.95)
+			(end -1.85 0.95)
 			(stroke
 				(width 0.05)
 				(type solid)
 			)
 			(layer "F.CrtYd")
-			(uuid "94cbb6f2-199d-4b7f-ad9b-b21dceb7a28f")
+			(uuid "f7bd7146-6a08-4cf3-b56e-8b819c1aff01")
 		)
 		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
+			(start -1 -0.625)
+			(end 1 -0.625)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "F.Fab")
-			(uuid "f1bcb3d8-59c7-48aa-bfc5-264023c56778")
+			(uuid "36846d49-c57e-4f15-948d-367371d79458")
 		)
 		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
+			(start -1 0.625)
+			(end -1 -0.625)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "F.Fab")
-			(uuid "1efd987f-7e6e-4cd3-8237-8698e85b63a8")
+			(uuid "2e24ca0a-13a4-4112-bf8c-4354a96fa045")
 		)
 		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
+			(start 1 -0.625)
+			(end 1 0.625)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "F.Fab")
-			(uuid "c8cc3312-3280-4d6b-9e67-a83a82f608ab")
+			(uuid "425270e8-76f6-4311-acba-6d2386c1fb2c")
 		)
 		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
+			(start 1 0.625)
+			(end -1 0.625)
 			(stroke
 				(width 0.1)
 				(type solid)
 			)
 			(layer "F.Fab")
-			(uuid "3f9f954d-f19e-49aa-9aac-233ed9fa2f19")
+			(uuid "4bfe8f4f-f437-469c-bef7-446905d8daf4")
 		)
 		(fp_text user "${REFERENCE}"
 			(at 0 0 0)
@@ -23785,31 +22981,31 @@
 			(uuid "da9f2d52-7e9a-494d-bc3d-c5a31d5b0c6a")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 0.5 0.5)
+					(thickness 0.08)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.55 0)
-			(size 1.3 1.75)
+			(at -1 0)
+			(size 1.2 1.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.192308)
-			(net 4 "GND")
+			(roundrect_rratio 0.208333)
+			(net 116 "Net-(U105-NRST)")
 			(pintype "passive")
 			(uuid "6cc62e89-e53e-4ce3-8571-a17237b311ea")
 		)
 		(pad "2" smd roundrect
-			(at 1.55 0)
-			(size 1.3 1.75)
+			(at 1 0)
+			(size 1.2 1.4)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.192308)
-			(net 26 "Net-(D102-K)")
+			(roundrect_rratio 0.208333)
+			(net 6 "+3V3")
 			(pintype "passive")
 			(uuid "509641b4-2041-4a38-b73a-b62d5a99e180")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
+		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0805_2012Metric.step"
 			(offset
 				(xyz 0 0 0)
 			)
@@ -23821,25 +23017,25 @@
 			)
 		)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "d97db6a9-69a0-4945-98a8-30bd32ca0f0f")
 		(at 152.8 216.4)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH308"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "1f3c8b2f-d276-45fc-bbdf-cf21761754a8")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "a9bfc8ba-0bca-4ff5-99e8-219bc7f5ea41")
 			(effects
@@ -23851,174 +23047,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "94eec016-deee-45b7-949e-81a73b23400c")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a054c55c-d7f3-49f8-b8a0-c7f4a78c816f")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/97108ec1-c591-4620-ac68-590dba5526b9")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/b6986e9c-8518-49d8-981a-9e64c8a86b7e")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "45a02c44-2ff7-46df-a4ed-e2265fe30afd")
+			(uuid "c04dde80-7521-4ad1-8506-9c33eb9ce0f0")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "7d3f5ade-72c2-46d4-95f9-ea1329f05c4a")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "ff4dfedb-3f3b-4814-b4c5-dd4bfb752c0d")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "a3a36edb-7573-461c-8e5f-425f5ea41efa")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "d78edb13-9862-4b48-8878-ed9dcdd00485")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "60853191-7d5e-4bd8-a897-377f6b02349f")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "3877f4cb-81af-4065-bd91-3630b69d353c")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "01512968-8b6b-4382-a89e-5d5f327a0a1e")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "993ae81d-9552-4fe2-8f2d-5430ed8971e2")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "13d4db47-6beb-4961-a855-b3a6938f7767")
+			(uuid "2756c067-dba2-4587-912d-518d984c4748")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "190cdc62-2e7e-47b8-8338-72102158adc2")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 23 "Net-(C308-Pad1)")
 			(pintype "passive")
 			(uuid "d90f2770-c6e6-45f4-8570-4b320e45afdd")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "6207be99-ac56-4242-88bc-6bc1e81eb773")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
 		(layer "F.Cu")
@@ -26490,7 +25598,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/6001b76a-eaa4-4641-999f-885e4f014256")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/6001b76a-eaa4-4641-999f-885e4f014256")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -26780,7 +25888,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/3ba82787-4361-4b21-8e02-34dabd97393e")
+		(path "/46c9bc4e-8853-456c-9b99-3aca30629720")
 		(sheetname "/")
 		(sheetfile "mini Orion TEM.kicad_sch")
 		(attr smd)
@@ -26909,7 +26017,7 @@
 			(size 1.175 1.45)
 			(layers "F.Cu" "F.Mask" "F.Paste")
 			(roundrect_rratio 0.212766)
-			(net 7 "Net-(U105-VCORE)")
+			(net 6 "+3V3")
 			(pintype "passive")
 			(uuid "b59eaea6-b900-4983-a274-c86ec6573089")
 		)
@@ -27070,7 +26178,7 @@
 			)
 		)
 		(property ki_fp_filters "C_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/90e7abe8-180c-4f5f-90d5-c4a7b8fb0f4f")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/90e7abe8-180c-4f5f-90d5-c4a7b8fb0f4f")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
@@ -27315,25 +26423,25 @@
 		)
 		(embedded_fonts no)
 	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
 		(layer "F.Cu")
 		(uuid "ee464658-076b-41ea-ae99-f6cd57b533ab")
 		(at 152.8 213.09)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
 		(property "Reference" "TH307"
-			(at 0 -1.83 0)
+			(at 0 -2.4 0)
+			(unlocked yes)
 			(layer "F.SilkS")
 			(uuid "24f7c71f-d185-4448-aa1b-bea810dd3ed7")
 			(effects
 				(font
 					(size 1 1)
-					(thickness 0.15)
+					(thickness 0.1)
 				)
 			)
 		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "02053e87-2e26-4249-8006-148bb3e133b7")
 			(effects
@@ -27345,185 +26453,10 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "35a78258-6214-4fea-a9db-da79cefeaf3a")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "3a57cfdd-e88d-4e1d-8282-1d9966cf9e35")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/7be9b7e6-729d-4723-9c2b-71cbd6d6a240")
-		(sheetname "/thermistor bank 2/")
-		(sheetfile "thermistors.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "ac76f639-823b-4dc4-b904-12c57c77796a")
-		)
-		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "2c27c421-136c-4486-bc2e-dec1e8aad9ce")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "4791e196-b69e-4f03-841a-6546b736bdd5")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "7752c148-1365-4eb3-bcd4-c6ba57a780d2")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "7833169a-2390-4c06-aff7-8e1da88b6b88")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "c887d0e4-0ee7-4dc6-83e9-9eb9dc95b380")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "d52bf7a9-b97c-4c57-9479-1ac40951232e")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "63270580-7f4a-485d-8f09-213255908221")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "990e5a40-721c-42ec-a0a8-b73f2a00f25b")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "eba1a579-1464-4498-b9ad-c4ee2dd53f8b")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "F.Fab")
-			(uuid "697ed4b8-51da-46d7-b0ad-e6ab8f7f94ca")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
-			(net 22 "Net-(C307-Pad1)")
-			(pintype "passive")
-			(uuid "9586af58-d9fa-404d-80e6-8dfcec4c0fca")
-		)
-		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
-			(net 4 "GND")
-			(pintype "passive")
-			(uuid "9c2a78ba-1b6e-48a1-8a76-f453b08efb11")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
-		(layer "F.Cu")
-		(uuid "f51a832f-867c-4b1a-8c0b-829429a141ce")
-		(at 152.8 209.78)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
-		(property "Reference" "TH306"
-			(at 0 -1.83 0)
-			(layer "F.SilkS")
-			(uuid "191aa1a3-a486-4fbc-a66c-5f32bbb38fa0")
 			(effects
 				(font
 					(size 1 1)
@@ -27531,8 +26464,95 @@
 				)
 			)
 		)
+		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "3a57cfdd-e88d-4e1d-8282-1d9966cf9e35")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/f43c80bd-47d4-40bd-91f0-f971227f8426")
+		(sheetname "/thermistor bank 2/")
+		(sheetfile "thermistors.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "f3389449-9808-47c4-a528-08cbb4ea7ba9")
+		)
+		(fp_line
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "6a0056f7-68dd-467f-a309-84fa8ed87ac6")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 2.5 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(uuid "697ed4b8-51da-46d7-b0ad-e6ab8f7f94ca")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.9 0)
+			(size 0.6 2)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.192308)
+			(net 22 "Net-(C307-Pad1)")
+			(pintype "passive")
+			(uuid "9586af58-d9fa-404d-80e6-8dfcec4c0fca")
+		)
+		(pad "2" smd roundrect
+			(at 0.9 0)
+			(size 0.6 2)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.192308)
+			(net 4 "GND")
+			(pintype "passive")
+			(uuid "9c2a78ba-1b6e-48a1-8a76-f453b08efb11")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
+		(layer "F.Cu")
+		(uuid "f51a832f-867c-4b1a-8c0b-829429a141ce")
+		(at 152.8 209.78)
+		(property "Reference" "TH306"
+			(at 0 -2.4 0)
+			(unlocked yes)
+			(layer "F.SilkS")
+			(uuid "191aa1a3-a486-4fbc-a66c-5f32bbb38fa0")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.1)
+				)
+			)
+		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "0e7e8446-d67e-466e-b152-04ee0762b88a")
 			(effects
@@ -27544,185 +26564,10 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "acda1dde-a7a4-4409-8fd1-aaec6006b316")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
-			(at 0 0 0)
-			(layer "F.Fab")
-			(hide yes)
-			(uuid "bf03e65d-7bba-4b05-8eed-2669a720cf0f")
-			(effects
-				(font
-					(size 1.27 1.27)
-					(thickness 0.15)
-				)
-			)
-		)
-		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/32200c5f-dcbe-4df0-a302-fd6f6af9d8da")
-		(sheetname "/thermistor bank 2/")
-		(sheetfile "thermistors.kicad_sch")
-		(attr smd)
-		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "21b553c8-880e-4ebc-8fc0-352a96179400")
-		)
-		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
-			(stroke
-				(width 0.12)
-				(type solid)
-			)
-			(layer "F.SilkS")
-			(uuid "23d13dbd-da46-437f-9f47-9ce792734fa3")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "a272db63-4632-4ca9-ba69-58b21f106541")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "e0553993-2f37-4f98-be81-9d88cb427c0d")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "96de97f3-d5b6-4c69-b08c-b074d2b81cb4")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "163be46c-ff5e-4d65-8d7e-1f7af08841f9")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "d880a984-067d-4247-9a2f-dec307f09ca1")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "2d87a08e-8624-40c3-85d5-f11801331b09")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "f48a2847-bd00-4c37-b486-2983c505d7ee")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "e0044135-dee1-4582-b7bb-9132d8c35c82")
-		)
-		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
-			(layer "F.Fab")
-			(uuid "e07b3519-f335-4671-b878-2c6b898d0780")
-			(effects
-				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
-				)
-			)
-		)
-		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
-			(net 21 "Net-(C306-Pad1)")
-			(pintype "passive")
-			(uuid "377188f1-c5b0-4985-86c4-2ef5b0aeed00")
-		)
-		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
-			(net 4 "GND")
-			(pintype "passive")
-			(uuid "f1140033-17d8-4914-8cb4-ed2aebffe0fb")
-		)
-		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
-	)
-	(footprint "Resistor_SMD:R_1206_3216Metric"
-		(layer "F.Cu")
-		(uuid "fb731d1a-4006-4ff4-b649-ffd54cb1da41")
-		(at 152.8 193.23)
-		(descr "Resistor SMD 1206 (3216 Metric), square (rectangular) end terminal, IPC-7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
-		(tags "resistor")
-		(property "Reference" "TH301"
-			(at 0 -1.83 0)
-			(layer "F.SilkS")
-			(uuid "4b66dd41-9015-419d-b64c-a3173286869f")
 			(effects
 				(font
 					(size 1 1)
@@ -27730,8 +26575,95 @@
 				)
 			)
 		)
+		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "bf03e65d-7bba-4b05-8eed-2669a720cf0f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(property ki_fp_filters "R_*")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/5cc8c598-36fd-4e3b-a62e-12c028266821")
+		(sheetname "/thermistor bank 2/")
+		(sheetfile "thermistors.kicad_sch")
+		(attr smd)
+		(fp_line
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "4ee8a91c-e644-4b75-bfe5-1bb3a1e67836")
+		)
+		(fp_line
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
+			(stroke
+				(width 0.12)
+				(type solid)
+			)
+			(layer "F.SilkS")
+			(uuid "ae0a8834-3e89-4952-af9f-82fd6f71e7e8")
+		)
+		(fp_text user "${REFERENCE}"
+			(at 0 2.5 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(uuid "e07b3519-f335-4671-b878-2c6b898d0780")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
+		(pad "1" smd roundrect
+			(at -0.9 0)
+			(size 0.6 2)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.192308)
+			(net 21 "Net-(C306-Pad1)")
+			(pintype "passive")
+			(uuid "377188f1-c5b0-4985-86c4-2ef5b0aeed00")
+		)
+		(pad "2" smd roundrect
+			(at 0.9 0)
+			(size 0.6 2)
+			(layers "F.Cu" "F.Mask" "F.Paste")
+			(roundrect_rratio 0.192308)
+			(net 4 "GND")
+			(pintype "passive")
+			(uuid "f1140033-17d8-4914-8cb4-ed2aebffe0fb")
+		)
+		(embedded_fonts no)
+	)
+	(footprint "zzLocalLibraries-Footprints:FPC thermistor strip 2x2mm"
+		(layer "F.Cu")
+		(uuid "fb731d1a-4006-4ff4-b649-ffd54cb1da41")
+		(at 152.8 193.23)
+		(property "Reference" "TH301"
+			(at 0 -2.4 0)
+			(unlocked yes)
+			(layer "F.SilkS")
+			(uuid "4b66dd41-9015-419d-b64c-a3173286869f")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.1)
+				)
+			)
+		)
 		(property "Value" "Thermistor_US"
-			(at 0 1.83 0)
+			(at 0 1 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "c680b3da-f8dd-45c7-8c0c-3abc97c07f81")
 			(effects
@@ -27743,174 +26675,86 @@
 		)
 		(property "Datasheet" "~"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "3a6160ab-ba0b-486c-8550-11ce6f313860")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property "Description" "Thermistor, temperature dependent resistor, US symbol"
 			(at 0 0 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "62e6e9e0-7f36-44cb-bd94-72d7c603e017")
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 1 1)
 					(thickness 0.15)
 				)
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/a4c03ae9-513b-43c4-ac91-26eb3959a2a5")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/a4c03ae9-513b-43c4-ac91-26eb3959a2a5")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
 		(fp_line
-			(start -0.727064 -0.91)
-			(end 0.727064 -0.91)
+			(start -1.4 1.2)
+			(end -1.4 -0.527064)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "6d9db16b-1afe-45ff-8e12-9d13ad2f51e2")
+			(uuid "1b7c75c4-f06f-47fe-b537-ddf5deec7b22")
 		)
 		(fp_line
-			(start -0.727064 0.91)
-			(end 0.727064 0.91)
+			(start -1.4 1.2)
+			(end 0.054128 1.2)
 			(stroke
 				(width 0.12)
 				(type solid)
 			)
 			(layer "F.SilkS")
-			(uuid "69e4e056-b7a2-4400-bf0f-4f93ea8355aa")
-		)
-		(fp_line
-			(start -2.28 -1.13)
-			(end 2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "3f2cf519-f24d-487a-91a9-84574921cf51")
-		)
-		(fp_line
-			(start -2.28 1.13)
-			(end -2.28 -1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "588fd1cb-a8bd-47d7-807b-f73c2602b4b4")
-		)
-		(fp_line
-			(start 2.28 -1.13)
-			(end 2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "f04298ff-6f65-4d4e-b4a3-644d074ed4ea")
-		)
-		(fp_line
-			(start 2.28 1.13)
-			(end -2.28 1.13)
-			(stroke
-				(width 0.05)
-				(type solid)
-			)
-			(layer "F.CrtYd")
-			(uuid "2c257052-40e3-45e3-bc43-8a9d353e4bc9")
-		)
-		(fp_line
-			(start -1.6 -0.8)
-			(end 1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "0f31e76b-6381-43fb-a157-41d8263a017c")
-		)
-		(fp_line
-			(start -1.6 0.8)
-			(end -1.6 -0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "34c10102-b18e-4b24-9cf2-74ebaf7ce822")
-		)
-		(fp_line
-			(start 1.6 -0.8)
-			(end 1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "afbd0e2f-3242-4d98-b8e4-992a76781369")
-		)
-		(fp_line
-			(start 1.6 0.8)
-			(end -1.6 0.8)
-			(stroke
-				(width 0.1)
-				(type solid)
-			)
-			(layer "F.Fab")
-			(uuid "cf246eae-6453-45aa-9817-11f7ab066c26")
+			(uuid "d96d08ff-2435-4873-9e38-7e067bfc1bcb")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 0)
+			(at 0 2.5 0)
+			(unlocked yes)
 			(layer "F.Fab")
 			(uuid "48b2d247-4c4b-41b6-8fd3-c21d1eecc366")
 			(effects
 				(font
-					(size 0.8 0.8)
-					(thickness 0.12)
+					(size 1 1)
+					(thickness 0.15)
 				)
 			)
 		)
 		(pad "1" smd roundrect
-			(at -1.4625 0)
-			(size 1.125 1.75)
+			(at -0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 16 "Net-(C301-Pad1)")
 			(pintype "passive")
 			(uuid "24779d39-d929-4343-ab80-e21011ced65e")
 		)
 		(pad "2" smd roundrect
-			(at 1.4625 0)
-			(size 1.125 1.75)
+			(at 0.9 0)
+			(size 0.6 2)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.222222)
+			(roundrect_rratio 0.192308)
 			(net 4 "GND")
 			(pintype "passive")
 			(uuid "cd80516e-0cc5-4c85-a751-2c2a5b8e3ea2")
 		)
 		(embedded_fonts no)
-		(model "${KICAD9_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
-			(offset
-				(xyz 0 0 0)
-			)
-			(scale
-				(xyz 1 1 1)
-			)
-			(rotate
-				(xyz 0 0 0)
-			)
-		)
 	)
 	(footprint "zzLocalLibraries-Footprints:pad 2.667x6.472mm"
 		(layer "F.Cu")
@@ -28126,7 +26970,7 @@
 			)
 		)
 		(property ki_fp_filters "R_*")
-		(path "/c3b9cdf1-3a4b-447f-a2ea-10fee6489e45/de451565-ad5a-46aa-9922-b3c1b5f60f1e")
+		(path "/095b9922-ee94-46ba-8a3e-5c7b061935d3/de451565-ad5a-46aa-9922-b3c1b5f60f1e")
 		(sheetname "/thermistor bank 2/")
 		(sheetfile "thermistors.kicad_sch")
 		(attr smd)
