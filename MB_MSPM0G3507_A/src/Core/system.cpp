@@ -51,11 +51,11 @@ void System::init() {
     delay_cycles(POWER_STARTUP_DELAY);
 
     #ifdef PROJECT_ENABLE_MCAN0
-    // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
+        // MCAN has to be enabled before the clocks are modified or the ram wont initialize
 
         // pins for v: 2.2, 3.0
-        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
-        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
+        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM59, IOMUX_PINCM59_PF_CANFD0_CANTX); // CANTX, PA26
+        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM60, IOMUX_PINCM60_PF_CANFD0_CANRX); // CANRX, PA27
 
         DL_MCAN_enablePower(CANFD0);
         delay_cycles(POWER_STARTUP_DELAY);
@@ -68,7 +68,7 @@ void System::init() {
      *  2: 2.73
      *  3: 2.92
      */
-    DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_0);
+    DL_SYSCTL_setBORThreshold(DL_SYSCTL_BOR_THRESHOLD_LEVEL::DL_SYSCTL_BOR_THRESHOLD_LEVEL_2);
 
     DL_SYSCTL_setFlashWaitState(DL_SYSCTL_FLASH_WAIT_STATE_2);
 
@@ -198,14 +198,6 @@ void System::init() {
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
-        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PA14
-                IOMUX_PINCM36,
-                IOMUX_PINCM36_PF_SPI0_PICO,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
-                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-            );
         DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO , PA13
                 IOMUX_PINCM35,
                 IOMUX_PINCM35_PF_SPI0_POCI,
@@ -214,9 +206,17 @@ void System::init() {
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PA14
+                IOMUX_PINCM36,
+                IOMUX_PINCM36_PF_SPI0_PICO,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
         DL_GPIO_enableHiZ(IOMUX_PINCM35);
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA12));
-        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
+//        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA14));
 
         /*--- SPI config -----------------*/
@@ -237,12 +237,12 @@ void System::init() {
         DL_SPI_init(spi0.reg, &config);
         DL_SPI_setFIFOThreshold(spi0.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
         DL_SPI_disablePacking(spi0.reg);
-        spi0.setSCLKTarget(125e3);
+        spi0.setSCLKTarget(1e6);
         DL_SPI_enable(spi0.reg);
 
         spi0._trxBuffer.rx_i = -1;
 
-        NVIC_EnableIRQ(SPI0_INT_IRQn);
+        NVIC_EnableIRQ(spi0.irq_type);
         DL_SPI_enableInterrupt(spi0.reg,
                   DL_SPI_INTERRUPT_RX
                 | DL_SPI_INTERRUPT_TX
@@ -261,14 +261,6 @@ void System::init() {
 
         /*--- GPIO config ----------------*/
 
-        DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO/POCI , PA16
-                IOMUX_PINCM38,
-                IOMUX_PINCM38_PF_SPI1_POCI,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
-                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
-            );
         DL_GPIO_initPeripheralOutputFunctionFeatures(//    SCLK , PA17
                 IOMUX_PINCM39,
                 IOMUX_PINCM39_PF_SPI1_SCLK,
@@ -276,6 +268,14 @@ void System::init() {
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
+        DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO/POCI , PA16
+                IOMUX_PINCM38,
+                IOMUX_PINCM38_PF_SPI1_POCI,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
+                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
         DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI/PICO, PA18
                 IOMUX_PINCM40,
@@ -286,7 +286,7 @@ void System::init() {
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
         DL_GPIO_enableHiZ(IOMUX_PINCM38);// MISO
-        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA16));
+//        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA16));
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA17));
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA18));
 
@@ -308,7 +308,7 @@ void System::init() {
         DL_SPI_init(spi1.reg, &config);
         DL_SPI_setFIFOThreshold(spi1.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
         DL_SPI_disablePacking(spi1.reg);
-        spi1.setSCLKTarget(125e3);
+        spi1.setSCLKTarget(1e3);
         DL_SPI_enable(spi1.reg);
 
         spi1._trxBuffer.rx_i = -1;

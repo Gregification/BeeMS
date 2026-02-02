@@ -22,8 +22,10 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, uint16_t * out) 
             break;
 
         case RegAddr::SOFTWARE_VERSION: // <input>
-            *out = 67;
-            break;
+        {
+            static uint8_t t;
+            *out = t++;
+        } break;
     }
 
     return true;

@@ -8,11 +8,15 @@
 #include "MasterBoard.hpp"
 
 // absurd naming!!! yippie!
-System::SPI::SPI MstrB::MHCS::spi   = System::SPI::spi1;
-System::SPI::SPI MstrB::Eth::spi    = System::SPI::spi0;
 
-#define TS_ADC  ADC0
-ADC12_Regs * const MstrB::TempSense::adc  = TS_ADC;
+namespace MstrB {
+    System::SPI::SPI & MHCS::spi  = System::SPI::spi1;
+    System::SPI::SPI & Eth::spi   = System::SPI::spi0;
+    System::SPI::SPI & FS::spi    = MHCS::spi;
+}
+
+//#define TS_ADC  ADC0
+//ADC12_Regs * const MstrB::TempSense::adc  = TS_ADC;
 
 namespace System::UART {
     UART & uart_ui = uart2;
@@ -49,21 +53,21 @@ void MstrB::init() {
     {
         using namespace Indi;
 
-        DL_GPIO_initDigitalOutput(i1.iomux);
-        DL_GPIO_clearPins(GPIOPINPUX(i1));
-        DL_GPIO_enableOutput(GPIOPINPUX(i1));
+        DL_GPIO_initDigitalOutput(LED::i1.iomux);
+        DL_GPIO_clearPins(GPIOPINPUX(LED::i1));
+        DL_GPIO_enableOutput(GPIOPINPUX(LED::i1));
 
-        DL_GPIO_initDigitalOutput(i2.iomux);
-        DL_GPIO_clearPins(GPIOPINPUX(i2));
-        DL_GPIO_enableOutput(GPIOPINPUX(i2));
+        DL_GPIO_initDigitalOutput(LED::i2.iomux);
+        DL_GPIO_clearPins(GPIOPINPUX(LED::i2));
+        DL_GPIO_enableOutput(GPIOPINPUX(LED::i2));
 
-        DL_GPIO_initDigitalOutput(bmsFault.iomux);
-        DL_GPIO_clearPins(GPIOPINPUX(bmsFault));
-        DL_GPIO_enableOutput(GPIOPINPUX(bmsFault));
+        DL_GPIO_initDigitalOutput(LED::fault.iomux);
+        DL_GPIO_clearPins(GPIOPINPUX(LED::fault));
+        DL_GPIO_enableOutput(GPIOPINPUX(LED::fault));
 
-        DL_GPIO_initDigitalOutput(RTOSRunning.iomux);
-        DL_GPIO_clearPins(GPIOPINPUX(RTOSRunning));
-        DL_GPIO_enableOutput(GPIOPINPUX(RTOSRunning));
+        DL_GPIO_initDigitalOutput(LED::scheduler.iomux);
+        DL_GPIO_clearPins(GPIOPINPUX(LED::scheduler));
+        DL_GPIO_enableOutput(GPIOPINPUX(LED::scheduler));
     }
 
     {
@@ -82,14 +86,14 @@ void MstrB::init() {
         DL_GPIO_initDigitalInputFeatures(
                 sense.iomux,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
         DL_GPIO_disableOutput(GPIOPINPUX(sense));
     }
 
-    {
+    /*{
         using namespace TempSense;
 
         static_assert(System::CLK::ULPCLK == 40e6);
@@ -125,65 +129,65 @@ void MstrB::init() {
         DL_ADC12_setSampleTime0(adc,250);
 
         DL_ADC12_enableConversions(adc);
-    }
+    }*/
 
     {
         using namespace HRLV;
 
         DL_GPIO_initDigitalInputFeatures(
-                HRLVSense.iomux,
+                presence_HRLV.iomux,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
-        DL_GPIO_disableOutput(GPIOPINPUX(HRLVSense));
+        DL_GPIO_disableOutput(GPIOPINPUX(presence_HRLV));
 
         DL_GPIO_initDigitalInputFeatures(
-                ILSense.iomux,
+                presence_IL.iomux,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
-        DL_GPIO_disableOutput(GPIOPINPUX(ILSense));
+        DL_GPIO_disableOutput(GPIOPINPUX(presence_IL));
     }
 
     {
         using namespace Eth;
+//
+//        DL_GPIO_initDigitalOutputFeatures(
+//                cs.iomux,
+//                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+//                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+//                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+//                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+//            );
+//        DL_GPIO_clearPins(GPIOPINPUX(cs));
+//        DL_GPIO_enableOutput(GPIOPINPUX(cs));
+//
+//        DL_GPIO_initDigitalOutputFeatures(
+//                reset.iomux,
+//                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+//                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+//                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+//                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+//            );
+//        DL_GPIO_clearPins(GPIOPINPUX(reset));
+//        DL_GPIO_enableOutput(GPIOPINPUX(reset));
 
-        DL_GPIO_initDigitalOutputFeatures(
-                cs.iomux,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
-                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-            );
-        DL_GPIO_clearPins(GPIOPINPUX(cs));
-        DL_GPIO_enableOutput(GPIOPINPUX(cs));
-
-        DL_GPIO_initDigitalOutputFeatures(
-                reset.iomux,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
-                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-            );
-        DL_GPIO_clearPins(GPIOPINPUX(reset));
-        DL_GPIO_enableOutput(GPIOPINPUX(reset));
-
+        DL_GPIO_disableOutput(GPIOPINPUX(irq));
         DL_GPIO_initDigitalInputFeatures(
                 irq.iomux,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
-        DL_GPIO_disableOutput(GPIOPINPUX(irq));
     }
 }
 
 uint8_t MstrB::getUnitBoardID() {
     // TODO: should be physically configurable on the board, just read back those settings.
-    return 0;
+    return 0xFE;
 }

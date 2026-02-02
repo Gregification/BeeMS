@@ -23,53 +23,61 @@ namespace MstrB {
 
     /** Main Current Hall Sensor */
     namespace MHCS {
-        extern SPI::SPI spi;
+        extern SPI::SPI & spi;
         const GPIO::GPIO
-            cs_precise      = GPIO::PB13,
-            cs_imprecise    = GPIO::PB7;
+            cs_precise      = GPIO::PB18,
+            cs_imprecise    = GPIO::PB19;
     }
 
     /** Indicator LEDs */
     namespace Indi {
-        const GPIO::GPIO
-            i1          = GPIO::PB1,
-            i2          = GPIO::PA5,
-            bmsFault    = GPIO::PA6,
-            RTOSRunning = GPIO::PB0;
+        namespace LED {
+            const GPIO::GPIO
+                i1          = GPIO::PA24,
+                i2          = GPIO::PA6,
+                fault       = GPIO::PA5,
+                scheduler   = GPIO::PA23;
+        }
     }
 
     /** Inter-lock */
     namespace IL {
         const GPIO::GPIO
-            control     = GPIO::PB3,
-            sense       = GPIO::PB2;
+            sense       = GPIO::PB7,
+            control     = GPIO::PB8;
     }
 
     /** on board temperature sensors */
     // TODO: test if adc code actually does anything. do it as a modbus register
     namespace TempSense {
-        extern ADC12_Regs * const adc;
+//        extern ADC12_Regs * const adc;
 
-        const ADC::ChannelMap ts1 = {
-            .mem = DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_0,
-            .chan = DL_ADC12_INPUT_CHAN_3,
-        };
+//        const ADC::ChannelMap ts1 = {
+//            .mem = DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_0,
+//            .chan = DL_ADC12_INPUT_CHAN_3,
+//        };
     }
 
     /** High Risk Low Voltage system , aka TSBP LV */
     namespace HRLV {
         const GPIO::GPIO
-            HRLVSense   = GPIO::PB26,
-            ILSense     = GPIO::PB27;
+            presence_HRLV   = GPIO::PB20,
+            presence_IL     = GPIO::PB24;
     }
 
     /** Ethernet interface */
     namespace Eth {
-        extern SPI::SPI spi;
+        extern SPI::SPI & spi;
         const GPIO::GPIO
             cs          = GPIO::PA15,
-            irq         = GPIO::PB16, // W5500 -> MCU
-            reset       = GPIO::PB15; // MCU <- W5500
+            reset       = GPIO::PB14, // MCU <- W5500
+            irq         = GPIO::PB15; // W5500 -> MCU
+    }
+
+    namespace FS {
+        extern SPI::SPI & spi;
+        const GPIO::GPIO
+            cs          = GPIO::PB16;
     }
 
     /** gets a 8b number that represents the board.

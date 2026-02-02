@@ -34,7 +34,6 @@
 
 int main(){
     System::init();
-//    MstrB::init();
 
     System::UART::uart_ui.setBaudTarget(115200);
     System::UART::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
@@ -43,8 +42,16 @@ int main(){
     System::UART::uart_ui.putu32h(System::mcuID);
     System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
-    // don't have this task on release
-    // used a an sanity check
+    MstrB::init();
+
+    MstrB::IL::control.clear();
+
+    MstrB::Indi::LED::i1.set();
+    MstrB::Indi::LED::i2.set();
+    delay_cycles(3 * System::CLK::CPUCLK);
+    MstrB::Indi::LED::i1.clear();
+    MstrB::Indi::LED::i2.clear();
+
     xTaskCreate(Task::blink_task,
             "blink_task",
             configMINIMAL_STACK_SIZE,
@@ -68,7 +75,7 @@ int main(){
 
     xTaskCreate(Task::ethModbus_task,
             "non_BMS_functions_task",
-            configMINIMAL_STACK_SIZE * 4,
+            configMINIMAL_STACK_SIZE * 3,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
