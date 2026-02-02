@@ -48,9 +48,13 @@ int main(){
 
     MstrB::Indi::LED::i1.set();
     MstrB::Indi::LED::i2.set();
-    delay_cycles(3 * System::CLK::CPUCLK);
+    MstrB::Indi::LED::fault.set();
+    MstrB::Indi::LED::scheduler.set();
+    delay_cycles(2 * System::CLK::CPUCLK);
     MstrB::Indi::LED::i1.clear();
     MstrB::Indi::LED::i2.clear();
+    MstrB::Indi::LED::fault.clear();
+    MstrB::Indi::LED::scheduler.clear();
 
     xTaskCreate(Task::blink_task,
             "blink_task",
@@ -75,7 +79,7 @@ int main(){
 
     xTaskCreate(Task::ethModbus_task,
             "non_BMS_functions_task",
-            configMINIMAL_STACK_SIZE * 3,
+            configMINIMAL_STACK_SIZE * 2,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);

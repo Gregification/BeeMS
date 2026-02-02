@@ -227,10 +227,11 @@ namespace System {
             uint32_t    pin;    // eg: DL_GPIO_PIN_0
             uint32_t    iomux;  // eg: IOMUX_PINCM0
 
-            void inline set() const { DL_GPIO_setPins(port, pin); }
-            void inline clear() const { DL_GPIO_clearPins(port, pin); }
+            void set() const { DL_GPIO_setPins(port, pin); }
+            void clear() const { DL_GPIO_clearPins(port, pin); }
 
-            bool inline get() const { DL_GPIO_readPins(port, pin); }
+            bool get() const { return DL_GPIO_readPins(port, pin); }
+            bool getOutput() const { return port->DOUT31_0 & pin; }
         };
 
         // Port A (PA) pins

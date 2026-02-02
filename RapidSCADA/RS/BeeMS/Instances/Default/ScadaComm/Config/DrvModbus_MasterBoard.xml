@@ -12,6 +12,21 @@
       <Elem type="ushort" readOnly="true" isBitMask="false" tagCode="MCU HARDWARE ID" name="MCU HARDWARE ID" />
       <Elem type="ushort" readOnly="true" isBitMask="false" tagCode="Software Version" name="Software Version" />
     </ElemGroup>
+    <ElemGroup active="true" dataBlock="DiscreteInputs" address="5" name="Indicators">
+      <Elem tagCode="indicator 1" name="indicator 1" />
+      <Elem tagCode="indicator 2" name="indicator 2" />
+      <Elem tagCode="bms fault" name="bms fault" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="DiscreteInputs" address="20" name="GLV interlock">
+      <Elem tagCode="presence" name="presence" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="Coils" address="25" name="GLV interlock">
+      <Elem readOnly="false" tagCode="forward" name="forward" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="DiscreteInputs" address="30" name="HRLV">
+      <Elem tagCode="interlock presence" name="interlock presence" />
+      <Elem tagCode="LV presence" name="LV presence" />
+    </ElemGroup>
   </ElemGroups>
   <Cmds />
 </DeviceTemplate>

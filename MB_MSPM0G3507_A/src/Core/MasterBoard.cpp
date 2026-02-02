@@ -53,19 +53,43 @@ void MstrB::init() {
     {
         using namespace Indi;
 
-        DL_GPIO_initDigitalOutput(LED::i1.iomux);
+        DL_GPIO_initDigitalOutputFeatures(
+                LED::i1.iomux,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
         DL_GPIO_clearPins(GPIOPINPUX(LED::i1));
         DL_GPIO_enableOutput(GPIOPINPUX(LED::i1));
 
-        DL_GPIO_initDigitalOutput(LED::i2.iomux);
+        DL_GPIO_initDigitalOutputFeatures(
+                LED::i2.iomux,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
         DL_GPIO_clearPins(GPIOPINPUX(LED::i2));
         DL_GPIO_enableOutput(GPIOPINPUX(LED::i2));
 
-        DL_GPIO_initDigitalOutput(LED::fault.iomux);
+        DL_GPIO_initDigitalOutputFeatures(
+                LED::fault.iomux,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
         DL_GPIO_clearPins(GPIOPINPUX(LED::fault));
         DL_GPIO_enableOutput(GPIOPINPUX(LED::fault));
 
-        DL_GPIO_initDigitalOutput(LED::scheduler.iomux);
+        DL_GPIO_initDigitalOutputFeatures(
+                LED::scheduler.iomux,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+            );
         DL_GPIO_clearPins(GPIOPINPUX(LED::scheduler));
         DL_GPIO_enableOutput(GPIOPINPUX(LED::scheduler));
     }
@@ -76,7 +100,7 @@ void MstrB::init() {
         DL_GPIO_initDigitalOutputFeatures(
                 control.iomux,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
@@ -85,7 +109,7 @@ void MstrB::init() {
 
         DL_GPIO_initDigitalInputFeatures(
                 sense.iomux,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
