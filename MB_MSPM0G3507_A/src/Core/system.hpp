@@ -56,14 +56,15 @@
 
 /*--- meta ---------------------------------------------*/
 
-#define PROJECT_NAME            "Voltage Tap"
+#define PROJECT_NAME            "Master Board"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "3.0" // [project version].[hardware version].[software version]
+#define PROJECT_VERSION         "MSPM0G3505 1-1-1" // [project version]-[hardware version]-[software version]
 
 /*--- IC footprint -------------------------------------*/
+// when changing footprints update this manually then match the library using the project settings.
 
-#define MSPM0G3507_LQFP64   // UG.6.1/6
-//#define MSPM0G3507_LQFP48   // UG.6.1/7
+//#define MSPM0G3507_LQFP64   // UG.6.1/6
+#define MSPM0G3507_LQFP48   // UG.6.1/7
 //#define MSPM0G3507_VQFN48   // UG.6.1/8
 //#define MSPM0G3507_VQFN32   // UG.6.1/9
 //#define MSPM0G3507_VSSOP28  // UG.6.1/9
@@ -226,17 +227,12 @@ namespace System {
             uint32_t    pin;    // eg: DL_GPIO_PIN_0
             uint32_t    iomux;  // eg: IOMUX_PINCM0
 
-            void inline set() const { DL_GPIO_setPins(port, pin); }
-            void inline clear() const { DL_GPIO_clearPins(port, pin); }
+            void set() const { DL_GPIO_setPins(port, pin); }
+            void clear() const { DL_GPIO_clearPins(port, pin); }
 
-            bool inline get() const { DL_GPIO_readPins(port, pin); }
+            bool get() const { return DL_GPIO_readPins(port, pin); }
+            bool getOutput() const { return port->DOUT31_0 & pin; }
         };
-
-//#define MSPM0G3507_LQFP64   // UG.6.1/6
-//#define MSPM0G3507_LQFP48   // UG.6.1/7
-//#define MSPM0G3507_VQFN48   // UG.6.1/8
-//#define MSPM0G3507_VQFN32   // UG.6.1/9
-//#define MSPM0G3507_VSSOP28  // UG.6.1/9
 
         // Port A (PA) pins
         #ifdef  MSPM0G3507_LQFP64
@@ -245,24 +241,34 @@ namespace System {
                  PA16, PA17, PA18, PA21, PA22, PA23,        // PA19 and PA20 reserved for SWD
                  PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31;
         #elif defined MSPM0G3507_VQFN32
+            // double check
             extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
                  PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
                  PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
                  PA24, PA25, PA26, PA27;
+        #elif defined MSPM0G3507_LQFP48
+            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
+                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
+                 PA24, PA25, PA26, PA27, PA28, PA31;
         #else
-            #error "forgot to setup the avilable pins for this footprint"
+            #error "forgot to setup the available pins for this footprint"
         #endif
 
         // Port B (PB) pins
         #ifdef  MSPM0G3507_LQFP64
             extern const GPIO PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7,
-                         PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
-                         PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23,
-                         PB24, PB25, PB26, PB27;
+                 PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
+                 PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23,
+                 PB24, PB25, PB26, PB27;
         #elif defined MSPM0G3507_VQFN32
             // no port B
+        #elif defined MSPM0G3507_LQFP48
+            extern const GPIO PB2, PB3, PB6, PB7, PB8, PB9,
+                 PB14, PB15, PB16, PB17, PB18, PB19, PB20,
+                 PB21, PB22, PB23, PB24;
         #else
-            #error "forgot to setup the avilable pins for this footprint"
+            #error "forgot to setup the available pins for this footprint"
         #endif
 
     }

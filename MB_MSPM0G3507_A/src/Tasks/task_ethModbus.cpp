@@ -50,12 +50,15 @@ DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_N
 
 
 /*** wizchip setup ****/
-//System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi;
-//System::GPIO::GPIO const &      wiz_cs    = MstrB::Eth::cs;
-//System::GPIO::GPIO const &      wiz_reset = MstrB::Eth::reset;
-System::SPI::SPI &              wiz_spi   = System::SPI::spi1;
-System::GPIO::GPIO const &      wiz_cs    = System::GPIO::PB3;
-System::GPIO::GPIO const &      wiz_reset = System::GPIO::PB2;
+System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi; // no workie
+System::GPIO::GPIO const &      wiz_cs    = MstrB::Eth::cs;
+System::GPIO::GPIO const &      wiz_reset = MstrB::Eth::reset;
+//System::SPI::SPI &              wiz_spi   = System::SPI::spi1;
+//System::GPIO::GPIO const &      wiz_cs    = System::GPIO::PB3;
+//System::GPIO::GPIO const &      wiz_reset = System::GPIO::PB2;
+//System::SPI::SPI &              wiz_spi   = System::SPI::spi0; // workie
+//System::GPIO::GPIO const &      wiz_cs    = System::GPIO::PA15;
+//System::GPIO::GPIO const &      wiz_reset = System::GPIO::PB14;
 uint16_t const                  modbusTCPPort = 502;   // arbitrary, must match RapidSCADA connection settings
 uint8_t const                   socketNum = 0;          // [0,8], arbitrary, socket must not be used elsewhere
 
@@ -110,7 +113,7 @@ void Task::ethModbus_task(void *){
 
     uart.nputs(ARRANDN(CLIHIGHLIGHT "awaiting W5500 response ..." CLIRESET NEWLINE));
     while(!setupWizchip()) {
-        uart.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed!" CLIRESET NEWLINE));
+        uart.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed! retrying..." CLIRESET NEWLINE));
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
@@ -141,6 +144,17 @@ void Task::ethModbus_task(void *){
         uart.nputs(ARRANDN(" "));
     }
     uart.nputs(ARRANDN(CLIRESET NEWLINE));
+
+    // broadcast just ot make itself known to network equiptment
+//    {
+//        SOCKET s = socketNum;
+//        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
+//        if(error == s) {
+//            uint8_t addr[] = {192,168,1,255};
+//            sendto(s, addr, 1, addr, 1234);
+//        }
+//        close(s);
+//    }
 
 
     /********************************/
@@ -365,8 +379,8 @@ void Task::ethModbus_task(void *){
                 uart.putu32h(rxheader->adu[0].unitID);
                 uart.nputs(ARRANDN(NEWLINE));
 
-                // is intended for this device?
-                if(rxheader->adu[0].unitID != MstrB::getUnitBoardID()) {
+                // is NOT intended for this device?
+                if(rxheader->adu[0].unitID != MstrB::getUnitBoardID() && rxheader->adu[0].unitID != 0) {
                     //  forward packet over CAN to intended device
                     uart.nputs(ARRANDN("\t forwarded to CAN bus." NEWLINE));
                     if(forwardModbusTCP2CAN(&rxbuf, &txbuf)) {
@@ -374,10 +388,8 @@ void Task::ethModbus_task(void *){
                     } else {
                         uart.nputs(ARRANDN("\tforward: fail" NEWLINE));
                     }
-                    continue;
                 }
-
-                if(ProcessRequest(rxheader, sizeof(rxbuf.arr), txheader, sizeof(txbuf.arr)))
+                else if(ProcessRequest(rxheader, sizeof(rxbuf.arr), txheader, sizeof(txbuf.arr)))
                     send(sn, txbuf.arr, sizeof(MBAPHeader) + ntoh16(txbuf.mbap.len));
 
             } while(false);
@@ -475,7 +487,7 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf) {
 
 void wiz_select(void)       { wiz_spi.takeResource(0); wiz_cs.set();  }
 void wiz_deselect(void)     { wiz_cs.clear(); wiz_spi.giveResource(); }
-uint8_t wiz_read_byte(void) {wiz_spi.takeResource(0);
+uint8_t wiz_read_byte(void) {
     uint8_t rx;
     wiz_spi.transfer(NULL, &rx, 1);
     while(wiz_spi.isBusy());
@@ -528,7 +540,9 @@ bool setupWizchip() {
     DL_GPIO_clearPins(GPIOPINPUX(wiz_cs));
     DL_GPIO_enableOutput(GPIOPINPUX(wiz_cs));
     wiz_cs.clear();
+    wiz_select();
     wiz_write_byte(0); // to reset the SCLK pin
+    wiz_deselect();
 
     DL_GPIO_initDigitalOutputFeatures(
             wiz_reset.iomux,
