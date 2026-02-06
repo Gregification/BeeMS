@@ -201,28 +201,7 @@ void Task::ethModbus_task(void *){
                 continue;
         }
 
-
-        /*** setup socket to listen *****/
-
-        error = listen(sn);
-        switch(error) {
-            default:
-            case SOCKERR_SOCKINIT:
-                uart.nputs(ARRANDN("SOCKERR_SOCKINIT , "));
-            case SOCKERR_SOCKCLOSED:
-                uart.nputs(ARRANDN("SOCKERR_SOCKCLOSED , "));
-                uart.nputs(ARRANDN("Modbus: TCP listen connection failed." NEWLINE));
-
-                // bad connection, ignore
-                continue;
-
-            case SOCK_OK:
-                // yippie!
-                break;
-        }
-
-
-        /*** wait for incoming connection ***/
+        /*** wait for incoming UDP, and CAN ***/
 
         uart.nputs(ARRANDN("Modbus: listening for TCP connection on port: " ));
         uart.putu32d(modbusTCPPort);
