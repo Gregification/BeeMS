@@ -14,14 +14,14 @@
 
 
 auto &led = CEB::Indi::LED::scheduler;
-//auto &led = System::GPIO::PA22;
+//auto &led = System::GPIO::PA26;
 
 void Task::blink_task(void*) {
 
 //    DL_GPIO_initDigitalOutputFeatures(
 //            led.iomux,
 //            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-//            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+//            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
 //            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
 //            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
 //        );
@@ -29,7 +29,9 @@ void Task::blink_task(void*) {
 //    DL_GPIO_enableOutput(GPIOPINPUX(led));
 
     for(;;){
-        DL_GPIO_togglePins(GPIOPINPUX(led));
+//        System::UART::uart_ui.nputs(ARRANDN("meow" NEWLINE));
+//        DL_GPIO_togglePins(GPIOPINPUX(led));
+        DL_GPIO_togglePins(GPIOPINPUX(CEB::Indi::LED::scheduler));
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }

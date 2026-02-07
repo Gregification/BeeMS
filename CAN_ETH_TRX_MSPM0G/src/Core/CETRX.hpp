@@ -49,7 +49,7 @@ namespace CEB {
             wiz_reset   = GPIO::PA24, // MCU <- W5500
             wiz_irq     = GPIO::PB3; // W5500 -> MCU
 
-        extern CANFD::CANFD can;
+        extern CANFD::CANFD & can;
     }
 
     /** gets a 8b number that represents the board.

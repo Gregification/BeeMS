@@ -13,10 +13,12 @@ void Task::MCAN_test_task(void *){
 
     //--- TX --------------------------------------------------
     do {
+        vTaskDelay(pdMS_TO_TICKS(400));
+
         DL_MCAN_TxBufElement txmsg = {
-                .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
+                .id     = 0x1<<18,  // CAN id, 11b->[28:18], 29b->[] when using 11b can id
                 .rtr    = 0,        // 0: data frame, 1: remote frame
-                .xtd    = 1,        // 0: 11b id, 1: 29b id
+                .xtd    = 0,        // 0: 11b id, 1: 29b id
                 .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
                 .dlc    = 3,        // data byte count, see DL comments
                 .brs    = 0,        // 0: no bit rate switching, 1: yes brs
@@ -30,17 +32,19 @@ void Task::MCAN_test_task(void *){
 
         DL_MCAN_TxFIFOStatus tf;
         DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
+        if(tf.fifoFull){
+            System::UART::uart_ui.nputs(ARRANDN("CAN TX FIFO full" NEWLINE));
+            continue;
+        }
 
-        uint32_t bufferIndex = tf.putIdx;
         System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
-        System::UART::uart_ui.putu32d(bufferIndex);
+        System::UART::uart_ui.putu32d(tf.putIdx);
         System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
 
-        DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
-        DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
+        DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txmsg);
+        DL_MCAN_TXBufAddReq(CANFD0, tf.putIdx);
 
-        vTaskDelay(pdMS_TO_TICKS(400));
-    } while(0);
+    } while(1);
 
     //--- RX --------------------------------------------------
 

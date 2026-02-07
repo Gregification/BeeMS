@@ -29,9 +29,13 @@
 #include "Core/system.hpp"
 #include "Tasks/task_CAN_Eth_TRX.hpp"
 #include "Tasks/examples/example_blink_task.hpp"
+#include "Tasks/examples/example_MCAN_task.hpp"
 
+void blinktest();
 
 int main(){
+//    blinktest();
+
     System::init();
 
     System::UART::uart_ui.setBaudTarget(115200);
@@ -58,12 +62,19 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-    xTaskCreate(Task::ethModbus_task,
+    xTaskCreate(Task::ethcan_task,
             "non_BMS_functions_task",
             configMINIMAL_STACK_SIZE * 3,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
+
+//    xTaskCreate(Task::MCAN_test_task,
+//                "non_BMS_functions_task",
+//                configMINIMAL_STACK_SIZE * 3,
+//                NULL,
+//                tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//                NULL);
 
     vTaskStartScheduler();
 
@@ -71,6 +82,33 @@ int main(){
     while(true) {
         System::FailHard("reached end of main" NEWLINE);
         delay_cycles(20e6);
+    }
+}
+
+void blinktest(){
+    DL_GPIO_disablePower(GPIOA);
+    DL_GPIO_disablePower(GPIOB);
+    DL_GPIO_reset(GPIOA);
+    DL_GPIO_reset(GPIOB);
+    DL_GPIO_enablePower(GPIOA);
+    DL_GPIO_enablePower(GPIOB);
+    delay_cycles(POWER_STARTUP_DELAY);
+
+    auto &led = System::GPIO::PA27;
+    DL_GPIO_initDigitalOutputFeatures(
+            led.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+    DL_GPIO_clearPins(GPIOPINPUX(led));
+    DL_GPIO_enableOutput(GPIOPINPUX(led));
+
+    for(;;){
+        DL_GPIO_togglePins(GPIOPINPUX(led));
+        delay_cycles(System::CLK::CPUCLK/2);
+
     }
 }
 

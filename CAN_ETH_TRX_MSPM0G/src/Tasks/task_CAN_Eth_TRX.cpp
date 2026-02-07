@@ -86,12 +86,21 @@ bool canToEthHandler(SOCKET sn, _RXBuffer * rxb, _TXBuffer * txb);
 
 /*** main ****************************************************/
 
-void Task::ethModbus_task(void *){
+void Task::ethcan_task(void *){
     uart.nputs(ARRANDN("ethModbus_task start" NEWLINE));
+
+    {
+        CEB::Bridge::netConfig.mac[5] = CEB::getUnitBoardID();
+        CEB::Bridge::netConfig.mac[4] = System::mcuID;
+        CEB::Bridge::netConfig.mac[3] = System::mcuID >> 8;
+        CEB::Bridge::netConfig.ip[3]  = System::mcuID;
+    }
+
     _RXBuffer rxbuf = {0};
     _TXBuffer txbuf = {0};
 
-    wiz_spi.setSCLKTarget(2e6);
+
+    wiz_spi.setSCLKTarget(10e6);
 
 
     /*** W5500 init *****************/
@@ -102,11 +111,7 @@ void Task::ethModbus_task(void *){
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
-    {
-        wiz_NetInfo nonConst = CEB::Bridge::netConfig;
-        nonConst.mac[5] = CEB::getUnitBoardID();
-        wizchip_setnetinfo(&nonConst);
-    }
+    wizchip_setnetinfo(&CEB::Bridge::netConfig);
 
     {
         wiz_NetTimeout timeout = {
@@ -176,7 +181,6 @@ void Task::ethModbus_task(void *){
                 wiz_print_sockerror(error);
                 uart.nputs(ARRANDN(CLIRESET NEWLINE));
                 vTaskDelay(pdMS_TO_TICKS(500));
-                close(sn);
                 continue;
         }
 
@@ -217,35 +221,39 @@ void Task::ethModbus_task(void *){
                 case SOCK_BUSY:
                 case SOCKERR_DATALEN:
                     /*** can 2 eth ******************/
-                    if(canToEthHandler(sn, &rxbuf, &txbuf)) {
-                        // tx can
-
-                        DL_MCAN_TxFIFOStatus tf;
-                        DL_MCAN_getTxFIFOQueStatus(CEB::Bridge::can.reg, &tf);
-
-                        uint32_t bufferIndex = tf.putIdx;
-                        System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
-                        System::UART::uart_ui.putu32d(bufferIndex);
-                        System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
-
-                        DL_MCAN_writeMsgRam(CEB::Bridge::can.reg, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txbuf.cantx);
-                        DL_MCAN_TXBufAddReq(CEB::Bridge::can.reg, tf.getIdx);
-                        System::UART::uart_ui.nputs(ARRANDN(CLIYES "can -> eth done" CLIRESET NEWLINE));
-                    } else {
+                    if(!canToEthHandler(sn, &rxbuf, &txbuf)) {
                         // keep waiting
                         vTaskDelay(pdMS_TO_TICKS(1));
                     }
                     continue;
-
             }
+
             if(reset) break;
 
-
             /*** eth 2 can ******************/
-            Eth2Can(&rxbuf, &txbuf);
 
-            System::UART::uart_ui.nputs(ARRANDN(CLIYES "eth -> can done" CLIRESET NEWLINE));
+            if(error != sizeof(rxbuf.canrx))
+                continue;
 
+            if(Eth2Can(&rxbuf, &txbuf)) {
+                // tx can
+
+                DL_MCAN_TxFIFOStatus tf;
+                DL_MCAN_getTxFIFOQueStatus(CEB::Bridge::can.reg, &tf);
+
+                if(tf.fifoFull){
+                    System::UART::uart_ui.nputs(ARRANDN("dropped, CAN TX FIFO full" NEWLINE));
+                    continue;
+                }
+                System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
+                System::UART::uart_ui.putu32d(tf.putIdx);
+                System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
+
+                DL_MCAN_writeMsgRam(CEB::Bridge::can.reg, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txbuf.cantx);
+                DL_MCAN_TXBufAddReq(CEB::Bridge::can.reg, tf.putIdx);
+
+                System::UART::uart_ui.nputs(ARRANDN(CLIYES "eth -> can done" CLIRESET NEWLINE));
+            }
         }
 
     }
@@ -299,6 +307,7 @@ uint8_t Eth2Can(_RXBuffer const * rx, _TXBuffer * tx){
     tx->cantx.dlc = rx->canrx.dlc;
     tx->cantx.brs = rx->canrx.brs;
     tx->cantx.fdf = rx->canrx.fdf;
+    tx->cantx.efc = 0;
     return sizeof(tx->cantx);
 }
 
