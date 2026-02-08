@@ -151,7 +151,7 @@ namespace System {
 /*------------------------------------------------------*/
 
 namespace System {
-    extern uint16_t mcuID; // unique ID of the MCU. different for every chip
+    extern volatile uint16_t mcuID; // unique ID of the MCU. different for every chip
 
     /** wrapper for controlling access to limited hardware resource.
      * purpose is to standardize resource access.

@@ -223,7 +223,7 @@ void Task::ethcan_task(void *){
                     /*** can 2 eth ******************/
                     if(!canToEthHandler(sn, &rxbuf, &txbuf)) {
                         // keep waiting
-                        vTaskDelay(pdMS_TO_TICKS(1));
+//                        vTaskDelay(pdMS_TO_TICKS(1));
                     }
                     continue;
             }
@@ -242,17 +242,19 @@ void Task::ethcan_task(void *){
                 DL_MCAN_getTxFIFOQueStatus(CEB::Bridge::can.reg, &tf);
 
                 if(tf.fifoFull){
-                    System::UART::uart_ui.nputs(ARRANDN("dropped, CAN TX FIFO full" NEWLINE));
+//                    System::UART::uart_ui.nputs(ARRANDN("dropped, CAN TX FIFO full" NEWLINE));
                     continue;
                 }
-                System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
-                System::UART::uart_ui.putu32d(tf.putIdx);
-                System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
+//                System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
+//                System::UART::uart_ui.putu32d(tf.putIdx);
+//                System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
 
                 DL_MCAN_writeMsgRam(CEB::Bridge::can.reg, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txbuf.cantx);
                 DL_MCAN_TXBufAddReq(CEB::Bridge::can.reg, tf.putIdx);
 
-                System::UART::uart_ui.nputs(ARRANDN(CLIYES "eth -> can done" CLIRESET NEWLINE));
+                DL_GPIO_togglePins(GPIOPINPUX(CEB::Indi::LED::ethRX));
+
+//                System::UART::uart_ui.nputs(ARRANDN(CLIYES "eth -> can done" CLIRESET NEWLINE));
             }
         }
 
@@ -276,19 +278,21 @@ bool canToEthHandler(SOCKET sn, _RXBuffer * rxb, _TXBuffer * txb) {
     DL_MCAN_readMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, 0, rf.num, &rxb->canrx);
     DL_MCAN_writeRxFIFOAck(can.reg, rf.num, rf.getIdx);
 
-    System::UART::uart_ui.nputs(ARRANDN("rx CAN ID: 0x"));
-    System::UART::uart_ui.putu32h(System::CANFD::getCANID(&rxb->canrx));
+//    System::UART::uart_ui.nputs(ARRANDN("rx CAN ID: 0x"));
+//    System::UART::uart_ui.putu32h(System::CANFD::getCANID(&rxb->canrx));
 
     uint8_t len = Can2Eth(rxb, txb);
 
     if(len == 0) {
-        System::UART::uart_ui.nputs(ARRANDN("\t -> \t ignored" NEWLINE));
+//        System::UART::uart_ui.nputs(ARRANDN("\t -> \t ignored" NEWLINE));
         return false;
     }
 
-    System::UART::uart_ui.nputs(ARRANDN("\t -> \t forwarded to Eth" NEWLINE));
+//    System::UART::uart_ui.nputs(ARRANDN("\t -> \t forwarded to Eth" NEWLINE));
 
     sendto(sn, txb->arr, len, CEB::Bridge::ethBroadcastIP, CEB::Bridge::wiz_IP_port);
+
+    DL_GPIO_togglePins(GPIOPINPUX(CEB::Indi::LED::canRX));
 
     return true;
 }
@@ -296,10 +300,19 @@ bool canToEthHandler(SOCKET sn, _RXBuffer * rxb, _TXBuffer * txb) {
 
 uint8_t Can2Eth(_RXBuffer const * rx, _TXBuffer * tx) {
     tx->canrx = rx->canrx;
+    tx->canrx.anmf = 0xBEEF;
+    tx->canrx.fidx = System::mcuID;
     return sizeof(tx->canrx);
 }
 
 uint8_t Eth2Can(_RXBuffer const * rx, _TXBuffer * tx){
+    if(     rx->canrx.anmf != 0xBEEF
+        ||  rx->canrx.fidx == System::mcuID
+        ) {
+//        System::UART::uart_ui.nputs(ARRANDN("dropped for meow" NEWLINE));
+        return false;
+    }
+
     ALT::memcpy(rx->canrx.data, tx->cantx.data, sizeof(tx->cantx.data));
     tx->cantx.id = rx->canrx.id;
     tx->cantx.rtr = rx->canrx.rtr;

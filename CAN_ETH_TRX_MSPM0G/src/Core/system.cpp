@@ -14,7 +14,7 @@
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
-    uint16_t mcuID = 0;
+    volatile uint16_t mcuID = 0;
 
     #ifdef PROJECT_ENABLE_UART0
         UART::UART UART::uart0 = {.reg = UART0};
