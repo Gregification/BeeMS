@@ -60,8 +60,7 @@ System::GPIO::GPIO const &      wiz_reset = MstrB::Eth::reset;
 //System::GPIO::GPIO const &      wiz_cs    = System::GPIO::PA15;
 //System::GPIO::GPIO const &      wiz_reset = System::GPIO::PB14;
 uint16_t const                  modbusTCPPort = 502;   // arbitrary, must match RapidSCADA connection settings
-
-uint8_t                         sockets[] = {0,1,2,3};
+uint8_t const                   socketNum = 0;          // [0,8], arbitrary, socket must not be used elsewhere
 
 wiz_NetInfo netConfig = {
            .mac = {0xBE,0xEE,0xEE,0x00,0x00,0x00}, // arbitrary
@@ -100,9 +99,6 @@ void wiz_print_sockerror(int8_t error);
 bool forwardModbusTCP2CAN(_RXBuffer const * rxbuff, _TXBuffer * txbuff, uint8_t socket);
 
 
-void checkSocket(uint8_t socket, _RXBuffer * rxb, _TXBuffer * txb);
-void checkCAN(_RXBuffer * rxb, _TXBuffer * txb);
-
 /*** main ****************************************************/
 
 void Task::ethModbus_task(void *){
@@ -111,6 +107,7 @@ void Task::ethModbus_task(void *){
     _TXBuffer txbuf = {0};
 
     wiz_spi.setSCLKTarget(2e6);
+
 
     /*** W5500 init *****************/
 
@@ -160,13 +157,6 @@ void Task::ethModbus_task(void *){
 //    }
 
 
-    while(true) {
-        for(uint8_t i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++){
-            checkSocket(sockets[i], &rxbuf, &txbuf);
-        }
-        checkCAN(&rxbuf, &txbuf);
-    }
-
     /********************************/
     /* we just wait for a connection, only support single connection.
      * 1. init socket
@@ -181,192 +171,108 @@ void Task::ethModbus_task(void *){
      * - if a error happens reset connection and restart from step one
      */
 
+    int8_t error;
+    SOCKET sn;
+    bool reset;
 
-    System::FailHard("ethModbus_task ended" NEWLINE);
-    vTaskDelete(NULL);
-}
+    while(true){
+        reset = false;
+        sn = socketNum;
 
-void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
-    if(sn > 8) // W5500 hardware limit
-        return;
+        /*** init socket ****************/
 
-    switch(getSn_SR(sn)) {
-        case SOCK_CLOSED: {
-            // open socket as listening tcp
-
-            int8_t error;
-            switch(error = socket(sn, Sn_MR_TCP, modbusTCPPort, SF_IO_NONBLOCK)){
-                default:
-                    if(error == sn) {
-                        uart.nputs(ARRANDN("IP socket inited:"));
-                        uart.put32d(sn);
-                        uart.nputs(ARRANDN(NEWLINE));
-
-                        if(SOCK_OK == listen(sn)) {
-                            // yippie
-                            uart.nputs(ARRANDN("IP socket listening:"));
-                            uart.put32d(sn);
-                            uart.nputs(ARRANDN(NEWLINE));
-                            break;
-                        }
-                    }
-
-                    uart.nputs(ARRANDN("W5500 unknown response to initing socket:!"));
-                    uart.put32d(sn);
-                    uart.nputs(ARRANDN(NEWLINE));
+        switch(error = socket(sn, Sn_MR_TCP, modbusTCPPort, SF_IO_NONBLOCK)){
+            default:
+                if(error == sn)
+                    // yippie
                     break;
 
-                case SOCKERR_SOCKMODE:
-                case SOCKERR_SOCKFLAG:
-                case SOCKERR_SOCKNUM:
-                    // failed to init socket, retry
-                    uart.nputs(ARRANDN(CLIERROR "Modbus TCP: failed to init socket : " ));
-                    wiz_print_sockerror(error);
-                    uart.nputs(ARRANDN(CLIRESET NEWLINE));
-                    close(sn);
+                uart.nputs(ARRANDN("W5500 unknown response to socket!" NEWLINE));
+
+            case SOCKERR_SOCKMODE:
+            case SOCKERR_SOCKFLAG:
+            case SOCKERR_SOCKNUM:
+                // failed to init socket, retry
+                uart.nputs(ARRANDN(CLIERROR "Modbus TCP: failed to init socket : " ));
+                wiz_print_sockerror(error);
+                uart.nputs(ARRANDN(CLIRESET NEWLINE));
+                vTaskDelay(pdMS_TO_TICKS(1e3));
+                close(sn);
+                continue;
+        }
+
+        /*** wait for incoming UDP, and CAN ***/
+
+        uart.nputs(ARRANDN("Modbus: listening for TCP connection on port: " ));
+        uart.putu32d(modbusTCPPort);
+        uart.nputs(ARRANDN(CLIRESET NEWLINE));
+
+        while((error = getSn_SR(sn)) != SOCK_ESTABLISHED){ // get socket status
+            switch(error){
+                // cases found at w5500.h/480
+
+                case SOCK_LISTEN:
+                    // keep waiting
+                    vTaskDelay(pdMS_TO_TICKS(100));
+                    continue;
+
+                default:
+                    // restart
+                    reset = true;
                     break;
             }
-        } break;
-
-        case SOCK_ESTABLISHED: {
-            // rx ModbusTCP packet
-            int32_t status = recv(sn, ARRANDN(rxbuf->arr));
-            switch(status){
-                case SOCK_BUSY:
-                    return;
-                case SOCKERR_DATALEN:
-                    uart.nputs(ARRANDN(CLIWARN "Modbus: zero data length" CLIRESET NEWLINE));
-                    return;
-                case SOCKERR_SOCKNUM:
-                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket number" CLIRESET NEWLINE));
-                    return;
-                case SOCKERR_SOCKMODE:
-                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid operation in the socket" CLIRESET NEWLINE));
-                    return;
-                case SOCKERR_SOCKSTATUS:
-                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
-                    return;
-                default:
-                    if(status >= 0 && status <= sizeof(rxbuf->arr)){
-                        // yippie
-                        uart.nputs(ARRANDN("ModbusTCP received on socket #:"));
-                        uart.put32d(sn);
-                        uart.nputs(ARRANDN(NEWLINE));
-                        break;
-                    }
-
-                    uart.nputs(ARRANDN(CLIERROR "Modbus: unknown receive status!? -> "));
-                    uart.put32d(status);
-                    uart.nputs(ARRANDN(CLIERROR " on socket "));
-                    uart.put32d(sn);
-                    uart.nputs(ARRANDN(CLIRESET NEWLINE));
-                    return;
-            }
+            if(reset)
+                break;
+        }
+        if(reset) continue;
 
 
-            /*** handle packet **************************************/
+        /*** receive packets ******************/
 
+        uart.nputs(ARRANDN("Modbus: accepted incoming TCP connection on port: " ));
+        uart.putu32d(modbusTCPPort);
+        uart.nputs(ARRANDN(CLIRESET NEWLINE));
+
+        while(!reset){
+            // make life simple
             using namespace Networking::CAN;
             using namespace Networking::Modbus;
             using namespace Networking::Bridge::CANModbus;
 
-            uint16_t const rxlen = status;
-            void const * const rxend = (void*)(rxbuf->arr + rxlen);
-            MBAPHeader const * rxheader = &rxbuf->mbap;
-            ADUPacket const * rxadu     = rxheader->adu;
-            MBAPHeader * txheader       = &txbuf->mbap;
-            ADUPacket * txadu           = txheader->adu;
+            // CAN -> ModbusTCP
+            {
+                DL_MCAN_RxFIFOStatus rf = {.num = canfifo};
+                DL_MCAN_getRxFIFOStatus(can.reg, &rf);
 
+                for(uint32_t i = rf.fillLvl; i != 0; i--) {
+                    if(rf.fillLvl == 0)
+                        break;
 
-            /*** validation *****************/
+                    DL_MCAN_readMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, 0, rf.num, &rxbuf.canrx);
+                    DL_MCAN_writeRxFIFOAck(can.reg, rf.num, rf.getIdx);
 
-            if(rxadu >= rxend) // is under sized?
-                break; // ignore packet
+                    /*** forward to ModbusTCP *********/
 
-            if(ntoh16(rxheader->protocolID) != MBAPHeader::PROTOCOL_ID_MODBUS) // is protocol not Modbus ?
-                break; // ignore packet
+                    uart.nputs(ARRANDN("CAN rx: " ));
+                    uart.nputs(ARRANDN(NEWLINE "dump: "));
+                    for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf.canrx); j++){
+                        if(j % 10 == 0)
+                            uart.nputs(ARRANDN(NEWLINE));
 
+                        uart.nputs(ARRANDN(" "));
+                        uart.putu32h(rxbuf.canrx.data[j]);
+                    }
+                    uart.nputs(ARRANDN(NEWLINE));
 
-            /*** process packet *************/
+                    if(CAN_to_ModbusTCP(&rxbuf.canrx, &txbuf.mbap)) {
+                        send(sn, txbuf.arr, sizeof(MBAPHeader) + ntoh16(txbuf.mbap.len));
+                        uart.nputs(ARRANDN("forwarded to ModbusTCP"));
+                    } else {
+                        uart.nputs(ARRANDN("not forwarded to ModbusTCP"));
+                    }
+                    uart.nputs(ARRANDN(NEWLINE));
 
-            uart.nputs(ARRANDN("TCP rx: unitID: "));
-            uart.putu32h(rxheader->adu[0].unitID);
-            uart.nputs(ARRANDN(NEWLINE));
-
-            // is NOT intended for this device?
-            if(rxheader->adu[0].unitID != MstrB::getUnitBoardID() && rxheader->adu[0].unitID != 0) {
-                //  forward packet over CAN to intended device
-                uart.nputs(ARRANDN("\t forwarded to CAN bus." NEWLINE));
-                if(forwardModbusTCP2CAN(rxbuf, txbuf, sn)) {
-                    uart.nputs(ARRANDN("\tforward: success" NEWLINE));
-                } else {
-                    uart.nputs(ARRANDN("\tforward: fail" NEWLINE));
-                }
-            }
-            else if(ProcessRequest(rxheader, sizeof(rxbuf->arr), txheader, sizeof(txbuf->arr)))
-                send(sn, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
-
-
-        } break;
-
-        case SOCK_LISTEN:
-        case SOCK_FIN_WAIT:
-        case SOCK_CLOSING:
-        case SOCK_TIME_WAIT:
-        case SOCK_CLOSE_WAIT:
-        case SOCK_LAST_ACK:
-        case SOCK_SYNRECV:
-        case SOCK_SYNSENT:
-            break;
-
-        default:
-            close(sn);
-            break;
-    }
-
-}
-
-void checkCAN(_RXBuffer * rxbuf, _TXBuffer * txbuf) {
-    // make life simple
-    using namespace Networking::CAN;
-    using namespace Networking::Modbus;
-    using namespace Networking::Bridge::CANModbus;
-
-    // CAN -> ModbusTCP
-
-    DL_MCAN_RxFIFOStatus rf = {.num = canfifo};
-    DL_MCAN_getRxFIFOStatus(can.reg, &rf);
-
-    for(uint32_t i = rf.fillLvl; i != 0; i--) {
-        if(rf.fillLvl == 0)
-            break;
-
-        DL_MCAN_readMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, 0, rf.num, &rxbuf->canrx);
-        DL_MCAN_writeRxFIFOAck(can.reg, rf.num, rf.getIdx);
-
-        /*** forward to ModbusTCP *********/
-
-        uart.nputs(ARRANDN("CAN rx: " ));
-        uart.nputs(ARRANDN(NEWLINE "dump: "));
-        for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf->canrx); j++){
-            if(j % 10 == 0)
-                uart.nputs(ARRANDN(NEWLINE));
-
-            uart.nputs(ARRANDN(" "));
-            uart.putu32h(rxbuf->canrx.data[j]);
-        }
-        uart.nputs(ARRANDN(NEWLINE));
-
-        uint8_t socket;
-        if(CAN_to_ModbusTCP(&rxbuf->canrx, &txbuf->mbap, &socket)) {
-            send(socket, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
-            uart.nputs(ARRANDN("forwarded to ModbusTCP"));
-        } else {
-            uart.nputs(ARRANDN("not forwarded to ModbusTCP"));
-        }
-        uart.nputs(ARRANDN(NEWLINE));
-
-        // already bad
+                    // already bad
 //                    uart.nputs(ARRANDN("dump: "));
 //                    for(uint8_t j = 0; j < sizeof(MBAPHeader) + ntoh16(txbuf.mbap.len); j++){
 //                        if(j % 10 == 0)
@@ -377,12 +283,107 @@ void checkCAN(_RXBuffer * rxbuf, _TXBuffer * txbuf) {
 //                    }
 //                    uart.nputs(ARRANDN(NEWLINE));
 
-        DL_MCAN_getRxFIFOStatus(can.reg, &rf);
+                    DL_MCAN_getRxFIFOStatus(can.reg, &rf);
+                }
+            }
 
+            // rx ModbusTCP packet
+            int32_t status = recv(sn, ARRANDN(rxbuf.arr));
+            switch(status){
+                static uint8_t cycles = 1; // 'exponential'(allegedly) back off wait times
+
+                case SOCK_BUSY:
+                    if(cycles < 15) // back off max cap mS
+                        cycles++;
+
+                    vTaskDelay(pdMS_TO_TICKS(cycles));
+                    continue;
+                case SOCKERR_DATALEN:
+                    uart.nputs(ARRANDN(CLIWARN "Modbus: zero data length" CLIRESET NEWLINE));
+                    reset = true;
+                    continue;
+                case SOCKERR_SOCKNUM:
+                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket number" CLIRESET NEWLINE));
+                    reset = true;
+                    continue;
+                case SOCKERR_SOCKMODE:
+                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid operation in the socket" CLIRESET NEWLINE));
+                    reset = true;
+                    continue;
+                case SOCKERR_SOCKSTATUS:
+                    uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
+                    reset = true;
+                    continue;
+                default:
+                    if(status >= 0 && status <= sizeof(rxbuf)){
+                        // yippie
+
+                        cycles = 0; // reset wait
+                        break;
+                    }
+
+                    uart.nputs(ARRANDN(CLIERROR "Modbus: unknown receive status!? -> "));
+                    uart.put32d(status);
+                    uart.nputs(ARRANDN(CLIRESET NEWLINE));
+                    reset = true;
+                    continue;
+            }
+
+
+            /*** handle packet **************************************/
+
+            uint16_t const rxlen = status;
+            void const * const rxend = (void*)(rxbuf.arr + rxlen);
+
+            do {
+
+                MBAPHeader const * rxheader = &rxbuf.mbap;
+                ADUPacket const * rxadu     = rxheader->adu;
+                MBAPHeader * txheader       = &txbuf.mbap;
+                ADUPacket * txadu           = txheader->adu;
+
+
+                /*** validation *****************/
+
+                if(rxadu >= rxend) // is under sized?
+                    break; // ignore packet
+
+                if(ntoh16(rxheader->protocolID) != MBAPHeader::PROTOCOL_ID_MODBUS) // is protocol not Modbus ?
+                    break; // ignore packet
+
+
+                /*** process packet *************/
+
+                uart.nputs(ARRANDN("TCP rx: unitID: "));
+                uart.putu32h(rxheader->adu[0].unitID);
+                uart.nputs(ARRANDN(NEWLINE));
+
+                // is NOT intended for this device?
+                if(rxheader->adu[0].unitID != MstrB::getUnitBoardID() && rxheader->adu[0].unitID != 0) {
+                    //  forward packet over CAN to intended device
+                    uart.nputs(ARRANDN("\t forwarded to CAN bus." NEWLINE));
+                    if(forwardModbusTCP2CAN(&rxbuf, &txbuf)) {
+                        uart.nputs(ARRANDN("\tforward: success" NEWLINE));
+                    } else {
+                        uart.nputs(ARRANDN("\tforward: fail" NEWLINE));
+                    }
+                }
+                else if(ProcessRequest(rxheader, sizeof(rxbuf.arr), txheader, sizeof(txbuf.arr)))
+                    send(sn, txbuf.arr, sizeof(MBAPHeader) + ntoh16(txbuf.mbap.len));
+
+            } while(false);
+        }
+
+        // connection was lost / terminated
+        // wait some time, maybe something went bonkers
+        vTaskDelay(pdMS_TO_TICKS(1e3));
     }
+
+    System::FailHard("ethModbus_task ended" NEWLINE);
+    vTaskDelete(NULL);
 }
 
-bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf, uint8_t socket) {
+bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf) {
     // NOTE: resource LOCKS CAN
 
     using namespace Networking::Bridge::CANModbus;
@@ -408,7 +409,7 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf, uint8_t socket)
                 .mm     = rxheader->transactionID,  // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
             };
 
-        if(!ModbusTCP_to_CAN(rxheader, &(buf->cantx), socket)) {
+        if(!ModbusTCP_to_CAN(rxheader, &(buf->cantx))) {
             uart.nputs(ARRANDN("failed ModbusTCP_to_CAN" NEWLINE));
             return false;
         }
@@ -430,23 +431,24 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf, uint8_t socket)
             DL_MCAN_getTxFIFOQueStatus(can.reg, &tf);
 
             if(tf.fifoFull) {
-                vTaskDelay(pdMS_TO_TICKS(1));
+                vTaskDelay(pdMS_TO_TICKS(5));
                 continue;
             }
 
-            uart.nputs(ARRANDN("TX from buffer "));
-            uart.putu32d(tf.putIdx);
-            uart.nputs(ARRANDN("" NEWLINE));
+//            uint32_t bufferIndex = tf.putIdx;
+//            uart.nputs(ARRANDN("TX from buffer "));
+//            uart.putu32d(bufferIndex);
+//            uart.nputs(ARRANDN("" NEWLINE));
 
             DL_MCAN_writeMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, tf.putIdx, &buf->cantx);
-            DL_MCAN_TXBufAddReq(can.reg, tf.putIdx);
+            DL_MCAN_TXBufAddReq(can.reg, tf.getIdx);
             break;
         }
 
         can.giveResource(); // UNLOCK CAN
 
         if(i == 0) {
-            uart.nputs(ARRANDN(CLIERROR "CAN tx fifo full" CLIRESET NEWLINE));
+//            uart.nputs(ARRANDN("CAN tx fifo timeout" NEWLINE));
             return false;
         }
 

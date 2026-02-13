@@ -19,8 +19,8 @@ void Task::blink_task(void*) {
 //    auto &led = System::GPIO::PB27; // blue board
 //    auto &led = System::GPIO::PA14; // green board v2.2 1
 //    auto &led = System::GPIO::PB26; // LP RED
-//    auto &led = System::GPIO::PB27; // LP GREEN
-    auto &led = System::GPIO::PA7; // v3
+    auto &led = System::GPIO::PB27; // LP GREEN
+//    auto &led = System::GPIO::PA7; // v3
 
     DL_GPIO_initDigitalOutputFeatures(
             led.iomux,

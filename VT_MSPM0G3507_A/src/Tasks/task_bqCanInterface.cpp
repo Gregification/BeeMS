@@ -60,7 +60,6 @@ void Task::bqCanInterface_task(void *){
     while(true){
 
         /*** poll for incoming request ********/
-
         if(can.takeResource(pdMS_TO_TICKS(3e3))) {
             DL_MCAN_getRxFIFOStatus(can.reg, &canrxf);
 
@@ -74,7 +73,7 @@ void Task::bqCanInterface_task(void *){
                     can.reg,
                     DL_MCAN_MEM_TYPE::DL_MCAN_MEM_TYPE_FIFO,
                     0, // arbitrary. value ignored
-                    canfifo,
+                    canrxf.num,
                     &canrx
                 );
             DL_MCAN_writeRxFIFOAck(can.reg, canrxf.num, canrxf.getIdx);
@@ -89,7 +88,9 @@ void Task::bqCanInterface_task(void *){
 
         /*** parse packet *********************/
 
-        if(Bridge::CANModbus::CAN_to_ModbusTCP(&canrx, &rxbuf.mbap)) {
+        uint8_t socketbuffer;
+
+        if(Bridge::CANModbus::CAN_to_ModbusTCP(&canrx, &rxbuf.mbap, &socketbuffer)) {
             uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
 
             /*** validation ***********************/
@@ -109,11 +110,11 @@ void Task::bqCanInterface_task(void *){
             if(Modbus::ProcessRequest(&rxbuf.mbap, sizeof(rxbuf), &txbuf.mbap, sizeof(txbuf))) {
                 uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
 
-                if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx)){
+                if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx, socketbuffer)){
                     // transmit CAN
                     uart.nputs(ARRANDN("  response CAN packet ready to send" NEWLINE));
 
-                    uart.nputs(ARRANDN(NEWLINE " \tdump: "));
+                    uart.nputs(ARRANDN(NEWLINE " \tdump CAN: "));
                     for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf.cantx); j++){
                         if(j % 10 == 0)
                             uart.nputs(ARRANDN(NEWLINE " \t"));

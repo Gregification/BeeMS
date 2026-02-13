@@ -62,8 +62,8 @@
 
 /*--- IC footprint -------------------------------------*/
 
-//#define MSPM0G3507_LQFP64   // UG.6.1/6
-#define MSPM0G3507_LQFP48   // UG.6.1/7
+#define MSPM0G3507_LQFP64   // UG.6.1/6
+//#define MSPM0G3507_LQFP48   // UG.6.1/7
 //#define MSPM0G3507_VQFN48   // UG.6.1/8
 //#define MSPM0G3507_VQFN32   // UG.6.1/9
 //#define MSPM0G3507_VSSOP28  // UG.6.1/9

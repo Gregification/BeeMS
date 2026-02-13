@@ -57,6 +57,7 @@ void System::init() {
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM59, IOMUX_PINCM59_PF_CANFD0_CANTX); // CANTX, PA26
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM60, IOMUX_PINCM60_PF_CANFD0_CANRX); // CANRX, PA27
 
+        DL_MCAN_reset(CANFD0);
         DL_MCAN_enablePower(CANFD0);
         delay_cycles(POWER_STARTUP_DELAY);
     #endif

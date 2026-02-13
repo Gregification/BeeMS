@@ -86,6 +86,13 @@ namespace Networking {
         };
         static_assert(sizeof(F_Range_REQ) == sizeof(uint32_t));
 
+        struct __attribute__((__packed__)) F_W_COIL {
+            uint16_t    addr;
+            uint16_t    val;
+        };
+        static_assert(sizeof(F_Range_REQ) == sizeof(uint32_t));
+
+
         /*** functions ***************************************/
 
         /**

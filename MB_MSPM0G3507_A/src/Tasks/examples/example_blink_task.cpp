@@ -29,6 +29,8 @@ void Task::blink_task(void*) {
 //    auto &led = MstrB::Indi::LED::fault;
     auto &led = MstrB::Indi::LED::scheduler;
 
+//    auto &led = System::GPIO::PA26;
+
     DL_GPIO_initDigitalOutputFeatures(
             led.iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,

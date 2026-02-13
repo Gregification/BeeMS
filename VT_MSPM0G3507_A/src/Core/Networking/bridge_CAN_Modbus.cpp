@@ -10,7 +10,7 @@
 #include "Core/common.h"
 #include "Core/std alternatives/string.hpp"
 
-bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * mbap, DL_MCAN_TxBufElement * tx) {
+bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * mbap, DL_MCAN_TxBufElement * tx, uint8_t socket) {
     using namespace CAN;
     using namespace Modbus;
 
@@ -38,6 +38,7 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
     txid->pdu_format        = J1939_PDU_FORMAT;
     txid->pdu_specific      = mbap->adu[0].func;
 
+    txpkt->header.ipsocketnum   = socket;
     txpkt->header.transactionID = mbap->transactionID;
     txpkt->header.mbatlen   = ntoh16(mbap->len);
     txpkt->header.unitID    = mbap->adu[0].unitID;
@@ -47,7 +48,7 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
     static_assert(sizeof(txpkt->header.transactionID) == sizeof(mbap->transactionID));
 
     // copy ADU
-    uint8_t adulen = txpkt->header.mbatlen - sizeof(ADUPacket);
+    uint8_t adulen = txpkt->header.mbatlen - sizeof(ADUPacket);//-1 for unitID
     if(adulen > PKTBUFFSIZE) return false;
     ALT::memcpy(
             mbap->adu[0].data,
@@ -55,29 +56,28 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
             adulen
         );
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE"- adu dump: "));
-    for(uint8_t j = 0; j < adulen + sizeof(CANPacket::_Header); j++){
+    System::uart_ui.nputs(ARRANDN(NEWLINE " \tdump TCP TCP->CAN: "));
+    for(uint8_t j = 0; j < adulen + sizeof(*mbap); j++){
         if(j % 10 == 0)
             System::uart_ui.nputs(ARRANDN(NEWLINE " \t"));
 
         System::uart_ui.nputs(ARRANDN(" "));
-        System::uart_ui.putu32h(txpkt->raw[j]);
+        System::uart_ui.putu32h(((uint8_t const *)mbap)[j]);
     }
+    System::uart_ui.nputs(ARRANDN(NEWLINE "header mbatlen: "));
+    System::uart_ui.putu32h(txpkt->header.mbatlen);
     System::uart_ui.nputs(ARRANDN(NEWLINE));
-
 
     /*** tx buffer settings ***/
 
+    tx->dlc = System::CANFD::len2DLC(adulen + sizeof(CANPacket));
     tx->xtd = true; // use 29b CAN ID
     tx->fdf = true; // use CAN-FD format
-    tx->brs = true; // use bit rate switching
-    tx->dlc = System::CANFD::len2DLC(adulen + sizeof(CANPacket::_Header));
-
 
     return true;
 }
 
-bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const * rx, Modbus::MBAPHeader * mbap) {
+bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const * rx, Modbus::MBAPHeader * mbap, uint8_t * socket) {
     using namespace CAN;
     using namespace Modbus;
 
@@ -102,11 +102,17 @@ bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const 
     if(!(rxid->raw != J1939_PDU_FORMAT))
         return false;
 
+    // is socket is funky
+    if(rxpkt->header.ipsocketnum > 8) // w5500 limit
+        return false;
+
     // is Modbus packet larger than CAN packet
     if(System::CANFD::DLC2Len(rx) < rxpkt->header.mbatlen - sizeof(Modbus::ADUPacket))
         return false;
 
     /*** translation **********/
+
+    *socket = rxpkt->header.ipsocketnum;
 
     mbap->transactionID     = rxpkt->header.transactionID;
     mbap->protocolID        = MBAPHeader::PROTOCOL_ID_MODBUS;

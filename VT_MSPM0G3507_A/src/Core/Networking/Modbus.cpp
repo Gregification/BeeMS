@@ -5,8 +5,8 @@
  *      Author: turtl
  */
 
+#include <Core/Networking/ModbusRegisters.hpp>
 #include "Modbus.hpp"
-#include "Core/Networking/ModbusRegisters.hpp"
 #include "Core/system.hpp"
 
 
@@ -23,10 +23,6 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
         return false;
 
     // is user stupid
-    if(rxlen < sizeof(MBAPHeader) || txlen < sizeof(MBAPHeader))
-        return false;
-
-    // is packet undersized according to Modbus
     if(rxlen < sizeof(MBAPHeader) + ntoh16(rxheader->len))
         return false;
 
@@ -34,91 +30,133 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
     /*** packet specific response *****************************/
 
     switch (rxadu.func) {
+//            uart.nputs(ARRANDN("R_COILS unhandled" NEWLINE));
+//            return false;
+//            break;
+
         case Function::R_COILS:
-            uart.nputs(ARRANDN("R_COILS unhandled" NEWLINE));
-            return false;
-            break;
+        case Function::R_DISRETE_INPUTS: {
+//                uart.nputs(ARRANDN("R_DISRETE_INPUTS unhandled" NEWLINE));
 
-        case Function::R_DISRETE_INPUTS:
-            uart.nputs(ARRANDN("R_DISRETE_INPUTS unhandled" NEWLINE));
-            return false;
-            break;
-
-        case Function::R_INPUT_REGS:
-        case Function::R_HOLDING_REGS: {
                 auto query  = reinterpret_cast<F_Range_REQ const *>(rxadu.data);
                 auto resp   = reinterpret_cast<F_Range_RES *>(txadu.data);
-
-//                uart.nputs(ARRANDN());
-//                uart.put32d();
-                uart.nputs(ARRANDN("dump: "));
-                for(uint8_t i = 0; i < sizeof(MBAPHeader) + ntoh16(rxheader->len); i++){
-                    if(i % 10 == 0)
-                        uart.nputs(ARRANDN(NEWLINE));
-
-                    uart.putu32h(((uint8_t *)rxheader)[i]);
-                    uart.nputs(ARRANDN(" "));
-                }
-                uart.nputs(ARRANDN(NEWLINE));
-                uart.nputs(ARRANDN(NEWLINE "\t mbap.len: "));
-                uart.put32d(ntoh16(rxheader->len));
-                uart.nputs(ARRANDN(NEWLINE "\t mbap.protocolID: "));
-                uart.put32d(ntoh16(rxheader->protocolID));
-                uart.nputs(ARRANDN(NEWLINE "\t mbap.transactionID: "));
-                uart.put32d(ntoh16(rxheader->transactionID));
-                uart.nputs(ARRANDN(NEWLINE "\t mbap.adu[0].func: "));
-                uart.put32d(rxheader->adu[0].func);
-                uart.nputs(ARRANDN(NEWLINE "\t mbap.adu[0].unitID: "));
-                uart.put32d(rxheader->adu[0].unitID);
-                uart.nputs(ARRANDN(NEWLINE "\t RR.start: "));
-                uart.put32d(ntoh16(query->start));
-                uart.nputs(ARRANDN(NEWLINE "\t RR.len: "));
-                uart.put32d(ntoh16(query->len));
-                uart.nputs(ARRANDN(NEWLINE));
 
                 /*** validation ***********/
 
                 if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ))
                     return false;
 
-                if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(F_Range_RES) + ntoh16(query->len) * sizeof(uint16_t)) { // constrain to tx buffer size
-                    uart.nputs(ARRANDN("modbus response buffer undersized, needed : >" ));
-                    uart.put32d(sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(F_Range_RES) + ntoh16(query->len) * sizeof(uint16_t));
-                    uart.nputs(ARRANDN(" \t, got: " ));
-                    uart.put32d(txlen);
-                    uart.nputs(ARRANDN(NEWLINE));
-                    return false;
-                }
 
                 /*** response *************/
 
                 *txheader   = *rxheader;
                 txadu       = rxadu;
-                resp->byteCount = sizeof(uint16_t) * ntoh16(query->len);
-                txheader->len = hton16(resp->byteCount + sizeof(ADUPacket) + sizeof(F_Range_RES));
+                resp->byteCount = 1;
+
+                uint8_t b = 0;
 
                 for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
                     uint16_t res;
 
-                    if(!VTRegisters::getReg(ntoh16(query->start) + i, &res))
+                    if(i == 0)
+                        resp->val8[b] = 0;
+
+                    if(i % 8 == 0 && i != 0) {
+                        b++;
+
+                        if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + b) // constrain to tx buffer size
+                            return false;
+
+                        resp->val8[b] = 0;
+                        resp->byteCount++;
+                    }
+
+                    uart.nputs(ARRANDN("\tregister: "));
+                    uart.putu32d(ntoh16(query->start) + i);
+                    uart.nputs(ARRANDN(NEWLINE));
+
+                    if(!Networking::Modbus::VTRegisters::getReg(ntoh16(query->start) + i, &res))
                         return false;
 
-                    uart.nputs(ARRANDN(" \t"));
-                    uart.putu32h(res);
-                    if(i % 10 == 0 && i != 0)
-                        uart.nputs(ARRANDN(NEWLINE));
-
-                    resp->val16[i] = hton16(res);
+                    if(res)
+                        resp->val8[b] |= BV(i%8);
                 }
-                uart.nputs(ARRANDN(NEWLINE));
+
+                txheader->len = hton16(resp->byteCount + sizeof(F_Range_RES) + sizeof(ADUPacket));
 
                 return true;
             } break;
 
-        case Function::W_COIL:
-            uart.nputs(ARRANDN("W_COIL unhandled" NEWLINE));
-            return false;
-            break;
+        case Function::R_INPUT_REGS:
+        case Function::R_HOLDING_REGS: {
+                auto query  = reinterpret_cast<F_Range_REQ const *>(rxadu.data);
+                auto resp   = reinterpret_cast<F_Range_RES *>(txadu.data);
+
+                /*** validation ***********/
+
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ))
+                    return false;
+
+
+                /*** response *************/
+
+                *txheader   = *rxheader;
+                txadu       = rxadu;
+                resp->byteCount = 0;
+
+                for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
+                    uint16_t res;
+
+                    if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i) // constrain to tx buffer size
+                        return false;
+
+                    if(!Networking::Modbus::VTRegisters::getReg(ntoh16(query->start) + i, &res))
+                        return false;
+
+
+                    resp->val16[i] = hton16(res);
+                    System::uart_ui.nputs(ARRANDN("header len : "));
+                    System::uart_ui.put32d(resp->byteCount);
+                    System::uart_ui.nputs(ARRANDN("\t + \t"));
+                    System::uart_ui.put32d(sizeof(res));
+                    System::uart_ui.nputs(ARRANDN(" = "NEWLINE));
+                    resp->byteCount += sizeof(res);
+                    System::uart_ui.put32d(resp->byteCount);
+                }
+
+                txheader->len = hton16(resp->byteCount + sizeof(*resp) + sizeof(ADUPacket));
+
+                return true;
+            } break;
+
+        case Function::W_COIL: {
+                uart.nputs(ARRANDN("W_COIL" NEWLINE));
+                auto query  = reinterpret_cast<F_W_COIL const *>(rxadu.data);
+                auto resp   = reinterpret_cast<F_W_COIL *>(txadu.data);
+
+                /*** validation ***********/
+
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ))
+                    return false;
+
+
+                /*** response *************/
+
+                *txheader   = *rxheader;
+                txadu       = rxadu;
+
+                uart.nputs(ARRANDN("\tregister: "));
+                uart.putu32d(ntoh16(query->addr));
+                uart.nputs(ARRANDN(NEWLINE));
+
+                if(!Networking::Modbus::VTRegisters::setReg(ntoh16(query->addr), ntoh16(query->val)))
+                    return false;
+
+                txheader->len = rxheader->len;
+                *resp = *query;
+
+                return true;
+            } break;
 
         case Function::W_REG:
             uart.nputs(ARRANDN("W_REG unhandled" NEWLINE));

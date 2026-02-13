@@ -10,7 +10,7 @@
 #include "Core/common.h"
 #include "Core/std alternatives/string.hpp"
 
-bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * mbap, DL_MCAN_TxBufElement * tx) {
+bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * mbap, DL_MCAN_TxBufElement * tx, uint8_t socket) {
     using namespace CAN;
     using namespace Modbus;
 
@@ -38,6 +38,7 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
     txid->pdu_format        = J1939_PDU_FORMAT;
     txid->pdu_specific      = mbap->adu[0].func;
 
+    txpkt->header.ipsocketnum   = socket;
     txpkt->header.transactionID = mbap->transactionID;
     txpkt->header.mbatlen   = ntoh16(mbap->len);
     txpkt->header.unitID    = mbap->adu[0].unitID;
@@ -66,7 +67,7 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
     return true;
 }
 
-bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const * rx, Modbus::MBAPHeader * mbap) {
+bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const * rx, Modbus::MBAPHeader * mbap, uint8_t * socket) {
     using namespace CAN;
     using namespace Modbus;
 
@@ -91,11 +92,17 @@ bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const 
     if(!(rxid->raw != J1939_PDU_FORMAT))
         return false;
 
+    // is socket is funky
+    if(rxpkt->header.ipsocketnum > 8) // w5500 limit
+        return false;
+
     // is Modbus packet larger than CAN packet
     if(System::CANFD::DLC2Len(rx) < rxpkt->header.mbatlen - sizeof(Modbus::ADUPacket))
         return false;
 
     /*** translation **********/
+
+    *socket = rxpkt->header.ipsocketnum;
 
     mbap->transactionID     = rxpkt->header.transactionID;
     mbap->protocolID        = MBAPHeader::PROTOCOL_ID_MODBUS;
@@ -111,6 +118,18 @@ bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const 
             mbap->adu[0].data,
             adulen
         );
+
+    System::UART::uart_ui.nputs(ARRANDN(NEWLINE " \tdump TCP from CAN->TCP: "));
+    for(uint8_t j = 0; j < adulen + sizeof(*mbap); j++){
+        if(j % 10 == 0)
+            System::UART::uart_ui.nputs(ARRANDN(NEWLINE " \t"));
+
+        System::UART::uart_ui.nputs(ARRANDN(" "));
+        System::UART::uart_ui.putu32h(((uint8_t const *)mbap)[j]);
+    }
+    System::UART::uart_ui.nputs(ARRANDN(NEWLINE "\theader mbatlen: "));
+    System::UART::uart_ui.putu32h(rxpkt->header.mbatlen);
+    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     return true;
 }

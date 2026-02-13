@@ -54,8 +54,11 @@ void System::init() {
     // MCAN has to be enabled beofre the clocks are modified or the ram wont initialize
 
         // pins for v: 2.2, 3.0
-        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
-        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
+//        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
+//        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
+
+        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM59, IOMUX_PINCM59_PF_CANFD0_CANTX); // CANTX, PA26
+        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM60, IOMUX_PINCM60_PF_CANFD0_CANRX); // CANRX, PA27
 
         DL_MCAN_reset(CANFD0);
         DL_MCAN_enablePower(CANFD0);
@@ -392,7 +395,7 @@ void System::init() {
                     .nomTimeSeg1        = 68,   /* Arbitration Time segment before sample point. */
                     .nomTimeSeg2        = 9,    /* Arbitration Time segment after sample point. */
                     .nomSynchJumpWidth  = 9,    /* Arbitration (Re)Synchronization Jump Width Range. */
-                    .dataRatePrescalar  = 1,    /* Data Baud Rate Pre-scaler. */
+                    .dataRatePrescalar  = 1 ,    /* Data Baud Rate Pre-scaler. */
                     .dataTimeSeg1       = 16,    /* Data Time segment before sample point. */
                     .dataTimeSeg2       = 1,    /* Data Time segment after sample point. */
                     .dataSynchJumpWidth = 1,    /* Data (Re)Synchronization Jump Width.   */

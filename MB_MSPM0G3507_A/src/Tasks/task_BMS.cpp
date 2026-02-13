@@ -9,7 +9,6 @@
 
 #include <Tasks/task_BMS.hpp>
 #include "Core/system.hpp"
-#include "Core/FancyCli.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/common.h"
 #include "Core/BMS/BMSMaster.hpp"
