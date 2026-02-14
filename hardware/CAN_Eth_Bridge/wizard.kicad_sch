@@ -3479,6 +3479,12 @@
 		(uuid "158fe5b9-8151-4165-aed4-b3489be8586b")
 	)
 	(junction
+		(at 111.76 27.94)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "16832745-4a34-443e-8a8f-3d2500ee8efc")
+	)
+	(junction
 		(at 91.44 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3647,6 +3653,12 @@
 		(uuid "d3f48cd4-9575-45f2-ae2e-03664a41281e")
 	)
 	(junction
+		(at 111.76 33.02)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dc63ea24-baa5-4103-82de-e49108d30b0a")
+	)
+	(junction
 		(at 187.96 97.79)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3760,7 +3772,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 33.02) (xy 142.24 33.02)
+			(xy 101.6 33.02) (xy 111.76 33.02)
 		)
 		(stroke
 			(width 0)
@@ -4140,16 +4152,6 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 27.94) (xy 142.24 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4a764782-ec1a-4939-9fcb-43dfcbf43afc")
-	)
-	(wire
-		(pts
 			(xy 154.94 80.01) (xy 154.94 78.74)
 		)
 		(stroke
@@ -4460,6 +4462,16 @@
 	)
 	(wire
 		(pts
+			(xy 111.76 27.94) (xy 142.24 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cd93517-8322-4164-9bcd-85742dba531e")
+	)
+	(wire
+		(pts
 			(xy 73.66 129.54) (xy 73.66 133.35)
 		)
 		(stroke
@@ -4570,6 +4582,16 @@
 	)
 	(wire
 		(pts
+			(xy 101.6 27.94) (xy 111.76 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9cf438c4-c772-4b73-b9e1-f0694a190af7")
+	)
+	(wire
+		(pts
 			(xy 185.42 90.17) (xy 185.42 91.44)
 		)
 		(stroke
@@ -4677,6 +4699,16 @@
 			(type default)
 		)
 		(uuid "af6b7a35-5bc1-471e-8120-ffdac70d7de7")
+	)
+	(wire
+		(pts
+			(xy 111.76 33.02) (xy 142.24 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2318066-a2f5-4af4-85e4-8ce37cc2e0c0")
 	)
 	(wire
 		(pts
@@ -5312,7 +5344,7 @@
 		)
 		(uuid "27a030c4-05bd-479a-bb23-db1a849ae33b")
 	)
-	(hierarchical_label "+3.3V"
+	(hierarchical_label "+5V"
 		(shape input)
 		(at 257.81 78.74 0)
 		(effects
@@ -6024,136 +6056,6 @@
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
 					(reference "C?")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 251.46 100.33 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "22cf91d0-7cb2-4af7-ba38-a0122e059e5b")
-		(property "Reference" "R317"
-			(at 254 99.0599 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "332"
-			(at 254 101.5999 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "332 ohm, 250mW, 200V, 1%, 100ppm, -55C, +155C"
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AC1206FR-07332RL?qs=sGAEpiMZZMvdGkrng054txZnKwhPFOhA4suuzGTX%2F2A%3D"
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.016"
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.10"
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 251.46 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "bc4574b3-2436-47ec-b252-e1c897356669")
-		)
-		(pin "2"
-			(uuid "b83cbf4d-bf30-45e9-adc2-3287aa9bbc65")
-		)
-		(instances
-			(project "W5500 testing"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R317")
-					(unit 1)
-				)
-			)
-			(project "W5500 testing"
-				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R?")
 					(unit 1)
 				)
 			)
@@ -7708,136 +7610,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 242.57 100.33 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "7abbdb18-fb96-455c-a623-c46bee2b2873")
-		(property "Reference" "R316"
-			(at 245.11 99.0599 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "332"
-			(at 245.11 101.5999 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, small US symbol"
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "332 ohm, 250mW, 200V, 1%, 100ppm, -55C, +155C"
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AC1206FR-07332RL?qs=sGAEpiMZZMvdGkrng054txZnKwhPFOhA4suuzGTX%2F2A%3D"
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.016"
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.10"
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 242.57 100.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "7ba1a143-0c3b-48d9-a953-e5a253e83dae")
-		)
-		(pin "2"
-			(uuid "5fe134ca-1c1b-4f64-98f4-c2fc8125c833")
-		)
-		(instances
-			(project "W5500 testing"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R316")
-					(unit 1)
-				)
-			)
-			(project "W5500 testing"
-				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "R?")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 128.27 134.62 0)
 		(mirror y)
@@ -7980,6 +7752,147 @@
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
 					(reference "C?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 251.46 100.33 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "8536cc9a-e04f-4871-84fa-69f50055a463")
+		(property "Reference" "R317"
+			(at 253.746 99.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "750"
+			(at 253.746 101.346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RC1206JR-13750RL?qs=sGAEpiMZZMvdGkrng054t8AJgcdMkx7xRBGyMWDk%2FFM%3D"
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "750mOhm, 250mW, 5%, 100PPM, 200C, -55C, +155C"
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.022"
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.1"
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 251.46 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "d6b11356-6247-48ea-914c-7bcb05117867")
+		)
+		(pin "1"
+			(uuid "631e4f13-de22-4d8d-b0b0-2ba3ae9558fc")
+		)
+		(instances
+			(project "CAN_Eth_Bridge"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
+					(reference "R317")
 					(unit 1)
 				)
 			)
@@ -8562,6 +8475,148 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 242.57 100.33 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b18c6a54-144e-4bb3-9b55-7031a4c9ff0e")
+		(property "Reference" "R316"
+			(at 240.284 99.568 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "750"
+			(at 240.284 101.346 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RC1206JR-13750RL?qs=sGAEpiMZZMvdGkrng054t8AJgcdMkx7xRBGyMWDk%2FFM%3D"
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "750mOhm, 250mW, 5%, 100PPM, 200C, -55C, +155C"
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.022"
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.1"
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 242.57 100.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0b0e1eea-12ae-4eb9-9370-ba0f96f48628")
+		)
+		(pin "1"
+			(uuid "964a346d-600b-4684-bc17-d3633e0a7487")
+		)
+		(instances
+			(project "CAN_Eth_Bridge"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
+					(reference "R316")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 82.55 30.48 0)
 		(mirror y)
@@ -8695,6 +8750,166 @@
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
 					(reference "C?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 111.76 30.48 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b465ed86-d65e-4b77-ae5b-a4df63ee795e")
+		(property "Reference" "C322"
+			(at 109.22 29.2162 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 109.22 31.7562 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder"
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Wurth-Elektronik/885012206095?qs=0KOYDY2FL2%2FIErXVpcsrTQ%3D%3D"
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100nF, 10%, 50V, X7R, -55C, +125C"
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.029"
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x50" "0.02"
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.017"
+			(at 111.76 30.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "33367de1-6687-4ef6-9f77-2be8e9c51f9f")
+		)
+		(pin "1"
+			(uuid "0ef5217b-2a2f-4242-bfed-34c317f675ac")
+		)
+		(instances
+			(project "CAN_Eth_Bridge"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
+					(reference "C322")
 					(unit 1)
 				)
 			)

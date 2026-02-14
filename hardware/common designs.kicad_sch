@@ -3990,6 +3990,293 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Transistor_FET:Q_NMOS_GSD"
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "Q"
+				(at 5.08 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "Q_NMOS_GSD"
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "N-MOSFET transistor, gate/source/drain"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "transistor NMOS N-MOS N-MOSFET"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Q_NMOS_GSD_0_1"
+				(polyline
+					(pts
+						(xy 0.254 1.905) (xy 0.254 -1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.254 0) (xy -2.54 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 2.286) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 0.508) (xy 0.762 -0.508)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -1.27) (xy 0.762 -2.286)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -1.778) (xy 3.302 -1.778) (xy 3.302 1.778) (xy 0.762 1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 0) (xy 2.032 0.381) (xy 2.032 -0.381) (xy 1.016 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.651 0)
+					(radius 2.794)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 2.54) (xy 2.54 1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.54 1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 2.54 -1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.921 0.381) (xy 3.683 0.381)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.302 0.381) (xy 2.921 -0.254) (xy 3.683 -0.254) (xy 3.302 0.381)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "Q_NMOS_GSD_1_1"
+				(pin input line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "G"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 5.08 270)
+					(length 2.54)
+					(name "D"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "S"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "zzLocalLibrary:DMN62D0U"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -7307,12 +7594,6 @@
 		(uuid "0a404c96-b80a-4839-9020-5226bf3aa6b2")
 	)
 	(junction
-		(at 179.07 82.55)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "0b1dd240-060a-4f8b-af0d-ad36168e107c")
-	)
-	(junction
 		(at 195.58 95.25)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7481,10 +7762,10 @@
 		(uuid "759c4fe5-a2df-450f-a51d-0cec021ffbf8")
 	)
 	(junction
-		(at 190.5 30.48)
+		(at 179.07 82.55)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "7c82c404-25aa-43e8-9a97-255cba6c259e")
+		(uuid "79ea6f37-8587-4c60-9090-836ad7ea5867")
 	)
 	(junction
 		(at 240.03 69.85)
@@ -7593,6 +7874,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e65c6019-4caf-4094-a15c-58bd091d7e4a")
+	)
+	(junction
+		(at 190.5 30.48)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e8c1eca4-2202-4170-b695-a84978e4f1dc")
 	)
 	(junction
 		(at 179.07 36.83)
@@ -8616,7 +8903,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 82.55) (xy 200.66 82.55)
+			(xy 179.07 82.55) (xy 195.58 82.55)
 		)
 		(stroke
 			(width 0)
@@ -9116,7 +9403,7 @@
 	)
 	(wire
 		(pts
-			(xy 185.42 74.93) (xy 195.58 74.93)
+			(xy 185.42 74.93) (xy 190.5 74.93)
 		)
 		(stroke
 			(width 0)
@@ -9878,7 +10165,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0a7399ff-dda4-4664-ba91-7a136b216939")
-		(property "Reference" "C337"
+		(property "Reference" "C338"
 			(at 270.51 129.5462 0)
 			(effects
 				(font
@@ -9995,7 +10282,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C337")
+					(reference "C338")
 					(unit 1)
 				)
 			)
@@ -10029,7 +10316,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "146eb1e7-3b4c-4370-a3b9-065739df9368")
-		(property "Reference" "C328"
+		(property "Reference" "C329"
 			(at 208.28 153.6762 0)
 			(effects
 				(font
@@ -10146,7 +10433,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C328")
+					(reference "C329")
 					(unit 1)
 				)
 			)
@@ -11318,7 +11605,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "22e15ef0-b40d-424c-9080-0025d3f828c8")
-		(property "Reference" "C330"
+		(property "Reference" "C331"
 			(at 231.14 118.364 90)
 			(effects
 				(font
@@ -11442,7 +11729,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C330")
+					(reference "C331")
 					(unit 1)
 				)
 			)
@@ -13117,21 +13404,21 @@
 		(dnp no)
 		(uuid "392329a4-e141-410c-93ab-ee01e1aeb330")
 		(property "Reference" "R306"
-			(at 60.452 77.47 0)
+			(at 62.484 77.978 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Value" "750"
-			(at 59.182 79.248 0)
+			(at 62.484 79.756 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
@@ -13723,6 +14010,148 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 107.95 86.36 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "3eb7f963-5539-432a-9be4-c83a63c45997")
+		(property "Reference" "R350"
+			(at 106.172 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "12.4k"
+			(at 105.918 87.122 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Susumu/RR1220P-1242-D-M?qs=sGAEpiMZZMvdGkrng054t0uOsFOTJMhbkKY3D7%2FGR%2FA%3D"
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "12.4k ohm, 0.5%, 100mW, 100V, 25ppm, -55C, +125C"
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.028"
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.1"
+			(at 107.95 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 107.95 86.36 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 107.95 86.36 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "6dc7f542-6762-4456-9a04-da8a341dd3fa")
+		)
+		(pin "1"
+			(uuid "08a5c462-d0a6-4234-9d45-01590a365ef1")
+		)
+		(instances
+			(project "CAN_Eth_Bridge"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "R350")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_name "AP64060ZQ_1")
 		(lib_id "zzLocalLibrary:AP64060ZQ")
 		(at 219.71 148.59 0)
@@ -13864,42 +14293,33 @@
 		)
 	)
 	(symbol
-		(lib_id "zzLocalLibrary:Si1480DH")
-		(at 179.07 71.12 0)
+		(lib_id "Transistor_FET:Q_NMOS_GSD")
+		(at 48.26 88.9 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "44442079-e1ae-4644-8419-d267ca186b1c")
-		(property "Reference" "U312"
-			(at 179.07 68.58 0)
+		(uuid "44c58b29-1bcc-4abe-9a45-5338c48c6667")
+		(property "Reference" "Q307"
+			(at 48.26 80.01 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "Si1450DH"
-			(at 179.07 71.12 0)
+		(property "Value" "TSM2328CX"
+			(at 48.26 82.55 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6_Handsoldering"
-			(at 179.07 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.vishay.com/docs/67327/si1480dh.pdf"
-			(at 179.07 71.12 0)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-3"
+			(at 45.72 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13907,8 +14327,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 179.07 71.12 0)
+		(property "Datasheet" "~"
+			(at 48.26 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13916,8 +14336,8 @@
 				(hide yes)
 			)
 		)
-		(property "specs" "2.6A cont, 200mOhm, 100Vds, +-20Vgs, -55C, +150C"
-			(at 179.07 71.12 0)
+		(property "Description" "N-MOSFET transistor, gate/source/drain"
+			(at 48.26 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13925,8 +14345,8 @@
 				(hide yes)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Siliconix/SI1480DH-T1-BE3?qs=zW32dvEIR3scWOH7DHfYCg%3D%3D"
-			(at 179.07 71.12 0)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Taiwan-Semiconductor/TSM2328CX-RFG?qs=5aG0NVq1C4wI2SOZtSA3NA%3D%3D"
+			(at 48.26 88.9 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13934,8 +14354,8 @@
 				(hide yes)
 			)
 		)
-		(property "unit x10" "0.274"
-			(at 179.07 71.12 0)
+		(property "unit x10" "0.432"
+			(at 48.26 88.9 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13943,8 +14363,8 @@
 				(hide yes)
 			)
 		)
-		(property "unit x1" "0.34"
-			(at 179.07 71.12 0)
+		(property "unit x1" "0.66"
+			(at 48.26 88.9 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13952,46 +14372,37 @@
 				(hide yes)
 			)
 		)
-		(pin "5"
-			(uuid "bf813737-fb7d-4b30-a102-125eca5bd4a1")
+		(property "unit x100" "0.345"
+			(at 48.26 88.9 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
-		(pin "4"
-			(uuid "4a9e4cd3-7132-4e2f-be4a-48efe8da4527")
-		)
-		(pin "3"
-			(uuid "98e44220-07c2-40e2-9f1a-5ff002138243")
-		)
-		(pin "2"
-			(uuid "14789e01-83b7-4e40-999f-de5d86e276ef")
+		(property "specs" "100Vds, +-20Vgs, 250mR, 1Vt, 1.5Acont, 1.38W"
+			(at 48.26 88.9 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
 		(pin "1"
-			(uuid "0868c3de-3895-48f4-827e-802fae1a979c")
+			(uuid "31a3a19f-44f9-4b3b-8c19-dddb710e1e3e")
 		)
-		(pin "6"
-			(uuid "90dc1742-5d02-40df-b25d-4aeedd8f1574")
+		(pin "3"
+			(uuid "0739080d-9457-40c7-895f-47a9da79962c")
+		)
+		(pin "2"
+			(uuid "fafec596-40b0-4ad7-acc8-aeee35d9239e")
 		)
 		(instances
-			(project "MasterBoard_A"
+			(project ""
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U312")
-					(unit 1)
-				)
-			)
-			(project "VoltageTap_A"
-				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U411")
-					(unit 1)
-				)
-			)
-			(project "mini Orion TEM"
-				(path "/b084770c-fa69-4b11-9ca5-6e8bd0701598/993306fe-1d86-4b6c-8161-5cbc7dd902e0"
-					(reference "U411")
-					(unit 1)
-				)
-			)
-			(project "Cell Balancing testing"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U?")
+					(reference "Q307")
 					(unit 1)
 				)
 			)
@@ -14161,7 +14572,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "49515c96-22c5-441c-91dd-4b646720ebf7")
-		(property "Reference" "C338"
+		(property "Reference" "C339"
 			(at 270.51 153.6762 0)
 			(effects
 				(font
@@ -14278,7 +14689,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C338")
+					(reference "C339")
 					(unit 1)
 				)
 			)
@@ -14461,7 +14872,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4aeb1f03-b38c-429b-a344-53177b4dfece")
-		(property "Reference" "C326"
+		(property "Reference" "C327"
 			(at 163.83 91.4462 0)
 			(effects
 				(font
@@ -14587,7 +14998,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C326")
+					(reference "C327")
 					(unit 1)
 				)
 			)
@@ -14616,9 +15027,9 @@
 		(at 48.26 66.04 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
+		(in_bom no)
+		(on_board no)
+		(dnp yes)
 		(fields_autoplaced yes)
 		(uuid "4e348e20-eeab-4c84-865d-747a34cb4151")
 		(property "Reference" "U309"
@@ -16786,7 +17197,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6cac40a9-0f3a-48b2-a9b3-9b223220a3de")
-		(property "Reference" "C327"
+		(property "Reference" "C328"
 			(at 208.28 129.5462 0)
 			(effects
 				(font
@@ -16903,7 +17314,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C327")
+					(reference "C328")
 					(unit 1)
 				)
 			)
@@ -18365,7 +18776,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "845da7ae-bca0-48a1-a5b1-67efc8269cdf")
-		(property "Reference" "C335"
+		(property "Reference" "C336"
 			(at 259.08 153.6762 0)
 			(effects
 				(font
@@ -18482,7 +18893,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C335")
+					(reference "C336")
 					(unit 1)
 				)
 			)
@@ -18948,7 +19359,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8add47fb-46e7-43ca-852e-860ff52d14b5")
-		(property "Reference" "C329"
+		(property "Reference" "C330"
 			(at 226.06 97.7962 0)
 			(effects
 				(font
@@ -19065,7 +19476,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C329")
+					(reference "C330")
 					(unit 1)
 				)
 			)
@@ -19556,7 +19967,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8f9433d7-aaa3-4441-b5c5-899f04a3cfc6")
-		(property "Reference" "C336"
+		(property "Reference" "C337"
 			(at 264.16 72.3962 0)
 			(effects
 				(font
@@ -19673,7 +20084,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C336")
+					(reference "C337")
 					(unit 1)
 				)
 			)
@@ -19698,6 +20109,122 @@
 			(project "Cell Balancing testing"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
 					(reference "C?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Transistor_FET:Q_NMOS_GSD")
+		(at 185.42 33.02 270)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "907cf5a0-2fa4-447f-8bd6-7ff184aeeffe")
+		(property "Reference" "Q310"
+			(at 185.42 24.13 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TSM2328CX"
+			(at 185.42 26.67 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-3"
+			(at 187.96 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 185.42 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "N-MOSFET transistor, gate/source/drain"
+			(at 185.42 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Taiwan-Semiconductor/TSM2328CX-RFG?qs=5aG0NVq1C4wI2SOZtSA3NA%3D%3D"
+			(at 185.42 33.02 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.432"
+			(at 185.42 33.02 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.66"
+			(at 185.42 33.02 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.345"
+			(at 185.42 33.02 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100Vds, +-20Vgs, 250mR, 1Vt, 1.5Acont, 1.38W"
+			(at 185.42 33.02 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "82bb4c76-3bff-4ae1-8758-590e505b9230")
+		)
+		(pin "3"
+			(uuid "201bebf3-2a01-4103-8844-77201fa2511b")
+		)
+		(pin "2"
+			(uuid "9795c999-acdc-4471-8877-324ef5cb84b3")
+		)
+		(instances
+			(project "CAN_Eth_Bridge"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "Q310")
 					(unit 1)
 				)
 			)
@@ -20030,7 +20557,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "93264922-7f6e-4784-96b9-3a0747a74aa6")
-		(property "Reference" "C324"
+		(property "Reference" "C325"
 			(at 93.98 29.2162 0)
 			(effects
 				(font
@@ -20156,7 +20683,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C324")
+					(reference "C325")
 					(unit 1)
 				)
 			)
@@ -20510,7 +21037,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9925e126-2de7-49cc-a619-096e7248c072")
-		(property "Reference" "C334"
+		(property "Reference" "C335"
 			(at 259.08 129.5462 0)
 			(effects
 				(font
@@ -20627,7 +21154,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C334")
+					(reference "C335")
 					(unit 1)
 				)
 			)
@@ -21023,140 +21550,6 @@
 			(project "mini Orion TEM"
 				(path "/b084770c-fa69-4b11-9ca5-6e8bd0701598/993306fe-1d86-4b6c-8161-5cbc7dd902e0"
 					(reference "U410")
-					(unit 1)
-				)
-			)
-			(project "Cell Balancing testing"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U?")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "zzLocalLibrary:Si1480DH")
-		(at 185.42 26.67 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "9c12cdf4-44cb-4a6f-87bc-61435be8eeed")
-		(property "Reference" "U314"
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Si1450DH"
-			(at 185.42 24.13 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6"
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.vishay.com/docs/67327/si1480dh.pdf"
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "2.6A cont, 200mOhm, 100Vds, +-20Vgs, -55C, +150C"
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Siliconix/SI1480DH-T1-BE3?qs=zW32dvEIR3scWOH7DHfYCg%3D%3D"
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.274"
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.34"
-			(at 185.42 26.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "5"
-			(uuid "adde18c0-746b-47bf-97ca-e1505ed10bf7")
-		)
-		(pin "4"
-			(uuid "71100b61-56f5-4b88-b22a-24f7efbd4501")
-		)
-		(pin "3"
-			(uuid "adccec26-fe03-4fe9-aecb-04b01b9bb483")
-		)
-		(pin "2"
-			(uuid "d17d6344-7718-4d92-b867-ee394ccd33e2")
-		)
-		(pin "1"
-			(uuid "1108ff9b-35b8-4bd2-aad6-2f49162ed64b")
-		)
-		(pin "6"
-			(uuid "3a8b7a27-8880-4f42-999b-4ef4fe8696cc")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U314")
-					(unit 1)
-				)
-			)
-			(project "VoltageTap_A"
-				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U413")
-					(unit 1)
-				)
-			)
-			(project "mini Orion TEM"
-				(path "/b084770c-fa69-4b11-9ca5-6e8bd0701598/993306fe-1d86-4b6c-8161-5cbc7dd902e0"
-					(reference "U413")
 					(unit 1)
 				)
 			)
@@ -21601,6 +21994,122 @@
 		)
 	)
 	(symbol
+		(lib_id "Transistor_FET:Q_NMOS_GSD")
+		(at 179.07 77.47 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a3455407-a9a5-4896-aa8a-05ad58bd169d")
+		(property "Reference" "Q308"
+			(at 179.07 68.58 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TSM2328CX"
+			(at 179.07 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-3"
+			(at 176.53 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 179.07 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "N-MOSFET transistor, gate/source/drain"
+			(at 179.07 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Taiwan-Semiconductor/TSM2328CX-RFG?qs=5aG0NVq1C4wI2SOZtSA3NA%3D%3D"
+			(at 179.07 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.432"
+			(at 179.07 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.66"
+			(at 179.07 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.345"
+			(at 179.07 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100Vds, +-20Vgs, 250mR, 1Vt, 1.5Acont, 1.38W"
+			(at 179.07 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "98335c2a-bcdc-4309-b733-c8e13891976b")
+		)
+		(pin "3"
+			(uuid "7c6c73aa-b823-4c90-b9db-2fead9d0a3ee")
+		)
+		(pin "2"
+			(uuid "ef921513-8335-42ce-8a8c-789991431ae4")
+		)
+		(instances
+			(project "CAN_Eth_Bridge"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "Q308")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 87.63 38.1 0)
 		(mirror y)
@@ -21610,7 +22119,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a3abb8d0-cdf6-4c0d-8fd8-eaa8b9b06a30")
-		(property "Reference" "C323"
+		(property "Reference" "C324"
 			(at 85.09 36.8362 0)
 			(effects
 				(font
@@ -21736,7 +22245,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C323")
+					(reference "C324")
 					(unit 1)
 				)
 			)
@@ -22361,141 +22870,6 @@
 		)
 	)
 	(symbol
-		(lib_id "zzLocalLibrary:Si1480DH")
-		(at 200.66 71.12 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "b3c75913-df60-42ee-a37d-8d89804d50a4")
-		(property "Reference" "U316"
-			(at 200.66 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Si1450DH"
-			(at 200.66 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-363_SC-70-6_Handsoldering"
-			(at 200.66 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.vishay.com/docs/67327/si1480dh.pdf"
-			(at 200.66 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 200.66 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "2.6A cont, 200mOhm, 100Vds, +-20Vgs, -55C, +150C"
-			(at 200.66 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Siliconix/SI1480DH-T1-BE3?qs=zW32dvEIR3scWOH7DHfYCg%3D%3D"
-			(at 200.66 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.274"
-			(at 200.66 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.34"
-			(at 200.66 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "5"
-			(uuid "6909ad3b-df88-43cc-aa56-440e4a2663e5")
-		)
-		(pin "4"
-			(uuid "f85a019f-ecf9-4fe1-8e7d-946a6efe5f89")
-		)
-		(pin "3"
-			(uuid "5249c51b-614f-4bce-b82a-51ee9b0fdaa5")
-		)
-		(pin "2"
-			(uuid "42de9e48-7f14-4a3a-b66b-67596765adaf")
-		)
-		(pin "1"
-			(uuid "cd9a25bd-266b-4dcc-9e98-89bde3ffc140")
-		)
-		(pin "6"
-			(uuid "59d31036-5945-47cc-8926-c6ed67392827")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "U316")
-					(unit 1)
-				)
-			)
-			(project "VoltageTap_A"
-				(path "/4b33f365-f3e6-4257-876a-be65258e9424/75724f26-b90e-442c-bed8-308272b11ccb"
-					(reference "U415")
-					(unit 1)
-				)
-			)
-			(project "mini Orion TEM"
-				(path "/b084770c-fa69-4b11-9ca5-6e8bd0701598/993306fe-1d86-4b6c-8161-5cbc7dd902e0"
-					(reference "U415")
-					(unit 1)
-				)
-			)
-			(project "Cell Balancing testing"
-				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
-					(reference "U?")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:D_Zener_Small")
 		(at 69.85 102.87 270)
 		(unit 1)
@@ -22897,7 +23271,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c31464e9-097a-4490-81f2-6428a8ba60c8")
-		(property "Reference" "C333"
+		(property "Reference" "C334"
 			(at 251.46 100.3362 0)
 			(effects
 				(font
@@ -23023,7 +23397,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C333")
+					(reference "C334")
 					(unit 1)
 				)
 			)
@@ -23618,6 +23992,122 @@
 		)
 	)
 	(symbol
+		(lib_id "Transistor_FET:Q_NMOS_GSD")
+		(at 195.58 77.47 270)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "d7f72a98-8a39-4403-897d-1d8a095df9e4")
+		(property "Reference" "Q309"
+			(at 195.58 68.58 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TSM2328CX"
+			(at 195.58 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-3"
+			(at 198.12 72.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 195.58 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "N-MOSFET transistor, gate/source/drain"
+			(at 195.58 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Taiwan-Semiconductor/TSM2328CX-RFG?qs=5aG0NVq1C4wI2SOZtSA3NA%3D%3D"
+			(at 195.58 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.432"
+			(at 195.58 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.66"
+			(at 195.58 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.345"
+			(at 195.58 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "100Vds, +-20Vgs, 250mR, 1Vt, 1.5Acont, 1.38W"
+			(at 195.58 77.47 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7b711cdb-bbf5-4432-a554-bc15791f05a5")
+		)
+		(pin "3"
+			(uuid "cb019158-b3d8-4f1c-9cc0-8467acc130f3")
+		)
+		(pin "2"
+			(uuid "42ef1b59-3769-4255-bd1d-d7240d84947d")
+		)
+		(instances
+			(project "CAN_Eth_Bridge"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "Q309")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 87.63 86.36 0)
 		(mirror y)
@@ -24037,7 +24527,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "df18317f-3b1a-4036-95c8-de8dce6fa398")
-		(property "Reference" "C332"
+		(property "Reference" "C333"
 			(at 237.49 72.3962 0)
 			(effects
 				(font
@@ -24154,7 +24644,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C332")
+					(reference "C333")
 					(unit 1)
 				)
 			)
@@ -24193,7 +24683,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e225b384-c7ea-4649-aaf0-513d23fbed81")
-		(property "Reference" "C331"
+		(property "Reference" "C332"
 			(at 231.14 142.494 90)
 			(effects
 				(font
@@ -24317,7 +24807,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C331")
+					(reference "C332")
 					(unit 1)
 				)
 			)
@@ -24484,7 +24974,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e5701967-ed1c-4ea3-8089-2713d2e69067")
-		(property "Reference" "C322"
+		(property "Reference" "C323"
 			(at 85.09 29.2162 0)
 			(effects
 				(font
@@ -24610,7 +25100,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C322")
+					(reference "C323")
 					(unit 1)
 				)
 			)
@@ -25087,7 +25577,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "eb54a86b-cd99-418f-aa26-c87188ff1660")
-		(property "Reference" "C325"
+		(property "Reference" "C326"
 			(at 93.98 36.8362 0)
 			(effects
 				(font
@@ -25213,7 +25703,7 @@
 		(instances
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
-					(reference "C325")
+					(reference "C326")
 					(unit 1)
 				)
 			)
