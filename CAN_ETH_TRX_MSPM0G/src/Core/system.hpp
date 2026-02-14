@@ -63,11 +63,11 @@
 /*--- IC footprint -------------------------------------*/
 // when changing footprints update this manually then match the library using the project settings.
 
-#define MSPM0G3507_LQFP64   // UG.6.1/6
+//#define MSPM0G3507_LQFP64   // UG.6.1/6
 //#define MSPM0G3507_LQFP48   // UG.6.1/7
 //#define MSPM0G3507_VQFN48   // UG.6.1/8
 //#define MSPM0G3507_VQFN32   // UG.6.1/9
-//#define MSPM0G3507_VSSOP28  // UG.6.1/9
+#define MSPM0G3507_VSSOP28  // UG.6.1/9
 
 /*--- shorthand ----------------------------------------*/
 
@@ -248,6 +248,10 @@ namespace System {
                  PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
                  PA16, PA17, PA18, PA21, PA22, PA23,        // PA19 and PA20 reserved for SWD
                  PA24, PA25, PA26, PA27, PA28, PA31;
+        #elif defined MSPM0G3507_VSSOP28
+            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA9,
+                 PA10, PA11, PA14, PA15, PA16, PA17, PA18, PA19,
+                 PA20, PA21, PA22, PA23, PA24, PA25;        // PA19 and PA20 reserved for SWD
         #else
             #error "forgot to setup the available pins for this footprint"
         #endif
@@ -264,6 +268,8 @@ namespace System {
             extern const GPIO PB2, PB3, PB6, PB7, PB8, PB9,
                  PB14, PB15, PB16, PB17, PB18, PB19, PB20,
                  PB21, PB22, PB23, PB24;
+        #elif defined MSPM0G3507_VSSOP28
+            // none
         #else
             #error "forgot to setup the available pins for this footprint"
         #endif

@@ -29,9 +29,8 @@ namespace CEB {
             // System::GPIO::PB22; // LP BLUE
 
             const GPIO::GPIO
-                canRX       = GPIO::PB27,
-                ethRX       = GPIO::PB26,
-                scheduler   = GPIO::PB22;
+                i1          = GPIO::PA25,
+                scheduler   = GPIO::PA24;
         }
     }
 
@@ -45,9 +44,9 @@ namespace CEB {
 
         extern SPI::SPI & wiz_spi;  // w5500 spi
         const GPIO::GPIO
-            wiz_cs      = GPIO::PA15,
-            wiz_reset   = GPIO::PA24, // MCU <- W5500
-            wiz_irq     = GPIO::PB3; // W5500 -> MCU
+            wiz_cs      = GPIO::PA6,
+            wiz_reset   = GPIO::PA9, // MCU <- W5500
+            wiz_irq     = GPIO::PA5; // W5500 -> MCU
 
         extern CANFD::CANFD & can;
     }

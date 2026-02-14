@@ -32,6 +32,10 @@ void Task::blink_task(void*) {
 //        System::UART::uart_ui.nputs(ARRANDN("meow" NEWLINE));
 //        DL_GPIO_togglePins(GPIOPINPUX(led));
         DL_GPIO_togglePins(GPIOPINPUX(CEB::Indi::LED::scheduler));
-        vTaskDelay(pdMS_TO_TICKS(1000));
+
+        for(uint8_t i = 0; i < 10; i++){
+            CEB::Indi::LED::i1.clear();
+            vTaskDelay(pdMS_TO_TICKS(100));
+        }
     }
 }

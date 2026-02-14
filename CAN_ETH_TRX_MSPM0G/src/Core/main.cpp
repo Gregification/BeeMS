@@ -47,12 +47,10 @@ int main(){
 
     CEB::init();
 
-    CEB::Indi::LED::canRX.set();
-    CEB::Indi::LED::ethRX.set();
+    CEB::Indi::LED::i1.set();
     CEB::Indi::LED::scheduler.set();
     delay_cycles(2 * System::CLK::CPUCLK);
-    CEB::Indi::LED::canRX.clear();
-    CEB::Indi::LED::ethRX.clear();
+    CEB::Indi::LED::i1.clear();
     CEB::Indi::LED::scheduler.clear();
 
     xTaskCreate(Task::blink_task,
@@ -69,13 +67,6 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::MCAN_test_task,
-//                "non_BMS_functions_task",
-//                configMINIMAL_STACK_SIZE * 3,
-//                NULL,
-//                tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//                NULL);
-
     vTaskStartScheduler();
 
     taskDISABLE_INTERRUPTS();
@@ -85,6 +76,7 @@ int main(){
     }
 }
 
+/*
 void blinktest(){
     DL_GPIO_disablePower(GPIOA);
     DL_GPIO_disablePower(GPIOB);
@@ -111,7 +103,7 @@ void blinktest(){
 
     }
 }
-
+*/
 
 // HOOKS
 /*-----------------------------------------------------------*/

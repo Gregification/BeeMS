@@ -43,24 +43,14 @@ void CEB::init() {
         using namespace Indi;
 
         DL_GPIO_initDigitalOutputFeatures(
-                LED::canRX.iomux,
+                LED::i1.iomux,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
-        DL_GPIO_clearPins(GPIOPINPUX(LED::canRX));
-        DL_GPIO_enableOutput(GPIOPINPUX(LED::canRX));
-
-        DL_GPIO_initDigitalOutputFeatures(
-                LED::ethRX.iomux,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
-                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
-                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-            );
-        DL_GPIO_clearPins(GPIOPINPUX(LED::ethRX));
-        DL_GPIO_enableOutput(GPIOPINPUX(LED::ethRX));
+        DL_GPIO_clearPins(GPIOPINPUX(LED::i1));
+        DL_GPIO_enableOutput(GPIOPINPUX(LED::i1));
 
         DL_GPIO_initDigitalOutputFeatures(
                 LED::scheduler.iomux,

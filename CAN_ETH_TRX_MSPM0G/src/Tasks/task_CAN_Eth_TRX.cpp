@@ -252,7 +252,7 @@ void Task::ethcan_task(void *){
                 DL_MCAN_writeMsgRam(CEB::Bridge::can.reg, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txbuf.cantx);
                 DL_MCAN_TXBufAddReq(CEB::Bridge::can.reg, tf.putIdx);
 
-                DL_GPIO_togglePins(GPIOPINPUX(CEB::Indi::LED::ethRX));
+                CEB::Indi::LED::i1.set();
 
 //                System::UART::uart_ui.nputs(ARRANDN(CLIYES "eth -> can done" CLIRESET NEWLINE));
             }
@@ -292,7 +292,7 @@ bool canToEthHandler(SOCKET sn, _RXBuffer * rxb, _TXBuffer * txb) {
 
     sendto(sn, txb->arr, len, CEB::Bridge::ethBroadcastIP, CEB::Bridge::wiz_IP_port);
 
-    DL_GPIO_togglePins(GPIOPINPUX(CEB::Indi::LED::canRX));
+    CEB::Indi::LED::i1.set();
 
     return true;
 }
