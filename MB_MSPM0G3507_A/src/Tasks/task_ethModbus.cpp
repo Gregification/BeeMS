@@ -46,7 +46,7 @@ System::UART::UART &            uart = System::UART::uart_ui;
 
 /*** CAN ***************/
 System::CANFD::CANFD &          can = System::CANFD::canFD0;
-DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_1;
+DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_0;
 
 
 /*** wizchip setup ****/
