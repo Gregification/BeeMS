@@ -393,58 +393,89 @@ void System::init() {
 
         { /* Configure Bit timings. */
             // arb 500k, data 500k
-//            constexpr DL_MCAN_BitTimingParams   bitTimeingParams = {
-//                    .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
-//                    .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
-//                    .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
-//                    .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
-//                    .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
-//                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
-//                    .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
-//                    .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
-//                };
-            // arb 500k, data 2M
             constexpr DL_MCAN_BitTimingParams   bitTimeingParams = {
-                    .nomRatePrescalar   = 1,    /* Arbitration Baud Rate Pre-scaler. */
-                    .nomTimeSeg1        = 68,   /* Arbitration Time segment before sample point. */
-                    .nomTimeSeg2        = 9,    /* Arbitration Time segment after sample point. */
-                    .nomSynchJumpWidth  = 9,    /* Arbitration (Re)Synchronization Jump Width Range. */
-                    .dataRatePrescalar  = 1,    /* Data Baud Rate Pre-scaler. */
-                    .dataTimeSeg1       = 16,    /* Data Time segment before sample point. */
-                    .dataTimeSeg2       = 1,    /* Data Time segment after sample point. */
-                    .dataSynchJumpWidth = 1,    /* Data (Re)Synchronization Jump Width.   */
+                    .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
+                    .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
+                    .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
+                    .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
+                    .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
+                    .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
+                    .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
+                    .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
                 };
+            // arb 500k, data 2M
+//            constexpr DL_MCAN_BitTimingParams   bitTimeingParams = {
+//                    .nomRatePrescalar   = 1,    /* Arbitration Baud Rate Pre-scaler. */
+//                    .nomTimeSeg1        = 68,   /* Arbitration Time segment before sample point. */
+//                    .nomTimeSeg2        = 9,    /* Arbitration Time segment after sample point. */
+//                    .nomSynchJumpWidth  = 9,    /* Arbitration (Re)Synchronization Jump Width Range. */
+//                    .dataRatePrescalar  = 1,    /* Data Baud Rate Pre-scaler. */
+//                    .dataTimeSeg1       = 16,    /* Data Time segment before sample point. */
+//                    .dataTimeSeg2       = 1,    /* Data Time segment after sample point. */
+//                    .dataSynchJumpWidth = 1,    /* Data (Re)Synchronization Jump Width.   */
+//                };
 
             DL_MCAN_setBitTime(CANFD0, &bitTimeingParams);
         }
 
         { /* Configure Message RAM Sections */
-            constexpr DL_MCAN_MsgRAMConfigParams  ramConfig = {
-                    .flssa                = 0,  /* Standard ID Filter List Start Address. */
-                    .lss                  = 2,  /* List Size: Standard ID. */
-                    .flesa                = 0,  /* Extended ID Filter List Start Address. */
-                    .lse                  = 0,  /* List Size: Extended ID. */
-                    .txStartAddr          = 148, /* Tx Buffers Start Address. */
-                    .txBufNum             = 2,  /* Number of Dedicated Transmit Buffers. */
-                    .txFIFOSize           = 19, /* Tx Buffer Element Size. */
-                    .txBufMode            = 0,
-                    .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
-                    .txEventFIFOStartAddr = 164,/* Tx Event FIFO Start Address. */
-                    .txEventFIFOSize      = 2,  /* Event FIFO Size. */
-                    .txEventFIFOWaterMark = 0,  /* Level for Tx Event FIFO watermark interrupt. */
-                    .rxFIFO0startAddr     = 172,  /* Rx FIFO0 Start Address. */
-                    .rxFIFO0size          = 3,  /* Number of Rx FIFO elements. */
-                    .rxFIFO0waterMark     = 0,  /* Rx FIFO0 Watermark. */
-                    .rxFIFO0OpMode        = 0,
-                    .rxFIFO1startAddr     = 192,  /* Rx FIFO1 Start Address. */
-                    .rxFIFO1size          = 2,  /* Number of Rx FIFO elements. */
-                    .rxFIFO1waterMark     = 3,  /* Level for Rx FIFO 1 watermark interrupt. */
-                    .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
-                    .rxBufStartAddr       = 208,  /* Rx Buffer Start Address. */
-                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx Buffer Element Size. */
-                    .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO0 Element Size. */
-                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx FIFO1 Element Size. */
-                };
+//            constexpr DL_MCAN_MsgRAMConfigParams  ramConfig = {
+//                    .flssa                = 0,  /* Standard ID Filter List Start Address. */
+//                    .lss                  = 2,  /* List Size: Standard ID. */
+//                    .flesa                = 0,  /* Extended ID Filter List Start Address. */
+//                    .lse                  = 0,  /* List Size: Extended ID. */
+//                    .txStartAddr          = 148, /* Tx Buffers Start Address. */
+//                    .txBufNum             = 2,  /* Number of Dedicated Transmit Buffers. */
+//                    .txFIFOSize           = 19, /* Tx Buffer Element Size. */
+//                    .txBufMode            = 0,
+//                    .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
+//                    .txEventFIFOStartAddr = 164,/* Tx Event FIFO Start Address. */
+//                    .txEventFIFOSize      = 2,  /* Event FIFO Size. */
+//                    .txEventFIFOWaterMark = 0,  /* Level for Tx Event FIFO watermark interrupt. */
+//                    .rxFIFO0startAddr     = 172,  /* Rx FIFO0 Start Address. */
+//                    .rxFIFO0size          = 3,  /* Number of Rx FIFO elements. */
+//                    .rxFIFO0waterMark     = 0,  /* Rx FIFO0 Watermark. */
+//                    .rxFIFO0OpMode        = 0,
+//                    .rxFIFO1startAddr     = 192,  /* Rx FIFO1 Start Address. */
+//                    .rxFIFO1size          = 2,  /* Number of Rx FIFO elements. */
+//                    .rxFIFO1waterMark     = 3,  /* Level for Rx FIFO 1 watermark interrupt. */
+//                    .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
+//                    .rxBufStartAddr       = 208,  /* Rx Buffer Start Address. */
+//                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx Buffer Element Size. */
+//                    .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO0 Element Size. */
+//                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx FIFO1 Element Size. */
+//                };
+            constexpr DL_MCAN_MsgRAMConfigParams ramConfig = {
+                .flssa                = 0,
+                .lss                  = 2,
+                .flesa                = 0,
+                .lse                  = 0,
+                /* Tx Section: 2 buffers @ 64 bytes each */
+                .txStartAddr          = 8,
+                .txBufNum             = 2,
+                .txFIFOSize           = 0,
+                .txBufMode            = 0,
+                .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
+                /* Event FIFO */
+                .txEventFIFOStartAddr = 152,
+                .txEventFIFOSize      = 2,
+                .txEventFIFOWaterMark = 0,
+                /* Rx FIFO 0: 4 elements @ 64 bytes each */
+                .rxFIFO0startAddr     = 168,
+                .rxFIFO0size          = 4,
+                .rxFIFO0waterMark     = 0,
+                .rxFIFO0OpMode        = 0,
+                .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,
+                /* Rx FIFO 1: 2 elements @ 64 bytes each */
+                .rxFIFO1startAddr     = 456,
+                .rxFIFO1size          = 2,
+                .rxFIFO1waterMark     = 0,
+                .rxFIFO1OpMode        = 0,
+                .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,
+                /* Dedicated Rx Buffers */
+                .rxBufStartAddr       = 600,
+                .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
+            };
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
         }
 

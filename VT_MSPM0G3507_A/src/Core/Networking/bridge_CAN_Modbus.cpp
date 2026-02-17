@@ -48,7 +48,7 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
     static_assert(sizeof(txpkt->header.transactionID) == sizeof(mbap->transactionID));
 
     // copy ADU
-    uint8_t adulen = txpkt->header.mbatlen - sizeof(ADUPacket);//-1 for unitID
+    uint8_t adulen = txpkt->header.mbatlen - sizeof(ADUPacket);
     if(adulen > PKTBUFFSIZE) return false;
     ALT::memcpy(
             mbap->adu[0].data,
@@ -56,23 +56,13 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
             adulen
         );
 
-    System::uart_ui.nputs(ARRANDN(NEWLINE " \tdump TCP TCP->CAN: "));
-    for(uint8_t j = 0; j < adulen + sizeof(*mbap); j++){
-        if(j % 10 == 0)
-            System::uart_ui.nputs(ARRANDN(NEWLINE " \t"));
-
-        System::uart_ui.nputs(ARRANDN(" "));
-        System::uart_ui.putu32h(((uint8_t const *)mbap)[j]);
-    }
-    System::uart_ui.nputs(ARRANDN(NEWLINE "header mbatlen: "));
-    System::uart_ui.putu32h(txpkt->header.mbatlen);
-    System::uart_ui.nputs(ARRANDN(NEWLINE));
 
     /*** tx buffer settings ***/
 
-    tx->dlc = System::CANFD::len2DLC(adulen + sizeof(CANPacket));
+    tx->dlc = System::CANFD::len2DLC(adulen + sizeof(CANPacket::_Header));
     tx->xtd = true; // use 29b CAN ID
     tx->fdf = true; // use CAN-FD format
+
 
     return true;
 }

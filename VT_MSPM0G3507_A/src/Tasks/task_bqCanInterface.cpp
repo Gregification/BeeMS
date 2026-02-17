@@ -90,22 +90,49 @@ void Task::bqCanInterface_task(void *){
 
         uint8_t socketbuffer;
 
+        {
+            uart.nputs(ARRANDN(NEWLINE " \tReceived from CAN bus: "));
+
+            for(uint8_t j = 0; j < System::CANFD::DLC2Len(&canrx); j++){
+                if(j % 10 == 0)
+                    uart.nputs(ARRANDN(NEWLINE " \t"));
+
+                uart.nputs(ARRANDN(" "));
+                uart.putu32h(canrx.data[j]);
+            }
+            uart.nputs(ARRANDN(NEWLINE));
+        }
+
         if(Bridge::CANModbus::CAN_to_ModbusTCP(&canrx, &rxbuf.mbap, &socketbuffer)) {
-            uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
+//            uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
 
             /*** validation ***********************/
 
             if(rxbuf.mbap.adu[0].unitID != VT::id) {
-                uart.nputs(ARRANDN("not my("));
-                uart.put32d(VT::id);
-                uart.nputs(ARRANDN(") id: "));
-                uart.put32d(rxbuf.mbap.adu[0].unitID);
-                uart.nputs(ARRANDN(NEWLINE));
+//                uart.nputs(ARRANDN("not my("));
+//                uart.put32d(VT::id);
+//                uart.nputs(ARRANDN(") id: "));
+//                uart.put32d(rxbuf.mbap.adu[0].unitID);
+//                uart.nputs(ARRANDN(NEWLINE));
 
                 continue; // ignore packet
             }
 
             /*** process packet *******************/
+
+            {
+                uart.nputs(ARRANDN(NEWLINE " \treceived CAN -> Modbus: "));
+
+
+                for(uint8_t j = 0; j < sizeof(rxbuf.mbap) + ntoh16(rxbuf.mbap.len); j++){
+                    if(j % 10 == 0)
+                        uart.nputs(ARRANDN(NEWLINE " \t"));
+
+                    uart.nputs(ARRANDN(" "));
+                    uart.putu32h(((uint8_t *)&rxbuf.mbap)[j]);
+                }
+                uart.nputs(ARRANDN(NEWLINE));
+            }
 
             if(Modbus::ProcessRequest(&rxbuf.mbap, sizeof(rxbuf), &txbuf.mbap, sizeof(txbuf))) {
                 uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
@@ -113,16 +140,6 @@ void Task::bqCanInterface_task(void *){
                 if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx, socketbuffer)){
                     // transmit CAN
                     uart.nputs(ARRANDN("  response CAN packet ready to send" NEWLINE));
-
-                    uart.nputs(ARRANDN(NEWLINE " \tdump CAN: "));
-                    for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf.cantx); j++){
-                        if(j % 10 == 0)
-                            uart.nputs(ARRANDN(NEWLINE " \t"));
-
-                        uart.nputs(ARRANDN(" "));
-                        uart.putu32h(rxbuf.cantx.data[j]);
-                    }
-                    uart.nputs(ARRANDN(NEWLINE));
 
                     DL_MCAN_TxFIFOStatus tf;
 

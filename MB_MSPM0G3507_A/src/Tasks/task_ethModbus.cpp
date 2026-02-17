@@ -46,7 +46,7 @@ System::UART::UART &            uart = System::UART::uart_ui;
 
 /*** CAN ***************/
 System::CANFD::CANFD &          can = System::CANFD::canFD0;
-DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_0;
+DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_1;
 
 
 /*** wizchip setup ****/
@@ -289,6 +289,20 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
             /*** process packet *************/
 
+
+            {
+                uart.nputs(ARRANDN(NEWLINE " \tReceived Eth Modbus: "));
+
+                for(uint8_t j = 0; j < sizeof(rxbuf->mbap) + ntoh16(rxbuf->mbap.len); j++){
+                    if(j % 10 == 0)
+                        uart.nputs(ARRANDN(NEWLINE " \t"));
+
+                    uart.nputs(ARRANDN(" "));
+                    uart.putu32h(((uint8_t *)&rxbuf->mbap)[j]);
+                }
+                uart.nputs(ARRANDN(NEWLINE));
+            }
+
             uart.nputs(ARRANDN("TCP rx: unitID: "));
             uart.putu32h(rxheader->adu[0].unitID);
             uart.nputs(ARRANDN(NEWLINE));
@@ -420,6 +434,20 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf, uint8_t socket)
         if(!can.takeResource(pdMS_TO_TICKS(50))) { // LOCK CAN
             uart.nputs(ARRANDN("CAN lock failed" NEWLINE));
             return false;
+        }
+
+
+        {
+            uart.nputs(ARRANDN(NEWLINE " \t Sending CAN bus: "));
+
+            for(uint8_t j = 0; j < System::CANFD::DLC2Len(&buf->cantx); j++){
+                if(j % 10 == 0)
+                    uart.nputs(ARRANDN(NEWLINE " \t"));
+
+                uart.nputs(ARRANDN(" "));
+                uart.putu32h(buf->cantx.data[j]);
+            }
+            uart.nputs(ARRANDN(NEWLINE));
         }
 
         DL_MCAN_TxFIFOStatus tf;

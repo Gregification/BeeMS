@@ -104,6 +104,9 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                 txadu       = rxadu;
                 resp->byteCount = 0;
 
+                System::uart_ui.nputs(ARRANDN("- ntoh16(query->len):"));
+                System::uart_ui.put32d(ntoh16(query->len));
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
                 for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
                     uint16_t res;
 
@@ -115,16 +118,10 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
 
 
                     resp->val16[i] = hton16(res);
-                    System::uart_ui.nputs(ARRANDN("header len : "));
-                    System::uart_ui.put32d(resp->byteCount);
-                    System::uart_ui.nputs(ARRANDN("\t + \t"));
-                    System::uart_ui.put32d(sizeof(res));
-                    System::uart_ui.nputs(ARRANDN(" = "NEWLINE));
                     resp->byteCount += sizeof(res);
-                    System::uart_ui.put32d(resp->byteCount);
                 }
 
-                txheader->len = hton16(resp->byteCount + sizeof(*resp) + sizeof(ADUPacket));
+                txheader->len = hton16((uint16_t)resp->byteCount + sizeof(F_Range_RES) + sizeof(ADUPacket));
 
                 return true;
             } break;

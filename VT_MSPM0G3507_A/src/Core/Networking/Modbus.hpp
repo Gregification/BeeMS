@@ -77,20 +77,20 @@ namespace Networking {
             uint16_t start;
             uint16_t len;
         };
-        static_assert(sizeof(F_Range_REQ) == sizeof(uint32_t));
+        static_assert(sizeof(F_Range_REQ) == 4);
 
         struct __attribute__((__packed__)) F_Range_RES {
             uint8_t     byteCount;
             uint16_t    val16[0];
             uint8_t     val8[0];
         };
-        static_assert(sizeof(F_Range_REQ) == sizeof(uint32_t));
+        static_assert(sizeof(F_Range_REQ) == 4);
 
         struct __attribute__((__packed__)) F_W_COIL {
             uint16_t    addr;
             uint16_t    val;
         };
-        static_assert(sizeof(F_Range_REQ) == sizeof(uint32_t));
+        static_assert(sizeof(F_Range_REQ) == 4);
 
 
         /*** functions ***************************************/

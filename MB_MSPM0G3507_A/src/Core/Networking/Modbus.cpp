@@ -71,11 +71,11 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                         resp->byteCount++;
                     }
 
-//                    uart.nputs(ARRANDN("\tregister: "));
-//                    uart.putu32d(ntoh16(query->start) + i);
-//                    uart.nputs(ARRANDN(NEWLINE));
+                    uart.nputs(ARRANDN("\tregister: "));
+                    uart.putu32d(ntoh16(query->start) + i);
+                    uart.nputs(ARRANDN(NEWLINE));
 
-                    if(!MasterRegisters::getReg(ntoh16(query->start) + i, &res))
+                    if(!Networking::Modbus::MasterRegisters::getReg(ntoh16(query->start) + i, &res))
                         return false;
 
                     if(res)
@@ -104,20 +104,34 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                 txadu       = rxadu;
                 resp->byteCount = 0;
 
+                uart.nputs(ARRANDN("- ntoh16(query->len):"));
+                uart.put32d(ntoh16(query->len));
+                uart.nputs(ARRANDN(NEWLINE));
                 for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
                     uint16_t res;
 
                     if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i) // constrain to tx buffer size
                         return false;
 
-                    if(!MasterRegisters::getReg(ntoh16(query->start) + i, &res))
+                    if(!Networking::Modbus::MasterRegisters::getReg(ntoh16(query->start) + i, &res))
                         return false;
+
 
                     resp->val16[i] = hton16(res);
                     resp->byteCount += sizeof(res);
                 }
 
-                txheader->len = hton16(resp->byteCount + sizeof(F_Range_RES) + sizeof(ADUPacket));
+                txheader->len = hton16((uint16_t)resp->byteCount + sizeof(F_Range_RES) + sizeof(ADUPacket));
+//                txheader->len = hton16(7);
+                uart.nputs(ARRANDN("mbapheader len: "));
+                uart.put32d(ntoh16(txheader->len));
+                uart.nputs(ARRANDN(" \t, resp->bytecount:"));
+                uart.put32d(resp->byteCount);
+                uart.nputs(ARRANDN(" \t, sizeof(F_Range_RES):"));
+                uart.put32d(sizeof(F_Range_RES));
+                uart.nputs(ARRANDN(" \t, sizeof(ADUPacket):"));
+                uart.put32d(sizeof(ADUPacket));
+                uart.nputs(ARRANDN(NEWLINE));
 
                 return true;
             } break;
@@ -142,7 +156,7 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                 uart.putu32d(ntoh16(query->addr));
                 uart.nputs(ARRANDN(NEWLINE));
 
-                if(!MasterRegisters::setReg(ntoh16(query->addr), ntoh16(query->val)))
+                if(!Networking::Modbus::MasterRegisters::setReg(ntoh16(query->addr), ntoh16(query->val)))
                     return false;
 
                 txheader->len = rxheader->len;
