@@ -20,7 +20,7 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
             break;
 
         case RegAddr::SOFTWARE_VERSION: // <input>
-            *out = 89;
+            *out = 67;
             break;
 
         case RegAddr::DELETE_ME: // <input>
