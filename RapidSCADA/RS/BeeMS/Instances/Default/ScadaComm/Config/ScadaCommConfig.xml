@@ -51,7 +51,7 @@
         <Option name="ConnectionMode" value="Shared" />
         <Option name="DisconnectOnError" value="false" />
         <Option name="Host" value="192.168.1.252" />
-        <Option name="ReconnectAfter" value="5" />
+        <Option name="ReconnectAfter" value="3" />
         <Option name="StayConnected" value="true" />
         <Option name="TcpPort" value="502" />
       </Channel>
@@ -59,7 +59,7 @@
         <Option name="TransMode" value="TCP" />
       </CustomOptions>
       <DevicePolling>
-        <Device active="true" isBound="true" number="0" name="master board" driver="DrvModbus" numAddress="0" strAddress="" pollOnCmd="false" timeout="200" delay="500" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_MasterBoard.xml" />
+        <Device active="false" isBound="true" number="0" name="master board" driver="DrvModbus" numAddress="0" strAddress="" pollOnCmd="false" timeout="200" delay="500" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_MasterBoard.xml" />
         <Device active="true" isBound="true" number="1" name="Module0_0" driver="DrvModbus" numAddress="239" strAddress="" pollOnCmd="false" timeout="500" delay="500" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_SlaveBoard.xml" />
       </DevicePolling>
     </Line>
