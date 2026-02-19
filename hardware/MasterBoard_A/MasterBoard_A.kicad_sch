@@ -5502,6 +5502,12 @@
 		(uuid "52a5c2c3-b029-4b39-8a56-4f2d2568dff8")
 	)
 	(junction
+		(at 78.74 127)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5b56874c-b880-4c39-b2d3-6a7c304f1748")
+	)
+	(junction
 		(at 189.23 39.37)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7368,6 +7374,16 @@
 	)
 	(wire
 		(pts
+			(xy 76.2 127) (xy 76.2 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63b43414-79bd-4e48-b503-0f434818afef")
+	)
+	(wire
+		(pts
 			(xy 298.45 54.61) (xy 287.02 54.61)
 		)
 		(stroke
@@ -7905,6 +7921,16 @@
 			(type default)
 		)
 		(uuid "8c27e262-f6a6-44ab-8517-4392c771cef5")
+	)
+	(wire
+		(pts
+			(xy 78.74 127) (xy 76.2 127)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8d75e848-f630-4eca-9209-6f98e0e1d44b")
 	)
 	(bus
 		(pts
@@ -8838,16 +8864,6 @@
 	)
 	(wire
 		(pts
-			(xy 76.2 124.46) (xy 76.2 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d0da0755-faaf-4db7-b0f9-7f43b29507e5")
-	)
-	(wire
-		(pts
 			(xy 93.98 229.87) (xy 95.25 229.87)
 		)
 		(stroke
@@ -9255,16 +9271,6 @@
 			(type default)
 		)
 		(uuid "f3b1d0d5-c348-4e94-ae57-664f48e63356")
-	)
-	(wire
-		(pts
-			(xy 76.2 124.46) (xy 78.74 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f3e2627d-6a6f-4c0e-867b-0a078451ed4a")
 	)
 	(wire
 		(pts
@@ -9787,7 +9793,7 @@
 		(uuid "56ed0d44-e00f-432e-9c58-0d48f3bfc181")
 	)
 	(label "HRLV_IL-"
-		(at 36.83 153.67 0)
+		(at 36.83 151.13 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9907,7 +9913,7 @@
 		(uuid "73587bf9-be3a-45b1-abde-2628188066f7")
 	)
 	(label "HRLV_LV+"
-		(at 36.83 156.21 0)
+		(at 36.83 153.67 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9947,7 +9953,7 @@
 		(uuid "801b2b59-205f-4e8b-81f5-15e248feef62")
 	)
 	(label "HRLV_LV-"
-		(at 24.13 156.21 180)
+		(at 24.13 153.67 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -9957,7 +9963,7 @@
 		(uuid "827461fd-b796-426d-93a4-64dee1fdf754")
 	)
 	(label "HRLV_IL+"
-		(at 24.13 153.67 180)
+		(at 24.13 151.13 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10067,12 +10073,12 @@
 		(uuid "90eb8ec4-cc15-4868-9819-f20a7c01ad3c")
 	)
 	(label "HRLV_CAN-"
-		(at 36.83 151.13 0)
+		(at 24.13 156.21 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "90f5bbaf-0d27-4e4f-905e-e1f49414e5eb")
 	)
@@ -10177,12 +10183,12 @@
 		(uuid "af2b3fbd-29af-4f4e-a101-7400a762ec85")
 	)
 	(label "HRLV_CAN+"
-		(at 24.13 151.13 180)
+		(at 36.83 156.21 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
 		(uuid "b0ee6ecd-6509-4607-aea3-284da3ecf52b")
 	)
@@ -10721,7 +10727,7 @@
 				(hide yes)
 			)
 		)
-		(property "unit x1" "0.054"
+		(property "unit x1" "0.14"
 			(at 299.72 36.83 0)
 			(effects
 				(font
@@ -11340,6 +11346,127 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 97.79 229.87 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "139f00db-202e-4123-b57c-1a7c46d9a657")
+		(property "Reference" "R103"
+			(at 121.158 229.87 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "332"
+			(at 127 229.87 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "332 ohm, 250mW, 200V, 1%, 100ppm, -55C, +155C"
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AC1206FR-07332RL?qs=sGAEpiMZZMvdGkrng054txZnKwhPFOhA4suuzGTX%2F2A%3D"
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.016"
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 97.79 229.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "356ea258-b4d0-458c-97b4-ab4f9a6f8690")
+		)
+		(pin "2"
+			(uuid "57529447-9b9c-4b2a-988a-136c552794b3")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
+					(reference "R103")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 22.86 78.74 0)
 		(unit 1)
@@ -11483,130 +11610,6 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
 					(reference "#PWR0102")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 97.79 229.87 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "1683f148-2715-425a-97fa-8dda920e5a8a")
-		(property "Reference" "R1"
-			(at 120.396 229.87 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "100"
-			(at 123.952 229.87 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR18EZPF1000?qs=sGAEpiMZZMvdGkrng054t4QdAY%2FQ0LwebVJAgfAYbMs%3D"
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "100 omh, thick, anti surge, 1%, 750mW, 200V, -55C, +155C, 100ppm"
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.055"
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.17"
-			(at 97.79 229.87 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "5a3e254e-1772-47b6-b580-2b652eb26f6d")
-		)
-		(pin "1"
-			(uuid "b581e4aa-d05c-48cd-9bb7-247678ca12d0")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "R1")
 					(unit 1)
 				)
 			)
@@ -12513,7 +12516,7 @@
 				(hide yes)
 			)
 		)
-		(property "unit x1" "0.054"
+		(property "unit x1" "0.14"
 			(at 86.36 156.21 0)
 			(effects
 				(font
@@ -13135,7 +13138,7 @@
 				(hide yes)
 			)
 		)
-		(property "unit x1" "0.054"
+		(property "unit x1" "0.14"
 			(at 289.56 36.83 0)
 			(effects
 				(font
@@ -13221,148 +13224,6 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
 					(reference "#PWR0135")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 85.09 69.85 0)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "3d19f9fc-dbab-43a1-8e1d-f6e42b8c4acc")
-		(property "Reference" "R102"
-			(at 83.312 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "4.99k"
-			(at 83.312 71.12 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP1206FTD4K99?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ95yR%2FF2bQQIaAb5UdPiGbTtQ%3D%3D"
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "4.99kOhm, 200V, 500mW, 1%, 100PPM, -55C, +155C"
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.016"
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "note" ""
-			(at 85.09 69.85 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "c5d3804c-f7d2-4e6d-972e-872c5b251ac2")
-		)
-		(pin "1"
-			(uuid "a0998db7-7c7f-42d3-82b5-790ff1b521c4")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "R102")
 					(unit 1)
 				)
 			)
@@ -14383,6 +14244,111 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 298.45 58.42 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5e0374b5-47e9-4187-95bc-7897d1591463")
+		(property "Reference" "R102"
+			(at 300.228 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "22.1k"
+			(at 300.228 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 298.45 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 298.45 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 298.45 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AC0805FR-0722K1L?qs=sGAEpiMZZMvdGkrng054txZnKwhPFOhA%2Fb1BRlUBP24%3D"
+			(at 298.45 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "22.1kR, 1%, 125mW, 150V, 100ppm, -55C, +155C"
+			(at 298.45 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.011"
+			(at 298.45 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 298.45 58.42 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "c8bbcde9-bf0a-478f-b827-3972914fec1b")
+		)
+		(pin "1"
+			(uuid "1746228d-e0d7-4077-9985-c0b4aa7dbde4")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
+					(reference "R102")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5V")
 		(at 66.04 153.67 90)
 		(mirror x)
@@ -14925,130 +14891,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 97.79 227.33 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "6d4a05f6-e537-4001-b88f-ee0cd31552a6")
-		(property "Reference" "R2"
-			(at 120.396 227.33 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "100"
-			(at 123.952 227.33 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR18EZPF1000?qs=sGAEpiMZZMvdGkrng054t4QdAY%2FQ0LwebVJAgfAYbMs%3D"
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "100 omh, thick, anti surge, 1%, 750mW, 200V, -55C, +155C, 100ppm"
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.055"
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.17"
-			(at 97.79 227.33 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "629abc75-f477-4123-82e3-d3623c613317")
-		)
-		(pin "1"
-			(uuid "c0793b3e-eb62-4139-82eb-5d8df06deb48")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "R2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GND")
 		(at 340.36 179.07 270)
 		(unit 1)
@@ -15232,7 +15074,7 @@
 				(hide yes)
 			)
 		)
-		(property "unit x1" "0.054"
+		(property "unit x1" "0.14"
 			(at 299.72 26.67 0)
 			(effects
 				(font
@@ -15617,6 +15459,15 @@
 				(hide yes)
 			)
 		)
+		(property "unit x1" "0.10"
+			(at 289.56 26.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "51a79284-4243-40ac-9f4a-d4a668a18206")
 		)
@@ -15749,7 +15600,7 @@
 				(hide yes)
 			)
 		)
-		(property "unit x1" "0.054"
+		(property "unit x1" "0.14"
 			(at 67.31 156.21 0)
 			(effects
 				(font
@@ -16845,6 +16696,127 @@
 			(project ""
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
 					(reference "#PWR0115")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 97.79 227.33 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "9849c9df-ea55-4be8-9620-6540efc67d48")
+		(property "Reference" "R112"
+			(at 121.158 227.33 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "332"
+			(at 127 227.33 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, small US symbol"
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "332 ohm, 250mW, 200V, 1%, 100ppm, -55C, +155C"
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/AC1206FR-07332RL?qs=sGAEpiMZZMvdGkrng054txZnKwhPFOhA4suuzGTX%2F2A%3D"
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.016"
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 97.79 227.33 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a541f072-dd99-4dd7-aa15-c9c09f0a3ff5")
+		)
+		(pin "2"
+			(uuid "b32a53c3-4b6d-4163-9b71-f43447cc2634")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
+					(reference "R112")
 					(unit 1)
 				)
 			)
@@ -17970,111 +17942,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 298.45 58.42 180)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "b867d559-5a1a-49d5-9077-9955a8462268")
-		(property "Reference" "R112"
-			(at 300.228 57.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "40.2k"
-			(at 300.228 59.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 298.45 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 298.45 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 298.45 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD4022F?qs=sGAEpiMZZMvdGkrng054txknJuA7M8fa4wn7EqIHwNI%3D"
-			(at 298.45 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "40.2k ohm, 250mW, 1%, 150V, 100ppm, -55C, +155C"
-			(at 298.45 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.02"
-			(at 298.45 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 298.45 58.42 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "34edcfd5-7ce5-45c2-97d2-aae5dd5ebbe0")
-		)
-		(pin "1"
-			(uuid "152a0185-9a0c-4916-b464-267f4c929931")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "R112")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 100.33 109.22 0)
 		(unit 1)
@@ -18191,7 +18058,7 @@
 				(hide yes)
 			)
 		)
-		(property "unit x1" "0.054"
+		(property "unit x1" "0.14"
 			(at 100.33 109.22 0)
 			(effects
 				(font
@@ -18588,8 +18455,8 @@
 	)
 	(symbol
 		(lib_id "power:+5V")
-		(at 78.74 124.46 270)
-		(mirror x)
+		(at 104.14 125.73 0)
+		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -18598,7 +18465,7 @@
 		(fields_autoplaced yes)
 		(uuid "c4c988af-2821-4044-967c-21d3d50a8e9e")
 		(property "Reference" "#PWR0109"
-			(at 74.93 124.46 0)
+			(at 104.14 129.54 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18607,16 +18474,15 @@
 			)
 		)
 		(property "Value" "+5V"
-			(at 82.55 124.4599 90)
+			(at 104.14 120.65 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 78.74 124.46 0)
+			(at 104.14 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18625,7 +18491,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 78.74 124.46 0)
+			(at 104.14 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18634,7 +18500,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+5V\""
-			(at 78.74 124.46 0)
+			(at 104.14 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18649,6 +18515,147 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
 					(reference "#PWR0109")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 85.09 69.85 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "c76fe3c9-536e-4ec2-8094-eda3d5a64974")
+		(property "Reference" "R101"
+			(at 83.058 68.072 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "3.32k"
+			(at 83.058 70.612 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Device" ""
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Type" ""
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Walsin/WR08X3321FTL?qs=sGAEpiMZZMvdGkrng054twKDKoBh%252BscnhzVUopLjNIsmzZlnTa4U1w%3D%3D"
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "3.32kOhm, 1%, 150V, 125mW, 100ppm, -55C, 155C"
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.019"
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Sim.Pins" ""
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "note" ""
+			(at 85.09 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "68376676-5e63-49e1-9d6a-52b51a49f8bd")
+		)
+		(pin "1"
+			(uuid "af36f3fc-7b93-46cb-835f-dff6ef607de8")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
+					(reference "R101")
 					(unit 1)
 				)
 			)
@@ -19087,72 +19094,6 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
 					(reference "R104")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3.3V")
-		(at 104.14 125.73 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d8587010-958c-4bb6-b4f0-117808f12fd5")
-		(property "Reference" "#PWR0124"
-			(at 104.14 129.54 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3.3V"
-			(at 104.14 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 104.14 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 104.14 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3.3V\""
-			(at 104.14 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ce89797f-bd66-489b-a940-11714c1fc8b8")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913"
-					(reference "#PWR0124")
 					(unit 1)
 				)
 			)
@@ -20389,16 +20330,6 @@
 				(justify left top)
 			)
 		)
-		(pin "CAN_RX" input
-			(at 77.47 175.26 0)
-			(uuid "fd8c7b54-5fdb-463b-98cb-36ab86689ecf")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
 		(pin "CAN_SIG+" input
 			(at 77.47 177.8 0)
 			(uuid "6871848b-97c7-457b-9a40-a378c0e0c51e")
@@ -20412,16 +20343,6 @@
 		(pin "CAN_SIG-" input
 			(at 77.47 170.18 0)
 			(uuid "ba84f48c-f90a-4568-a9dd-3a44e6ce5a1e")
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(pin "CAN_TX" input
-			(at 77.47 172.72 0)
-			(uuid "3f61ff16-fccc-445a-8cb2-334f3c51c1bd")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20512,6 +20433,26 @@
 		(pin "IL_PRESENCE" output
 			(at 77.47 189.23 0)
 			(uuid "df127c18-4603-4e74-b9c1-e4fef9b94dd8")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_RX" output
+			(at 77.47 175.26 0)
+			(uuid "e04355d5-b7f5-40b4-85f5-2d3de6a14516")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "CAN_TX" input
+			(at 77.47 172.72 0)
+			(uuid "0a775f0c-2ab8-4b7b-a75f-df3b9af2caba")
 			(effects
 				(font
 					(size 1.27 1.27)
