@@ -42,6 +42,12 @@ Translates CAN/CAN-FD packets to a custom IP packet. The custom IP packet can th
 - MCU has a unique 32b hardware level serial number from factory.
 - runs FreeRTOS
     - main loop task is in <a href="https://github.com/Gregification/BeeMS/blob/main/CAN_ETH_TRX_MSPM0G/src/Tasks/task_CAN_Eth_TRX.hpp">`task_CAN_Eth_TRX.hpp`</a><a href="https://github.com/Gregification/BeeMS/blob/main/CAN_ETH_TRX_MSPM0G/src/Tasks/task_CAN_Eth_TRX.cpp">`cpp`</a>.
+- CAN bus speed settings are in <a href="../../CAN_ETH_TRX_MSPM0G/src/Core/system.cpp">system.cpp</a> . If the option your looking for is not there here are your options.
+    1.  (suggested) use <a href="www.ti.com/tool/SYSCONFIG">SysConfig</a>
+        1. open <a href="../../80mhzjunk.syscfg">this SysConfig project</a> 
+        1. set the desired CAN baud 
+        1. find the output c file and copy the settings
+    1. do it by hand. See the <a href="https://www.ti.com/lit/pdf/slau846">technical manual</a>. 
 
 #### Files
 
