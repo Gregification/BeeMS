@@ -5654,12 +5654,6 @@
 		(uuid "84ef9e92-6398-4599-aa21-391f8a6909a0")
 	)
 	(junction
-		(at 162.56 100.33)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9098129a-1822-4756-971c-d52b2d7fda47")
-	)
-	(junction
 		(at 135.89 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5945,7 +5939,7 @@
 	)
 	(wire
 		(pts
-			(xy 153.67 100.33) (xy 162.56 100.33)
+			(xy 153.67 100.33) (xy 172.72 100.33)
 		)
 		(stroke
 			(width 0)
@@ -6585,16 +6579,6 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 114.3) (xy 162.56 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8408b137-b0fa-421c-b676-0bc34b5b1245")
-	)
-	(wire
-		(pts
 			(xy 77.47 87.63) (xy 92.71 87.63)
 		)
 		(stroke
@@ -6805,16 +6789,6 @@
 	)
 	(wire
 		(pts
-			(xy 162.56 100.33) (xy 172.72 100.33)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ab25598d-b8a9-42d9-a623-73d5a2ba92de")
-	)
-	(wire
-		(pts
 			(xy 96.52 114.3) (xy 88.9 114.3)
 		)
 		(stroke
@@ -6952,16 +6926,6 @@
 			(type default)
 		)
 		(uuid "c1827682-0bc7-42c9-b9ba-5455e3ce67fa")
-	)
-	(wire
-		(pts
-			(xy 162.56 100.33) (xy 162.56 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c3534141-1bb1-4aa3-9602-6360543e40c2")
 	)
 	(wire
 		(pts
@@ -8741,112 +8705,6 @@
 			(project "VoltageTap_B"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670"
 					(reference "R7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_Push")
-		(at 162.56 109.22 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "0aa5b7ef-0aa6-4d5f-b5f2-284a608b2d3b")
-		(property "Reference" "SW2"
-			(at 166.37 107.9499 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "SW_Push"
-			(at 166.37 110.4899 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Button_Switch_SMD:SW_SPST_PTS645Sx43SMTR92"
-			(at 167.64 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Soldered/101111?qs=%252BXxaIXUDbq05T1Vr5nLouw%3D%3D"
-			(at 167.64 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Push button switch, generic, two pins"
-			(at 162.56 109.22 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 162.56 109.22 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 162.56 109.22 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/CK/KSC251J-SP-DELTA-LFS?qs=sGAEpiMZZMtFyPk3yBMYYFTocizRX9VpYSHB0QfEbpY%3D"
-			(at 162.56 109.22 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.532"
-			(at 162.56 109.22 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "907a931c-806a-4514-a629-a6c93d0c62c8")
-		)
-		(pin "1"
-			(uuid "4b62ff7e-560d-45bc-8c32-c7253fac23f1")
-		)
-		(instances
-			(project "VoltageTap_B"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670"
-					(reference "SW2")
 					(unit 1)
 				)
 			)
@@ -13020,9 +12878,9 @@
 		(at 187.96 30.48 90)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom no)
-		(on_board no)
-		(dnp yes)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9eb3d2ee-240c-4970-bc7b-a49ac0047099")
 		(property "Reference" "JP1"
@@ -13286,8 +13144,8 @@
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
-		(on_board no)
-		(dnp yes)
+		(on_board yes)
+		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bfe5848f-7d64-4494-b578-d76be11dfd96")
 		(property "Reference" "#PWR025"

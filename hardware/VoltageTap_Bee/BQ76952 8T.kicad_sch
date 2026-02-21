@@ -2216,16 +2216,6 @@
 		)
 		(uuid "5cc63150-fd4b-4249-810c-217ed7fa207f")
 	)
-	(text "joined to prevent absurd \nvoltage differences"
-		(exclude_from_sim no)
-		(at 255.524 27.178 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "8125cf56-733a-4334-b0fe-e6b5d55bdee0")
-	)
 	(text "REG18: \n\"internal 1.8V\n LDO output \n(only for \ninternal use)\""
 		(exclude_from_sim no)
 		(at 182.118 118.364 0)
@@ -2318,12 +2308,6 @@
 		(uuid "18ed0a75-15af-4c73-b653-a314ceea6cc2")
 	)
 	(junction
-		(at 262.89 16.51)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "1a1da082-dd4d-4dbc-8e71-bb4eabfd0b22")
-	)
-	(junction
 		(at 80.01 21.59)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2352,6 +2336,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "23a355a9-41af-48b7-8bbe-d8e2813a0938")
+	)
+	(junction
+		(at 226.06 48.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "24b73558-de04-4461-aec6-dda9b8b5ac6d")
 	)
 	(junction
 		(at 55.88 173.99)
@@ -2432,16 +2422,16 @@
 		(uuid "35a1dee2-78ac-47ef-95d9-ba5692572e6b")
 	)
 	(junction
+		(at 237.49 40.64)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "39d1901f-1fd9-477b-a942-13d6805b9591")
+	)
+	(junction
 		(at 127 46.99)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "3da34846-8ca9-4c86-85a8-28bf04792b2b")
-	)
-	(junction
-		(at 237.49 48.26)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "3f3199b8-2206-4603-9e91-7e378bb78edb")
 	)
 	(junction
 		(at 39.37 173.99)
@@ -2514,12 +2504,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "6159d69f-b253-42ec-93dc-47944905a610")
-	)
-	(junction
-		(at 262.89 40.64)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "617c2d08-cc62-46b1-9178-1c4ad51f3afb")
 	)
 	(junction
 		(at 110.49 53.34)
@@ -2604,6 +2588,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "88962248-8aef-42bf-acfd-d3538d05a752")
+	)
+	(junction
+		(at 262.89 74.93)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "898221c5-0b78-47f1-95dc-a1d9ac03ae6f")
 	)
 	(junction
 		(at 127 147.32)
@@ -2870,7 +2860,7 @@
 		(uuid "f33abc34-c9fe-49e1-92c0-1677e4f9e025")
 	)
 	(junction
-		(at 274.32 72.39)
+		(at 262.89 72.39)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "fbcc70fc-352a-40c9-9493-29b5af615612")
@@ -3117,7 +3107,7 @@
 	)
 	(wire
 		(pts
-			(xy 274.32 74.93) (xy 274.32 72.39)
+			(xy 262.89 74.93) (xy 262.89 72.39)
 		)
 		(stroke
 			(width 0)
@@ -3737,6 +3727,16 @@
 	)
 	(wire
 		(pts
+			(xy 262.89 74.93) (xy 262.89 76.2)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2add23ec-6b0c-4ed0-812f-dfab80380afd")
+	)
+	(wire
+		(pts
 			(xy 80.01 54.61) (xy 80.01 48.26)
 		)
 		(stroke
@@ -3997,17 +3997,7 @@
 	)
 	(wire
 		(pts
-			(xy 274.32 72.39) (xy 274.32 16.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "37ab8945-0dbc-4728-b353-82141507597d")
-	)
-	(wire
-		(pts
-			(xy 233.68 48.26) (xy 237.49 48.26)
+			(xy 222.25 48.26) (xy 226.06 48.26)
 		)
 		(stroke
 			(width 0)
@@ -4057,7 +4047,7 @@
 	)
 	(wire
 		(pts
-			(xy 237.49 40.64) (xy 237.49 41.91)
+			(xy 226.06 40.64) (xy 226.06 41.91)
 		)
 		(stroke
 			(width 0)
@@ -4067,7 +4057,7 @@
 	)
 	(wire
 		(pts
-			(xy 262.89 24.13) (xy 262.89 33.02)
+			(xy 262.89 16.51) (xy 262.89 72.39)
 		)
 		(stroke
 			(width 0)
@@ -4217,16 +4207,6 @@
 	)
 	(wire
 		(pts
-			(xy 262.89 16.51) (xy 262.89 19.05)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "471af13d-8316-4c99-b264-705769b8ea9b")
-	)
-	(wire
-		(pts
 			(xy 90.17 30.48) (xy 157.48 30.48)
 		)
 		(stroke
@@ -4314,16 +4294,6 @@
 			(type default)
 		)
 		(uuid "4a64b0d9-9c2b-4b0b-a8db-43efd1b71b52")
-	)
-	(wire
-		(pts
-			(xy 255.27 41.91) (xy 255.27 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4ae06ffb-e5ed-4560-a846-9d7c3a113611")
 	)
 	(wire
 		(pts
@@ -4474,16 +4444,6 @@
 			(type default)
 		)
 		(uuid "56617ccc-cf6e-4f47-8b0c-bfd3718256fc")
-	)
-	(wire
-		(pts
-			(xy 262.89 40.64) (xy 262.89 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5699382c-62b9-4a35-a3ca-b3098866a850")
 	)
 	(wire
 		(pts
@@ -4724,16 +4684,6 @@
 			(type default)
 		)
 		(uuid "64808eed-a05d-4199-a517-c7a5ca9bebc8")
-	)
-	(wire
-		(pts
-			(xy 262.89 38.1) (xy 262.89 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "64f2e87a-e414-4e72-9c08-eee4121059a5")
 	)
 	(wire
 		(pts
@@ -5147,7 +5097,7 @@
 	)
 	(wire
 		(pts
-			(xy 237.49 46.99) (xy 237.49 48.26)
+			(xy 226.06 46.99) (xy 226.06 48.26)
 		)
 		(stroke
 			(width 0)
@@ -5578,16 +5528,6 @@
 	)
 	(wire
 		(pts
-			(xy 255.27 40.64) (xy 262.89 40.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "97466636-4c1c-4cc9-8559-3380578cf0ab")
-	)
-	(wire
-		(pts
 			(xy 110.49 69.85) (xy 127 69.85)
 		)
 		(stroke
@@ -5908,16 +5848,6 @@
 	)
 	(wire
 		(pts
-			(xy 274.32 16.51) (xy 262.89 16.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a70e3e16-7003-4d9e-9604-42bed7f0cc2b")
-	)
-	(wire
-		(pts
 			(xy 55.88 31.75) (xy 55.88 33.02)
 		)
 		(stroke
@@ -6008,7 +5938,7 @@
 	)
 	(wire
 		(pts
-			(xy 251.46 74.93) (xy 274.32 74.93)
+			(xy 251.46 74.93) (xy 262.89 74.93)
 		)
 		(stroke
 			(width 0)
@@ -6295,6 +6225,16 @@
 			(type default)
 		)
 		(uuid "c131f38d-bed0-4cf2-a050-9ee662f9e600")
+	)
+	(wire
+		(pts
+			(xy 237.49 40.64) (xy 246.38 40.64)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c1e533d6-bffa-4f30-950c-811524d60a58")
 	)
 	(wire
 		(pts
@@ -6788,7 +6728,7 @@
 	)
 	(wire
 		(pts
-			(xy 237.49 40.64) (xy 246.38 40.64)
+			(xy 226.06 40.64) (xy 237.49 40.64)
 		)
 		(stroke
 			(width 0)
@@ -6958,16 +6898,6 @@
 	)
 	(wire
 		(pts
-			(xy 237.49 48.26) (xy 255.27 48.26)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e7904661-6bc1-4fd2-8ded-11d4e18c473c")
-	)
-	(wire
-		(pts
 			(xy 102.87 120.65) (xy 102.87 181.61)
 		)
 		(stroke
@@ -7078,7 +7008,7 @@
 	)
 	(wire
 		(pts
-			(xy 255.27 48.26) (xy 255.27 46.99)
+			(xy 237.49 48.26) (xy 237.49 46.99)
 		)
 		(stroke
 			(width 0)
@@ -7148,7 +7078,17 @@
 	)
 	(wire
 		(pts
-			(xy 251.46 72.39) (xy 274.32 72.39)
+			(xy 237.49 40.64) (xy 237.49 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f478e899-1aec-4847-b4f9-3b896ab83aff")
+	)
+	(wire
+		(pts
+			(xy 251.46 72.39) (xy 262.89 72.39)
 		)
 		(stroke
 			(width 0)
@@ -7235,6 +7175,16 @@
 			(type default)
 		)
 		(uuid "f7b11694-591a-414c-b3a6-0a31473eddfc")
+	)
+	(wire
+		(pts
+			(xy 226.06 48.26) (xy 237.49 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f87b69f8-a56d-47c7-ae8d-596087107922")
 	)
 	(wire
 		(pts
@@ -7527,7 +7477,7 @@
 		(uuid "4b2495e8-ece2-4b2f-89f1-76884d5f029e")
 	)
 	(label "GND"
-		(at 233.68 48.26 180)
+		(at 222.25 48.26 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -10303,7 +10253,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 237.49 44.45 0)
+		(at 226.06 44.45 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -10311,7 +10261,7 @@
 		(dnp no)
 		(uuid "1be739d8-48ac-4b08-b059-b361ca0fba8c")
 		(property "Reference" "C220"
-			(at 240.03 43.1862 0)
+			(at 228.6 43.1862 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10320,7 +10270,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 240.03 45.7262 0)
+			(at 228.6 45.7262 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10329,7 +10279,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10338,7 +10288,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10347,7 +10297,7 @@
 			)
 		)
 		(property "Description" "100.Vdc, 10%, +125C"
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10356,7 +10306,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10365,7 +10315,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10374,7 +10324,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B105KCHNNNE?qs=349EhDEZ59qH1i3RhF2lug%3D%3D"
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10383,7 +10333,7 @@
 			)
 		)
 		(property "specs" "1uF, 100VDC, X7R, 10%, -55C, +125C"
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10392,7 +10342,7 @@
 			)
 		)
 		(property "unit x10" "0.07"
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10401,7 +10351,7 @@
 			)
 		)
 		(property "Field10" ""
-			(at 237.49 44.45 0)
+			(at 226.06 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14215,112 +14165,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Schottky_Small")
-		(at 262.89 21.59 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "602b4d28-f534-4dfb-8268-01e1ce1f9fc3")
-		(property "Reference" "D218"
-			(at 265.43 20.5739 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "ES1D"
-			(at 265.43 23.1139 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SMA"
-			(at 262.89 21.59 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 262.89 21.59 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Schottky diode, small symbol"
-			(at 262.89 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/onsemi-Fairchild/ES1C?qs=sGAEpiMZZMtbRapU8LlZDwxyh3P6uVi9ZaZE%252B629d7E%3D"
-			(at 262.89 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.086"
-			(at 262.89 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "920mVf, 150Vr, 1Aconstant, 15nSr,15Ar, 1.47W -50C, +150C"
-			(at 262.89 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.10"
-			(at 262.89 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "4f507357-b97c-40e2-9062-f06c3f6382be")
-		)
-		(pin "1"
-			(uuid "6ac1f80f-d8ab-4316-a887-eb08be70b537")
-		)
-		(instances
-			(project "VoltageTap_B"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D218")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 80.01 41.91 0)
 		(mirror y)
@@ -16119,130 +15963,6 @@
 			(project "VoltageTap_B"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "R238")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 262.89 35.56 0)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "8b5e1966-4d84-43d1-a7e5-08d4268cea47")
-		(property "Reference" "R255"
-			(at 261.112 34.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "100"
-			(at 261.112 36.83 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/SG73S2ATTD101J?qs=sGAEpiMZZMvdGkrng054t%2Fj9PfXFS6zM95CwodtLlbI%3D"
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "specs" "100 omh, thick, anti surge, 5%, 750mW, 400V, -55C, +155C, 100ppm"
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "0.037"
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "0.12"
-			(at 262.89 35.56 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "6c5ddefc-ab25-47e6-b5ef-702d6dd4eb75")
-		)
-		(pin "1"
-			(uuid "61d9ec91-371b-4927-a08b-ee566f350ba3")
-		)
-		(instances
-			(project "VoltageTap_B"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "R255")
 					(unit 1)
 				)
 			)
@@ -22260,7 +21980,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 255.27 44.45 0)
+		(at 237.49 44.45 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -22268,7 +21988,7 @@
 		(dnp no)
 		(uuid "e63a944d-1ae3-4af0-8d4b-ed562a493e8b")
 		(property "Reference" "C221"
-			(at 257.81 43.1862 0)
+			(at 240.03 43.1862 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22277,7 +21997,7 @@
 			)
 		)
 		(property "Value" "1u"
-			(at 257.81 45.7262 0)
+			(at 240.03 45.7262 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22286,7 +22006,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_1206_3216Metric_Pad1.33x1.80mm_HandSolder"
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22295,7 +22015,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22304,7 +22024,7 @@
 			)
 		)
 		(property "Description" "100.Vdc, 10%, +125C"
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22313,7 +22033,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22322,7 +22042,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22331,7 +22051,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B105KCHNNNE?qs=349EhDEZ59qH1i3RhF2lug%3D%3D"
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22340,7 +22060,7 @@
 			)
 		)
 		(property "specs" "1uF, 100VDC, X7R, 10%, -55C, +125C"
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22349,7 +22069,7 @@
 			)
 		)
 		(property "unit x10" "0.07"
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22358,7 +22078,7 @@
 			)
 		)
 		(property "Field10" ""
-			(at 255.27 44.45 0)
+			(at 237.49 44.45 0)
 			(effects
 				(font
 					(size 1.27 1.27)
