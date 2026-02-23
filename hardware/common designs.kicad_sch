@@ -6686,6 +6686,218 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "zzLocalLibrary:ISOM811_0_3"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at -0.508 6.858 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "ISOM8110"
+				(at -0.508 5.334 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "zzLocalLibraries-Footprints:ISOM811_SOIC-4_DFG"
+				(at -1.524 10.16 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://www.ti.com/product/ISOM8111"
+				(at -2.159 11.049 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "DC input, transistor output, single channel, opto-emulator with 150% to 230% CTR"
+				(at -2.159 11.049 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "mouser" "https://www.mouser.com/ProductDetail/Texas-Instruments/ISOM8110DFSR?qs=2FehpBK1j96965pfOjJBkA%3D%3D"
+				(at -1.524 9.144 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "unit x10" "0.385"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "unit x1" "0.56"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "specs" "1.5Vf, 5mA, 80Vce, 10mAout max"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "ISOM811_0_3_0_1"
+				(rectangle
+					(start -5.08 4.445)
+					(end 3.81 -4.445)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.54 1.905) (xy -2.54 -1.27) (xy -2.54 0) (xy -3.175 0.635) (xy -1.905 0.635) (xy -2.54 0)
+						(xy -3.175 0) (xy -1.905 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+						(color 0 0 0 1)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 1.27) (xy 2.54 1.27) (xy 1.27 0) (xy 1.27 0.635) (xy 1.27 -0.635) (xy 1.27 0) (xy 2.54 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+						(color 0 0 0 1)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -1.27) (xy 1.905 -1.27) (xy 2.54 -0.635) (xy 2.54 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+						(color 0 0 0 1)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "ISOM811_0_3_1_1"
+				(pin input line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "+TX"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 -2.54 0)
+					(length 2.54)
+					(name "-TX"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 6.35 2.54 180)
+					(length 2.54)
+					(name "C"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 6.35 -2.54 180)
+					(length 2.54)
+					(name "E"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "zzLocalLibrary:LM74502"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -8569,7 +8781,7 @@
 	(text_box "Isolated CAN TRX"
 		(exclude_from_sim no)
 		(at 163.83 111.76 0)
-		(size 25.4 26.67)
+		(size 25.4 52.07)
 		(margins 0.9525 0.9525 0.9525 0.9525)
 		(stroke
 			(width 0)
@@ -12877,7 +13089,7 @@
 	)
 	(symbol
 		(lib_id "zzLocalLibrary:ESD2CAN36DBZRQ1")
-		(at 154.94 151.13 0)
+		(at 173.99 143.51 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -12885,7 +13097,7 @@
 		(dnp no)
 		(uuid "202bec7f-2c0d-445d-9559-9fef5d9b8f76")
 		(property "Reference" "CR501"
-			(at 161.036 145.542 0)
+			(at 180.086 137.922 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -12894,7 +13106,7 @@
 			)
 		)
 		(property "Value" "ESD2CAN36DBZRQ1"
-			(at 161.036 148.082 0)
+			(at 180.086 140.462 0)
 			(effects
 				(font
 					(size 1.524 1.524)
@@ -12903,7 +13115,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:TSOT-23_HandSoldering"
-			(at 154.94 151.13 0)
+			(at 173.99 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12913,7 +13125,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.ti.com/lit/gpn/esd2can36-q1"
-			(at 154.94 151.13 0)
+			(at 173.99 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12923,7 +13135,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 154.94 151.13 0)
+			(at 173.99 143.51 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12941,6 +13153,12 @@
 			(uuid "2532a2e7-5010-485d-8df2-5d235c37792e")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "CR?")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_B"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/15f0d5a6-9e68-4d09-9bf2-845cbad50a23"
 					(reference "CR501")
@@ -16620,7 +16838,7 @@
 	)
 	(symbol
 		(lib_id "Filter:Choke_CommonMode_FerriteCore_1243")
-		(at 154.94 167.64 0)
+		(at 173.99 156.21 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -16629,7 +16847,7 @@
 		(fields_autoplaced yes)
 		(uuid "4dda59c9-a8b5-4ac1-a7ec-4c0b36574b35")
 		(property "Reference" "FL101"
-			(at 154.813 160.02 0)
+			(at 173.863 148.59 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16637,7 +16855,7 @@
 			)
 		)
 		(property "Value" "Choke_CommonMode_FerriteCore_1243"
-			(at 154.813 162.56 0)
+			(at 173.863 151.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16646,7 +16864,7 @@
 			)
 		)
 		(property "Footprint" "Inductor_SMD:L_CommonModeChoke_Coilcraft_1812CAN"
-			(at 154.94 173.99 0)
+			(at 173.99 162.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16655,7 +16873,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 154.94 175.895 0)
+			(at 173.99 164.465 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16664,7 +16882,7 @@
 			)
 		)
 		(property "Description" "EMI 2-inductor common mode filter"
-			(at 159.004 168.402 0)
+			(at 178.054 156.972 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16673,7 +16891,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Coilcraft/1812CAN-104NRC?qs=sGAEpiMZZMtyFaoUegSfpui3aeWT%2FEDwS0laKeGaDcu5YilxPzj2MQ%3D%3D"
-			(at 154.94 167.64 0)
+			(at 173.99 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16682,7 +16900,7 @@
 			)
 		)
 		(property "unit x1" "2.27"
-			(at 154.94 167.64 0)
+			(at 173.99 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16691,7 +16909,7 @@
 			)
 		)
 		(property "unit x10" "2.07"
-			(at 154.94 167.64 0)
+			(at 173.99 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16700,7 +16918,7 @@
 			)
 		)
 		(property "stats" "CAN, 100uH, 260mAdc, 800mRdc, 30%"
-			(at 154.94 167.64 0)
+			(at 173.99 156.21 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16721,6 +16939,12 @@
 			(uuid "b47f90ba-b842-48e3-b533-2a8867552832")
 		)
 		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "FL?")
+					(unit 1)
+				)
+			)
 			(project "VoltageTap_B"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/15f0d5a6-9e68-4d09-9bf2-845cbad50a23"
 					(reference "FL101")
@@ -24289,6 +24513,122 @@
 			(project "Cell Balancing testing"
 				(path "/c88eee57-fb0b-41b2-9a6e-752504f62967/e4525cac-ac40-4418-bfce-03decc327415"
 					(reference "C?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zzLocalLibrary:ISOM811_0_3")
+		(at 162.56 189.23 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a65e4d8e-0e11-41b6-a580-1b83437a73d8")
+		(property "Reference" "U?"
+			(at 161.925 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "ISOM8110DFS"
+			(at 161.925 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "zzLocalLibraries-Footprints:ISOM811_SOIC-4_DFG"
+			(at 161.036 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/product/ISOM8111"
+			(at 160.401 178.181 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "DC input, transistor output, single channel, opto-emulator with 150% to 230% CTR"
+			(at 160.401 178.181 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Texas-Instruments/ISOM8110DFSR?qs=2FehpBK1j96965pfOjJBkA%3D%3D"
+			(at 161.036 180.086 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.385"
+			(at 162.56 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.56"
+			(at 162.56 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "specs" "1.5Vf, 5mA, 80Vce, 10mAout max"
+			(at 162.56 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "7eb1738d-ad7c-49d0-bba5-0b3980c92ad4")
+		)
+		(pin "2"
+			(uuid "2fc92c9b-bb81-4ecc-a7f1-f765ef262ccf")
+		)
+		(pin "4"
+			(uuid "8a2447dd-6b64-4d9c-9506-2ebd46cc7c25")
+		)
+		(pin "3"
+			(uuid "5e04b7a2-ae14-4890-9f23-2fc30a2e607f")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/e647e6c7-d2c9-4086-bd05-45f6d07d327b"
+					(reference "U822")
+					(unit 1)
+				)
+			)
+			(project "VoltageTap_B"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/15f0d5a6-9e68-4d09-9bf2-845cbad50a23"
+					(reference "U?")
 					(unit 1)
 				)
 			)
