@@ -4622,80 +4622,6 @@
 		)
 	)
 	(symbol
-		(lib_id "zzLocalLibrary:ESD2CAN36DBZRQ1")
-		(at 60.96 68.58 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "202bec7f-2c0d-445d-9559-9fef5d9b8f76")
-		(property "Reference" "CR501"
-			(at 67.056 62.992 0)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "ESD2CAN36DBZRQ1"
-			(at 67.056 65.532 0)
-			(effects
-				(font
-					(size 1.524 1.524)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:TSOT-23_HandSoldering"
-			(at 60.96 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/gpn/esd2can36-q1"
-			(at 60.96 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 60.96 68.58 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "13f8fa43-b5ac-40d2-8bf4-321ea1d45456")
-		)
-		(pin "1"
-			(uuid "43cfb442-5c63-4023-8b4c-7a1be95ffbbb")
-		)
-		(pin "3"
-			(uuid "2532a2e7-5010-485d-8df2-5d235c37792e")
-		)
-		(instances
-			(project ""
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/258b64a8-9b08-463b-aff1-8236af04e061"
-					(reference "CR501")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 69.85 166.37 90)
 		(unit 1)
@@ -4812,6 +4738,117 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/258b64a8-9b08-463b-aff1-8236af04e061"
 					(reference "R504")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Filter:Choke_CommonMode_FerriteCore_1243")
+		(at 40.64 82.55 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "26e49328-cf7e-4969-871b-acae5bea1882")
+		(property "Reference" "FL101"
+			(at 40.513 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Choke_CommonMode_FerriteCore_1243"
+			(at 40.513 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Inductor_SMD:L_CommonModeChoke_Coilcraft_1812CAN"
+			(at 40.64 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 40.64 90.805 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "EMI 2-inductor common mode filter"
+			(at 44.704 83.312 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Coilcraft/1812CAN-104NRC?qs=sGAEpiMZZMtyFaoUegSfpui3aeWT%2FEDwS0laKeGaDcu5YilxPzj2MQ%3D%3D"
+			(at 40.64 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "2.27"
+			(at 40.64 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "2.07"
+			(at 40.64 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "stats" "CAN, 100uH, 260mAdc, 800mRdc, 30%"
+			(at 40.64 82.55 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "8f775292-96ac-48d8-9a4f-b0182397c2eb")
+		)
+		(pin "2"
+			(uuid "91dcd015-597e-4ed0-9a26-b4c6b53bcb44")
+		)
+		(pin "1"
+			(uuid "10e9adce-faf9-427e-87ed-1dacdc732209")
+		)
+		(pin "3"
+			(uuid "b47f90ba-b842-48e3-b533-2a8867552832")
+		)
+		(instances
+			(project "MasterBoard_A"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/258b64a8-9b08-463b-aff1-8236af04e061"
+					(reference "FL101")
 					(unit 1)
 				)
 			)
@@ -5173,117 +5210,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Filter:Choke_CommonMode_FerriteCore_1243")
-		(at 40.64 82.55 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "4dda59c9-a8b5-4ac1-a7ec-4c0b36574b35")
-		(property "Reference" "FL101"
-			(at 40.513 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Choke_CommonMode_FerriteCore_1243"
-			(at 40.513 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "Inductor_SMD:L_CommonModeChoke_Coilcraft_1812CAN"
-			(at 40.64 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 40.64 90.805 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "EMI 2-inductor common mode filter"
-			(at 44.704 83.312 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Coilcraft/1812CAN-104NRC?qs=sGAEpiMZZMtyFaoUegSfpui3aeWT%2FEDwS0laKeGaDcu5YilxPzj2MQ%3D%3D"
-			(at 40.64 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x1" "2.27"
-			(at 40.64 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "unit x10" "2.07"
-			(at 40.64 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "stats" "CAN, 100uH, 260mAdc, 800mRdc, 30%"
-			(at 40.64 82.55 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "4"
-			(uuid "8f775292-96ac-48d8-9a4f-b0182397c2eb")
-		)
-		(pin "2"
-			(uuid "91dcd015-597e-4ed0-9a26-b4c6b53bcb44")
-		)
-		(pin "1"
-			(uuid "10e9adce-faf9-427e-87ed-1dacdc732209")
-		)
-		(pin "3"
-			(uuid "b47f90ba-b842-48e3-b533-2a8867552832")
-		)
-		(instances
-			(project "MasterBoard_A"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/258b64a8-9b08-463b-aff1-8236af04e061"
-					(reference "FL101")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 60.96 116.84 0)
 		(mirror x)
@@ -5400,6 +5326,80 @@
 			(project "MasterBoard_A"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/258b64a8-9b08-463b-aff1-8236af04e061"
 					(reference "R503")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "zzLocalLibrary:ESD2CAN36DBZRQ1")
+		(at 60.96 68.58 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7827cbcc-7a2d-4e96-b5ad-45f372aa7330")
+		(property "Reference" "CR501"
+			(at 67.056 62.992 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "ESD2CAN36DBZRQ1"
+			(at 67.056 65.532 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_SMD:TSOT-23_HandSoldering"
+			(at 60.96 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://www.ti.com/lit/gpn/esd2can36-q1"
+			(at 60.96 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 60.96 68.58 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "13f8fa43-b5ac-40d2-8bf4-321ea1d45456")
+		)
+		(pin "1"
+			(uuid "43cfb442-5c63-4023-8b4c-7a1be95ffbbb")
+		)
+		(pin "3"
+			(uuid "2532a2e7-5010-485d-8df2-5d235c37792e")
+		)
+		(instances
+			(project ""
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/258b64a8-9b08-463b-aff1-8236af04e061"
+					(reference "CR501")
 					(unit 1)
 				)
 			)
