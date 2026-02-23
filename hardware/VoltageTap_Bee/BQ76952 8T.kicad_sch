@@ -2614,12 +2614,6 @@
 		(uuid "8ce6966b-030e-412d-a3ec-6838a8f961fd")
 	)
 	(junction
-		(at 246.38 16.51)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "8e993731-9a64-45d1-9a73-236cba010f86")
-	)
-	(junction
 		(at 127 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2804,6 +2798,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "cf6993ce-5dca-480d-85aa-691baab1d88d")
+	)
+	(junction
+		(at 246.38 26.67)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d533f1d9-a5a9-4c56-871f-4d1dfcf6dcdf")
 	)
 	(junction
 		(at 149.86 96.52)
@@ -4057,16 +4057,6 @@
 	)
 	(wire
 		(pts
-			(xy 262.89 16.51) (xy 262.89 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3b7a97bb-2d8f-47f8-96fe-fc7ee0889fe5")
-	)
-	(wire
-		(pts
 			(xy 148.59 35.56) (xy 149.86 36.83)
 		)
 		(stroke
@@ -4557,6 +4547,16 @@
 	)
 	(wire
 		(pts
+			(xy 262.89 26.67) (xy 262.89 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e330115-ef96-4942-afb6-6936ba8259af")
+	)
+	(wire
+		(pts
 			(xy 196.85 59.69) (xy 198.12 59.69)
 		)
 		(stroke
@@ -4834,16 +4834,6 @@
 			(type default)
 		)
 		(uuid "7169be04-3770-41c5-a582-a88fbfc62792")
-	)
-	(wire
-		(pts
-			(xy 246.38 16.51) (xy 262.89 16.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "71c4cbdc-c558-44ad-a7c5-4de90841f8dc")
 	)
 	(wire
 		(pts
@@ -6998,6 +6988,16 @@
 	)
 	(wire
 		(pts
+			(xy 246.38 26.67) (xy 246.38 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ee1f073a-da41-4b41-8cce-dced33acd012")
+	)
+	(wire
+		(pts
 			(xy 55.88 130.81) (xy 55.88 132.08)
 		)
 		(stroke
@@ -7178,6 +7178,16 @@
 	)
 	(wire
 		(pts
+			(xy 246.38 26.67) (xy 262.89 26.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8086a71-37c9-4627-8e68-bb92fe35b0d9")
+	)
+	(wire
+		(pts
 			(xy 226.06 48.26) (xy 237.49 48.26)
 		)
 		(stroke
@@ -7248,7 +7258,7 @@
 	)
 	(wire
 		(pts
-			(xy 246.38 24.13) (xy 246.38 33.02)
+			(xy 246.38 24.13) (xy 246.38 26.67)
 		)
 		(stroke
 			(width 0)
@@ -23371,6 +23381,56 @@
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "D207")
 					(unit 1)
+				)
+			)
+		)
+	)
+	(sheet
+		(at 347.98 172.72)
+		(size 27.94 22.86)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board no)
+		(dnp yes)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "9d2d8159-40d8-487b-a19e-2ae38d23db02")
+		(property "Sheetname" "something"
+			(at 347.98 172.0084 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "../common designs.kicad_sch"
+			(at 347.98 196.1646 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Field2" ""
+			(at 347.98 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(instances
+			(project "VoltageTap_B"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(page "5")
 				)
 			)
 		)
