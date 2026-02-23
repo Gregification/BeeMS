@@ -30,6 +30,7 @@
 #include "Tasks/task_BMS.hpp"
 #include "Tasks/task_ethModbus.hpp"
 #include "Tasks/examples/example_blink_task.hpp"
+#include "Tasks/task_ADC.hpp"
 
 
 int main(){
@@ -77,8 +78,8 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-    xTaskCreate(Task::ethModbus_task,
-            "non_BMS_functions_task",
+    xTaskCreate(Task::adc_task,
+            "adc_task",
             configMINIMAL_STACK_SIZE * 2,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
