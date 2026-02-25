@@ -48,7 +48,7 @@
         "silk_text_thickness": 0.1,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.0
+          "min_clearance": 0.5
         }
       },
       "diff_pair_dimensions": [
@@ -58,7 +58,20 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "silk_edge_clearance|122100000|120000000|3ce72b41-d6e3-4c44-bfeb-40138471f284|08136431-59c0-44a8-a8c0-974c095c955b",
+          ""
+        ],
+        [
+          "silk_edge_clearance|122100000|120000000|3ce72b41-d6e3-4c44-bfeb-40138471f284|0dcdefa3-10d9-4fbf-9054-2b1e7b87569a",
+          ""
+        ],
+        [
+          "silk_edge_clearance|167100000|118267949|ac7aedd4-ee42-4e65-b400-40488e0e21d1|19ad0db2-d25d-4788-8598-793e469cbc52",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -611,7 +624,7 @@
           "group_by": false,
           "label": "mouser",
           "name": "mouser",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
@@ -623,13 +636,13 @@
           "group_by": false,
           "label": "specs",
           "name": "specs",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
           "label": "specs ",
           "name": "specs ",
-          "show": false
+          "show": true
         },
         {
           "group_by": false,
