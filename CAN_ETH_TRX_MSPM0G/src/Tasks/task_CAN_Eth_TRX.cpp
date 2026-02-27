@@ -100,17 +100,18 @@ void Task::ethcan_task(void *){
     _TXBuffer txbuf = {0};
 
 
-    wiz_spi.setSCLKTarget(10e6);
+    wiz_spi.setSCLKTarget(2e6);
 
 
     /*** W5500 init *****************/
 
-    uart.nputs(ARRANDN(CLIHIGHLIGHT "awaiting W5500 response ..." CLIRESET NEWLINE));
+    uart.nputs(ARRANDN(CLIHIGHLIGHT "awaiting W5500 initial response ..." CLIRESET NEWLINE));
     while(!setupWizchip()) {
         uart.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed! retrying..." CLIRESET NEWLINE));
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
+    uart.nputs(ARRANDN(CLIHIGHLIGHT "setting net info ..." CLIRESET NEWLINE));
     wizchip_setnetinfo(&CEB::Bridge::netConfig);
 
     {
@@ -159,14 +160,19 @@ void Task::ethcan_task(void *){
     bool reset;
 
     while(true){
-        close(sn);
         reset = false;
+
         sn = CEB::Bridge::wiz_sn;
+//        close(sn);
 
         /*** init socket ****************/
 
+        uart.nputs(ARRANDN(CLIHIGHLIGHT "init socket "));
+        vTaskDelay(pdMS_TO_TICKS(1000));
+        uart.nputs(ARRANDN("..." CLIRESET NEWLINE));
         switch(error = socket(sn, Sn_MR_UDP, CEB::Bridge::wiz_IP_port, SF_IO_NONBLOCK)){
             default:
+                uart.nputs(ARRANDN(CLIHIGHLIGHT "init socket retry" CLIRESET NEWLINE));
                 if(error == sn)
                     // yippie
                     break;

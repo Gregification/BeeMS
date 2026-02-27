@@ -14,6 +14,7 @@
 
 
 auto &led = CEB::Indi::LED::scheduler;
+//auto &led = CEB::Indi::LED::i1;
 //auto &led = System::GPIO::PA26;
 
 void Task::blink_task(void*) {
