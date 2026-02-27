@@ -1,0 +1,7 @@
+(version 1)
+(rule "HV Trace-to-Trace Only"
+    (condition "A.insideArea('high clearance for HV') && A.Type == 'track' && B.Type == 'track'")
+	(constraint min_width (min 0.3mm))
+    (constraint edge_clearance (min 2.0mm))
+    (constraint clearance (min 1.0mm))
+)
