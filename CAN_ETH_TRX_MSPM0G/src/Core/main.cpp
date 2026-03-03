@@ -67,6 +67,13 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
+//    xTaskCreate(Task::MCAN_test_task,
+//            "non_BMS_functions_task",
+//            configMINIMAL_STACK_SIZE * 3,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
+
     vTaskStartScheduler();
 
     taskDISABLE_INTERRUPTS();

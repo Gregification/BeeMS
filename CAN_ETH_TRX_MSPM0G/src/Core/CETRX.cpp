@@ -21,11 +21,11 @@ namespace CEB {
     namespace Bridge {
         CANFD::CANFD & can = System::CANFD::canFD0;
 
-        uint8_t ethBroadcastIP[4] = {192,168,1,255};
+        uint8_t ethBroadcastIP[4] = {190, 67, 255, 255};
         wiz_NetInfo netConfig = {
-                   .mac = {0xBE,0xEE,0xEE,0x00,0x00,0x00}, // arbitrary. last byte is overwritten with MCU serial number
-                   .ip  = {192,168,1,220},
-                   .sn  = {255,255,255,0},
+                   .mac = {0xBE,0xEE,0xEE,0x00,0x00,0x00}, // arbitrary. last 3 bytes overwritten with MCU serial number
+                   .ip  = {190,67,0x00,0x00},// arbitrary. last 2 bytes overwritten with MCU serial number
+                   .sn  = {255,255,0,0},
                    .gw  = {192,168,1,1},
                    .dns = {8,8,8,8},
                    .dhcp= NETINFO_STATIC

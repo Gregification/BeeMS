@@ -90,17 +90,18 @@ void Task::ethcan_task(void *){
     uart.nputs(ARRANDN("ethModbus_task start" NEWLINE));
 
     {
-        CEB::Bridge::netConfig.mac[5] = CEB::getUnitBoardID();
-        CEB::Bridge::netConfig.mac[4] = System::mcuID;
-        CEB::Bridge::netConfig.mac[3] = System::mcuID >> 8;
-        CEB::Bridge::netConfig.ip[3]  = System::mcuID;
+        CEB::Bridge::netConfig.mac[5] = System::mcuID;
+        CEB::Bridge::netConfig.mac[4] = System::mcuID >> 8;
+
+        CEB::Bridge::netConfig.ip[2]  = System::mcuID;
+        CEB::Bridge::netConfig.ip[3]  = System::mcuID >> 8;
     }
 
     _RXBuffer rxbuf = {0};
     _TXBuffer txbuf = {0};
 
 
-    wiz_spi.setSCLKTarget(2e6);
+    wiz_spi.setSCLKTarget(32e6);
 
 
     /*** W5500 init *****************/
@@ -194,8 +195,7 @@ void Task::ethcan_task(void *){
 
         uart.nputs(ARRANDN("CanEthBridge: listening for UDP (port: " ));
         uart.putu32d(CEB::Bridge::wiz_IP_port);
-        uart.nputs(ARRANDN("), and CAN bus"));
-        uart.nputs(ARRANDN(CLIRESET NEWLINE));
+        uart.nputs(ARRANDN("), and CAN bus" CLIRESET NEWLINE));
 
         // wait for eth packet or can packet, & respond.
         while(!reset) {
@@ -211,7 +211,7 @@ void Task::ethcan_task(void *){
                     if(error > 0){
                         System::UART::uart_ui.nputs(ARRANDN("eth rx len: "));
                         System::UART::uart_ui.putu32d(error);
-                        System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
+                        System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
                         break;
                     }
                 case SOCKERR_SOCKMODE:
@@ -227,10 +227,12 @@ void Task::ethcan_task(void *){
                 case SOCK_BUSY:
                 case SOCKERR_DATALEN:
                     /*** can 2 eth ******************/
+
                     if(!canToEthHandler(sn, &rxbuf, &txbuf)) {
                         // keep waiting
 //                        vTaskDelay(pdMS_TO_TICKS(1));
                     }
+
                     continue;
             }
 
@@ -241,6 +243,7 @@ void Task::ethcan_task(void *){
             if(error != sizeof(rxbuf.canrx))
                 continue;
 
+            uart.nputs(ARRANDN("Eth->CAN ... "));
             if(Eth2Can(&rxbuf, &txbuf)) {
                 // tx can
 
@@ -248,7 +251,7 @@ void Task::ethcan_task(void *){
                 DL_MCAN_getTxFIFOQueStatus(CEB::Bridge::can.reg, &tf);
 
                 if(tf.fifoFull){
-//                    System::UART::uart_ui.nputs(ARRANDN("dropped, CAN TX FIFO full" NEWLINE));
+                    uart.nputs(ARRANDN("dropped, CAN TX FIFO full" NEWLINE));
                     continue;
                 }
 //                System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
@@ -261,7 +264,10 @@ void Task::ethcan_task(void *){
                 CEB::Indi::LED::i1.set();
 
 //                System::UART::uart_ui.nputs(ARRANDN(CLIYES "eth -> can done" CLIRESET NEWLINE));
+                uart.nputs(ARRANDN(CLIYES "translation success" CLIRESET NEWLINE));
             }
+            else
+                uart.nputs(ARRANDN(CLINO "translation failed" CLIRESET NEWLINE));
         }
 
     }
@@ -278,23 +284,27 @@ bool canToEthHandler(SOCKET sn, _RXBuffer * rxb, _TXBuffer * txb) {
     rf.num = DL_MCAN_RX_FIFO_NUM_0;
     DL_MCAN_getRxFIFOStatus(can.reg, &rf);
 
-    if(rf.fillLvl == 0) // if CAN rx buffer is empty
-        return false;
+    if(rf.fillLvl == 0) { // if CAN rx buffer is empty
+        rf.num = DL_MCAN_RX_FIFO_NUM_1;
+        DL_MCAN_getRxFIFOStatus(can.reg, &rf);
+
+        if(rf.fillLvl == 0)
+            return false;
+
+    }
+
+    uart.nputs(ARRANDN("CAN->Eth ... "));
 
     DL_MCAN_readMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, 0, rf.num, &rxb->canrx);
     DL_MCAN_writeRxFIFOAck(can.reg, rf.num, rf.getIdx);
 
-//    System::UART::uart_ui.nputs(ARRANDN("rx CAN ID: 0x"));
-//    System::UART::uart_ui.putu32h(System::CANFD::getCANID(&rxb->canrx));
-
     uint8_t len = Can2Eth(rxb, txb);
 
     if(len == 0) {
-//        System::UART::uart_ui.nputs(ARRANDN("\t -> \t ignored" NEWLINE));
+        uart.nputs(ARRANDN(CLINO "translation failed" CLIRESET NEWLINE));
         return false;
-    }
-
-//    System::UART::uart_ui.nputs(ARRANDN("\t -> \t forwarded to Eth" NEWLINE));
+    } else
+        uart.nputs(ARRANDN(CLIYES "translation success" CLIRESET NEWLINE));
 
     sendto(sn, txb->arr, len, CEB::Bridge::ethBroadcastIP, CEB::Bridge::wiz_IP_port);
 

@@ -44,7 +44,7 @@ void Task::MCAN_test_task(void *){
         DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txmsg);
         DL_MCAN_TXBufAddReq(CANFD0, tf.putIdx);
 
-    } while(1);
+    } while(0);
 
     //--- RX --------------------------------------------------
 
