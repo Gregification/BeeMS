@@ -57,6 +57,7 @@ void System::init() {
 //        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM34, IOMUX_PINCM34_PF_CANFD0_CANTX); // CANTX, PA12
 //        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM35, IOMUX_PINCM35_PF_CANFD0_CANRX); // CANRX, PA13
 
+        //VT Bee
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM59, IOMUX_PINCM59_PF_CANFD0_CANTX); // CANTX, PA26
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM60, IOMUX_PINCM60_PF_CANFD0_CANRX); // CANRX, PA27
 

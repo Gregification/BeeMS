@@ -14,8 +14,9 @@ namespace VT {
 
     BQ76952 bq = {
             .spi  = &System::spi1,
-            .cs   = &System::GPIO::PB19, // v3
-    //        .cs   = &System::GPIO::PA15, // v2.2
+            //.cs   = &System::GPIO::PB19, // v3
+            //.cs   = &System::GPIO::PA15, // v2.2
+            .cs   = &System::GPIO::PA14, // VT Bee
         };
     System::GPIO::GPIO const & bqReset = System::GPIO::PA15; // v3
     //    System::GPIO::GPIO &bqReset = System::GPIO::PA21; // v2.2

@@ -15,7 +15,8 @@
 void Task::SPI_example_task(void *){
     System::uart_ui.nputs(ARRANDN("SPI example task start" NEWLINE));
 
-    auto cs = System::GPIO::PA8;
+    //auto cs = System::GPIO::PA8;
+    auto cs = System::GPIO::PA14;
     DL_GPIO_enableOutput(GPIOPINPUX(cs));
     cs.clear();
 

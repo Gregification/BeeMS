@@ -19,7 +19,7 @@ namespace Task {
      */
     void BMS_task(void *);
 
-    extern BQ76952 bq;
+    //extern BQ76952 bq;
 }
 
 #endif /* SRC_TASKS_TASK_BMS_HPP_ */
