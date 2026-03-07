@@ -4,7 +4,7 @@
     (constraint clearance (min 0.5mm))
     (constraint track_width (min 0.3mm))
 )
-(rule "HV Track-to-Edge Only"
-    (condition "A.insideArea('high clearance for HV') && A.Type == 'Track' && B.Type == 'BoardEdge'")
-    (constraint edge_clearance (min 2.5mm))
+(rule "HV Track-to-Edge"
+    (condition "A.insideArea('high clearance for HV') && A.Type == 'Track' && B.Layer == 'Edge.Cuts'")
+    (constraint clearance (min 2.5mm))
 )
