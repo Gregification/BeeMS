@@ -4,6 +4,7 @@ Battery Management System (BMS)
 __a work in progress__
 
 BMS for University Of Texas At Arlington's FSAE Race team's E27 vehicle.
+> point of contact for this repo is <a href="https://github.com/gregclacker"> George Boone</a>
 
 ## Development
 - Code Composer Studio 12
