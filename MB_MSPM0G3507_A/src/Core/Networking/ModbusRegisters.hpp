@@ -30,21 +30,21 @@ namespace Networking {
         namespace MasterRegisters {
 
             enum RegAddr : uint16_t {
-                MCU_HARDWARE_ID             = 0, // <input>R        MCU silicon level serial number.
-                SOFTWARE_VERSION            = 1, // <input>R        software revision.
+                MCU_HARDWARE_ID             = 0, // <input>         MCU silicon level serial number.
+                SOFTWARE_VERSION            = 1, // <input>         software revision.
 
-                LED_INDICATOR1              = 5, // <discrete>R     status of indicator 1 led.
-                LED_INDICATOR2              = 6, // <discrete>R     status of indicator 2 led.
-                LED_BMS_FAULT               = 7, // <discrete>R     status of fault led.
+                LED_INDICATOR1              = 5, // <discrete>      status of indicator 1 led.
+                LED_INDICATOR2              = 6, // <discrete>      status of indicator 2 led.
+                LED_BMS_FAULT               = 7, // <discrete>      status of fault led.
 
-                GLV_IL_PRESENCE             = 20, // <discrete>R    active if a voltage >19.4V is input side of the devices IL.
-                GLV_IL_CTRL_STATUS          = 25, // <coil>R        actual state of GLV IL relay control signal.
-                GLV_IL_CTRL_usr_dsrd        = 26, // <coil>RW       user defined state of GLV IL relay. software will prefer this state unless it conflicts with safety.
-                GLV_IL_CTRL_usr_ovrd        = 27, // <coil>RW       forces the GLV IL to match the user defined state regardless of safety conflicts.
-                GLV_IL_CTRL_sw_dsrd         = 28, // <coil>R        forces the GLV IL to match the user defined state regardless of safety conflicts.
+                GLV_IL_PRESENCE             = 20, // <discrete>     active if a voltage >19.4V is input side of the devices IL.
+                GLV_IL_CTRL_STATUS          = 25, // <discrete>     actual state of GLV IL relay control signal.
+                GLV_IL_CTRL_usr_dsrd        = 26, // <coil>         user defined state of GLV IL relay. software will prefer this state unless it conflicts with safety.
+                GLV_IL_CTRL_usr_ovrd        = 27, // <coil>         forces the GLV IL to match the user defined state regardless of safety conflicts.
+                GLV_IL_CTRL_sw_dsrd         = 28, // <discrete>     forces the GLV IL to match the user defined state regardless of safety conflicts.
 
-                HRLV_IL_PRESENCE            = 30, // <discrete>R    active if HRLV IL is OK; a voltage >11V is present on the HRLV IL. This IL operates as a common fault bus. Single PU, all nodes are open drain.
-                HRLV_PRESENCE               = 31, // <discrete>R    active if HRLV has sufficient power; a voltage >6V is present on the HRLV LV network.
+                HRLV_IL_PRESENCE            = 30, // <discrete>     active if HRLV IL is OK; a voltage >11V is present on the HRLV IL. This IL operates as a common fault bus. Single PU, all nodes are open drain.
+                HRLV_PRESENCE               = 31, // <discrete>     active if HRLV has sufficient power; a voltage >6V is present on the HRLV LV network.
 
                 _end
             };
@@ -65,7 +65,13 @@ namespace Networking {
          */
         namespace MasterCommands {
             enum CmdAddr : uint16_t {
-                ABUSE_GLV_IL_RELAY          = MasterRegisters::RegAddr::GLV_IL_CTRL_sw_dsrd, // <coil>          makes click noises
+                /** IL burping
+                 * - data: 16b
+                 *      - [0B] : delay between transitions. "x * 10mS".
+                 *      - [1B] : number of transitions.
+                 */
+                GLV_IL_RELAY_burp          = MasterRegisters::RegAddr::GLV_IL_CTRL_sw_dsrd,
+
             };
 
             bool command(uint16_t command, uint16_t data);

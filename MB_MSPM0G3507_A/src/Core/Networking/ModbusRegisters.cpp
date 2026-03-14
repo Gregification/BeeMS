@@ -97,13 +97,32 @@ bool Networking::Modbus::MasterCommands::command(uint16_t command, uint16_t data
     switch(command) {
         default: return false;
 
-        case CmdAddr::ABUSE_GLV_IL_RELAY:
-            for(int i = 0; i < 5; i++){
-                DL_GPIO_togglePins(GPIOPINPUX(MstrB::IL::_control));
-                vTaskDelay(pdMS_TO_TICKS(15));
-            }
-            MstrB::IL::getStatus(); // reset to proper value
-            break;
+        case CmdAddr::GLV_IL_RELAY_burp: {
+                static TaskHandle_t task;
+                static void (*func)(void *) = [](void * p) -> void {
+                    uint8_t i = GB(1, (uint32_t)p);
+                    uint8_t d = GB(0, (uint32_t)p);
+
+                    for(; i > 0; i--) {
+                        DL_GPIO_togglePins(GPIOPINPUX(MstrB::IL::_control));
+                        vTaskDelay(pdMS_TO_TICKS(d * 10));
+                    }
+
+                    MstrB::IL::getStatus(); // reset to proper value
+
+                    task = NULL;
+                    vTaskDelete(NULL);
+                };
+
+                if(task == NULL || eTaskGetState(task) == eDeleted) {
+                    xTaskCreate(func,
+                        "GLV_IL_RELAY_burp",
+                        configMINIMAL_STACK_SIZE,
+                        (void *)data,
+                        tskIDLE_PRIORITY+1, //configMAX_PRIORITIES,
+                        &task);
+                }
+            } break;
     }
 
     return true;

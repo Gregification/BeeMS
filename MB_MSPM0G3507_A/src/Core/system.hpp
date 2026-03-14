@@ -71,7 +71,8 @@
 
 /*--- shorthand ----------------------------------------*/
 
-#define BV(X) (1 << (X))
+#define BV(X) (1 << (X)) // bit value
+#define GB(N,V) ( ( (V) & (0xF << (4*(N))) ) >> ((N)*4) ) // get byte
 #define STRINGIFY(X) #X
 #define TOSTRING(X) STRINGIFY(X)
 
