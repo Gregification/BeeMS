@@ -200,15 +200,15 @@ void Task::ethModbus_task(void *){
 
         uart.nputs(ARRANDN(CLIRESET NEWLINE));
     }
-    while(1)
-    vTaskDelay(pdMS_TO_TICKS(1e3));
 
-    // broadcast just to make itself known to network equipment
+    // broadcast to ensure device is known to network equipment
 //    {
 //        SOCKET s = socketNum;
 //        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
 //        if(error == s) {
-//            uint8_t addr[] = {192,168,1,255};
+//            uint8_t addr[4];
+//            ALT::memcpy(netConfig.ip, addr, sizeof(addr));
+//            addr[3] = 255;
 //            sendto(s, addr, 1, addr, 1234);
 //        }
 //        close(s);
@@ -347,7 +347,6 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
 
             /*** process packet *************/
-
 
             {
                 uart.nputs(ARRANDN(NEWLINE " \tReceived Eth Modbus: "));

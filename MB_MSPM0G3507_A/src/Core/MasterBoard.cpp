@@ -12,6 +12,14 @@
 // absurd naming!!! yippie!
 
 namespace MstrB {
+    OpProfile_t opProfile = {
+            .GLV_IL_RELAY_allow_usr_ovrd = false,   // allow local control
+            .GLV_IL_RELAY_usr_requested = true,     // ^
+        };
+    OpVars_t opVars = {
+            .GLV_IL_RELAY_engaged = false,
+        };
+
     System::SPI::SPI & MHCS::spi  = System::SPI::spi1;
     System::SPI::SPI & Eth::spi   = System::SPI::spi0;
     System::SPI::SPI & FS::spi    = MHCS::spi;
@@ -100,23 +108,23 @@ void MstrB::init() {
         using namespace IL;
 
         DL_GPIO_initDigitalOutputFeatures(
-                control.iomux,
+                _control.iomux,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
-        DL_GPIO_clearPins(GPIOPINPUX(control));
-        DL_GPIO_enableOutput(GPIOPINPUX(control));
+        DL_GPIO_clearPins(GPIOPINPUX(_control));
+        DL_GPIO_enableOutput(GPIOPINPUX(_control));
 
         DL_GPIO_initDigitalInputFeatures(
-                sense.iomux,
+                _sense.iomux,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
-        DL_GPIO_disableOutput(GPIOPINPUX(sense));
+        DL_GPIO_disableOutput(GPIOPINPUX(_sense));
     }
 
     /*{
@@ -234,6 +242,8 @@ uint32_t MstrB::POST(char * error_msg, uint16_t max_msg_len) {
     }
     #endif
 
+    IL::getStatus(); // force update
+
     MstrB::Indi::LED::i1.set();
     MstrB::Indi::LED::i2.set();
     MstrB::Indi::LED::fault.set();
@@ -243,7 +253,6 @@ uint32_t MstrB::POST(char * error_msg, uint16_t max_msg_len) {
     MstrB::Indi::LED::i2.clear();
     MstrB::Indi::LED::fault.clear();
     MstrB::Indi::LED::scheduler.clear();
-    MstrB::IL::control.clear();
 
     return 0;
 }
@@ -251,6 +260,47 @@ uint32_t MstrB::POST(char * error_msg, uint16_t max_msg_len) {
 uint8_t MstrB::getUnitBoardID() {
     // TODO: should be physically configurable on the board, just read back those settings.
     return 0xFE;
+}
+
+bool MstrB::IL::setEnable(bool v){
+    opVars.GLV_IL_RELAY_engaged = v;
+    return getStatus() == v;
+}
+
+bool MstrB::IL::getStatus() {
+    // 1. if overridden, use overridden value
+    // 2. if user wants it on, software must also want it on
+
+    do {
+        if(opProfile.GLV_IL_RELAY_allow_usr_ovrd) { // if use override
+            if(opProfile.GLV_IL_RELAY_usr_requested)
+                _control.set();
+            else
+                _control.clear();
+            break;
+        }
+
+        if(!opProfile.GLV_IL_RELAY_usr_requested) { // if user wants it off
+            _control.clear();
+             break;
+        }
+
+        if(opVars.GLV_IL_RELAY_engaged)
+            _control.set();
+        else
+            _control.clear();
+
+    } while(false);
+
+    return _control.getOutput();
+}
+
+bool MstrB::IL::getInput() {
+    return _sense.get();
+}
+
+bool MstrB::IL::isUserOverriding() {
+    return opProfile.GLV_IL_RELAY_allow_usr_ovrd;
 }
 
 bool MCHScalibrationADC(System::SPI::SPI& spi) {

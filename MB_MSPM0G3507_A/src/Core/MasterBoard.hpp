@@ -11,11 +11,29 @@
 #include "system.hpp"
 
 namespace System {
-    OCCUPY(ADC0); // used by TempSense
+    //OCCUPY(ADC0); // used by TempSense
 }
 
 namespace MstrB {
     using namespace System;
+
+    /**
+     * operator configuration
+     * - use explicit variable names
+     */
+    struct __attribute__((__packed__)) OpProfile_t {
+        bool GLV_IL_RELAY_allow_usr_ovrd            : 1;
+        bool GLV_IL_RELAY_usr_requested             : 1;
+    };
+    extern OpProfile_t opProfile;
+
+    /**
+     * operation variables. for internal software use.
+     */
+    struct __attribute__((__packed__)) OpVars_t {
+        bool GLV_IL_RELAY_engaged                   : 1;
+    };
+    extern OpVars_t opVars;
 
     /** sets up remaining peripherals & pins not handled by "System::init()";
      */
@@ -31,7 +49,7 @@ namespace MstrB {
         const uint16_t  ADCReference_100uV = 40960;
         const uint8_t   ADCResolution_b = 14;
 
-        /** return true on success. REQUIRES RTOS. DOES NOTWORK, BROKEN */
+        /** return true on success. REQUIRES RTOS. DOES NOT WORK, BROKEN */
         // auto calibration takes place ~40mS after the ADC gets power.
         bool calibrationADCPer();
         bool calibrationADCImp();
@@ -56,8 +74,16 @@ namespace MstrB {
     /** Inter-lock */
     namespace IL {
         const GPIO::GPIO
-            sense       = GPIO::PB7,
-            control     = GPIO::PB8;
+            _sense       = GPIO::PB7,
+            _control     = GPIO::PB8;
+
+        /** returns fails if fails to set to desired value */
+        bool setEnable(bool);
+        /** returns true if IL is in OK state*/
+        bool getStatus();
+        /** returns true if IL input is present*/
+        bool getInput();
+        bool isUserOverriding();
     }
 
     /** on board temperature sensors */

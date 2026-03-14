@@ -47,8 +47,6 @@ typedef uint16_t buffersize_t;
 
 //--- functions -----------------------------------------------
 
-bool arrCmp(void const * a, void const * b, buffersize_t len);
-
 //--- general macros ------------------------------------------
 
 #define SWAP_BYTES_16(X) ( (((X) & 0x00FF) << 8) | (((X) & 0xFF00) >> 8) )

@@ -41,11 +41,11 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, volatile uint16_
             break;
 
         case RegAddr::GLV_IL_PRESENCE:  // <discrete>
-            *out = MstrB::IL::sense.get();
+            *out = MstrB::IL::getInput();
             break;
 
         case RegAddr::GLV_IL_FORWARD:   // <coil>
-            *out = MstrB::IL::control.getOutput();
+            *out = MstrB::IL::getStatus();
             break;
 
         case RegAddr::HRLV_IL_PRESENCE: // <discrete>
@@ -66,8 +66,23 @@ bool Networking::Modbus::MasterRegisters::setReg(uint16_t addr, uint16_t val) {
         default: return false;
 
         case RegAddr::GLV_IL_FORWARD:   // <coil>
-            if(val) MstrB::IL::control.set();
-            else    MstrB::IL::control.clear();
+            MstrB::opProfile.GLV_IL_RELAY_usr_requested = val;
+            break;
+    }
+
+    return true;
+}
+
+bool Networking::Modbus::MasterCommands::command(uint16_t command, void const * data) {
+    switch(command) {
+        default: return false;
+
+        case CmdAddr::SET_GLV_IL_FORWARD_OVERRIDE:
+            MstrB::opProfile.GLV_IL_RELAY_allow_usr_ovrd = !data ? false : *(bool const *)data;
+            break;
+
+        case CmdAddr::SET_GLV_IL_FORWARD_user_req:
+            MstrB::opProfile.GLV_IL_RELAY_usr_requested = !data ? false : *(bool const *)data;
             break;
     }
 
