@@ -15,15 +15,30 @@ void Task::adc_task(void *){
     uartt.nputs(ARRANDN("adc_task start" NEWLINE));
     while(1)
     {
-        uartt.nputs(ARRANDN("PRECISE: "));
-        val1 = ADC::read_precise_adc();
-        uartt.putu32d(val1 * 250e-6);
-        uartt.nputs(ARRANDN("V" NEWLINE));
 
-        uartt.nputs(ARRANDN("IMPRECISE: "));
-        val2 = ADC::read_imprecise_adc();
-        uartt.putu32d(val2 * 250e-6);
-        uartt.nputs(ARRANDN("V" NEWLINE));
+        if(MstrB::MHCS::calibrationADCImp())
+            uartt.nputs(ARRANDN(CLIYES "PASS:"));
+        else
+            uartt.nputs(ARRANDN(CLINO "FAIL:"));
+
+        vTaskDelay(pdMS_TO_TICKS(10));
+
+        val1 = MstrB::MHCS::readImp_mV();
+        uartt.putu32h(val1);
+
+        uartt.nputs(ARRANDN("\t"));
+
+        if(MstrB::MHCS::calibrationADCPer())
+            uartt.nputs(ARRANDN(CLIYES "PASS:"));
+        else
+            uartt.nputs(ARRANDN(CLINO "FAIL:"));
+
+        val2 = MstrB::MHCS::readPer_mV();
+        uartt.putu32h(val2);
+
+        vTaskDelay(pdMS_TO_TICKS(10));
+
+        uartt.nputs(ARRANDN(NEWLINE));
 
     }
     System::FailHard("adc_task ended" NEWLINE);

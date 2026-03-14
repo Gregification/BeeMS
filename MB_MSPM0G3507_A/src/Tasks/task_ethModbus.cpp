@@ -50,7 +50,7 @@ DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_N
 
 
 /*** wizchip setup ****/
-System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi; // no workie
+System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi;
 System::GPIO::GPIO const &      wiz_cs    = MstrB::Eth::cs;
 System::GPIO::GPIO const &      wiz_reset = MstrB::Eth::reset;
 //System::SPI::SPI &              wiz_spi   = System::SPI::spi1;
@@ -131,24 +131,79 @@ void Task::ethModbus_task(void *){
 
 
     /********************************/
-    uart.nputs(ARRANDN(CLIHIGHLIGHT "IP: \t"));
-    for(int i = 0; i < 4; i++){
-        uart.putu32d(netConfig.ip[i]);
-        uart.nputs(ARRANDN("."));
-    }
-    uart.nputs(ARRANDN(NEWLINE "SNM: \t"));
-    for(int i = 0; i < 4; i++){
-        uart.putu32d(netConfig.sn[i]);
-        uart.nputs(ARRANDN("."));
-    }
-    uart.nputs(ARRANDN(NEWLINE "MAC: \t"));
-    for(int i = 0; i < 6; i++){
-        uart.putu32h(netConfig.mac[i]);
-        uart.nputs(ARRANDN(" "));
-    }
-    uart.nputs(ARRANDN(CLIRESET NEWLINE));
+    {
+        wiz_NetInfo read;
+        uart.nputs(ARRANDN(CLIRESET "reading back net config ... " NEWLINE));
+        wizchip_getnetinfo(&read);
 
-    // broadcast just ot make itself known to network equiptment
+        while(!ALT::memcmp(&read, &netConfig, sizeof(netConfig))) {
+            uart.nputs(ARRANDN(CLIRESET CLIERROR "W5500" CLINO " read" CLIERROR " config does not match" CLIYES " written" NEWLINE));
+
+            uart.nputs(ARRANDN(CLIYES "IP: \t"));
+            for(int i = 0; i < 4; i++){
+                uart.putu32d(netConfig.ip[i]);
+                uart.nputs(ARRANDN("."));
+            }
+            uart.nputs(ARRANDN(NEWLINE "SNM: \t"));
+            for(int i = 0; i < 4; i++){
+                uart.putu32d(netConfig.sn[i]);
+                uart.nputs(ARRANDN("."));
+            }
+            uart.nputs(ARRANDN(NEWLINE "MAC: \t"));
+            for(int i = 0; i < 6; i++){
+                uart.putu32h(netConfig.mac[i]);
+                uart.nputs(ARRANDN(" "));
+            }
+
+            uart.nputs(ARRANDN(CLINO NEWLINE));
+
+            uart.nputs(ARRANDN("IP: \t"));
+            for(int i = 0; i < 4; i++){
+                uart.putu32d(read.ip[i]);
+                uart.nputs(ARRANDN("."));
+            }
+            uart.nputs(ARRANDN(NEWLINE "SNM: \t"));
+            for(int i = 0; i < 4; i++){
+                uart.putu32d(read.sn[i]);
+                uart.nputs(ARRANDN("."));
+            }
+            uart.nputs(ARRANDN(NEWLINE "MAC: \t"));
+            for(int i = 0; i < 6; i++){
+                uart.putu32h(read.mac[i]);
+                uart.nputs(ARRANDN(" "));
+            }
+
+
+            wizchip_sw_reset();
+            if(0 != wizchip_init(NULL,NULL))
+                uart.nputs(ARRANDN("W5500 failed to reinit D:" NEWLINE)); // uh oh
+            vTaskDelay(pdMS_TO_TICKS(1000));
+            wizchip_getnetinfo(&read);
+            uart.nputs(ARRANDN(NEWLINE));
+        }
+
+        uart.nputs(ARRANDN(CLIRESET NEWLINE CLIHIGHLIGHT"IP: \t"));
+        for(int i = 0; i < 4; i++){
+            uart.putu32d(read.ip[i]);
+            uart.nputs(ARRANDN("."));
+        }
+        uart.nputs(ARRANDN(NEWLINE "SNM: \t"));
+        for(int i = 0; i < 4; i++){
+            uart.putu32d(read.sn[i]);
+            uart.nputs(ARRANDN("."));
+        }
+        uart.nputs(ARRANDN(NEWLINE "MAC: \t"));
+        for(int i = 0; i < 6; i++){
+            uart.putu32h(read.mac[i]);
+            uart.nputs(ARRANDN(" "));
+        }
+
+        uart.nputs(ARRANDN(CLIRESET NEWLINE));
+    }
+    while(1)
+    vTaskDelay(pdMS_TO_TICKS(1e3));
+
+    // broadcast just to make itself known to network equipment
 //    {
 //        SOCKET s = socketNum;
 //        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
@@ -158,7 +213,6 @@ void Task::ethModbus_task(void *){
 //        }
 //        close(s);
 //    }
-
 
     while(true) {
         for(uint8_t i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++){
@@ -208,10 +262,15 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                             uart.put32d(sn);
                             uart.nputs(ARRANDN(NEWLINE));
                             break;
+                        } else {
+                            uart.nputs(ARRANDN("IP inited socket not OK:"));
+                            uart.put32d(sn);
+                            uart.nputs(ARRANDN(NEWLINE));
+                            break;
                         }
                     }
 
-                    uart.nputs(ARRANDN("W5500 unknown response to initing socket:!"));
+                    uart.nputs(ARRANDN("W5500 unknown response to initing socket!:"));
                     uart.put32d(sn);
                     uart.nputs(ARRANDN(NEWLINE));
                     break;
@@ -545,6 +604,7 @@ bool setupWizchip() {
     DL_GPIO_clearPins(GPIOPINPUX(wiz_cs));
     DL_GPIO_enableOutput(GPIOPINPUX(wiz_cs));
     wiz_cs.clear();
+
     wiz_select();
     wiz_write_byte(0); // to reset the SCLK pin
     wiz_deselect();

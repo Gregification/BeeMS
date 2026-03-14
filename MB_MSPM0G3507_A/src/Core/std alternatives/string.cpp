@@ -20,6 +20,24 @@ buffersize_t ALT::srtCpy(char * to, buffersize_t maxLen, char const * from) {
 }
 
 void ALT::memcpy(void const * from, void * to, buffersize_t len) {
+    if(!from || !to)
+        return;
+
     for(buffersize_t i = 0; i < len; i++)
         ((uint8_t *)to)[i] = ((uint8_t *)from)[i];
+}
+
+
+bool ALT::memcmp(void const * a, void const * b, buffersize_t len) {
+    if(a == b)
+        return true;
+
+    if(!a || !b)
+        return false;
+
+    for(buffersize_t i = 0; i < len; i++)
+        if(((uint8_t *)a)[i] != ((uint8_t *)b)[i])
+            return false;
+
+    return true;
 }

@@ -6,6 +6,8 @@
  */
 
 #include "MasterBoard.hpp"
+#include "task.h"
+#include "Core/std alternatives/string.hpp"
 
 // absurd naming!!! yippie!
 
@@ -209,9 +211,128 @@ void MstrB::init() {
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
     }
+
+    delay_cycles(System::CLK::CPUCLK); // MCHS ADC does a auto calibration ~40mS after power up, it takes ~400mS
+}
+
+uint32_t MstrB::POST(char * error_msg, uint16_t max_msg_len) {
+    // TODO
+    // - try initing w5500 , the function hangs if the chip is dead
+    // - read from the MCHS inputs, the ADC's better respond and give some floating value
+
+    #ifdef PROJECT_ENABLE_SPI0
+    if(!System::SPI::spi0.MISO) {
+        ALT::srtCpy(error_msg, max_msg_len, "SPI0 no MISO pin officially declared");
+        return __LINE__;
+    }
+    #endif
+
+    #ifdef PROJECT_ENABLE_SPI1
+    if(!System::SPI::spi1.MISO) {
+        ALT::srtCpy(error_msg, max_msg_len, "SPI1 no MISO pin officially declared");
+        return __LINE__;
+    }
+    #endif
+
+    MstrB::Indi::LED::i1.set();
+    MstrB::Indi::LED::i2.set();
+    MstrB::Indi::LED::fault.set();
+    MstrB::Indi::LED::scheduler.set();
+    delay_cycles(2 * System::CLK::CPUCLK);
+    MstrB::Indi::LED::i1.clear();
+    MstrB::Indi::LED::i2.clear();
+    MstrB::Indi::LED::fault.clear();
+    MstrB::Indi::LED::scheduler.clear();
+    MstrB::IL::control.clear();
+
+    return 0;
 }
 
 uint8_t MstrB::getUnitBoardID() {
     // TODO: should be physically configurable on the board, just read back those settings.
     return 0xFE;
+}
+
+bool MCHScalibrationADC(System::SPI::SPI& spi) {
+    uint8_t rx[8];
+    bool ret = true;
+
+    static_assert(1024 == 1024/sizeof(rx) * sizeof(rx), "non even division");
+    for(uint16_t i = 0; ret && i < 1024/sizeof(rx); i++) {
+        spi.transfer_blocking(NULL, rx, sizeof(rx), NULL);
+
+        for(uint16_t j = 0; j < sizeof(rx); j++) {
+            if(i * sizeof(rx) + j < 2) // ignore the first 14 bits . (ignores first 16b)
+                continue;
+
+            if(rx[j] != 0xFF) {
+                System::UART::uart_ui.nputs(ARRANDN(" womp "));
+                ret = false;
+                break;
+            }
+        }
+    }
+
+    if(ret) {
+        // wait for SDO to go high
+        // the SPI MISO line will hold low for like ~400mS then go to high-z , the MCU
+        //  has a PU on it.
+        TickType_t startTime, now;
+        startTime = now = xTaskGetTickCount();
+
+        do {
+            now = xTaskGetTickCount();
+
+            if(spi.MISO->get())
+                break;
+
+            if((portTICK_PERIOD_MS * (now-startTime)) > 500)
+                ret = false;
+
+            startTime = now;
+            vTaskDelay(0);
+        } while(ret);
+
+        TickType_t ms = portTICK_PERIOD_MS * (now-startTime);
+        if(ms < 350 || ms > 450) // unexpected calibration time
+            ret = false;
+    }
+
+    return ret;
+}
+
+bool MstrB::MHCS::calibrationADCPer() {
+    bool ret;
+    cs_precise.set();
+    ret = MCHScalibrationADC(spi);
+    cs_precise.clear();
+    return ret;
+}
+
+bool MstrB::MHCS::calibrationADCImp() {
+    bool ret;
+    cs_imprecise.set();
+    ret = MCHScalibrationADC(spi);
+    cs_imprecise.clear();
+    return ret;
+}
+
+uint16_t MstrB::MHCS::readRawPer() {
+    uint16_t raw;
+    spi.transfer_blocking(NULL, &raw, sizeof(raw), &cs_precise);
+    return raw;
+}
+
+uint16_t MstrB::MHCS::readRawImp() {
+    uint16_t raw;
+    spi.transfer_blocking(NULL, &raw, sizeof(raw), &cs_imprecise);
+    return raw;
+}
+
+uint16_t MstrB::MHCS::readPer_mV() {
+    return readRawPer() * (ADCReference_100uV / BV(ADCResolution_b)) / 10;
+}
+
+uint16_t MstrB::MHCS::readImp_mV() {
+    return readRawImp() * (ADCReference_100uV / BV(ADCResolution_b)) / 10;
 }

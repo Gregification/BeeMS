@@ -44,18 +44,22 @@ int main(){
     System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     MstrB::init();
+    {
+        char errorMsg[MAX_STR_ERROR_LEN] = "";
+        uint32_t error = MstrB::POST(errorMsg, sizeof(errorMsg));
+        if(error) {
+            while(1) {
+                System::UART::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE "POST ERROR #"));
+                System::UART::uart_ui.putu32h(error);
+                System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "\"\"\"" NEWLINE));
+                System::UART::uart_ui.nputs(errorMsg, sizeof(errorMsg));
+                System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "\"\"\"" NEWLINE));
+                DL_GPIO_togglePins(GPIOPINPUX(MstrB::Indi::LED::fault));
 
-    MstrB::IL::control.clear();
-
-    MstrB::Indi::LED::i1.set();
-    MstrB::Indi::LED::i2.set();
-    MstrB::Indi::LED::fault.set();
-    MstrB::Indi::LED::scheduler.set();
-    delay_cycles(2 * System::CLK::CPUCLK);
-    MstrB::Indi::LED::i1.clear();
-    MstrB::Indi::LED::i2.clear();
-    MstrB::Indi::LED::fault.clear();
-    MstrB::Indi::LED::scheduler.clear();
+                delay_cycles(System::CLK::CPUCLK);
+            }
+        }
+    }
 
     xTaskCreate(Task::blink_task,
             "blink_task",
@@ -78,12 +82,19 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-    xTaskCreate(Task::adc_task,
-            "adc_task",
-            configMINIMAL_STACK_SIZE * 2,
+    xTaskCreate(Task::ethModbus_task,
+            "ethModbus_task",
+            configMINIMAL_STACK_SIZE*10,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
+
+//    xTaskCreate(Task::adc_task,
+//            "adc_task",
+//            configMINIMAL_STACK_SIZE,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
     vTaskStartScheduler();
 

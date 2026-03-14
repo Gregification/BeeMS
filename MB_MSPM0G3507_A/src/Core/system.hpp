@@ -282,6 +282,7 @@ namespace System {
         struct SPI : Lockable {
             SPI_Regs * const reg;
             const IRQn_Type irq_type;
+            System::GPIO::GPIO const * MISO;
 
             /* transmitted when RX is needed but no TX is provided */
             uint8_t TRANSFER_FILLER_BYTE;
