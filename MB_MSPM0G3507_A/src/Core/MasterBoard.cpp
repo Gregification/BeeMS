@@ -17,7 +17,7 @@ namespace MstrB {
             .GLV_IL_RELAY_usr_requested = true,     // ^
         };
     OpVars_t opVars = {
-            .GLV_IL_RELAY_engaged = false,
+            .GLV_IL_RELAY_engage = false,
         };
 
     System::SPI::SPI & MHCS::spi  = System::SPI::spi1;
@@ -263,7 +263,7 @@ uint8_t MstrB::getUnitBoardID() {
 }
 
 bool MstrB::IL::setEnable(bool v){
-    opVars.GLV_IL_RELAY_engaged = v;
+    opVars.GLV_IL_RELAY_engage = v;
     return getStatus() == v;
 }
 
@@ -285,7 +285,7 @@ bool MstrB::IL::getStatus() {
              break;
         }
 
-        if(opVars.GLV_IL_RELAY_engaged)
+        if(opVars.GLV_IL_RELAY_engage)
             _control.set();
         else
             _control.clear();

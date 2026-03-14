@@ -44,8 +44,20 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, volatile uint16_
             *out = MstrB::IL::getInput();
             break;
 
-        case RegAddr::GLV_IL_FORWARD:   // <coil>
+        case RegAddr::GLV_IL_CTRL_STATUS:   // <coil>
             *out = MstrB::IL::getStatus();
+            break;
+
+        case RegAddr::GLV_IL_CTRL_sw_dsrd:   // <coil>
+            *out = MstrB::opVars.GLV_IL_RELAY_engage;
+            break;
+
+        case RegAddr::GLV_IL_CTRL_usr_dsrd:   // <coil>
+            *out = MstrB::opProfile.GLV_IL_RELAY_usr_requested;
+            break;
+
+        case RegAddr::GLV_IL_CTRL_usr_ovrd:   // <coil>
+            *out = MstrB::opProfile.GLV_IL_RELAY_allow_usr_ovrd;
             break;
 
         case RegAddr::HRLV_IL_PRESENCE: // <discrete>
@@ -65,7 +77,15 @@ bool Networking::Modbus::MasterRegisters::setReg(uint16_t addr, uint16_t val) {
     switch(addr){
         default: return false;
 
-        case RegAddr::GLV_IL_FORWARD:   // <coil>
+        case RegAddr::GLV_IL_CTRL_usr_dsrd:   // <coil>
+            MstrB::opProfile.GLV_IL_RELAY_usr_requested = val;
+            break;
+
+        case RegAddr::GLV_IL_CTRL_usr_ovrd:   // <coil>
+            MstrB::opProfile.GLV_IL_RELAY_allow_usr_ovrd = val;
+            break;
+
+        case RegAddr::GLV_IL_CTRL_STATUS:   // <coil>
             MstrB::opProfile.GLV_IL_RELAY_usr_requested = val;
             break;
     }
@@ -73,16 +93,16 @@ bool Networking::Modbus::MasterRegisters::setReg(uint16_t addr, uint16_t val) {
     return true;
 }
 
-bool Networking::Modbus::MasterCommands::command(uint16_t command, void const * data) {
+bool Networking::Modbus::MasterCommands::command(uint16_t command, uint16_t data) {
     switch(command) {
         default: return false;
 
-        case CmdAddr::SET_GLV_IL_FORWARD_OVERRIDE:
-            MstrB::opProfile.GLV_IL_RELAY_allow_usr_ovrd = !data ? false : *(bool const *)data;
-            break;
-
-        case CmdAddr::SET_GLV_IL_FORWARD_user_req:
-            MstrB::opProfile.GLV_IL_RELAY_usr_requested = !data ? false : *(bool const *)data;
+        case CmdAddr::ABUSE_GLV_IL_RELAY:
+            for(int i = 0; i < 5; i++){
+                DL_GPIO_togglePins(GPIOPINPUX(MstrB::IL::_control));
+                vTaskDelay(pdMS_TO_TICKS(15));
+            }
+            MstrB::IL::getStatus(); // reset to proper value
             break;
     }
 

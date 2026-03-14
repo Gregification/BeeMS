@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DeviceTemplate>
   <Options>
-    <ZeroAddr>false</ZeroAddr>
+    <ZeroAddr>true</ZeroAddr>
     <DecAddr>true</DecAddr>
     <DefByteOrder2 />
     <DefByteOrder4 />
@@ -18,17 +18,20 @@
       <Elem tagCode="bms fault" name="bms fault" />
     </ElemGroup>
     <ElemGroup active="true" dataBlock="DiscreteInputs" address="20" name="GLV interlock">
-      <Elem tagCode="presence" name="presence" />
+      <Elem tagCode="GLV IL presence" name="GLV IL presence" />
     </ElemGroup>
     <ElemGroup active="true" dataBlock="Coils" address="25" name="GLV interlock">
-      <Elem readOnly="false" tagCode="forward" name="forward" />
+      <Elem readOnly="true" tagCode="GLV IL control status" name="GLV IL control status" />
+      <Elem readOnly="false" tagCode="GLV IL user desired" name="GLV IL user desired" />
+      <Elem readOnly="false" tagCode="GLV IL user override" name="GLV IL user override" />
+      <Elem readOnly="true" tagCode="GLV IL software desired" name="GLV IL software desired" />
     </ElemGroup>
     <ElemGroup active="true" dataBlock="DiscreteInputs" address="30" name="HRLV">
-      <Elem tagCode="interlock presence" name="interlock presence" />
-      <Elem tagCode="LV presence" name="LV presence" />
+      <Elem tagCode="HRLV IL presence" name="HRLV IL presence" />
+      <Elem tagCode="HRLV LV presence" name="HRLV LV presence" />
     </ElemGroup>
   </ElemGroups>
   <Cmds>
-    <Cmd dataBlock="Coils" multiple="false" address="0" cmdNum="20" cmdCode="OVRD GLV IL" name="OVRD GLV IL" />
+    <Cmd dataBlock="Coils" multiple="false" address="28" cmdNum="0" cmdCode="abuse GLV IL" name="abuse GLV IL" />
   </Cmds>
 </DeviceTemplate>

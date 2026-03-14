@@ -31,7 +31,7 @@ namespace MstrB {
      * operation variables. for internal software use.
      */
     struct __attribute__((__packed__)) OpVars_t {
-        bool GLV_IL_RELAY_engaged                   : 1;
+        bool GLV_IL_RELAY_engage                    : 1;
     };
     extern OpVars_t opVars;
 
