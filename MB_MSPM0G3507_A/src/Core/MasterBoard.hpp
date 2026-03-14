@@ -27,6 +27,19 @@ namespace MstrB {
         const GPIO::GPIO
             cs_precise      = GPIO::PB18,
             cs_imprecise    = GPIO::PB19;
+
+        const uint16_t  ADCReference_100uV = 40960;
+        const uint8_t   ADCResolution_b = 14;
+
+        /** return true on success. REQUIRES RTOS. DOES NOTWORK, BROKEN */
+        // auto calibration takes place ~40mS after the ADC gets power.
+        bool calibrationADCPer();
+        bool calibrationADCImp();
+
+        uint16_t readRawPer();
+        uint16_t readRawImp();
+        uint16_t readPer_mV();
+        uint16_t readImp_mV();
     }
 
     /** Indicator LEDs */
@@ -85,6 +98,11 @@ namespace MstrB {
      * - used by the network to identity instances
      */
     uint8_t getUnitBoardID();
+
+    /** is not a exhaustive test.
+     * Returns 0 on successful post.
+     */
+    uint32_t POST(char * error_msg, uint16_t max_msg_len);
 }
 
 

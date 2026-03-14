@@ -28,6 +28,7 @@ void Task::blink_task(void*) {
 //    auto &led = MstrB::Indi::LED::i2;
 //    auto &led = MstrB::Indi::LED::fault;
     auto &led = MstrB::Indi::LED::scheduler;
+//      auto &led = MstrB::IL::control;
 
 //    auto &led = System::GPIO::PA26;
 

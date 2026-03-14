@@ -199,6 +199,7 @@ void System::init() {
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
+        spi0.MISO = &GPIO::PA13;
         DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO , PA13
                 IOMUX_PINCM35,
                 IOMUX_PINCM35_PF_SPI0_POCI,
@@ -270,6 +271,7 @@ void System::init() {
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
+        spi1.MISO = &GPIO::PA16;
         DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO/POCI , PA16
                 IOMUX_PINCM38,
                 IOMUX_PINCM38_PF_SPI1_POCI,
