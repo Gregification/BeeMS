@@ -40,7 +40,7 @@ void Task::MCAN_test_task(void *){
         DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
 
         vTaskDelay(pdMS_TO_TICKS(400));
-    } while(0);
+    } while(1);
 
     //--- RX --------------------------------------------------
 

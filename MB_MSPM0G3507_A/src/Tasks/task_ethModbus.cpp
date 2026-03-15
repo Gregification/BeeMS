@@ -65,8 +65,10 @@ uint8_t                         sockets[] = {0,1,2,3};
 
 wiz_NetInfo netConfig = {
            .mac = {0xBE,0xEE,0xEE,0x00,0x00,0x00}, // arbitrary
-           .ip  = {192,168,1,252},
-           .sn  = {255,255,255,0},
+//           .ip  = {192,168,1,252},
+//           .sn  = {255,255,255,0},
+           .ip  = {169,254,0,1},
+           .sn  = {255,255,0,0},
            .gw  = {192,168,1,1},
            .dns = {8,8,8,8},
            .dhcp= NETINFO_STATIC
@@ -110,7 +112,7 @@ void Task::ethModbus_task(void *){
     _RXBuffer rxbuf = {0};
     _TXBuffer txbuf = {0};
 
-    wiz_spi.setSCLKTarget(2e6);
+    wiz_spi.setSCLKTarget(32e6);
 
     /*** W5500 init *****************/
 
@@ -201,25 +203,19 @@ void Task::ethModbus_task(void *){
         uart.nputs(ARRANDN(CLIRESET NEWLINE));
     }
 
-    {
-        for(int i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++) {
-            close(sockets[i]);
-            vTaskDelay(pdMS_TO_TICKS(50));
-        }
-    }
-
-    // broadcast to ensure device is known to network equipment
-    {
-        SOCKET s = sockets[0];
-        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
-        if(error == s) {
-            uint8_t addr[4];
-            ALT::memcpy(netConfig.ip, addr, sizeof(addr));
-            addr[3] = 255;
-            sendto(s, addr, 1, addr, 1234);
-        }
-        close(s);
-    }
+//
+//    // broadcast to ensure device is known to network equipment
+//    {
+//        SOCKET s = sockets[0];
+//        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
+//        if(error == s) {
+//            uint8_t addr[4];
+//            ALT::memcpy(netConfig.ip, addr, sizeof(addr));
+//            addr[3] = 255;
+//            sendto(s, addr, 1, addr, 1234);
+//        }
+//        close(s);
+//    }
 
     while(true) {
         for(uint8_t i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++){
@@ -315,9 +311,9 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                 default:
                     if(status >= 0 && status <= sizeof(rxbuf->arr)){
                         // yippie
-//                        uart.nputs(ARRANDN("ModbusTCP received on socket #:"));
-//                        uart.put32d(sn);
-//                        uart.nputs(ARRANDN(NEWLINE));
+                        uart.nputs(ARRANDN("ModbusTCP received on socket #:"));
+                        uart.put32d(sn);
+                        uart.nputs(ARRANDN(NEWLINE));
                         break;
                     }
 
@@ -376,10 +372,10 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                 case Networking::Modbus::Function::R_DISRETE_INPUTS:
                 case Networking::Modbus::Function::R_HOLDING_REGS:
                 case Networking::Modbus::Function::R_INPUT_REGS:
-//                    uart.nputs(ARRANDN("R_" NEWLINE));
+                    uart.nputs(ARRANDN("R_" NEWLINE));
                     break;
                 default:
-//                    uart.nputs(ARRANDN("D_" NEWLINE));
+                    uart.nputs(ARRANDN("D_" NEWLINE));
                     break;
             }
 
@@ -400,9 +396,9 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
             // is NOT intended for this device?
             if(rxheader->adu[0].unitID != MstrB::getUnitBoardID() && rxheader->adu[0].unitID != 0) {
                 //  forward packet over CAN to intended device
-//                uart.nputs(ARRANDN("\t forwarded to CAN bus." NEWLINE));
+                uart.nputs(ARRANDN("\t forwarded to CAN bus." NEWLINE));
                 if(forwardModbusTCP2CAN(rxbuf, txbuf, sn)) {
-//                    uart.nputs(ARRANDN("\tforward: success" NEWLINE));
+                    uart.nputs(ARRANDN("\tforward: success" NEWLINE));
                 } else {
                     uart.nputs(ARRANDN("\tModbusTCP -> CAN . FAILED . targUID:"));
                     uart.putu32h(rxheader->adu[0].unitID);
@@ -423,6 +419,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 //                    }
 //                    uart.nputs(ARRANDN(NEWLINE));
 //                }
+                uart.nputs(ARRANDN("processed request, sending response" NEWLINE));
                 send(sn, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
             } else {
                 uart.nputs(ARRANDN("failed to process request" NEWLINE));
@@ -432,16 +429,39 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
         } break;
 
         case SOCK_LISTEN:
+//            uart.nputs(ARRANDN("SOCK_LISTEN" NEWLINE));
+            break;
+
         case SOCK_FIN_WAIT:
+//            uart.nputs(ARRANDN("SOCK_FIN_WAIT" NEWLINE));
+            break;
+
         case SOCK_CLOSING:
+//            uart.nputs(ARRANDN("SOCK_CLOSING" NEWLINE));
+            break;
+
         case SOCK_TIME_WAIT:
+//            uart.nputs(ARRANDN("SOCK_TIME_WAIT" NEWLINE));
+            break;
+
         case SOCK_CLOSE_WAIT:
+//            uart.nputs(ARRANDN("SOCK_CLOSE_WAIT" NEWLINE));
+            break;
+
         case SOCK_LAST_ACK:
+//            uart.nputs(ARRANDN("SOCK_LAST_ACK" NEWLINE));
+            break;
+
         case SOCK_SYNRECV:
+//            uart.nputs(ARRANDN("SOCK_SYNRECV" NEWLINE));
+            break;
+
         case SOCK_SYNSENT:
+//            uart.nputs(ARRANDN("SOCK_SYNSENT" NEWLINE));
             break;
 
         default:
+            uart.nputs(ARRANDN("DEFAULT" NEWLINE));
             close(sn);
             break;
     }

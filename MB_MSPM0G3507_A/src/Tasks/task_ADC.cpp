@@ -1,10 +1,10 @@
 #include <FreeRTOS.h>
+#include <Middleware/MCP33151/MCP33151.hpp>
 #include <task.h>
 #include <Tasks/task_ADC.hpp>
 #include <cstdint>
 #include "Core/system.hpp"
 #include "Core/MasterBoard.hpp"
-#include "Middleware/MCP33151/adc.hpp"
 
 System::UART::UART &            uartt = System::UART::uart_ui;
 

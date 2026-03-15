@@ -49,8 +49,8 @@
       <Channel type="TcpClient" driver="DrvCnlBasic">
         <Option name="Behavior" value="Master" />
         <Option name="ConnectionMode" value="Shared" />
-        <Option name="DisconnectOnError" value="false" />
-        <Option name="Host" value="192.168.1.252" />
+        <Option name="DisconnectOnError" value="true" />
+        <Option name="Host" value="169.254.0.1" />
         <Option name="ReconnectAfter" value="3" />
         <Option name="StayConnected" value="true" />
         <Option name="TcpPort" value="502" />
@@ -59,8 +59,8 @@
         <Option name="TransMode" value="TCP" />
       </CustomOptions>
       <DevicePolling>
-        <Device active="false" isBound="true" number="1" name="BeeMS Master 0" driver="DrvModbus" numAddress="0" strAddress="" pollOnCmd="false" timeout="100" delay="200" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_MasterBoard.xml" />
-        <Device active="true" isBound="true" number="2" name="Module0_0" driver="DrvModbus" numAddress="1" strAddress="" pollOnCmd="false" timeout="200" delay="200" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_SlaveBoard.xml" />
+        <Device active="true" isBound="true" number="1" name="BeeMS Master 0" driver="DrvModbus" numAddress="0" strAddress="" pollOnCmd="false" timeout="150" delay="300" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_MasterBoard.xml" />
+        <Device active="false" isBound="true" number="2" name="Module0_0" driver="DrvModbus" numAddress="1" strAddress="" pollOnCmd="false" timeout="200" delay="200" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_SlaveBoard.xml" />
       </DevicePolling>
     </Line>
   </Lines>

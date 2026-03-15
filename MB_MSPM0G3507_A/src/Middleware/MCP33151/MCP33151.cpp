@@ -1,7 +1,7 @@
 // read function for MCP33151 ADC
 // need to add coloumb counting 
 
-#include "adc.hpp"
+#include <Middleware/MCP33151/MCP33151.hpp>
 
 namespace ADC
 {
