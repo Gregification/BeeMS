@@ -32,6 +32,7 @@ namespace VT {
      */
     struct __attribute__((__packed__)) OpVars_t {
         uint16_t cell_mV[14];
+        uint16_t stack_10mV;
         uint16_t cell_mK[7];
         uint16_t die_mK;
     };

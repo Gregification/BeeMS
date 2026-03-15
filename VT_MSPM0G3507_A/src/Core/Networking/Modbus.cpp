@@ -19,12 +19,16 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
     /*** general validation ***********************************/
 
     // is user bonkers
-    if(!rxheader || !txheader)
+    if(!rxheader || !txheader) {
+        uart.nputs(ARRANDN("Modbus::ProcessRequest : user is bonkers" NEWLINE));
         return false;
+    }
 
     // is user stupid
-    if(rxlen < sizeof(MBAPHeader) + ntoh16(rxheader->len))
+    if(rxlen < sizeof(MBAPHeader) + ntoh16(rxheader->len)) {
+        uart.nputs(ARRANDN("Modbus::ProcessRequest : user is stupid" NEWLINE));
         return false;
+    }
 
 
     /*** packet specific response *****************************/
@@ -104,17 +108,25 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                 txadu       = rxadu;
                 resp->byteCount = 0;
 
-                System::uart_ui.nputs(ARRANDN("- ntoh16(query->len):"));
-                System::uart_ui.put32d(ntoh16(query->len));
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+//                System::uart_ui.nputs(ARRANDN("- ntoh16(query->len):"));
+//                System::uart_ui.put32d(ntoh16(query->len));
+//                System::uart_ui.nputs(ARRANDN(NEWLINE));
                 for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
                     uint16_t res;
 
-                    if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i) // constrain to tx buffer size
+                    if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i){ // constrain to tx buffer size
+                        uart.nputs(ARRANDN("Modbus::ProcessRequest : R in/ho regs, too big: "));
+                        uart.put32d(i);
+                        uart.nputs(ARRANDN(NEWLINE));
                         return false;
+                    }
 
-                    if(!Networking::Modbus::VTRegisters::getReg(ntoh16(query->start) + i, &res))
+                    if(!Networking::Modbus::VTRegisters::getReg(ntoh16(query->start) + i, &res)) {
+                        uart.nputs(ARRANDN("Modbus::ProcessRequest : R in/ho regs, unknown #: "));
+                        uart.put32d(ntoh16(query->start) + i);
+                        uart.nputs(ARRANDN(NEWLINE));
                         return false;
+                    }
 
 
                     resp->val16[i] = hton16(res);

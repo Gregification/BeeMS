@@ -13,6 +13,7 @@
       <Elem type="ushort" isBitMask="false" tagCode="Software Version" name="Software Version" />
     </ElemGroup>
     <ElemGroup active="true" dataBlock="InputRegisters" address="20" name="Pack Voltage">
+      <Elem type="ushort" isBitMask="false" tagCode="stack" name="stack" />
       <Elem type="ushort" isBitMask="false" tagCode="c1" name="c1" />
       <Elem type="ushort" isBitMask="false" tagCode="c2" name="c2" />
       <Elem type="ushort" isBitMask="false" tagCode="c3" name="c3" />
@@ -27,9 +28,9 @@
       <Elem type="ushort" isBitMask="false" tagCode="c12" name="c12" />
       <Elem type="ushort" isBitMask="false" tagCode="c13" name="c13" />
       <Elem type="ushort" isBitMask="false" tagCode="c14" name="c14" />
-      <Elem type="ushort" isBitMask="false" tagCode="stack" name="stack" />
     </ElemGroup>
-    <ElemGroup active="true" dataBlock="InputRegisters" address="0" name="Pack Temperature">
+    <ElemGroup active="true" dataBlock="InputRegisters" address="70" name="Pack Temperature">
+      <Elem type="ushort" isBitMask="false" tagCode="bbq" name="bbq" />
       <Elem type="ushort" isBitMask="false" tagCode="t1" name="t1" />
       <Elem type="ushort" isBitMask="false" tagCode="t2" name="t2" />
       <Elem type="ushort" isBitMask="false" tagCode="t3" name="t3" />
@@ -37,7 +38,6 @@
       <Elem type="ushort" isBitMask="false" tagCode="t5" name="t5" />
       <Elem type="ushort" isBitMask="false" tagCode="t6" name="t6" />
       <Elem type="ushort" isBitMask="false" tagCode="t7" name="t7" />
-      <Elem type="ushort" isBitMask="false" tagCode="bbq" name="bbq" />
     </ElemGroup>
   </ElemGroups>
   <Cmds />

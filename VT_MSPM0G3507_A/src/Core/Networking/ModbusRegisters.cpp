@@ -22,6 +22,7 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
         case RegAddr::HW_ID:        *out = System::mcuID; break;
         case RegAddr::SW_VER:       *out = 3; break;
 
+        case RegAddr::STACK_10mV:   *out = VT::opVars.cell_mV[0]; break;
         case RegAddr::CELL1_mV:     *out = VT::opVars.cell_mV[0]; break;
         case RegAddr::CELL2_mV:     *out = VT::opVars.cell_mV[1]; break;
         case RegAddr::CELL3_mV:     *out = VT::opVars.cell_mV[2]; break;

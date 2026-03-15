@@ -20,8 +20,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
-#include <Tasks/task_bqCanInterface.hpp>
-
+#include <Tasks/task_CanModbusInterface.hpp>
 #include "Core/system.hpp"
 #include "Core/VT.hpp"
 #include "Core/std alternatives/string.hpp"
@@ -32,7 +31,7 @@ auto & uart     = System::uart_ui;
 auto & can      = System::canFD0;
 constexpr DL_MCAN_RX_FIFO_NUM canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_0;
 
-void Task::bqCanInterface_task(void *){
+void Task::canModbusInterface_task(void *){
     using namespace Networking;
 
     /*
@@ -80,8 +79,8 @@ void Task::bqCanInterface_task(void *){
 
             can.giveResource();
         } else {
-            vTaskDelay(pdMS_TO_TICKS(10)); // eye-balled value
-            System::uart_ui.nputs(ARRANDN("can timeout" NEWLINE));
+            vTaskDelay(pdMS_TO_TICKS(100)); // eye-balled value
+            System::uart_ui.nputs(ARRANDN("CAN-Modbus failed to lock can resource" NEWLINE));
             continue;
         }
 
@@ -90,21 +89,21 @@ void Task::bqCanInterface_task(void *){
 
         uint8_t socketbuffer;
 
-        {
-            uart.nputs(ARRANDN(NEWLINE " \tReceived from CAN bus: "));
-
-            for(uint8_t j = 0; j < System::CANFD::DLC2Len(&canrx); j++){
-                if(j % 10 == 0)
-                    uart.nputs(ARRANDN(NEWLINE " \t"));
-
-                uart.nputs(ARRANDN(" "));
-                uart.putu32h(canrx.data[j]);
-            }
-            uart.nputs(ARRANDN(NEWLINE));
-        }
+//        {
+//            uart.nputs(ARRANDN(NEWLINE " \tReceived from CAN bus: "));
+//
+//            for(uint8_t j = 0; j < System::CANFD::DLC2Len(&canrx); j++){
+//                if(j % 10 == 0)
+//                    uart.nputs(ARRANDN(NEWLINE " \t"));
+//
+//                uart.nputs(ARRANDN(" "));
+//                uart.putu32h(canrx.data[j]);
+//            }
+//            uart.nputs(ARRANDN(NEWLINE));
+//        }
 
         if(Bridge::CANModbus::CAN_to_ModbusTCP(&canrx, &rxbuf.mbap, &socketbuffer)) {
-            uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
+//            uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
 
             /*** validation ***********************/
 
@@ -120,26 +119,26 @@ void Task::bqCanInterface_task(void *){
 
             /*** process packet *******************/
 
-            {
-                uart.nputs(ARRANDN(NEWLINE " \treceived CAN -> Modbus: "));
-
-
-                for(uint8_t j = 0; j < sizeof(rxbuf.mbap) + ntoh16(rxbuf.mbap.len); j++){
-                    if(j % 10 == 0)
-                        uart.nputs(ARRANDN(NEWLINE " \t"));
-
-                    uart.nputs(ARRANDN(" "));
-                    uart.putu32h(((uint8_t *)&rxbuf.mbap)[j]);
-                }
-                uart.nputs(ARRANDN(NEWLINE));
-            }
+//            {
+//                uart.nputs(ARRANDN(NEWLINE " \treceived CAN -> Modbus: "));
+//
+//
+//                for(uint8_t j = 0; j < sizeof(rxbuf.mbap) + ntoh16(rxbuf.mbap.len); j++){
+//                    if(j % 10 == 0)
+//                        uart.nputs(ARRANDN(NEWLINE " \t"));
+//
+//                    uart.nputs(ARRANDN(" "));
+//                    uart.putu32h(((uint8_t *)&rxbuf.mbap)[j]);
+//                }
+//                uart.nputs(ARRANDN(NEWLINE));
+//            }
 
             if(Modbus::ProcessRequest(&rxbuf.mbap, sizeof(rxbuf), &txbuf.mbap, sizeof(txbuf))) {
-                uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
+//                uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
 
                 if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx, socketbuffer)){
                     // transmit CAN
-                    uart.nputs(ARRANDN("  response CAN packet ready to send" NEWLINE));
+//                    uart.nputs(ARRANDN("  response CAN packet ready to send" NEWLINE));
 
                     DL_MCAN_TxFIFOStatus tf;
 

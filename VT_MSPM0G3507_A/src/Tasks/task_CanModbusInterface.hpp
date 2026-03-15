@@ -19,7 +19,7 @@ namespace Task {
      * - uses CAN FIFO 1
      * - UI UART
      */
-    void bqCanInterface_task(void *);
+    void canModbusInterface_task(void *);
 }
 
 #endif /* SRC_CORE_FIDDLE_HPP_ */

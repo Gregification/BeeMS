@@ -30,7 +30,7 @@
 #include "Core/VT.hpp"
 
 #include <Tasks/task_BMS.hpp>
-#include <Tasks/task_bqCanInterface.hpp>
+#include <Tasks/task_CanModbusInterface.hpp>
 #include "Tasks/examples/example_blink_task.hpp"
 #include "Tasks/examples/example_MCAN_task.hpp"
 
@@ -71,9 +71,9 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-    xTaskCreate(Task::bqCanInterface_task,
+    xTaskCreate(Task::canModbusInterface_task,
             "non_BMS_functions_task",
-            configMINIMAL_STACK_SIZE * 2,
+            configMINIMAL_STACK_SIZE * 3,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);

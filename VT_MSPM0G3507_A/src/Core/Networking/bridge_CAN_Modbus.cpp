@@ -4,6 +4,10 @@
  *  Created on: Dec 11, 2025
  *      Author: turtl
  */
+/**
+ * - this packet mapping can be improved to get like 5B more room. some of the modbus data sent is redundant
+ */
+
 
 #include "bridge_CAN_Modbus.hpp"
 #include "Core/system.hpp"
