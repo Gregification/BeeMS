@@ -50,6 +50,7 @@ namespace Networking {
                 CELL5_mK                            = 74,   // <input>
                 CELL6_mK                            = 75,   // <input>
                 CELL7_mK                            = 76,   // <input>
+                DIE_mK                              = 100,  // <input>          on chip bbq temperature
 
                 _end                                ,       // software reference
             };

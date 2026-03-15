@@ -255,9 +255,9 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
             switch(error = socket(sn, Sn_MR_TCP, modbusTCPPort, SF_IO_NONBLOCK)){
                 default:
                     if(error == sn) {
-                        uart.nputs(ARRANDN("IP socket inited:"));
-                        uart.put32d(sn);
-                        uart.nputs(ARRANDN(NEWLINE));
+//                        uart.nputs(ARRANDN("IP socket inited:"));
+//                        uart.put32d(sn);
+//                        uart.nputs(ARRANDN(NEWLINE));
 
                         if(SOCK_OK == listen(sn)) {
                             // yippie
@@ -311,9 +311,9 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                 default:
                     if(status >= 0 && status <= sizeof(rxbuf->arr)){
                         // yippie
-                        uart.nputs(ARRANDN("ModbusTCP received on socket #:"));
-                        uart.put32d(sn);
-                        uart.nputs(ARRANDN(NEWLINE));
+//                        uart.nputs(ARRANDN("ModbusTCP received on socket #:"));
+//                        uart.put32d(sn);
+//                        uart.nputs(ARRANDN(NEWLINE));
                         break;
                     }
 
@@ -353,29 +353,29 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
             switch(rxbuf->mbap.adu->func) {
                 case Networking::Modbus::Function::W_COIL:
-                    uart.nputs(ARRANDN("W_COIL" NEWLINE));
+//                    uart.nputs(ARRANDN("W_COIL" NEWLINE));
                     break;
 
                 case Networking::Modbus::Function::W_COILS:
-                    uart.nputs(ARRANDN("W_COILS" NEWLINE));
+//                    uart.nputs(ARRANDN("W_COILS" NEWLINE));
                     break;
 
                 case Networking::Modbus::Function::W_REG:
-                    uart.nputs(ARRANDN("W_REG" NEWLINE));
+//                    uart.nputs(ARRANDN("W_REG" NEWLINE));
                     break;
 
                 case Networking::Modbus::Function::W_REGS:
-                    uart.nputs(ARRANDN("W_REGS" NEWLINE));
+//                    uart.nputs(ARRANDN("W_REGS" NEWLINE));
                     break;
 
                 case Networking::Modbus::Function::R_COILS:
                 case Networking::Modbus::Function::R_DISRETE_INPUTS:
                 case Networking::Modbus::Function::R_HOLDING_REGS:
                 case Networking::Modbus::Function::R_INPUT_REGS:
-                    uart.nputs(ARRANDN("R_" NEWLINE));
+//                    uart.nputs(ARRANDN("R_" NEWLINE));
                     break;
                 default:
-                    uart.nputs(ARRANDN("D_" NEWLINE));
+//                    uart.nputs(ARRANDN("D_" NEWLINE));
                     break;
             }
 
@@ -396,13 +396,13 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
             // is NOT intended for this device?
             if(rxheader->adu[0].unitID != MstrB::getUnitBoardID() && rxheader->adu[0].unitID != 0) {
                 //  forward packet over CAN to intended device
-                uart.nputs(ARRANDN("\t forwarded to CAN bus." NEWLINE));
+//                uart.nputs(ARRANDN("\t forwarded to CAN bus." NEWLINE));
                 if(forwardModbusTCP2CAN(rxbuf, txbuf, sn)) {
-                    uart.nputs(ARRANDN("\tforward: success" NEWLINE));
+//                    uart.nputs(ARRANDN("\tforward: success" NEWLINE));
                 } else {
-                    uart.nputs(ARRANDN("\tModbusTCP -> CAN . FAILED . targUID:"));
-                    uart.putu32h(rxheader->adu[0].unitID);
-                    uart.nputs(ARRANDN(NEWLINE));
+//                    uart.nputs(ARRANDN("\tModbusTCP -> CAN . FAILED . targUID:"));
+//                    uart.putu32h(rxheader->adu[0].unitID);
+//                    uart.nputs(ARRANDN(NEWLINE));
                 }
             }
             else if(ProcessRequest(rxheader, sizeof(rxbuf->arr), txheader, sizeof(txbuf->arr))) {
@@ -419,7 +419,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 //                    }
 //                    uart.nputs(ARRANDN(NEWLINE));
 //                }
-                uart.nputs(ARRANDN("processed request, sending response" NEWLINE));
+//                uart.nputs(ARRANDN("processed request, sending response" NEWLINE));
                 send(sn, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
             } else {
                 uart.nputs(ARRANDN("failed to process request" NEWLINE));
@@ -461,7 +461,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
             break;
 
         default:
-            uart.nputs(ARRANDN("DEFAULT" NEWLINE));
+//            uart.nputs(ARRANDN("DEFAULT" NEWLINE));
             close(sn);
             break;
     }

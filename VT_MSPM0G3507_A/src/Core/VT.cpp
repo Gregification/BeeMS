@@ -20,6 +20,14 @@ namespace VT {
         };
     System::GPIO::GPIO const & bqReset = System::GPIO::PA15; // v3
     //    System::GPIO::GPIO &bqReset = System::GPIO::PA21; // v2.2
+
+    OpProfile_t opProfile = {
+
+    };
+
+    OpVars_t opVars = {
+
+    };
 }
 
 void VT::preScheduler_init(){
