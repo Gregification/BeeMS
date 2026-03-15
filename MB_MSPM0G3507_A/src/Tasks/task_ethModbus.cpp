@@ -201,18 +201,25 @@ void Task::ethModbus_task(void *){
         uart.nputs(ARRANDN(CLIRESET NEWLINE));
     }
 
+    {
+        for(int i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++) {
+            close(sockets[i]);
+            vTaskDelay(pdMS_TO_TICKS(50));
+        }
+    }
+
     // broadcast to ensure device is known to network equipment
-//    {
-//        SOCKET s = socketNum;
-//        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
-//        if(error == s) {
-//            uint8_t addr[4];
-//            ALT::memcpy(netConfig.ip, addr, sizeof(addr));
-//            addr[3] = 255;
-//            sendto(s, addr, 1, addr, 1234);
-//        }
-//        close(s);
-//    }
+    {
+        SOCKET s = sockets[0];
+        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
+        if(error == s) {
+            uint8_t addr[4];
+            ALT::memcpy(netConfig.ip, addr, sizeof(addr));
+            addr[3] = 255;
+            sendto(s, addr, 1, addr, 1234);
+        }
+        close(s);
+    }
 
     while(true) {
         for(uint8_t i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++){
@@ -376,19 +383,19 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                     break;
             }
 
-            if(rxbuf->mbap.adu->func == Networking::Modbus::Function::W_COIL)
-            {
-                uart.nputs(ARRANDN(NEWLINE " \tReceived Eth Modbus: "));
-
-                for(uint8_t j = 0; j < sizeof(rxbuf->mbap) + ntoh16(rxbuf->mbap.len); j++){
-                    if(j % 10 == 0)
-                        uart.nputs(ARRANDN(NEWLINE " \t"));
-
-                    uart.nputs(ARRANDN(" "));
-                    uart.putu32h(((uint8_t *)&rxbuf->mbap)[j]);
-                }
-                uart.nputs(ARRANDN(NEWLINE));
-            }
+//            if(rxbuf->mbap.adu->func == Networking::Modbus::Function::W_COIL)
+//            {
+//                uart.nputs(ARRANDN(NEWLINE " \tReceived Eth Modbus: "));
+//
+//                for(uint8_t j = 0; j < sizeof(rxbuf->mbap) + ntoh16(rxbuf->mbap.len); j++){
+//                    if(j % 10 == 0)
+//                        uart.nputs(ARRANDN(NEWLINE " \t"));
+//
+//                    uart.nputs(ARRANDN(" "));
+//                    uart.putu32h(((uint8_t *)&rxbuf->mbap)[j]);
+//                }
+//                uart.nputs(ARRANDN(NEWLINE));
+//            }
 
             // is NOT intended for this device?
             if(rxheader->adu[0].unitID != MstrB::getUnitBoardID() && rxheader->adu[0].unitID != 0) {
@@ -403,19 +410,19 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                 }
             }
             else if(ProcessRequest(rxheader, sizeof(rxbuf->arr), txheader, sizeof(txbuf->arr))) {
-                if(rxbuf->mbap.adu->func == Networking::Modbus::Function::W_COIL)
-                {
-                    uart.nputs(ARRANDN(NEWLINE " \tTX Modbus response: "));
-
-                    for(uint8_t j = 0; j < sizeof(txbuf->mbap) + ntoh16(txbuf->mbap.len); j++){
-                        if(j % 10 == 0)
-                            uart.nputs(ARRANDN(NEWLINE " \t"));
-
-                        uart.nputs(ARRANDN(" "));
-                        uart.putu32h(((uint8_t *)&txbuf->mbap)[j]);
-                    }
-                    uart.nputs(ARRANDN(NEWLINE));
-                }
+//                if(rxbuf->mbap.adu->func == Networking::Modbus::Function::W_COIL)
+//                {
+//                    uart.nputs(ARRANDN(NEWLINE " \tTX Modbus response: "));
+//
+//                    for(uint8_t j = 0; j < sizeof(txbuf->mbap) + ntoh16(txbuf->mbap.len); j++){
+//                        if(j % 10 == 0)
+//                            uart.nputs(ARRANDN(NEWLINE " \t"));
+//
+//                        uart.nputs(ARRANDN(" "));
+//                        uart.putu32h(((uint8_t *)&txbuf->mbap)[j]);
+//                    }
+//                    uart.nputs(ARRANDN(NEWLINE));
+//                }
                 send(sn, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
             } else {
                 uart.nputs(ARRANDN("failed to process request" NEWLINE));

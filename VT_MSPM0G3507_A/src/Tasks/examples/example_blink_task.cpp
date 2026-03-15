@@ -10,6 +10,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include "Tasks/examples/example_blink_task.hpp"
+#include "Core/VT.hpp"
 
 void Task::blink_task(void*) {
     /* different iterations of the board use different pins for the blink led
@@ -21,7 +22,7 @@ void Task::blink_task(void*) {
 //    auto &led = System::GPIO::PB26; // LP RED
 //    auto &led = System::GPIO::PB27; // LP GREEN
 //    auto &led = System::GPIO::PA7; // v3
-      auto &led = System::GPIO::PA3; // VT Bee
+    auto &led = VT::Indicator::scheduler; // VT Bee
 
     DL_GPIO_initDigitalOutputFeatures(
             led.iomux,

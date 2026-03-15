@@ -30,6 +30,7 @@
 #include "Tasks/task_BMS.hpp"
 #include "Tasks/task_ethModbus.hpp"
 #include "Tasks/examples/example_blink_task.hpp"
+#include "Tasks/examples/example_MCAN_task.hpp"
 #include "Tasks/task_ADC.hpp"
 
 
@@ -89,8 +90,8 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::adc_task,
-//            "adc_task",
+//    xTaskCreate(Task::MCAN_test_task,
+//            "MCAN_test_task",
 //            configMINIMAL_STACK_SIZE,
 //            NULL,
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,

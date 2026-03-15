@@ -62,6 +62,12 @@ void Task::MCAN_test_task(void *){
             System::UART::uart_ui.nputs(ARRANDN("ID: "));
             System::UART::uart_ui.putu32d(id);
             System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
+
+            for(int i = 0; i < System::CANFD::DLC2Len(&e); i++) {
+                System::UART::uart_ui.putu32h(e.data[i]);
+                System::UART::uart_ui.nputs(ARRANDN("\t"));
+            }
+            System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
         }
 
         vTaskDelay(pdMS_TO_TICKS(400));

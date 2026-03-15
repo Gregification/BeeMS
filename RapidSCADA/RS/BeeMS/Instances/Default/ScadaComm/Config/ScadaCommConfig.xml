@@ -41,9 +41,9 @@
     <Line active="true" isBound="true" number="1" name="MB LAN">
       <LineOptions>
         <ReqRetries>3</ReqRetries>
-        <CycleDelay>10</CycleDelay>
+        <CycleDelay>50</CycleDelay>
         <CmdEnabled>true</CmdEnabled>
-        <PollAfterCmd>true</PollAfterCmd>
+        <PollAfterCmd>false</PollAfterCmd>
         <DetailedLog>true</DetailedLog>
       </LineOptions>
       <Channel type="TcpClient" driver="DrvCnlBasic">
@@ -59,7 +59,8 @@
         <Option name="TransMode" value="TCP" />
       </CustomOptions>
       <DevicePolling>
-        <Device active="true" isBound="true" number="1" name="BeeMS Master 0" driver="DrvModbus" numAddress="0" strAddress="" pollOnCmd="false" timeout="500" delay="500" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_MasterBoard.xml" />
+        <Device active="false" isBound="true" number="1" name="BeeMS Master 0" driver="DrvModbus" numAddress="0" strAddress="" pollOnCmd="false" timeout="100" delay="200" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_MasterBoard.xml" />
+        <Device active="true" isBound="true" number="2" name="Module0_0" driver="DrvModbus" numAddress="1" strAddress="" pollOnCmd="false" timeout="200" delay="200" time="00:00:00" period="00:00:00" cmdLine="DrvModbus_SlaveBoard.xml" />
       </DevicePolling>
     </Line>
   </Lines>

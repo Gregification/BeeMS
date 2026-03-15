@@ -32,6 +32,7 @@
 #include <Tasks/task_BMS.hpp>
 #include <Tasks/task_bqCanInterface.hpp>
 #include "Tasks/examples/example_blink_task.hpp"
+#include "Tasks/examples/example_MCAN_task.hpp"
 
 
 int main(){
@@ -56,12 +57,12 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-    xTaskCreate(Task::BMS_task,
-            "BMS_task",
-            configMINIMAL_STACK_SIZE*20,
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    xTaskCreate(Task::BMS_task,
+//            "BMS_task",
+//            configMINIMAL_STACK_SIZE*20,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
 //            "BQ769x2_PROTOCOL_Test_V_Task",
@@ -70,12 +71,19 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-    xTaskCreate(Task::bqCanInterface_task,
-            "non_BMS_functions_task",
-            configMINIMAL_STACK_SIZE * 2,
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    xTaskCreate(Task::bqCanInterface_task,
+//            "non_BMS_functions_task",
+//            configMINIMAL_STACK_SIZE * 2,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
+
+    xTaskCreate(Task::MCAN_test_task,
+        "MCAN_test_task",
+        configMINIMAL_STACK_SIZE * 2,
+        NULL,
+        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+        NULL);
 
     vTaskStartScheduler();
 

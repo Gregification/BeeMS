@@ -104,16 +104,16 @@ void Task::bqCanInterface_task(void *){
         }
 
         if(Bridge::CANModbus::CAN_to_ModbusTCP(&canrx, &rxbuf.mbap, &socketbuffer)) {
-//            uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
+            uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
 
             /*** validation ***********************/
 
             if(rxbuf.mbap.adu[0].unitID != VT::id) {
-//                uart.nputs(ARRANDN("not my("));
-//                uart.put32d(VT::id);
-//                uart.nputs(ARRANDN(") id: "));
-//                uart.put32d(rxbuf.mbap.adu[0].unitID);
-//                uart.nputs(ARRANDN(NEWLINE));
+                uart.nputs(ARRANDN("not my("));
+                uart.put32d(VT::id);
+                uart.nputs(ARRANDN(") id: "));
+                uart.put32d(rxbuf.mbap.adu[0].unitID);
+                uart.nputs(ARRANDN(NEWLINE));
 
                 continue; // ignore packet
             }

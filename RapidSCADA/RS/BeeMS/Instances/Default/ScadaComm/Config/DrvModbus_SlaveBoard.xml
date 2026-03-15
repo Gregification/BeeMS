@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DeviceTemplate>
   <Options>
-    <ZeroAddr>false</ZeroAddr>
+    <ZeroAddr>true</ZeroAddr>
     <DecAddr>true</DecAddr>
     <DefByteOrder2 />
     <DefByteOrder4 />
@@ -11,6 +11,33 @@
     <ElemGroup active="true" dataBlock="InputRegisters" address="0" name="Device">
       <Elem type="ushort" isBitMask="false" tagCode="MCU HARDWARE ID" name="MCU HARDWARE ID" />
       <Elem type="ushort" isBitMask="false" tagCode="Software Version" name="Software Version" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="InputRegisters" address="20" name="Pack Voltage">
+      <Elem type="ushort" isBitMask="true" tagCode="c1" name="c1" />
+      <Elem type="ushort" isBitMask="false" tagCode="c2" name="c2" />
+      <Elem type="ushort" isBitMask="false" tagCode="c3" name="c3" />
+      <Elem type="ushort" isBitMask="false" tagCode="c4" name="c4" />
+      <Elem type="ushort" isBitMask="false" tagCode="c5" name="c5" />
+      <Elem type="ushort" isBitMask="false" tagCode="c6" name="c6" />
+      <Elem type="ushort" isBitMask="false" tagCode="c7" name="c7" />
+      <Elem type="ushort" isBitMask="false" tagCode="c8" name="c8" />
+      <Elem type="ushort" isBitMask="false" tagCode="c9" name="c9" />
+      <Elem type="ushort" isBitMask="false" tagCode="c10" name="c10" />
+      <Elem type="ushort" isBitMask="false" tagCode="c11" name="c11" />
+      <Elem type="ushort" isBitMask="false" tagCode="c12" name="c12" />
+      <Elem type="ushort" isBitMask="false" tagCode="c13" name="c13" />
+      <Elem type="ushort" isBitMask="false" tagCode="c14" name="c14" />
+      <Elem type="ushort" isBitMask="false" tagCode="stack" name="stack" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="InputRegisters" address="0" name="Pack Temperature">
+      <Elem type="ushort" isBitMask="false" tagCode="t1" name="t1" />
+      <Elem type="ushort" isBitMask="false" tagCode="t2" name="t2" />
+      <Elem type="ushort" isBitMask="false" tagCode="t3" name="t3" />
+      <Elem type="ushort" isBitMask="false" tagCode="t4" name="t4" />
+      <Elem type="ushort" isBitMask="false" tagCode="t5" name="t5" />
+      <Elem type="ushort" isBitMask="false" tagCode="t6" name="t6" />
+      <Elem type="ushort" isBitMask="false" tagCode="t7" name="t7" />
+      <Elem type="ushort" isBitMask="false" tagCode="bbq" name="bbq" />
     </ElemGroup>
   </ElemGroups>
   <Cmds />
