@@ -295,15 +295,19 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                     return;
                 case SOCKERR_DATALEN:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: zero data length" CLIRESET NEWLINE));
+                    close(sn);
                     return;
                 case SOCKERR_SOCKNUM:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket number" CLIRESET NEWLINE));
+                    close(sn);
                     return;
                 case SOCKERR_SOCKMODE:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid operation in the socket" CLIRESET NEWLINE));
+                    close(sn);
                     return;
                 case SOCKERR_SOCKSTATUS:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
+                    close(sn);
                     return;
                 default:
                     if(status >= 0 && status <= sizeof(rxbuf->arr)){
@@ -459,7 +463,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
         default:
 //            uart.nputs(ARRANDN("DEFAULT" NEWLINE));
-//            close(sn);
+            close(sn);
             break;
     }
 
