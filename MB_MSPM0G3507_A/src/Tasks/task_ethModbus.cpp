@@ -124,11 +124,19 @@ void Task::ethModbus_task(void *){
     {
         wiz_NetTimeout timeout = {
                .retry_cnt = 3,
-               .time_100us = 2500,
+               .time_100us = 15000,
             };
         wizchip_settimeout(&timeout);
     }
 
+
+    {
+        for(int i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++){
+            vTaskDelay(pdMS_TO_TICKS(10));
+            disconnect(sockets[i]);
+            close(sockets[i]);
+        }
+    }
 
     /********************************/
     {
@@ -290,6 +298,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
         case SOCK_ESTABLISHED: {
             // rx ModbusTCP packet
             int32_t status = recv(sn, ARRANDN(rxbuf->arr));
+            if(status == 0) return;
             switch(status){
                 case SOCK_BUSY:
                     return;
@@ -433,24 +442,22 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 //            uart.nputs(ARRANDN("SOCK_LISTEN" NEWLINE));
             break;
 
-        case SOCK_FIN_WAIT:
-//            uart.nputs(ARRANDN("SOCK_FIN_WAIT" NEWLINE));
-            break;
-
-        case SOCK_CLOSING:
-//            uart.nputs(ARRANDN("SOCK_CLOSING" NEWLINE));
-            break;
-
         case SOCK_TIME_WAIT:
 //            uart.nputs(ARRANDN("SOCK_TIME_WAIT" NEWLINE));
             break;
 
+        case SOCK_FIN_WAIT:
+        case SOCK_CLOSING:
+        case SOCK_LAST_ACK:
         case SOCK_CLOSE_WAIT:
 //            uart.nputs(ARRANDN("SOCK_CLOSE_WAIT" NEWLINE));
-            break;
-
-        case SOCK_LAST_ACK:
-//            uart.nputs(ARRANDN("SOCK_LAST_ACK" NEWLINE));
+            // the W5500 still ACK's keep alive packets in this state,
+            //      rapid scada will keep sending them,
+            //      the w5500 will report to the mcu the socket is closed,
+            //      rapid scada will keep thinking hte socket is still in use
+            //      it will get stuck in that loop.
+            disconnect(sn);
+            close(sn);
             break;
 
         case SOCK_SYNRECV:
@@ -463,6 +470,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
         default:
 //            uart.nputs(ARRANDN("DEFAULT" NEWLINE));
+            disconnect(sn);
             close(sn);
             break;
     }
@@ -503,14 +511,13 @@ void checkCAN(_RXBuffer * rxbuf, _TXBuffer * txbuf) {
 //        }
 //        uart.nputs(ARRANDN(NEWLINE));
 
-        uint8_t socket;
-        if(CAN_to_ModbusTCP(&rxbuf->canrx, &txbuf->mbap, &socket)) {
-            send(socket, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
-//            uart.nputs(ARRANDN("forwarded to ModbusTCP"));
+        Networking::Bridge::CANModbus::Meta_t meta;
+        if(CAN_to_ModbusTCP(&rxbuf->canrx, &txbuf->mbap, &meta)) {
+            send(meta.socket, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
+//            uart.nputs(ARRANDN("forwarded to ModbusTCP" NEWLINE));
         } else {
-//            uart.nputs(ARRANDN("not forwarded to ModbusTCP"));
+//            uart.nputs(ARRANDN("not forwarded to ModbusTCP" NEWLINE));
         }
-//        uart.nputs(ARRANDN(NEWLINE));
 
         // already bad
 //                    uart.nputs(ARRANDN("dump: "));
@@ -553,16 +560,16 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf, uint8_t socket)
                 .brs    = 1,        // 0: no bit rate switching, 1: yes brs
                 .fdf    = 1,        // FD format, 0: classic CAN, 1: CAN FD format
                 .efc    = 0,        // 0: dont store Tx events, 1: store
-                .mm     = rxheader->transactionID,  // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
+                .mm     = 0,        // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
             };
 
-        if(!ModbusTCP_to_CAN(rxheader, &(buf->cantx), socket)) {
+        Networking::Bridge::CANModbus::Meta_t meta;
+        meta.socket = socket;
+        meta.initiatorID = rxheader->adu[0].unitID;
+        if(!ModbusTCP_to_CAN(rxheader, &(buf->cantx), &meta)) {
             uart.nputs(ARRANDN("failed ModbusTCP_to_CAN" NEWLINE));
             return false;
         }
-
-        id->src_addr = MstrB::getUnitBoardID();
-        id->priority = 0b110;
 
         // send CAN packet
         if(!can.takeResource(pdMS_TO_TICKS(50))) { // LOCK CAN

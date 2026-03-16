@@ -1,6 +1,8 @@
 /*
  * baselined from TI's sample code found in the MSPM0 SDK.
  *      mspm0_sdk_2_05_00_05\examples\nortos\LP_MSPM0G3507\battery_gauge\gauge_level2_bq76952\Driver
+ *
+ * i am going to lose it lose it
  */
 
 #include "Middleware/BQ769x2/BQ769x2_PROTOCOL.hpp"
@@ -194,7 +196,7 @@ bool BQ769X2_PROTOCOL::spi24b_writeReg(System::SPI::SPI * spi, System::GPIO::GPI
 
     uint8_t tx[3], rx[3] = {0,0,0};
     uint8_t retries;
-    constexpr int max_retries = 5;
+    constexpr uint8_t max_retries = 5;
 
     tx[0] = BV(7) | reg;
     tx[1] = data;

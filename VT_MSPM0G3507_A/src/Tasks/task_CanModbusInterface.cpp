@@ -65,7 +65,7 @@ void Task::canModbusInterface_task(void *){
 
             if(canrxf.fillLvl == 0) { // is fifo empty?
                 can.giveResource();
-                vTaskDelay(pdMS_TO_TICKS(10)); // eye-balled value
+                vTaskDelay(pdMS_TO_TICKS(40)); // eye-balled value
                 continue;
             }
 
@@ -88,7 +88,7 @@ void Task::canModbusInterface_task(void *){
 
         /*** parse packet *********************/
 
-        uint8_t socketbuffer;
+        Bridge::CANModbus::Meta_t meta;
 
 //        {
 //            uart.nputs(ARRANDN(NEWLINE " \tReceived from CAN bus: "));
@@ -103,14 +103,14 @@ void Task::canModbusInterface_task(void *){
 //            uart.nputs(ARRANDN(NEWLINE));
 //        }
 
-        if(Bridge::CANModbus::CAN_to_ModbusTCP(&canrx, &rxbuf.mbap, &socketbuffer)) {
+        if(Bridge::CANModbus::CAN_to_ModbusTCP(&canrx, &rxbuf.mbap, &meta)) {
 //            uart.nputs(ARRANDN("parsed Modbus over CAN" NEWLINE));
 
             /*** validation ***********************/
 
-            if(rxbuf.mbap.adu[0].unitID != VT::id) {
+            if(rxbuf.mbap.adu[0].unitID != VT::getID()) {
                 uart.nputs(ARRANDN("not my("));
-                uart.put32d(VT::id);
+                uart.put32d(VT::getID());
                 uart.nputs(ARRANDN(") id: "));
                 uart.put32d(rxbuf.mbap.adu[0].unitID);
                 uart.nputs(ARRANDN(NEWLINE));
@@ -137,7 +137,7 @@ void Task::canModbusInterface_task(void *){
             if(Modbus::ProcessRequest(&rxbuf.mbap, sizeof(rxbuf), &txbuf.mbap, sizeof(txbuf))) {
 //                uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
 
-                if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx, socketbuffer)){
+                if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx, &meta)){
                     // transmit CAN
 //                    uart.nputs(ARRANDN("  response CAN packet ready to send" NEWLINE));
 

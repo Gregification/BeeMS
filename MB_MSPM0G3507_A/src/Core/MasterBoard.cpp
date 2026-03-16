@@ -259,7 +259,7 @@ uint32_t MstrB::POST(char * error_msg, uint16_t max_msg_len) {
 
 uint8_t MstrB::getUnitBoardID() {
     // TODO: should be physically configurable on the board, just read back those settings.
-    return 0xFE;
+    return 123;
 }
 
 bool MstrB::IL::setEnable(bool v){

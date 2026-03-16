@@ -25,5 +25,4 @@ struct __attribute__((packed)) TempSensor {
 };
 static_assert(sizeof(TempSensor) == sizeof(uint16_t));
 
-
 #endif /* SRC_CORE_BMS_BMSCOMMON_HPP_ */

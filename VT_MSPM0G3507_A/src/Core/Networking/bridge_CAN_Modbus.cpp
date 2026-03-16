@@ -13,15 +13,16 @@
 #include "Core/system.hpp"
 #include "Core/common.h"
 #include "Core/std alternatives/string.hpp"
+#include "Core/BMS/BMSComms.hpp"
 
-bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * mbap, DL_MCAN_TxBufElement * tx, uint8_t socket) {
+bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * mbap, DL_MCAN_TxBufElement * tx, Meta_t const * meta) {
     using namespace CAN;
     using namespace Modbus;
 
     /*** input validation *****/
 
     // is user stupid
-    if(mbap == NULL || tx == NULL)
+    if(mbap == NULL || tx == NULL || meta == NULL)
         return false;
 
     // is Modbus
@@ -29,49 +30,75 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
         return false;
 
     // will translation fit in a single CAN-FD packet?
-    if(ntoh16(mbap->len) > sizeof(CANPacket) - sizeof(CANPacket::_Header) + 1) // +1 for unitID which is part of the CANPacket
+    uint8_t aduDataLen = ntoh16(mbap->len) - sizeof(ADUPacket);
+    if(aduDataLen > sizeof(CANPacket) - sizeof(CANPacket::_Header))
         return false;
-
 
     /*** translation **********/
     // - dont bother with ntoh and hton
+    // - THIS CODE MUST ABIDE BY BMSComms packet format
 
-    auto txid   = reinterpret_cast<J1939::ID *>(&tx->id);
-    auto txpkt  = reinterpret_cast<CANPacket *>(tx->data);
+    *tx = {
+            .id     = 0,        // CAN id, 11b->[28:18], 29b->[] when using 11b can id
+            .rtr    = 0,        // 0: data frame, 1: remote frame
+            .xtd    = 1,        // 0: 11b id, 1: 29b id
+            .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
+            .dlc    = 0,        // data byte count, see DL comments
+            .brs    = 1,        // 0: no bit rate switching, 1: yes brs
+            .fdf    = 1,        // FD format, 0: classic CAN, 1: CAN FD format
+            .efc    = 0,        // 0: dont store Tx events, 1: store
+            .mm     = 0,        // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
+        };
 
-    txid->pdu_format        = J1939_PDU_FORMAT;
-    txid->pdu_specific      = mbap->adu[0].func;
+    { // set up ID
+        J1939::ID * id   = reinterpret_cast<J1939::ID *>(&(tx->id));
+        id->src_addr    = BMSComms::getID();        // message from this device, used as modbus unit ID
+        id->pdu_format  = BMSComms::J1939_PF::MOD;  // is a Modbus thing
+        id->pdu_specific= meta->initiatorID;        // CAN packet goes to this device
+        id->data_page   = 0;                        // unused
+        id->priority    = BMSComms::PRI_MODBUS;     // standard priority
 
-    txpkt->header.ipsocketnum   = socket;
-    txpkt->header.transactionID = mbap->transactionID;
-    txpkt->header.mbatlen   = ntoh16(mbap->len);
-    txpkt->header.unitID    = mbap->adu[0].unitID;
+//        auto & uart = System::uart_ui;
+//        uart.nputs(ARRANDN("TCP->CAN"));
+//        uart.nputs(ARRANDN(NEWLINE   "\tsrc: \t" ));
+//        uart.put32d(id->src_addr);
+//        uart.nputs(ARRANDN(NEWLINE   "\tpf:  \t" ));
+//        uart.put32d(id->pdu_format);
+//        uart.nputs(ARRANDN(NEWLINE   "\tps:  \t" ));
+//        uart.put32d(id->pdu_specific);
+//        uart.nputs(ARRANDN(NEWLINE   "\tdp:  \t" ));
+//        uart.put32d(id->data_page);
+//        uart.nputs(ARRANDN(NEWLINE   "\tpri: \t" ));
+//        uart.put32d(id->priority);
+//        uart.nputs(ARRANDN(NEWLINE));
+    }
 
-    static_assert(sizeof(txid->pdu_format) == sizeof(J1939_PDU_FORMAT));
-    static_assert(sizeof(txid->pdu_specific) == sizeof(mbap->adu[0].func));
-    static_assert(sizeof(txpkt->header.transactionID) == sizeof(mbap->transactionID));
+    { // setup data
+        CANPacket * pkt  = reinterpret_cast<CANPacket *>(tx->data);
 
-    // copy ADU
-    uint8_t adulen = txpkt->header.mbatlen - sizeof(ADUPacket);
-    if(adulen > PKTBUFFSIZE) return false;
-    ALT::memcpy(
-            mbap->adu[0].data,
-            txpkt->header.adudata,
-            adulen
-        );
+        pkt->header.ipsocketnum     = meta->socket;
+        pkt->header.transactionID   = mbap->transactionID;
+        pkt->header.adu             = mbap->adu[0];
+        pkt->header.aduDataLen      = aduDataLen;
 
+        ALT::memcpy(
+                mbap->adu[0].data,
+                pkt->header.adu.data,
+                aduDataLen
+            );
+
+        tx->dlc = System::CANFD::len2DLC(aduDataLen + sizeof(CANPacket::_Header));
+    }
 
     /*** tx buffer settings ***/
 
-    tx->dlc = System::CANFD::len2DLC(adulen + sizeof(CANPacket::_Header));
     tx->xtd = true; // use 29b CAN ID
     tx->fdf = true; // use CAN-FD format
-
 
     return true;
 }
 
-bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const * rx, Modbus::MBAPHeader * mbap, uint8_t * socket) {
+bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const * rx, Modbus::MBAPHeader * mbap, Meta_t * meta) {
     using namespace CAN;
     using namespace Modbus;
 
@@ -81,7 +108,7 @@ bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const 
     /*** input validation *****/
 
     // is user stupid
-    if(mbap == NULL || rx == NULL)
+    if(mbap == NULL || rx == NULL || meta == NULL)
         return false;
 
     // is not 29b CAN ID
@@ -93,35 +120,55 @@ bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const 
         return false;
 
     // is not PDU for a translated packet
-    if(!(rxid->raw != J1939_PDU_FORMAT))
+    if(rxid->pdu_format != BMSComms::J1939_PF::MOD)
         return false;
 
-    // is socket is funky
+    // is socket funky
     if(rxpkt->header.ipsocketnum > 8) // w5500 limit
         return false;
 
-    // is Modbus packet larger than CAN packet
-    if(System::CANFD::DLC2Len(rx) < rxpkt->header.mbatlen - sizeof(Modbus::ADUPacket))
+    if(rxpkt->header.aduDataLen > sizeof(CANModbus::CANPacket) - sizeof(CANModbus::CANPacket::_Header))
         return false;
 
     /*** translation **********/
 
-    *socket = rxpkt->header.ipsocketnum;
+    { // assumed data
+        mbap->protocolID        = hton16(MBAPHeader::PROTOCOL_ID_MODBUS);
+    }
 
-    mbap->transactionID     = rxpkt->header.transactionID;
-    mbap->protocolID        = MBAPHeader::PROTOCOL_ID_MODBUS;
-    mbap->len               = hton16((uint16_t)rxpkt->header.mbatlen);
-    mbap->adu[0].unitID     = rxpkt->header.unitID;
-    mbap->adu[0].func       = (Function)rxid->pdu_specific;
+    { // strip info from data
+        meta->socket            = rxpkt->header.ipsocketnum;
+        mbap->transactionID     = rxpkt->header.transactionID;
 
-    // restore ADU
-    uint8_t adulen = rxpkt->header.mbatlen - sizeof(ADUPacket);
-    if(adulen > PKTBUFFSIZE) return false;
-    ALT::memcpy(
-            rxpkt->header.adudata,
-            mbap->adu[0].data,
-            adulen
-        );
+        // restore ADU
+        ALT::memcpy(
+                rxpkt->header.adu.data,
+                mbap->adu[0].data,
+                rxpkt->header.aduDataLen
+            );
+    }
+
+    { // strip info from ID
+        mbap->len               = hton16(rxpkt->header.aduDataLen + sizeof(ADUPacket));
+        mbap->adu[0]            = rxpkt->header.adu;
+
+        meta->initiatorID       = rxid->src_addr;
+    }
+
+//    auto & uart = System::uart_ui;
+//    auto & id = rxid;
+//    uart.nputs(ARRANDN("CAN->TCP"));
+//    uart.nputs(ARRANDN(NEWLINE   "\tsrc: \t" ));
+//    uart.put32d(id->src_addr);
+//    uart.nputs(ARRANDN(NEWLINE   "\tpf:  \t" ));
+//    uart.put32d(id->pdu_format);
+//    uart.nputs(ARRANDN(NEWLINE   "\tps:  \t" ));
+//    uart.put32d(id->pdu_specific);
+//    uart.nputs(ARRANDN(NEWLINE   "\tdp:  \t" ));
+//    uart.put32d(id->data_page);
+//    uart.nputs(ARRANDN(NEWLINE   "\tpri: \t" ));
+//    uart.put32d(id->priority);
+//    uart.nputs(ARRANDN(NEWLINE));
 
     return true;
 }

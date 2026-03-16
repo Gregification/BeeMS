@@ -17,7 +17,7 @@ namespace Networking {
 
         /** targeted for the J1939 standard
          *
-         * ISO 11783-11 PGN tables down loads : https://www.isobus.net/isobus/
+         * ISO 11783-11 PGN tables downloads : https://www.isobus.net/isobus/
          * J1939 SPN table sources : https://felixequipment.com/Documents/Suspect-Parameter-Numbers-SPN-Codes.pdf
          * J1939 fault code look-up, Source Address, PGN, SPN, and FMI : https://lnx.numeralkod.com/wordpress/docs/errors-index/suspect-parameter-numbers-spn/
          */
@@ -41,6 +41,16 @@ namespace Networking {
                 uint32_t raw : 29;
             };
             static_assert(sizeof(ID) == sizeof(uint32_t), "a J1939 ID is 29 bits");
+        }
+
+        constexpr uint8_t getPriOffset(int8_t offset, uint16_t base) {
+            if ((int16_t)base + offset > 0b111)
+                return 0b111;
+
+            if ((int16_t)base + offset < 0)
+                return 0b000;
+
+            return static_cast<uint8_t>(base + offset);
         }
 
     }

@@ -29,8 +29,9 @@
 #include "system.hpp"
 #include "Core/VT.hpp"
 
-#include <Tasks/task_BMS.hpp>
-#include <Tasks/task_CanModbusInterface.hpp>
+#include "Tasks/task_CanModbusInterface.hpp"
+#include "Tasks/task_BBQ_test.hpp"
+#include "Tasks/task_BMS.hpp"
 #include "Tasks/examples/example_blink_task.hpp"
 #include "Tasks/examples/example_MCAN_task.hpp"
 
@@ -45,7 +46,7 @@ int main(){
     System::uart_ui.nputs(ARRANDN("\t - MCU HARDWARE ID: "));
     System::uart_ui.putu32d(System::mcuID);
     System::uart_ui.nputs(ARRANDN(NEWLINE "\t - MCU unit ID: "));
-    System::uart_ui.putu32d(VT::id);
+    System::uart_ui.putu32d(VT::getID());
     System::uart_ui.nputs(ARRANDN(NEWLINE));
 
     // don't have this task on release
@@ -57,12 +58,12 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::BMS_task,
-//            "BMS_task",
-//            configMINIMAL_STACK_SIZE*20,
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
+    xTaskCreate(Task::BMS,
+            "BMS_task",
+            MAX(2048, configMINIMAL_STACK_SIZE),
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
 //            "BQ769x2_PROTOCOL_Test_V_Task",
@@ -73,7 +74,7 @@ int main(){
 
     xTaskCreate(Task::canModbusInterface_task,
             "non_BMS_functions_task",
-            configMINIMAL_STACK_SIZE * 3,
+            MAX(384, configMINIMAL_STACK_SIZE),
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);

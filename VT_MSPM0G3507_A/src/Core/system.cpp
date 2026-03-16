@@ -10,6 +10,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
+#include "Core/BMS/BMSComms.hpp"
 #include "Core/Networking/bridge_CAN_Modbus.hpp"
 
 /*--- variables ------------------------------------------------------------------------*/
@@ -419,32 +420,31 @@ void System::init() {
                 .flssa                = 0,
                 .lss                  = 2,
                 .flesa                = 8,
-                .lse                  = 1,
-                /* Tx Section: 7 buffers @ 64 bytes*/
-                .txStartAddr          = 16,
-                .txBufNum             = 0,
+                .lse                  = 4,
+                /* Tx Section: 1 dedicated + 7 fifo elements @ 64 bytes*/
+                .txStartAddr          = 40,
+                .txBufNum             = 1,
                 .txFIFOSize           = 7,
-                .txBufMode            = 0,
+                .txBufMode            = 0,          // 0 : fifo , 1 : queue
                 .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
-                /* Event FIFO: 2 elements & 8 bytes */
-                .txEventFIFOStartAddr = 520,
-                .txEventFIFOSize      = 2,
+                /* Event FIFO: unused, empty */
+                .txEventFIFOStartAddr = 616,
+                .txEventFIFOSize      = 0,
                 .txEventFIFOWaterMark = 0,
                 /* Rx FIFO 0: 3 elements @ 64 bytes */ //MODBUS_RXFIFO
-                .rxFIFO0startAddr     = 536,
+                .rxFIFO0startAddr     = 616,
                 .rxFIFO0size          = 3,
                 .rxFIFO0waterMark     = 0,
                 .rxFIFO0OpMode        = 0,
                 .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,
-                /* Rx FIFO 1: 7 elements @ 20 bytes */ //OP_RXFIFO
-                .rxFIFO1startAddr     = 752,
-                .rxFIFO1size          = 7,
+                /* Rx FIFO 1: 6 elements @ 20 bytes */ //OP_RXFIFO
+                .rxFIFO1startAddr     = 832,
+                .rxFIFO1size          = 6,
                 .rxFIFO1waterMark     = 0,
                 .rxFIFO1OpMode        = 0,
                 .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_20BYTES,
-                /* Dedicated Rx Buffers: 2 elements @ 32 bytes */
-                /* Size: 2 * 28 = 56. Range: 940 to 1019 */
-                .rxBufStartAddr       = 948,
+                /* Dedicated Rx Buffers: unused*/
+                .rxBufStartAddr       = 1000,
                 .rxBufElemSize        = DL_MCAN_ELEM_SIZE_20BYTES,
             };
             static_assert(CANFD::MODBUS_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0);
@@ -452,26 +452,40 @@ void System::init() {
 
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
 
-            { /* modbus packets routed to appropriate rx fifio */
-                const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
-                    .efid1  = (uint32_t)(Networking::Bridge::CANModbus::J1939_PDU_FORMAT << 16),
+            { /* modbus packets routed to modbus rx fifo , if device ID matches*/
+                const DL_MCAN_ExtMsgIDFilterElement filter = {
+                    .efid1  = (((uint32_t)BMSComms::J1939_PF::MOD) << 16) | ((uint32_t)BMSComms::getID() << 8),
                     .efec   = CANFD::MODBUS_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
+                    .efid2  = 0xFFFF  << 8,
+                    .eft    = 0b10
+                };
+                DL_MCAN_addExtMsgIDFilter(CANFD0, 0, &filter);
+            }
+            { /* broadcast packets routed to operational rx fifo */
+                const DL_MCAN_ExtMsgIDFilterElement filter = {
+                    .efid1  = ((uint32_t)BMSComms::J1939_PF::B) << 16,
+                    .efec   = CANFD::OP_RXFIFO == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
                     .efid2  = 0xFF << 16,
                     .eft    = 0b10
                 };
-                DL_MCAN_addExtMsgIDFilter(CANFD0, 0, &modbusFilter);
+                DL_MCAN_addExtMsgIDFilter(CANFD0, 1, &filter);
+            }
+            { /* MS packets routed to operational rx fifo , if device ID matches */
+                const DL_MCAN_ExtMsgIDFilterElement filter = {
+                    .efid1  = (((uint32_t)BMSComms::J1939_PF::MS) << 16) | ((uint32_t)BMSComms::getID() << 8),
+                    .efec   = CANFD::OP_RXFIFO == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
+                    .efid2  = 0xFFFF << 8,
+                    .eft    = 0b10
+                };
+                DL_MCAN_addExtMsgIDFilter(CANFD0, 2, &filter);
+            }
+            { /* unused filter element */
+                const DL_MCAN_ExtMsgIDFilterElement filter = {
+                    .efec   = 0, // disable
+                };
+                DL_MCAN_addExtMsgIDFilter(CANFD0, 3, &filter);
             }
         }
-
-//        {
-//            constexpr DL_MCAN_StdMsgIDFilterElement filtere = {
-//                   .sfid2   = 3 << 18,
-//                   .sfid1   = 3,
-//                   .sfec    = 0b001,
-//                   .sft     = 0b01,
-//                };
-//            DL_MCAN_addStdMsgIDFilter(CANFD0, 0, &filtere);
-//        }
 
         /* Set Extended ID Mask. */
         // is ANDed with 29b message id of frame
@@ -924,6 +938,20 @@ uint32_t System::CANFD::len2DLC(uint32_t size) {
     if(size <= 32)  return 13;
     if(size <= 48)  return 14;
     return 15;
+}
+
+uint32_t System::CANFD::getID(DL_MCAN_RxBufElement const & pkt) {
+    if(pkt.xtd)
+        return pkt.id & 0x1FFF'FFFF;
+
+    return (pkt.id & 0x1FFC'0000) >> 18;
+}
+
+uint32_t System::CANFD::getID(DL_MCAN_TxBufElement const & pkt) {
+    if(pkt.xtd)
+        return pkt.id & 0x1FFF'FFFF;
+
+    return (pkt.id & 0x1FFC'0000) >> 18;
 }
 
 

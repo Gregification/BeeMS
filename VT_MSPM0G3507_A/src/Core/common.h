@@ -24,6 +24,8 @@
 #define ARRANDN(ARR)                (ARR),sizeof(ARR)
 #define PT2ANDN(ARR)                (&(ARR)),sizeof(ARR)  // for pointer to a object
 #define ARRLEN(ARR)                 (sizeof((ARR))/sizeof((ARR)[0]))
+#define MIN(A,B)                    ((A) < (B) ? (A):(B))
+#define MAX(A,B)                    ((A) > (B) ? (A):(B))
 
 //--- program constants ---------------------------------------
 

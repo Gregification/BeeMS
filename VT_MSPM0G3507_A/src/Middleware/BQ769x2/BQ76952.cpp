@@ -9,36 +9,36 @@
 #include "Middleware/BQ769x2/BQ769x2_PROTOCOL.hpp"
 
 bool BQ76952::sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd command) {
-    return BQ769X2_PROTOCOL::sendCommandSubcommand(spi, cs, command);
+    return BQ769X2_PROTOCOL::sendCommandSubcommand(&spi, &cs, command);
 }
 
 bool BQ76952::sendSubcommandR(BQ769X2_PROTOCOL::Cmd cmd, void * data_out, uint8_t datalen) {
-    return BQ769X2_PROTOCOL::sendSubcommandR(spi, cs, cmd, data_out, datalen);
+    return BQ769X2_PROTOCOL::sendSubcommandR(&spi, &cs, cmd, data_out, datalen);
 }
 
 bool BQ76952::sendSubcommandW(BQ769X2_PROTOCOL::Cmd cmd, uint16_t data, uint8_t datalen) {
-    return BQ769X2_PROTOCOL::sendSubcommandW(spi, cs, cmd, data, datalen);
+    return BQ769X2_PROTOCOL::sendSubcommandW(&spi, &cs, cmd, data, datalen);
 //    return BQ769X2_PROTOCOL::sendSubcommandW(*i2c_controller, i2c_addr, cmd, data);
 }
 
 bool BQ76952::sendCommandR(BQ769X2_PROTOCOL::Cmd command, void * data_out, uint8_t datalen){
-    return BQ769X2_PROTOCOL::readRegister(spi, cs, command, data_out, datalen);
+    return BQ769X2_PROTOCOL::readRegister(&spi, &cs, command, data_out, datalen);
 }
 
 bool BQ76952::sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt command, void * readOut, uint8_t datalen) {
-    return BQ769X2_PROTOCOL::sendDirectCommandR(spi, cs, command, readOut, datalen);
+    return BQ769X2_PROTOCOL::sendDirectCommandR(&spi, &cs, command, readOut, datalen);
 }
 
 bool BQ76952::sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt command, void * data, uint8_t datalen) {
-    return BQ769X2_PROTOCOL::sendDirectCommandW(spi, cs, command, data, datalen);
+    return BQ769X2_PROTOCOL::sendDirectCommandW(&spi, &cs, command, data, datalen);
 }
 
 bool BQ76952::setRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, uint16_t reg_data, uint8_t datalen) {
-    return BQ769X2_PROTOCOL::setRegister(spi, cs, reg_addr, reg_data, datalen);
+    return BQ769X2_PROTOCOL::setRegister(&spi, &cs, reg_addr, reg_data, datalen);
 }
 
 uint8_t BQ76952::getRegister(BQ769X2_PROTOCOL::RegAddr reg_addr, void * reg_out, uint8_t datalen){
-    return BQ769X2_PROTOCOL::readRegister(spi, cs, reg_addr, reg_out, datalen);
+    return BQ769X2_PROTOCOL::readRegister(&spi, &cs, reg_addr, reg_out, datalen);
 }
 
 bool BQ76952::unseal(uint32_t key){

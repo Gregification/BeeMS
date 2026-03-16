@@ -20,8 +20,8 @@
  */
 class BQ76952 {
 public:
-    System::SPI::SPI * const spi;
-    System::GPIO::GPIO const * const cs;
+    System::SPI::SPI & spi;
+    System::GPIO::GPIO const & cs;
 
     union BQ76952PinConfig {
         uint8_t Raw;

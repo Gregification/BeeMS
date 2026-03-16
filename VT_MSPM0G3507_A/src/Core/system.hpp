@@ -344,6 +344,9 @@ namespace System {
         uint32_t DLC2Len(DL_MCAN_RxBufElement const *);
         uint32_t DLC2Len(DL_MCAN_TxBufElement const *);
         uint32_t len2DLC(uint32_t size);
+
+        uint32_t getID(DL_MCAN_RxBufElement const &);
+        uint32_t getID(DL_MCAN_TxBufElement const &);
     }
 
     void init();

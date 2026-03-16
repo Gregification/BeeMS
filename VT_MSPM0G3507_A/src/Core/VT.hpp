@@ -16,8 +16,6 @@
 namespace VT {
     using namespace System;
 
-    extern uint8_t id; // slave id . must be uint8_t to meet J1939 CAN standards
-
     /**
      * operator configuration
      * - use explicit variable names
@@ -36,20 +34,40 @@ namespace VT {
         uint16_t cell_mK[7];
         uint16_t die_mK;
 
-        bool HRLV_IL_sw_dsrd            : 1;
+        bool HRLV_IL_sw_dsrd            : 1;        // software desired state of IL enable
     };
     extern OpVars_t opVars;
-
-    extern BQ76952 bq;
-    extern System::GPIO::GPIO const & bqReset;
 
     namespace Indicator {
         const GPIO::GPIO
             scheduler   = GPIO::PA3;
     };
 
+    namespace BBQ {
+
+        struct BBQ_t {
+            BQ76952 bq;
+            GPIO::GPIO const & resetPin;
+        };
+
+        extern BBQ_t bbqs[1];
+        extern const uint8_t bbqs_n;
+
+        /** write to non volatile storage */
+        bool storeSetting(buffersize_t idx, BQ76952::BQ76952SSetting const *);// TODO
+        /** read from non volatile storage */
+        bool recalSetting(buffersize_t idx, BQ76952::BQ76952SSetting *);// TODO
+        /** write to BBQ */
+        bool applySetting(BQ76952 &, BQ76952::BQ76952SSetting const *);// TODO
+        /** read from BBQ */
+        bool retreiveSetting(BQ76952 const &, BQ76952::BQ76952SSetting *);// TODO
+    }
+
     void preScheduler_init();
     void postScheduler_init();
+
+    // slave id . must be uint8_t to meet J1939 CAN standards
+    uint8_t getID();
 };
 
 
