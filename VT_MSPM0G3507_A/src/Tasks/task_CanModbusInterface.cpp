@@ -60,6 +60,7 @@ void Task::canModbusInterface_task(void *){
 
         /*** poll for incoming request ********/
         if(can.takeResource(pdMS_TO_TICKS(3e3))) {
+            canrxf.num = System::CANFD::MODBUS_RXFIFO;
             DL_MCAN_getRxFIFOStatus(can.reg, &canrxf);
 
             if(canrxf.fillLvl == 0) { // is fifo empty?

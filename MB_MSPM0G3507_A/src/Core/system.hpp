@@ -342,6 +342,9 @@ namespace System {
          * just use the DL funcitons, its good enough
          */
 
+        constexpr uint32_t MODBUS_RXFIFO    = DL_MCAN_RX_FIFO_NUM_0;
+        constexpr uint32_t OP_RXFIFO        = DL_MCAN_RX_FIFO_NUM_1;
+
         struct CANFD : Lockable {
             MCAN_Regs * const reg;
 

@@ -322,6 +322,11 @@ namespace System {
          * just use the DL funcitons, its good enough
          */
 
+        /** separate rx buffers for modbus and BMS stuff, packets filtered by hardware filter */
+        constexpr uint32_t MODBUS_RXFIFO    = DL_MCAN_RX_FIFO_NUM_0; // for modbus-tcp operations
+        constexpr uint32_t OP_RXFIFO        = DL_MCAN_RX_FIFO_NUM_1; // for BMS operations
+        static_assert(MODBUS_RXFIFO != OP_RXFIFO);
+
         struct CANFD : Lockable {
             MCAN_Regs * const reg;
         };

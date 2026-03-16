@@ -35,6 +35,8 @@ namespace VT {
         uint16_t stack_10mV;
         uint16_t cell_mK[7];
         uint16_t die_mK;
+
+        bool HRLV_IL_sw_dsrd            : 1;
     };
     extern OpVars_t opVars;
 

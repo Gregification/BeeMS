@@ -10,6 +10,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
+#include "Core/Networking/bridge_CAN_Modbus.hpp"
 
 /*--- variables ------------------------------------------------------------------------*/
 
@@ -362,18 +363,26 @@ void System::init() {
         }
 
         { /* Configure MCAN module. */
+
+            /* background rule for packet filter, unknown stuff goes
+             * in the operational fifo
+             */
+            constexpr DL_MCAN_GlobalFiltConfig backgroundFilter = {
+                  .rrfe = 1,
+                  .rrfs = 1,
+                  .anfe = CANFD::OP_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0 ? 0 : CANFD::OP_RXFIFO  == DL_MCAN_RX_FIFO_NUM_1 ? 1 : 67,
+                  .anfs = CANFD::OP_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0 ? 0 : CANFD::OP_RXFIFO  == DL_MCAN_RX_FIFO_NUM_1 ? 1 : 67,
+            };
+
             constexpr DL_MCAN_ConfigParams config = {
-                    .monEnable         = false,     // bus monitoring mode
-                    .asmEnable         = false,     // restricted operation mode
-                    .tsPrescalar       = 15,        // timestamp counter prescalar
-                    .tsSelect          = 0,         // timestamp source selection
-                    .timeoutSelect     = DL_MCAN_TIMEOUT_SELECT_CONT, // timeout source select
-                    .timeoutPreload    = 65535,     // load value of timeout counter
-                    .timeoutCntEnable  = false,     // timeout counter enable
-                    .filterConfig.rrfe = 0,         // reject remote frames extended
-                    .filterConfig.rrfs = 0,         // reject remote frames standard
-                    .filterConfig.anfe = 0,         // accept non-matching frames extended
-                    .filterConfig.anfs = 0,         // accept non-matching frames standard
+                    .monEnable          = false,     // bus monitoring mode
+                    .asmEnable          = false,     // restricted operation mode
+                    .tsPrescalar        = 15,        // timestamp counter prescalar
+                    .tsSelect           = 0,         // timestamp source selection
+                    .timeoutSelect      = DL_MCAN_TIMEOUT_SELECT_CONT, // timeout source select
+                    .timeoutPreload     = 65535,     // load value of timeout counter
+                    .timeoutCntEnable   = false,     // timeout counter enable
+                    .filterConfig       = backgroundFilter,
                 };
             DL_MCAN_config(CANFD0, &config);
         }
@@ -405,65 +414,53 @@ void System::init() {
             DL_MCAN_setBitTime(CANFD0, &bitTimeingParams);
         }
 
-        { /* Configure Message RAM Sections */
-//            constexpr DL_MCAN_MsgRAMConfigParams  ramConfig = {
-//                    .flssa                = 0,  /* Standard ID Filter List Start Address. */
-//                    .lss                  = 2,  /* List Size: Standard ID. */
-//                    .flesa                = 0,  /* Extended ID Filter List Start Address. */
-//                    .lse                  = 0,  /* List Size: Extended ID. */
-//                    .txStartAddr          = 148, /* Tx Buffers Start Address. */
-//                    .txBufNum             = 2,  /* Number of Dedicated Transmit Buffers. */
-//                    .txFIFOSize           = 19, /* Tx Buffer Element Size. */
-//                    .txBufMode            = 0,
-//                    .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
-//                    .txEventFIFOStartAddr = 164,/* Tx Event FIFO Start Address. */
-//                    .txEventFIFOSize      = 2,  /* Event FIFO Size. */
-//                    .txEventFIFOWaterMark = 0,  /* Level for Tx Event FIFO watermark interrupt. */
-//                    .rxFIFO0startAddr     = 172,  /* Rx FIFO0 Start Address. */
-//                    .rxFIFO0size          = 3,  /* Number of Rx FIFO elements. */
-//                    .rxFIFO0waterMark     = 0,  /* Rx FIFO0 Watermark. */
-//                    .rxFIFO0OpMode        = 0,
-//                    .rxFIFO1startAddr     = 192,  /* Rx FIFO1 Start Address. */
-//                    .rxFIFO1size          = 2,  /* Number of Rx FIFO elements. */
-//                    .rxFIFO1waterMark     = 3,  /* Level for Rx FIFO 1 watermark interrupt. */
-//                    .rxFIFO1OpMode        = 0,  /* FIFO blocking mode. */
-//                    .rxBufStartAddr       = 208,  /* Rx Buffer Start Address. */
-//                    .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx Buffer Element Size. */
-//                    .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_8BYTES,  /* Rx FIFO0 Element Size. */
-//                    .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES, /* Rx FIFO1 Element Size. */
-//                };
+        { /* Configure Message RAM Sections & filter elements*/
             constexpr DL_MCAN_MsgRAMConfigParams ramConfig = {
                 .flssa                = 0,
                 .lss                  = 2,
-                .flesa                = 0,
-                .lse                  = 0,
-                /* Tx Section: 2 buffers @ 64 bytes each */
-                .txStartAddr          = 8,
-                .txBufNum             = 2,
-                .txFIFOSize           = 0,
+                .flesa                = 8,
+                .lse                  = 1,
+                /* Tx Section: 7 buffers @ 64 bytes*/
+                .txStartAddr          = 16,
+                .txBufNum             = 0,
+                .txFIFOSize           = 7,
                 .txBufMode            = 0,
                 .txBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
-                /* Event FIFO */
-                .txEventFIFOStartAddr = 152,
+                /* Event FIFO: 2 elements & 8 bytes */
+                .txEventFIFOStartAddr = 520,
                 .txEventFIFOSize      = 2,
                 .txEventFIFOWaterMark = 0,
-                /* Rx FIFO 0: 4 elements @ 64 bytes each */
-                .rxFIFO0startAddr     = 168,
-                .rxFIFO0size          = 4,
+                /* Rx FIFO 0: 3 elements @ 64 bytes */ //MODBUS_RXFIFO
+                .rxFIFO0startAddr     = 536,
+                .rxFIFO0size          = 3,
                 .rxFIFO0waterMark     = 0,
                 .rxFIFO0OpMode        = 0,
                 .rxFIFO0ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,
-                /* Rx FIFO 1: 2 elements @ 64 bytes each */
-                .rxFIFO1startAddr     = 456,
-                .rxFIFO1size          = 2,
+                /* Rx FIFO 1: 7 elements @ 20 bytes */ //OP_RXFIFO
+                .rxFIFO1startAddr     = 752,
+                .rxFIFO1size          = 7,
                 .rxFIFO1waterMark     = 0,
                 .rxFIFO1OpMode        = 0,
-                .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_64BYTES,
-                /* Dedicated Rx Buffers */
-                .rxBufStartAddr       = 600,
-                .rxBufElemSize        = DL_MCAN_ELEM_SIZE_64BYTES,
+                .rxFIFO1ElemSize      = DL_MCAN_ELEM_SIZE_20BYTES,
+                /* Dedicated Rx Buffers: 2 elements @ 32 bytes */
+                /* Size: 2 * 28 = 56. Range: 940 to 1019 */
+                .rxBufStartAddr       = 948,
+                .rxBufElemSize        = DL_MCAN_ELEM_SIZE_20BYTES,
             };
+            static_assert(CANFD::MODBUS_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0);
+            static_assert(CANFD::OP_RXFIFO      == DL_MCAN_RX_FIFO_NUM_1);
+
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
+
+            { /* modbus packets routed to appropriate rx fifio */
+                const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
+                    .efid1  = (uint32_t)(Networking::Bridge::CANModbus::J1939_PDU_FORMAT << 16),
+                    .efec   = CANFD::MODBUS_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
+                    .efid2  = 0xFF << 16,
+                    .eft    = 0b10
+                };
+                DL_MCAN_addExtMsgIDFilter(CANFD0, 0, &modbusFilter);
+            }
         }
 
 //        {

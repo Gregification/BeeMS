@@ -46,8 +46,6 @@ System::UART::UART &            uart = System::UART::uart_ui;
 
 /*** CAN ***************/
 System::CANFD::CANFD &          can = System::CANFD::canFD0;
-DL_MCAN_RX_FIFO_NUM constexpr   canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_0;
-
 
 /*** wizchip setup ****/
 System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi;
@@ -203,19 +201,18 @@ void Task::ethModbus_task(void *){
         uart.nputs(ARRANDN(CLIRESET NEWLINE));
     }
 
-//
-//    // broadcast to ensure device is known to network equipment
-//    {
-//        SOCKET s = sockets[0];
-//        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
-//        if(error == s) {
-//            uint8_t addr[4];
-//            ALT::memcpy(netConfig.ip, addr, sizeof(addr));
-//            addr[3] = 255;
-//            sendto(s, addr, 1, addr, 1234);
-//        }
-//        close(s);
-//    }
+    // broadcast to ensure device is known to network equipment
+    {
+        SOCKET s = sockets[0];
+        int8_t error = socket(s, Sn_MR_UDP, 123, SF_IO_NONBLOCK);
+        if(error == s) {
+            uint8_t addr[4];
+            ALT::memcpy(netConfig.ip, addr, sizeof(addr));
+            addr[3] = 255;
+            sendto(s, addr, 1, addr, 1234);
+        }
+        close(s);
+    }
 
     while(true) {
         for(uint8_t i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++){
@@ -462,7 +459,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
         default:
 //            uart.nputs(ARRANDN("DEFAULT" NEWLINE));
-            close(sn);
+//            close(sn);
             break;
     }
 
@@ -476,7 +473,10 @@ void checkCAN(_RXBuffer * rxbuf, _TXBuffer * txbuf) {
 
     // CAN -> ModbusTCP
 
-    DL_MCAN_RxFIFOStatus rf = {.num = canfifo};
+    if(!can.takeResource(pdMS_TO_TICKS(30)))
+        return;
+
+    DL_MCAN_RxFIFOStatus rf = {.num = System::CANFD::MODBUS_RXFIFO};
     DL_MCAN_getRxFIFOStatus(can.reg, &rf);
 
     for(uint32_t i = rf.fillLvl; i != 0; i--) {
@@ -488,25 +488,25 @@ void checkCAN(_RXBuffer * rxbuf, _TXBuffer * txbuf) {
 
         /*** forward to ModbusTCP *********/
 
-        uart.nputs(ARRANDN("CAN rx: " ));
-        uart.nputs(ARRANDN(NEWLINE "dump: "));
-        for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf->canrx); j++){
-            if(j % 10 == 0)
-                uart.nputs(ARRANDN(NEWLINE));
-
-            uart.nputs(ARRANDN(" "));
-            uart.putu32h(rxbuf->canrx.data[j]);
-        }
-        uart.nputs(ARRANDN(NEWLINE));
+//        uart.nputs(ARRANDN("CAN rx: " ));
+//        uart.nputs(ARRANDN(NEWLINE "dump: "));
+//        for(uint8_t j = 0; j < System::CANFD::DLC2Len(&rxbuf->canrx); j++){
+//            if(j % 10 == 0)
+//                uart.nputs(ARRANDN(NEWLINE));
+//
+//            uart.nputs(ARRANDN(" "));
+//            uart.putu32h(rxbuf->canrx.data[j]);
+//        }
+//        uart.nputs(ARRANDN(NEWLINE));
 
         uint8_t socket;
         if(CAN_to_ModbusTCP(&rxbuf->canrx, &txbuf->mbap, &socket)) {
             send(socket, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
-            uart.nputs(ARRANDN("forwarded to ModbusTCP"));
+//            uart.nputs(ARRANDN("forwarded to ModbusTCP"));
         } else {
-            uart.nputs(ARRANDN("not forwarded to ModbusTCP"));
+//            uart.nputs(ARRANDN("not forwarded to ModbusTCP"));
         }
-        uart.nputs(ARRANDN(NEWLINE));
+//        uart.nputs(ARRANDN(NEWLINE));
 
         // already bad
 //                    uart.nputs(ARRANDN("dump: "));
@@ -522,6 +522,8 @@ void checkCAN(_RXBuffer * rxbuf, _TXBuffer * txbuf) {
         DL_MCAN_getRxFIFOStatus(can.reg, &rf);
 
     }
+
+    can.giveResource();
 }
 
 bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf, uint8_t socket) {
@@ -565,18 +567,18 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf, uint8_t socket)
         }
 
 
-        {
-            uart.nputs(ARRANDN(NEWLINE " \t Sending CAN bus: "));
-
-            for(uint8_t j = 0; j < System::CANFD::DLC2Len(&buf->cantx); j++){
-                if(j % 10 == 0)
-                    uart.nputs(ARRANDN(NEWLINE " \t"));
-
-                uart.nputs(ARRANDN(" "));
-                uart.putu32h(buf->cantx.data[j]);
-            }
-            uart.nputs(ARRANDN(NEWLINE));
-        }
+//        {
+//            uart.nputs(ARRANDN(NEWLINE " \t Sending CAN bus: "));
+//
+//            for(uint8_t j = 0; j < System::CANFD::DLC2Len(&buf->cantx); j++){
+//                if(j % 10 == 0)
+//                    uart.nputs(ARRANDN(NEWLINE " \t"));
+//
+//                uart.nputs(ARRANDN(" "));
+//                uart.putu32h(buf->cantx.data[j]);
+//            }
+//            uart.nputs(ARRANDN(NEWLINE));
+//        }
 
         DL_MCAN_TxFIFOStatus tf;
 
@@ -590,9 +592,9 @@ bool forwardModbusTCP2CAN(_RXBuffer const * rx, _TXBuffer * buf, uint8_t socket)
                 continue;
             }
 
-            uart.nputs(ARRANDN("TX from buffer "));
-            uart.putu32d(tf.putIdx);
-            uart.nputs(ARRANDN("" NEWLINE));
+//            uart.nputs(ARRANDN("TX from buffer "));
+//            uart.putu32d(tf.putIdx);
+//            uart.nputs(ARRANDN("" NEWLINE));
 
             DL_MCAN_writeMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, tf.putIdx, &buf->cantx);
             DL_MCAN_TXBufAddReq(can.reg, tf.putIdx);

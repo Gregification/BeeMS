@@ -40,14 +40,14 @@ void Task::MCAN_test_task(void *){
         DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
 
         vTaskDelay(pdMS_TO_TICKS(400));
-    } while(1);
+    } while(0);
 
     //--- RX --------------------------------------------------
 
     System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "RX start" NEWLINE CLIRESET));
     do {
         static DL_MCAN_RxFIFOStatus rf;
-        rf.num = DL_MCAN_RX_FIFO_NUM_0;
+        rf.num = System::CANFD::OP_RXFIFO;
         DL_MCAN_getRxFIFOStatus(CANFD0, &rf);
 
         if(rf.fillLvl != 0) { // if not empty

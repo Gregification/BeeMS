@@ -13,6 +13,8 @@ void Task::MCAN_test_task(void *){
 
     //--- TX --------------------------------------------------
     do {
+        vTaskDelay(pdMS_TO_TICKS(400));
+
         DL_MCAN_TxBufElement txmsg = {
                 .id     = 0x1,      // CAN id, 11b->[28:18], 29b->[] when using 11b can id
                 .rtr    = 0,        // 0: data frame, 1: remote frame
@@ -28,24 +30,34 @@ void Task::MCAN_test_task(void *){
         txmsg.data[1] = 7;
         txmsg.data[2] = 8;
 
+        if(!System::CANFD::canFD0.takeResource(pdMS_TO_TICKS(50)))
+            continue;
+
         DL_MCAN_TxFIFOStatus tf;
         DL_MCAN_getTxFIFOQueStatus(CANFD0, &tf);
 
         uint32_t bufferIndex = tf.putIdx;
-        System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
-        System::UART::uart_ui.putu32d(bufferIndex);
-        System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
 
         DL_MCAN_writeMsgRam(CANFD0, DL_MCAN_MEM_TYPE_FIFO, bufferIndex, &txmsg);
         DL_MCAN_TXBufAddReq(CANFD0, tf.getIdx);
 
-        vTaskDelay(pdMS_TO_TICKS(400));
+        System::CANFD::canFD0.giveResource();
+
+        System::UART::uart_ui.nputs(ARRANDN("TX from buffer "));
+        System::UART::uart_ui.putu32d(bufferIndex);
+        System::UART::uart_ui.nputs(ARRANDN("" NEWLINE));
+
     } while(1);
 
     //--- RX --------------------------------------------------
 
     System::UART::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "RX start" NEWLINE CLIRESET));
     do {
+        vTaskDelay(pdMS_TO_TICKS(400));
+
+        if(!System::CANFD::canFD0.takeResource(pdMS_TO_TICKS(50)))
+            continue;
+
         static DL_MCAN_RxFIFOStatus rf;
         rf.num = DL_MCAN_RX_FIFO_NUM_0;
         DL_MCAN_getRxFIFOStatus(CANFD0, &rf);
@@ -70,7 +82,8 @@ void Task::MCAN_test_task(void *){
             System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
         }
 
-        vTaskDelay(pdMS_TO_TICKS(400));
+        System::CANFD::canFD0.giveResource();
+
     } while(1);
 
     System::UART::uart_ui.nputs(ARRANDN("MCAN_test_task end" NEWLINE));

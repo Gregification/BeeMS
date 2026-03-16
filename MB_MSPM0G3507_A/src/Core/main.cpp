@@ -85,7 +85,7 @@ int main(){
 
     xTaskCreate(Task::ethModbus_task,
             "ethModbus_task",
-            configMINIMAL_STACK_SIZE*10,
+            configMINIMAL_STACK_SIZE*7,
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
