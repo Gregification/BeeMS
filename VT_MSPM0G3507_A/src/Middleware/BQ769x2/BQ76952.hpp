@@ -18,8 +18,8 @@
 /*
  * a wrapper Class over the C style protocol library
  */
-class BQ76952 {
-public:
+struct BQ76952 {
+
     System::SPI::SPI & spi;
     System::GPIO::GPIO const & cs;
 

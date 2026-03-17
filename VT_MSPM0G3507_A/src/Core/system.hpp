@@ -349,6 +349,11 @@ namespace System {
         uint32_t getID(DL_MCAN_TxBufElement const &);
     }
 
+    namespace CRCn {
+        constexpr uint32_t STD_SEED = 2'845'906'381;
+        uint32_t calCRC(void * start, uint32_t n_bytes);
+    }
+
     void init();
 
     /* bring system to immediate stop . requires chip reset to escape this */

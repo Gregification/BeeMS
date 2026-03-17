@@ -65,7 +65,7 @@ void Task::canModbusInterface_task(void *){
 
             if(canrxf.fillLvl == 0) { // is fifo empty?
                 can.giveResource();
-                vTaskDelay(pdMS_TO_TICKS(40)); // eye-balled value
+                vTaskDelay(pdMS_TO_TICKS(50)); // eye-balled value
                 continue;
             }
 

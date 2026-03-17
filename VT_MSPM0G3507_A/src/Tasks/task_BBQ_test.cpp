@@ -26,8 +26,8 @@
 #define userVto10mV(X) (X)
 
 // only 1 BQ on the voltage tap board
-BQ76952 & bq = VT::BBQ::bbqs[0].bq;
-System::GPIO::GPIO const &bqReset = VT::BBQ::bbqs[0].resetPin;
+BQ76952 & bq = VT::opVars.bbqs[0].bq;
+System::GPIO::GPIO const &bqReset = VT::opVars.bbqs[0].resetPin;
 
 BQ76952::BQ76952SSetting constexpr bqSetting = {
         .Fuse = {
@@ -360,7 +360,7 @@ void Task::BBQ_test_task(void *){
     bq.spi.takeResource(0);
 
     //---- SPI setup ------------------------------------------
-    bq.spi.setSCLKTarget(2e3 - 1); // bq76952 max speed of 2MHz,run just under that since it assumes some other ocnditions
+    bq.spi.setSCLKTarget(3e6); // bq76952 max speed of 2MHz,run just under that since it assumes some other ocnditions
     DL_GPIO_enableOutput(GPIOPINPUX(bq.cs)); // SPI CS
     DL_GPIO_initDigitalOutputFeatures(
             bq.cs.iomux,

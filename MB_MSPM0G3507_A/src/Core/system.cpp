@@ -12,6 +12,7 @@
 #include <ti/driverlib/driverlib.h>
 #include "Core/BMS/BMSComms.hpp"
 #include "Core/Networking/bridge_CAN_Modbus.hpp"
+#include "Core/MasterBoard.hpp"
 
 /*--- variables ------------------------------------------------------------------------*/
 
@@ -603,11 +604,21 @@ void System::FailHard(const char *str) {
     taskDISABLE_INTERRUPTS();
 
     static uint32_t count = 0;
+
+    MstrB::Indi::LED::fault.set();
+    MstrB::opVars.GLV_IL_RELAY_engage = false;
+    MstrB::IL::getStatus(); // update relay
+
     while(1) {
         System::UART::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
         System::UART::uart_ui.putu32d(count);
         System::UART::uart_ui.nputs(ARRANDN(" : " CLIRESET));
         System::UART::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
+
+        for(int i = 0; i < 6; i++){
+            DL_GPIO_togglePins(GPIOPINPUX(MstrB::Indi::LED::fault));
+            delay_cycles(System::CLK::CPUCLK / 2);
+        }
 
         delay_cycles(System::CLK::CPUCLK * 10);
         count++;

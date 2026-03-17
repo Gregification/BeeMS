@@ -12,6 +12,7 @@
 #include <ti/driverlib/driverlib.h>
 #include "Core/BMS/BMSComms.hpp"
 #include "Core/Networking/bridge_CAN_Modbus.hpp"
+#include "VT.hpp"
 
 /*--- variables ------------------------------------------------------------------------*/
 
@@ -498,6 +499,33 @@ void System::init() {
     }
     #endif
 
+    // crc
+    {
+        DL_CRC_enablePower(CRC);
+        delay_cycles(POWER_STARTUP_DELAY);
+
+        DL_CRC_init(
+                CRC,
+                DL_CRC_POLYNOMIAL::DL_CRC_32_POLYNOMIAL,
+                DL_CRC_BIT::DL_CRC_BIT_NOT_REVERSED,
+                DL_CRC_INPUT_ENDIANESS::DL_CRC_INPUT_ENDIANESS_BIG_ENDIAN,
+                DL_CRC_OUTPUT_BYTESWAP::DL_CRC_OUTPUT_BYTESWAP_DISABLED
+            );
+        DL_CRC_setSeed32(CRC, CRCn::STD_SEED);
+    }
+
+}
+
+uint32_t System::CRCn::calCRC(void * start, uint32_t n_bytes) {
+    uint32_t* pStart = static_cast<uint32_t*>(start);
+
+    uint32_t n_words = n_bytes / 4;
+
+    if (n_words == 0) return 0;
+
+    uint32_t* pEnd = pStart + (n_words - 1);
+
+    return DL_CRC_calculateMemoryRange32(CRC, CRCn::STD_SEED, pStart, pEnd);
 }
 
 bool System::Lockable::takeResource(TickType_t timeout) {
@@ -584,7 +612,12 @@ void System::FailHard(const char *str) {
         System::uart_ui.nputs(ARRANDN(" : " CLIRESET));
         System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
 
-        delay_cycles(System::CLK::CPUCLK * 10);
+        for(int i = 0; i < 6; i++){
+            DL_GPIO_togglePins(GPIOPINPUX(VT::Indicator::scheduler));
+            delay_cycles(System::CLK::CPUCLK / 2);
+        }
+
+        delay_cycles(System::CLK::CPUCLK * 3);
         count++;
     }
 

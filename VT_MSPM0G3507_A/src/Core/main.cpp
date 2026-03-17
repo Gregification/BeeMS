@@ -62,12 +62,12 @@ int main(){
             "BMS_task",
             MAX(2048, configMINIMAL_STACK_SIZE),
             NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            tskIDLE_PRIORITY + 2, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
-//            "BQ769x2_PROTOCOL_Test_V_Task",
-//            configMINIMAL_STACK_SIZE*207
+//    xTaskCreate(Task::BBQ_test_task,
+//            "BBQ_test_task",
+//            MAX(384, configMINIMAL_STACK_SIZE),
 //            NULL,
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
