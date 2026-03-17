@@ -108,15 +108,16 @@ void Task::canModbusInterface_task(void *){
 
             /*** validation ***********************/
 
-            if(rxbuf.mbap.adu[0].unitID != VT::getID()) {
-                uart.nputs(ARRANDN("not my("));
-                uart.put32d(VT::getID());
-                uart.nputs(ARRANDN(") id: "));
-                uart.put32d(rxbuf.mbap.adu[0].unitID);
-                uart.nputs(ARRANDN(NEWLINE));
-
-                continue; // ignore packet
-            }
+            // id filtering is done in hardware. packet would be dropped otherwise
+//            if(rxbuf.mbap.adu[0].unitID != VT::getID()) {
+//                uart.nputs(ARRANDN("not my("));
+//                uart.put32d(VT::getID());
+//                uart.nputs(ARRANDN(") id: "));
+//                uart.put32d(rxbuf.mbap.adu[0].unitID);
+//                uart.nputs(ARRANDN(NEWLINE));
+//
+//                continue; // ignore packet
+//            }
 
             /*** process packet *******************/
 

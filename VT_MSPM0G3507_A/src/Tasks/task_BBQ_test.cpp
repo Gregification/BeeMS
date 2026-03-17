@@ -360,7 +360,7 @@ void Task::BBQ_test_task(void *){
     bq.spi.takeResource(0);
 
     //---- SPI setup ------------------------------------------
-    bq.spi.setSCLKTarget(3e6); // bq76952 max speed of 2MHz,run just under that since it assumes some other ocnditions
+    bq.spi.setSCLKTarget(2e6+1); // bq76952 max speed of 2MHz,run just under that since it assumes some other ocnditions
     DL_GPIO_enableOutput(GPIOPINPUX(bq.cs)); // SPI CS
     DL_GPIO_initDigitalOutputFeatures(
             bq.cs.iomux,
@@ -381,11 +381,11 @@ void Task::BBQ_test_task(void *){
     bq.cs.clear();
     bqReset.set();
 
-    vTaskDelay(pdMS_TO_TICKS(500)); // CS needs some time to get recognized by the slave
+    vTaskDelay(pdMS_TO_TICKS(50)); // CS needs some time to get recognized by the slave
 
     bqReset.clear();
 
-    vTaskDelay(pdMS_TO_TICKS(300));
+    vTaskDelay(pdMS_TO_TICKS(10));
 
     //--- init BQ76952 ----------------------------------------
     // TODO: on the final product we need to somehow prevent the MCU from locking up the BQ,

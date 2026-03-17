@@ -17,6 +17,7 @@ namespace VT {
     using namespace System;
 
     constexpr uint8_t NUM_BBQs = 1;
+    typedef uint16_t UNIT_uint; // a unsigned integer big enough to act as a bit mask for all cells per BBQ
 
     namespace Indicator {
         const GPIO::GPIO
@@ -45,6 +46,8 @@ namespace VT {
         bool HRLV_IL_usr_dsrd           : 1;
 
         bool balancing_enable           : 1;
+        uint16_t cell_mV_min;
+        uint16_t cell_mV_max;
     };
     extern OpProfile_t opProfile;
 
@@ -53,6 +56,12 @@ namespace VT {
      */
     struct __attribute__((__packed__)) OpVars_t {
         struct __attribute__((__packed__)) BBQ_t {
+
+            static constexpr uint8_t MAX_CELLS_N = 14;
+            UNIT_uint cells_m;
+            static constexpr uint8_t MAX_THERMS_N = 7;
+            UNIT_uint therms_m;
+
             BQ76952 bq;
             GPIO::GPIO const & resetPin;
 
@@ -60,16 +69,18 @@ namespace VT {
                 INIT,
                 INIT_VERI,              // verify init completed successfully
                 ON_NORMAL,
+                ON_ERROR_LATCH,         // latch in this state when error, until some sort of explicit user reset
                 SHUTDOWN,
                 SHUTDOWN_VERI,          // verify shutdown completed successfully
                 OFF,
             } state = State_t::INIT;
 
-            uint16_t cell_mV[14];
+            uint8_t const cell_n;
+            uint16_t cell_mV[MAX_CELLS_N];
             uint16_t stack_10mV;
-            uint16_t cell_mK[7];
+            uint16_t cell_mK[MAX_THERMS_N];
             uint16_t die_mK;
-            uint16_t cell_balancing_status;     // bit mask of what cells are currently balancing
+            UNIT_uint cell_balancing_status;     // bit mask of what cells are currently balancing
         } bbqs[NUM_BBQs];
         uint8_t user_selected_BQ;                   // the BQ chip thats selected by the user for edits
 

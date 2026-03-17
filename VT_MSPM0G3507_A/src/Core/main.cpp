@@ -62,7 +62,7 @@ int main(){
             "BMS_task",
             MAX(2048, configMINIMAL_STACK_SIZE),
             NULL,
-            tskIDLE_PRIORITY + 2, //configMAX_PRIORITIES,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
 //    xTaskCreate(Task::BBQ_test_task,

@@ -8,13 +8,16 @@
 #include "VT.hpp"
 #include "Core/system.hpp"
 
+
 // variables
 namespace VT {
     uint8_t id = 0;
 
     OpProfile_t opProfile = {
-
-    };
+             .balancing_enable  = false,
+             .cell_mV_min       = 1300,
+             .cell_mV_max       = 4300,
+        };
 
     OpVars_t opVars = {
         .bbqs = {

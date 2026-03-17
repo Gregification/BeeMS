@@ -9,6 +9,7 @@
 #define SRC_TASKS_TASK_BMS_HPP_
 
 namespace Task {
+
     /**
      * performs the DAQ and comms required to operate as part of a BMS.
      */
