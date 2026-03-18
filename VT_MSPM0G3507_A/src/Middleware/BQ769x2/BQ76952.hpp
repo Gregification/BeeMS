@@ -37,6 +37,29 @@ struct BQ76952 {
     };
     static_assert(sizeof(BQ76952PinConfig) == sizeof(uint8_t));
 
+    /* BATRM/54 */
+    union BatteryStatus_t {
+        uint16_t Raw;
+        struct __attribute__((packed)) {
+            unsigned int CFGUPDATE      : 1;
+            unsigned int PCHG_MODE      : 1;
+            unsigned int SLEEP_EN       : 1;
+            unsigned int POR            : 1;
+            unsigned int WD             : 1;
+            unsigned int COW_CHK        : 1;
+            unsigned int OTPW           : 1;
+            unsigned int OTPB           : 1;
+            unsigned int SEC            : 2;
+            unsigned int FUSE           : 1;
+            unsigned int SS             : 1;
+            unsigned int PF             : 1;
+            unsigned int SDM            : 1;
+            unsigned int                : 1; // reserved
+            unsigned int SLEEP          : 1;
+        };
+    };
+    static_assert(sizeof(BatteryStatus_t) == sizeof(uint16_t));
+
     /**
      * BQ76952 settings.
      * this is no where near all the options on the BQ.
@@ -357,10 +380,10 @@ struct BQ76952 {
             uint16_t bodyDiodeThreshold;
         } Protection;
 
-        struct __attribute__((packed)) {
+        struct __attribute__((packed)) Alarm_t {
 
             /* BATRM.13.3.4.1/164 */
-            union {
+            union DefaultAlarmMask_t {
                 uint16_t Raw;
                 struct __attribute__((packed)) {
                     unsigned int WAKE : 1 = 0;             // Bit 0: Device wakened from SLEEP mode
