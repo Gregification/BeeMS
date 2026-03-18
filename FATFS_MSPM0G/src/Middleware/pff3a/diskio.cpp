@@ -154,7 +154,6 @@ DSTATUS disk_initialize(void) {
     DESELECT();
     spi_receive();
 
-    //return ty ? 0 : STA_NOINIT;
     if(ty) return (BYTE)0;
     else return (BYTE)STA_NOINIT;
 }
