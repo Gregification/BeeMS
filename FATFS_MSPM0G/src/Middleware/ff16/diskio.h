@@ -1,6 +1,7 @@
 /*-----------------------------------------------------------------------/
-/  Low level disk interface modlue include file   (C)ChaN, 2025          /
+/  Low level disk interface module include file   (C)ChaN, 2025          /
 /-----------------------------------------------------------------------*/
+#include "Middleware/ff16/integer.h"
 
 #ifndef _DISKIO_DEFINED
 #define _DISKIO_DEFINED
@@ -26,11 +27,15 @@ typedef enum {
 /* Prototypes for disk control functions */
 
 
-DSTATUS disk_initialize (BYTE pdrv);
-DSTATUS disk_status (BYTE pdrv);
-DRESULT disk_read (BYTE pdrv, BYTE* buff, LBA_t sector, UINT count);
-DRESULT disk_write (BYTE pdrv, const BYTE* buff, LBA_t sector, UINT count);
-DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
+//DSTATUS disk_initialize (BYTE pdrv);
+//DSTATUS disk_status (BYTE pdrv);
+//DRESULT disk_read (BYTE pdrv, BYTE* buff, LBA_t sector, UINT count);
+//DRESULT disk_write (BYTE pdrv, const BYTE* buff, LBA_t sector, UINT count);
+//DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
+
+DRESULT disk_initialize(void);
+DRESULT disk_readp(BYTE*, DWORD, WORD, WORD);
+DRESULT disk_writep(const BYTE*, DWORD);
 
 
 /* Disk Status Bits (DSTATUS) */
@@ -40,7 +45,7 @@ DRESULT disk_ioctl (BYTE pdrv, BYTE cmd, void* buff);
 #define STA_PROTECT		0x04	/* Write protected */
 
 
-/* Command code for disk_ioctrl fucntion */
+/* Command code for disk_ioctrl function */
 
 /* Generic command (Used by FatFs) */
 #define CTRL_SYNC			0	/* Complete pending write process (needed at FF_FS_READONLY == 0) */

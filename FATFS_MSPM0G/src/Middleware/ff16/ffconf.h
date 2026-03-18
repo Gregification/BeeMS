@@ -56,10 +56,10 @@
 /* This option switches f_forward(). (0:Disable or 1:Enable) */
 
 
-#define FF_USE_STRFUNC	0
+#define FF_USE_STRFUNC	1
 #define FF_PRINT_LLI	0
-#define FF_PRINT_FLOAT	0
-#define FF_STRF_ENCODE	0
+#define FF_PRINT_FLOAT  0
+#define FF_STRF_ENCODE	3
 /* FF_USE_STRFUNC switches string API functions, f_gets(), f_putc(), f_puts() and
 /  f_printf().
 /
@@ -84,7 +84,7 @@
 / Locale and Namespace Configurations
 /---------------------------------------------------------------------------*/
 
-#define FF_CODE_PAGE	932
+#define FF_CODE_PAGE	437
 /* This option specifies the OEM code page to be used on the target system.
 /  Incorrect code page setting can cause a file open failure.
 /
@@ -123,7 +123,7 @@
 /   3: Enable LFN with dynamic working buffer on the HEAP.
 /
 /  To enable the LFN, ffunicode.c needs to be added to the project. The LFN feature
-/  requiers certain internal working buffer occupies (FF_MAX_LFN + 1) * 2 bytes and
+/  requires certain internal working buffer occupies (FF_MAX_LFN + 1) * 2 bytes and
 /  additional (FF_MAX_LFN + 44) / 15 * 32 bytes when exFAT is enabled.
 /  The FF_MAX_LFN defines size of the working buffer in UTF-16 code unit and it can
 /  be in range of 12 to 255. It is recommended to be set 255 to fully support the LFN
@@ -133,7 +133,7 @@
 /  ff_memfree() exemplified in ffsystem.c, need to be added to the project. */
 
 
-#define FF_LFN_UNICODE	0
+#define FF_LFN_UNICODE	2
 /* This option switches the character encoding on the API when LFN is enabled.
 /
 /   0: ANSI/OEM in current CP (TCHAR = char)
@@ -249,7 +249,7 @@
 /  Note that enabling exFAT discards ANSI C (C89) compatibility. */
 
 
-#define FF_FS_NORTC		0
+#define FF_FS_NORTC		1
 #define FF_NORTC_MON	1
 #define FF_NORTC_MDAY	1
 #define FF_NORTC_YEAR	2025
@@ -298,7 +298,7 @@
 /  module itself. Note that regardless of this option, file access to different
 /  volume is always re-entrant and volume control functions, f_mount(), f_mkfs()
 /  and f_fdisk(), are always not re-entrant. Only file/directory access to
-/  the same volume is under control of this featuer.
+/  the same volume is under control of this feature.
 /
 /   0: Disable re-entrancy. FF_FS_TIMEOUT have no effect.
 /   1: Enable re-entrancy. Also user provided synchronization handlers,
