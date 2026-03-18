@@ -94,18 +94,29 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         static_assert(sizeof(batstat) == 2);
                     }
 
-                    if(batstat.SEC == 0)
+
+                    if(batstat.SEC == 0) // is not initialized
                         break;
-                    if(batstat.SEC == 3) {
-                        batch.bq.unseal(0x0414'3672);
+
+                    System::uart_ui.nputs(ARRANDN("BBQ security state:" NEWLINE));
+                    if(batstat.SEC == 3) { // is sealed
+                        System::uart_ui.nputs(ARRANDN("SEALED , attempting security key (0x"));
+                        System::uart_ui.putu32h(BQ76952::DEFAULT_UNSEAL_KEY);
+                        System::uart_ui.nputs(ARRANDN(") ..." NEWLINE));
+                        batch.bq.unseal(BQ76952::DEFAULT_UNSEAL_KEY);
                         break;
+                    }
+                    if(batstat.SEC == 2) {
+                        System::uart_ui.nputs(ARRANDN("UNSEALED" NEWLINE));
+                    }
+                    else if(batstat.SEC == 1) {
+                        System::uart_ui.nputs(ARRANDN("FULL ACCESS" NEWLINE));
                     }
 
                     if(batstat.POR) {
                         BQ76952::BQ76952SSetting settings;
-                        if(!VT::BBQ::recalSetting(idx, &settings)) {
+                        if(!VT::BBQ::recalSetting(idx, &settings))
                             settings = VT::BBQ::DEFAULT_BBQ_SETTING;
-                        }
 
                         batch.resetPin.set();
                         vTaskDelay(pdMS_TO_TICKS(50)); // CS needs some time to get recognized by the slave
@@ -144,8 +155,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
                     //TODO, wait for the INITSTART and INITCOMP bits to do their thing
                     BQ76952::BQ76952SSetting::Alarm_t::DefaultAlarmMask_t alarmstatus;
-                    if(!bq.sendDirectCommandR(
-                            BQ769X2_PROTOCOL::CmdDrt::AlarmRawStatus,
+                    if(!bq.sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt::AlarmRawStatus,
                             &alarmstatus.Raw,
                             2
                         )){
@@ -192,8 +202,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     error = 0;
 
                     BQ76952::BatteryStatus_t batstat;
-                    if(!bq.sendDirectCommandR(
-                            BQ769X2_PROTOCOL::CmdDrt::BatteryStatus,
+                    if(!bq.sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt::BatteryStatus,
                             &batstat,
                             2
                         )){
@@ -203,14 +212,14 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         static_assert(sizeof(batstat) == 2);
                     }
 
-                    if(batstat.)
-
-                    if(batstat.SEC == 0)
-                        break;
-                    if(batstat.SEC == 3) {
-                        batch.state = OpVars_t::BBQ_t::State_t::INIT;
-                        batch._strikes = 0;
-                        break;
+                    switch(batstat.SEC) {
+                        case 1: // FULLACCESS
+                        case 2: // UNSEALED
+                            break;
+                        default:
+                            batch.state = OpVars_t::BBQ_t::State_t::INIT;
+                            batch._strikes = 0;
+                            break;
                     }
 
                     for(int i = 0; i < VT::OpVars_t::BBQ_t::MAX_CELLS_N && !error; i++) {
@@ -273,7 +282,8 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp) >= 2);
                     }
-                    batch.therms_m[];
+
+                    // todo read therms
 
                     if(error) {
 //                        batch.state = OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH;

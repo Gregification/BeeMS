@@ -23,6 +23,8 @@ struct BQ76952 {
     System::SPI::SPI & spi;
     System::GPIO::GPIO const & cs;
 
+    static constexpr uint32_t DEFAULT_UNSEAL_KEY = 0x0414'3672;
+
     union BQ76952PinConfig {
         uint8_t Raw;
         struct __attribute__((packed)) {
@@ -679,8 +681,8 @@ struct BQ76952 {
         bool operator==(const BQ76952SSetting& other) const;
     };
 
-    struct __attribute__((packed)) {
-        struct __attribute__((packed)) {
+    struct __attribute__((packed)) Power_t {
+        struct __attribute__((packed)) Shutdown_t {
             /* BATRM.13.4.1.1/ */
             int16_t shutdownCellVoltage_mV; // Default: 0 mV (0x0000)
 
@@ -706,7 +708,7 @@ struct BQ76952 {
             uint8_t ramFailShutdownTime_s; // Default: 5 s (0x05)
         } Shutdown;
 
-        struct __attribute__((packed)) {
+        struct __attribute__((packed)) Sleep_t {
             /* BATRM.13.4.2.1/ */
             int16_t sleepCurrent_mA; // Default: 20 mA (0x0014)
 
@@ -720,10 +722,10 @@ struct BQ76952 {
             uint8_t sleepHysteresisTime_s; // Default: 10 s (0x0A)
 
             /* BATRM.13.4.2.5/ */
-            int16_t sleepChargerVoltageThreshold_10mV; // Default: 2000 (20.0 V, 0x07D0)
+            int16_t sleepChargerVThresh_10mV; // Default: 2000 (20.0 V, 0x07D0)
 
             /* BATRM.13.4.2.6/ */
-            int16_t sleepChargerPackTosDelta_10mV; // Default: 200 (2.0 V, 0x00C8)
+            int16_t sleepChargerPackTOSDelta_10mV; // Default: 200 (2.0 V, 0x00C8)
         } Sleep;
 
     } Power;
