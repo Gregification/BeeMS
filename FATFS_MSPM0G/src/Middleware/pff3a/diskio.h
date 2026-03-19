@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------
-/  PFF - Low level disk interface modlue include file    (C)ChaN, 2014
+/  PFF - Low level disk interface module include file    (C)ChaN, 2014
 /-----------------------------------------------------------------------*/
 
 #ifndef _DISKIO_DEFINED
@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-#include "pff.h"
+#include "Middleware/pff3a/pff.h"
 
 
 /* Status of Disk Functions */

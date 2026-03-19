@@ -7,20 +7,49 @@
 #include "Core/system.hpp"
 #include "Core/std alternatives/string.hpp"
 
+#include <string.h>
 
+#include "Middleware/pff3a/diskio.h"
+#include "Middleware/pff3a/pff.h"
 
 
 /*** setup ***************************************************/
-System::UART::UART &            uart1 = System::UART::uart_ui;
 
 
 void Task::SDC_test_task(void *){
-    uart1.nputs(ARRANDN("SDC_test_task start" NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN("SDC_test_task start" NEWLINE));
+
+    FRESULT res;
+    FATFS fs; /* File system object */
+    UINT bw;
+    WORD n = 0;
+    char Line[128];
+    System::UART::uart_ui.nputs(ARRANDN("Disc init.... \n\r res: "));
+    System::UART::uart_ui.putu32h(disk_initialize());
+    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
 
 
-    while(true){
-        //TODO uhhhhhhhh....
-    }
+    System::UART::uart_ui.nputs(ARRANDN("Mounting.... \n\r res: "));
+    System::UART::uart_ui.putu32h(pf_mount(&fs));
+    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+
+    System::UART::uart_ui.nputs(ARRANDN("opening file.txt.... \n\r res: "));
+    System::UART::uart_ui.putu32h(pf_open("file.txt"));
+    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+
+    strcat(Line,"Do I need to panik? Probably.\r\n");
+
+    System::UART::uart_ui.nputs(ARRANDN("Writing.... \n\r res: "));
+    System::UART::uart_ui.putu32h(pf_write(Line, strlen(Line), &bw));
+    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+
+    System::UART::uart_ui.nputs(ARRANDN("Finalizing.... \n\r res: "));
+    System::UART::uart_ui.putu32h(pf_write(0, 0, &bw));
+    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+
+
+
+
 
 
     System::FailHard("SDC_test_task ended" NEWLINE);
