@@ -38,15 +38,15 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
         case RegAddr::CELL13_mV:    *out = VT::getSelectedBBQ().cell_mV[12]; break;
         case RegAddr::CELL14_mV:    *out = VT::getSelectedBBQ().cell_mV[13]; break;
 
-        case RegAddr::CELL1_mK:     *out = VT::getSelectedBBQ().cell_mK[0]; break;
-        case RegAddr::CELL2_mK:     *out = VT::getSelectedBBQ().cell_mK[0]; break;
-        case RegAddr::CELL3_mK:     *out = VT::getSelectedBBQ().cell_mK[0]; break;
-        case RegAddr::CELL4_mK:     *out = VT::getSelectedBBQ().cell_mK[0]; break;
-        case RegAddr::CELL5_mK:     *out = VT::getSelectedBBQ().cell_mK[0]; break;
-        case RegAddr::CELL6_mK:     *out = VT::getSelectedBBQ().cell_mK[0]; break;
-        case RegAddr::CELL7_mK:     *out = VT::getSelectedBBQ().cell_mK[0]; break;
+        case RegAddr::CELL1_mK:     *out = VT::getSelectedBBQ().cell_10mCl[0] / 100; break;
+        case RegAddr::CELL2_mK:     *out = VT::getSelectedBBQ().cell_10mCl[1] / 100; break;
+        case RegAddr::CELL3_mK:     *out = VT::getSelectedBBQ().cell_10mCl[2] / 100; break;
+        case RegAddr::CELL4_mK:     *out = VT::getSelectedBBQ().cell_10mCl[3] / 100; break;
+        case RegAddr::CELL5_mK:     *out = VT::getSelectedBBQ().cell_10mCl[4] / 100; break;
+        case RegAddr::CELL6_mK:     *out = VT::getSelectedBBQ().cell_10mCl[5] / 100; break;
+        case RegAddr::CELL7_mK:     *out = VT::getSelectedBBQ().cell_10mCl[6] / 100; break;
 
-        case RegAddr::DIE_mK:       *out = VT::getSelectedBBQ().die_mK; break;
+        case RegAddr::DIE_mK:       *out = VT::getSelectedBBQ().die_10mCl  / 100; break;
     }
 
     return true;

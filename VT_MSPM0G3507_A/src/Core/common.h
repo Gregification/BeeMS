@@ -26,6 +26,8 @@
 #define ARRLEN(ARR)                 (sizeof((ARR))/sizeof((ARR)[0]))
 #define MIN(A,B)                    ((A) < (B) ? (A):(B))
 #define MAX(A,B)                    ((A) > (B) ? (A):(B))
+#define STR(X)                      #X
+#define STRM(X)                     STR(X)
 
 //--- program constants ---------------------------------------
 

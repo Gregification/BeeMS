@@ -46,6 +46,7 @@ namespace VT {
         bool HRLV_IL_usr_dsrd           : 1;
 
         bool balancing_enable           : 1;
+
         uint16_t cell_mV_min;
         uint16_t cell_mV_max;
     };
@@ -78,9 +79,11 @@ namespace VT {
             uint8_t const cell_n;
             uint16_t cell_mV[MAX_CELLS_N];
             uint16_t stack_10mV;
-            uint16_t cell_mK[MAX_THERMS_N];
-            uint16_t die_mK;
-            UNIT_uint cell_balancing_status;     // bit mask of what cells are currently balancing
+            int16_t cell_10mCl[MAX_THERMS_N];   // degrees celsius (10mCl)
+            uint16_t die_10mCl;                 // degrees celsius (10mCl)
+            UNIT_uint cell_balancing_status;    // bit mask of what cells are currently balancing
+
+            uint8_t _strikes;                   // internal counter of how many errors have accumulated
         } bbqs[NUM_BBQs];
         uint8_t user_selected_BQ;                   // the BQ chip thats selected by the user for edits
 

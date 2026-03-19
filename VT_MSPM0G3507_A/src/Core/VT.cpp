@@ -41,13 +41,13 @@ namespace VT::BBQ {
              .Configuration = {
                  .powerConfig = {
                      .wake_speed     = 0,
-                     .loop_slow      = 0,
+                     .loop_slow      = 3,
                      .cb_loop_slow   = 2,
                      .fastadc        = 0,
                      .otsd           = 1,
                      .sleep          = 1,
                      .dpslp_lfo      = 0,
-                     .dpslp_ldo      = 0,
+                     .dpslp_ldo      = 1,
                      .dpslp_pd       = 1,
                      .shut_ts2       = 0,
                      .dpslp_ot       = 1,
@@ -62,43 +62,61 @@ namespace VT::BBQ {
                      .enable0    = 1,
                  },
                  .HWDRegulatorOptions = { // TODO: is a safety thing, set up properly on final product
-                     .toggle_time    = 0, // 5S power cycle
-                     .toggle_opt     = 0,  // turn-off then turn-on on HWD
+                     .toggle_time    = 5, // 5S power cycle
+                     .toggle_opt     = 1,  // turn-off then turn-on on HWD
                  },
                  .spiConfig = {
                      .filt       = 1, // use digital filter?
                      .miso_reg1  = 1, // logic high V = REG1 output
                  },
-                 .commIdleTime_S = 0, // 1S of no comms before turning off HFO
+                 .commIdleTime_S = 1, // 1S of no comms before turning off HFO
                  .cfetoffPinConfig = {// WARNING: effects SPI CS behavior
                      .Raw = 0,   // as SPI cs
                  },
                  .dfetoffPinConfig = { // TODO: figure out how to do custom thermistor polynomial
-                     .Raw = 0,
+                     .function  = 3,    // 3 : ADC/thermistor
+                     .opt1_0    = 0b10, // thermistor reported, not used for anything else
+                     .opt3_2    = 0b11, // use raw adc count
+                     .opt5_4    = 0b00, // internal PU: 18k
                  },
                  .alertPinConfig = { // TODO: figure out how to do custom thermistor polynomial
-                     .Raw = 0,
+                     .function  = 3,    // 3 : ADC/thermistor
+                     .opt1_0    = 0b10, // thermistor reported, not used for anything else
+                     .opt3_2    = 0b11, // use raw adc count
+                     .opt5_4    = 0b00, // internal PU: 18k
                  },
                  .TS1Config = { // TODO: figure out how to do custom thermistor polynomial
                      .function   = 3,    // as ADC/thermistor
-                     .opt1_0     = 0b01, // as thermistor
-                     .opt3_2     = 0b00, // 18k model
-                     .opt5_4     = 0b00, // 18k PU
+                     .opt1_0     = 0b10, // thermistor reported, not used for anything else
+                     .opt3_2     = 0b11, // use raw adc count
+                     .opt5_4     = 0b00, // internal PU: 18k
                  },
                  .TS2Config = { // TODO: figure out how to do custom thermistor polynomial
-                     .Raw = 0,
+                    .function   = 3,    // as ADC/thermistor
+                    .opt1_0     = 0b10, // thermistor reported, not used for anything else
+                    .opt3_2     = 0b11, // use raw adc count
+                    .opt5_4     = 0b00, // internal PU: 18k
                  },
                  .TS3Config = { // TODO: figure out how to do custom thermistor polynomial
-                     .Raw = 0,
+                    .function   = 3,    // as ADC/thermistor
+                    .opt1_0     = 0b10, // thermistor reported, not used for anything else
+                    .opt3_2     = 0b11, // use raw adc count
+                    .opt5_4     = 0b00, // internal PU: 18k
                  },
                  .HDQPinConfig = { // WARNING: effects SPI MOSI behavior
                      .Raw = 0,   // as SPI MOSI
                  },
                  .DCHGPinConfig = { // TODO: figure out how to do custom thermistor polynomial
-                     .Raw = 0,
+                    .function   = 3,    // as ADC/thermistor
+                    .opt1_0     = 0b10, // thermistor reported, not used for anything else
+                    .opt3_2     = 0b11, // use raw adc count
+                    .opt5_4     = 0b00, // internal PU: 18k
                  },
                  .DDSGPinConfig = { // TODO: figure out how to do custom thermistor polynomial
-                     .Raw = 0,
+                    .function   = 3,    // as ADC/thermistor
+                    .opt1_0     = 0b10, // thermistor reported, not used for anything else
+                    .opt3_2     = 0b11, // use raw adc count
+                    .opt5_4     = 0b00, // internal PU: 18k
                  },
                  .DAConfig = {
                      .user_amps  = 2, // USER AMPS unit selection. 2:10mA,3:100mA . see userAto10mA macro
@@ -112,7 +130,7 @@ namespace VT::BBQ {
 
              .Protection = {
                  .protectionConfiguraiton = {
-                    .PF_FETS         = 1, // Bit 1: PF causes FETs off (Default: 1)
+                    .PF_FETS         = 0, // Bit 1: PF causes FETs off (Default: 1)
                     .PF_REGS         = 0, // Bit 2: PF causes regulators off (Default: 0)
                     .PF_DPSLP        = 0, // Bit 3: PF causes device to enter DEEPSLEEP (Default: 0)
                     .PF_FUSE         = 0, // Bit 4: PF causes fuse blow (Default: 0)
@@ -123,12 +141,12 @@ namespace VT::BBQ {
                     .SCDL_CURR_RECOV = 0, // Bit 10: SCD Latch recovers based on charge current (Default: 0)
                  },
                  .enabledProtectionsA = {
-                     .CUV  = 0, // Bit 2: Cell Undervoltage Protection (Default: 0)
+                     .CUV  = 1, // Bit 2: Cell Undervoltage Protection (Default: 0)
                      .COV  = 1, // Bit 3: Cell Overvoltage Protection (Default: 1)
                      .OCC  = 0, // Bit 4: Overcurrent in Charge Protection (Default: 0)
                      .OCD1 = 0, // Bit 5: Overcurrent in Discharge 1st Tier Protection (Default: 0)
                      .OCD2 = 0, // Bit 6: Overcurrent in Discharge 2nd Tier Protection (Default: 0)
-                     .SCD  = 1, // Bit 7: Short Circuit in Discharge Protection (Default: 1)
+                     .SCD  = 0, // Bit 7: Short Circuit in Discharge Protection (Default: 1)
                  },
                  .enabledProtectionsB = {
                      .UTC   = 0, // Bit 0: Undertemperature in Charge (Default: 0)
@@ -136,7 +154,7 @@ namespace VT::BBQ {
                      .UTINT = 0, // Bit 2: Internal Undertemperature (Default: 0)
                      .OTC   = 0, // Bit 4: Overtemperature in Charge (Default: 0)
                      .OTD   = 0, // Bit 5: Overtemperature in Discharge (Default: 0)
-                     .OTINT = 0, // Bit 6: Internal Overtemperature (Default: 0)
+                     .OTINT = 1, // Bit 6: Internal Overtemperature (Default: 0)
                      .OTF   = 0, // Bit 7: FET Overtemperature (Default: 0)
                  },
                  .enabledProtectionsC = {
@@ -285,16 +303,6 @@ namespace VT::BBQ {
                       .HWMX = 0, // Bit 6: Internal Stuck Hardware Mux Permanent Fail (Default: 0)
                       .CMDF = 0, // Bit 7: Commanded Permanent Fail (Default: 0)
                   },
-                  .enabledPFC = {
-                      .OTPF = 1, // Bit 0: OTP Memory Permanent Fail (Default: 1)
-                      .DRMF = 1, // Bit 1: Data ROM Permanent Fail (Default: 1)
-                      .IRMF = 1, // Bit 2: Instruction ROM Permanent Fail (Default: 1)
-                      .LFOF = 0, // Bit 3: Internal LFO Permanent Fail (Default: 0)
-                      .VREF = 0, // Bit 4: Internal Voltage Reference Permanent Fail (Default: 0)
-                      .VSSF = 0, // Bit 5: Internal VSS Measurement Permanent Fail (Default: 0)
-                      .HWMX = 0, // Bit 6: Internal Stuck Hardware Mux Permanent Fail (Default: 0)
-                      .CMDF = 0, // Bit 7: Commanded Permanent Fail (Default: 0)
-                  },
              },
 
              // we dotn use this, values are just what ever it takes to turn stuff off
@@ -318,7 +326,7 @@ namespace VT::BBQ {
              },
 
              .CellOpenWire = {
-                  .checkTime_S = 5
+                  .checkTime_S = 10
              },
 
              .InterconnectResistance = {
@@ -344,14 +352,14 @@ namespace VT::BBQ {
                   },
                   .minCellTemp_C     = -20,
                   .maxCellTemp_C     = 60,
-                  .maxInternalTemp_C = 70,
-                  .cellBalanceInterval_s = 20,
-                  .cellBalanceMaxCells   = 10,
-                  .cellBalanceMinCellV_Charge_mV = 3000,
-                  .cellBalanceMinDelta_Charge_mV = 30,
+                  .maxInternalTemp_C = 80,
+                  .cellBalanceInterval_s = 5,
+                  .cellBalanceMaxCells   = 16,
+                  .cellBalanceMinCellV_Charge_mV = 2000,
+                  .cellBalanceMinDelta_Charge_mV = 50,
                   .cellBalanceStopDelta_Charge_mV= 10,
-                  .cellBalanceMinCellV_Relax_mV  = 3000,
-                  .cellBalanceMinDelta_Relax_mV  = 30,
+                  .cellBalanceMinCellV_Relax_mV  = 2200,
+                  .cellBalanceMinDelta_Relax_mV  = 20,
                   .cellBalanceStopDelta_Relax_mV = 10,
              },
          };
@@ -376,9 +384,9 @@ void VT::postScheduler_init(){
 
        for(auto & i : opVars.bbqs) {
            i.stack_10mV = 0;
-           i.die_mK = 0;
+           i.die_10mCl = 0;
            i.cell_balancing_status = 0;
-           for(auto & j : i.cell_mK)
+           for(auto & j : i.cell_10mCl)
                j = 0;
            for(auto & j : i.cell_mV)
                j = 0;

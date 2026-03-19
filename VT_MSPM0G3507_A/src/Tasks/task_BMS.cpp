@@ -9,10 +9,13 @@
 #include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/system.hpp"
 #include "Core/VT.hpp"
+#include "Core/std alternatives/string.hpp"
 
 using namespace System;
 
+// a proper logging system would be the way to go
 int32_t error = 0;
+char errorStr[MAX_STR_ERROR_LEN];
 
 void loop(VT::OpVars_t::BBQ_t &, uint8_t idx);
 
@@ -21,8 +24,8 @@ void Task::BMS(void *) {
 
     {
         auto & uart = System::uart_ui;
-        uart.nputs(ARRANDN("BMS_task start" NEWLINE));
-        uart.nputs(ARRANDN("postScheduler init ..." NEWLINE));
+        vTaskDelay(pdMS_TO_TICKS(10));
+        uart.nputs(ARRANDN("BMS_task start" NEWLINE "postScheduler init ..." NEWLINE));
     }
 
     VT::postScheduler_init();
@@ -30,7 +33,7 @@ void Task::BMS(void *) {
     while(true) {
         for(uint8_t i = 0; i < sizeof(VT::OpVars_t::bbqs)/sizeof(VT::OpVars_t::bbqs[0]); i++) {
             loop(VT::opVars.bbqs[i], i);
-            vTaskDelay(pdMS_TO_TICKS(50));
+            vTaskDelay(pdMS_TO_TICKS(100));
         }
     }
 
@@ -73,29 +76,59 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     );
 
                 bq.cs.clear();
-                batch.resetPin.set();
-
-                vTaskDelay(pdMS_TO_TICKS(50)); // CS needs some time to get recognized by the slave
-
                 batch.resetPin.clear();
-
-                vTaskDelay(pdMS_TO_TICKS(10));
 
                 if(!bq.spi.takeResource(pdMS_TO_TICKS(10)))
                     return;
                 do{
-                    BQ76952::BQ76952SSetting settings;
-                    if(!VT::BBQ::recalSetting(idx, &settings)) {
-                        settings = VT::BBQ::DEFAULT_BBQ_SETTING;
+
+                    BQ76952::BatteryStatus_t batstat;
+                    if(!bq.sendDirectCommandR(
+                            BQ769X2_PROTOCOL::CmdDrt::BatteryStatus,
+                            &batstat,
+                            2
+                        )){
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " failed SPI test transaction");
+                        break;
+                        static_assert(sizeof(batstat) == 2);
                     }
 
-                    if(!bq.setConfig(&settings))
+                    if(batstat.SEC == 0)
                         break;
+                    if(batstat.SEC == 3) {
+                        batch.bq.unseal(0x0414'3672);
+                        break;
+                    }
+
+                    if(batstat.POR) {
+                        BQ76952::BQ76952SSetting settings;
+                        if(!VT::BBQ::recalSetting(idx, &settings)) {
+                            settings = VT::BBQ::DEFAULT_BBQ_SETTING;
+                        }
+
+                        batch.resetPin.set();
+                        vTaskDelay(pdMS_TO_TICKS(50)); // CS needs some time to get recognized by the slave
+                        batch.resetPin.clear();
+                        vTaskDelay(pdMS_TO_TICKS(10));
+
+                        if(!bq.setConfig(&settings))
+                            break;
+                    }
 
                     batch.state = OpVars_t::BBQ_t::State_t::INIT_VERI;
-
+                    batch._strikes = 0;
                 }while(false);
                 bq.spi.giveResource();
+
+                if(error){
+                    if(batch._strikes > 5) {
+                        batch.state = OpVars_t::BBQ_t::State_t::SHUTDOWN;
+                        batch._strikes = 0;
+                    }
+
+                    vTaskDelay(pdMS_TO_TICKS(batch._strikes * 10));
+                }
 
             } break;
 
@@ -105,27 +138,49 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
                 if(bq.spi.takeResource(10))
                     break;
+
                 do {
-                    bool bad = false;
-                    for(int i = 0; i < 3 && !bad; i++) {
+                    error = 0;
 
-                        if(!bq.sendDirectCommandR(
-                                (BQ769X2_PROTOCOL::CmdDrt)(BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage + 2 * i),
-                                batch.cell_mV + i,
-                                sizeof(batch.cell_mV)
-                            ))
-                            bad = true;
-
-                        if(batch.cell_mV[i] < 1.2e3 || 4.4e3 < batch.cell_mV[i])
-                            bad = true;
+                    //TODO, wait for the INITSTART and INITCOMP bits to do their thing
+                    BQ76952::BQ76952SSetting::Alarm_t::DefaultAlarmMask_t alarmstatus;
+                    if(!bq.sendDirectCommandR(
+                            BQ769X2_PROTOCOL::CmdDrt::AlarmRawStatus,
+                            &alarmstatus.Raw,
+                            2
+                        )){
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " failed SPI test transaction");
+                        break;
+                        static_assert(sizeof(alarmstatus) == 2);
                     }
 
-                    if(bad)
+                    if(!alarmstatus.INITCOMP) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ has not yet completed power up init");
                         break;
+                    }
+
+                    if(!alarmstatus.FULLSCAN) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ has not yet completed power up init");
+                        break;
+                    }
 
                     batch.state = OpVars_t::BBQ_t::State_t::ON_NORMAL;
+                    batch._strikes = 0;
                 } while(false);
                 bq.spi.giveResource();
+
+                if(error) {
+                    System::uart_ui.nputs(ARRANDN("task BMS > "));
+                    System::uart_ui.put32d(batch._strikes);
+                    System::uart_ui.nputs(ARRANDN(" > INIT_VERI error: "));
+                    System::uart_ui.nputs(ARRANDN(errorStr));
+                    System::uart_ui.nputs(ARRANDN("\t --> "));
+                    System::uart_ui.put32d(error);
+                    System::uart_ui.nputs(ARRANDN(NEWLINE));
+                }
 
             } break;
 
@@ -134,25 +189,101 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                 if(bq.spi.takeResource(10))
                     break;
                 do {
-                    for(int i = 0; i < VT::OpVars_t::BBQ_t::MAX_CELLS_N && !error; i++) {
+                    error = 0;
 
+                    BQ76952::BatteryStatus_t batstat;
+                    if(!bq.sendDirectCommandR(
+                            BQ769X2_PROTOCOL::CmdDrt::BatteryStatus,
+                            &batstat,
+                            2
+                        )){
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " failed SPI test transaction");
+                        break;
+                        static_assert(sizeof(batstat) == 2);
+                    }
+
+                    if(batstat.)
+
+                    if(batstat.SEC == 0)
+                        break;
+                    if(batstat.SEC == 3) {
+                        batch.state = OpVars_t::BBQ_t::State_t::INIT;
+                        batch._strikes = 0;
+                        break;
+                    }
+
+                    for(int i = 0; i < VT::OpVars_t::BBQ_t::MAX_CELLS_N && !error; i++) {
                         if(!bq.sendDirectCommandR(
                                 (BQ769X2_PROTOCOL::CmdDrt)(BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage + 2 * i),
                                 batch.cell_mV + i,
-                                sizeof(batch.cell_mV)
+                                2
                             )) {
                             error = __LINE__;
+                            ALT::srtCpy(ARRANDN(errorStr),  STRM(__LINE__) " BBQ SPI transaction failed");
+                            break;
+                            static_assert(sizeof(batch.cell_mV[0]) >= 2);
+                        }
+
+                        if(batch.cell_mV[i] < VT::opProfile.cell_mV_min){
+                            error = batch.cell_mV[i];
+                            if(!error) error++;
+                            ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " cell UV, mV");
                             break;
                         }
 
-//                        if(batch.cell_mV[i] < VT::opProfile.cell_mV_min || VT::opProfile.cell_mV_max < batch.cell_mV[i]){
-//                            error = __LINE__;
-//                            break;
-//                        }
+                        if(batch.cell_mV[i] > VT::opProfile.cell_mV_max){
+                            error = batch.cell_mV[i];
+                            if(!error) error++;
+                            ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " cell OV, mV");
+                            break;
+                        }
                     }
 
+                    uint16_t temp;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::StackVoltage,
+                            &batch.stack_10mV,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr),  STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(batch.stack_10mV) >= 2);
+                    }
+
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68 (100mK)
+                            &temp,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp) >= 2);
+                    }
+                    batch.die_10mCl = temp * 10 - 2731;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::ALERTTemperature,  // 0x68 (100mK)
+                            &temp,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp) >= 2);
+                    }
+                    batch.therms_m[];
+
                     if(error) {
-                        batch.state = OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH;
+//                        batch.state = OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH;
+                        System::uart_ui.nputs(ARRANDN("task BMS > "));
+                        System::uart_ui.put32d(batch._strikes);
+                        System::uart_ui.nputs(ARRANDN(" > NORMAL_ON error: "));
+                        System::uart_ui.nputs(ARRANDN(errorStr));
+                        System::uart_ui.nputs(ARRANDN("\t --> "));
+                        System::uart_ui.put32d(error);
+                        System::uart_ui.nputs(ARRANDN(NEWLINE));
                         break;
                     }
 
@@ -162,7 +293,11 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
             } break;
 
         case OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH: {
-                System::uart_ui.nputs(ARRANDN("task BMS > ON_ERROR_LATCH: "));
+                System::uart_ui.nputs(ARRANDN("task BMS > "));
+                System::uart_ui.put32d(batch._strikes);
+                System::uart_ui.nputs(ARRANDN(" > ON_ERROR_LATCH error: "));
+                System::uart_ui.nputs(ARRANDN(errorStr));
+                System::uart_ui.nputs(ARRANDN("\t --> "));
                 System::uart_ui.put32d(error);
                 System::uart_ui.nputs(ARRANDN(NEWLINE));
             } break;
