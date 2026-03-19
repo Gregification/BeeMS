@@ -59,9 +59,19 @@ namespace VT {
         struct __attribute__((__packed__)) BBQ_t {
 
             static constexpr uint8_t MAX_CELLS_N = 14;
-            UNIT_uint cells_m;
-            static constexpr uint8_t MAX_THERMS_N = 7;
-            UNIT_uint therms_m;
+//            UNIT_uint cells_u;
+
+            enum THERM_IDX : uint8_t {
+                TS1,TS2,TS3,
+                ALERT,
+                DCHG,
+                DDSG,
+                DFETOFF,
+
+                _end
+            };
+            static constexpr uint8_t MAX_THERMS_N = THERM_IDX::_end;
+            UNIT_uint therms_100mCl[MAX_THERMS_N];
 
             BQ76952 bq;
             GPIO::GPIO const & resetPin;
@@ -78,9 +88,8 @@ namespace VT {
 
             uint8_t const cell_n;
             uint16_t cell_mV[MAX_CELLS_N];
-            uint16_t stack_10mV;
-            int16_t cell_10mCl[MAX_THERMS_N];   // degrees celsius (10mCl)
-            uint16_t die_10mCl;                 // degrees celsius (10mCl)
+            uint16_t stack_cV;
+            uint16_t die_dDegC;                 // degrees celsius (10mCl)
             UNIT_uint cell_balancing_status;    // bit mask of what cells are currently balancing
 
             uint8_t _strikes;                   // internal counter of how many errors have accumulated

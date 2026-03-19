@@ -383,10 +383,10 @@ void VT::postScheduler_init(){
        opVars.HRLV_IL_sw_dsrd = false;
 
        for(auto & i : opVars.bbqs) {
-           i.stack_10mV = 0;
-           i.die_10mCl = 0;
+           i.stack_cV = 0;
+           i.die_dDegC = 0;
            i.cell_balancing_status = 0;
-           for(auto & j : i.cell_10mCl)
+           for(auto & j : i.therms_100mCl)
                j = 0;
            for(auto & j : i.cell_mV)
                j = 0;

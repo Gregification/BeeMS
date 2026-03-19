@@ -28,7 +28,7 @@ namespace Networking {
                 HW_ID                               = 0,    // <input>
                 SW_VER                              = 1,    // <input>
 
-                STACK_10mV                          = 20,   // <input>          stack voltage (10mV)
+                STACK_cV                            = 20,   // <input>          stack voltage (10mV)
                 CELL1_mV                            = 21,   // <input>          cell voltage (mV)
                 CELL2_mV                            = 22,   // <input>
                 CELL3_mV                            = 23,   // <input>
@@ -44,14 +44,14 @@ namespace Networking {
                 CELL13_mV                           = 33,   // <input>
                 CELL14_mV                           = 34,   // <input>
 
-                DIE_mK                              = 70,   // <input>          on chip bbq temperature
-                CELL1_mK                            = 71,   // <input>          cell temperature (m-Kelvin)
-                CELL2_mK                            = 72,   // <input>
-                CELL3_mK                            = 73,   // <input>
-                CELL4_mK                            = 74,   // <input>
-                CELL5_mK                            = 75,   // <input>
-                CELL6_mK                            = 76,   // <input>
-                CELL7_mK                            = 77,   // <input>
+                DIE_dDegC                           = 70,   // <input>          on chip bbq temperature
+                CELL1_dDegC                         = 71,   // <input>          cell temperature (m-Kelvin)
+                CELL2_dDegC                         = 72,   // <input>
+                CELL3_dDegC                         = 73,   // <input>
+                CELL4_dDegC                         = 74,   // <input>
+                CELL5_dDegC                         = 75,   // <input>
+                CELL6_dDegC                         = 76,   // <input>
+                CELL7_dDegC                         = 77,   // <input>
 
                 _end                                ,       // software reference
             };

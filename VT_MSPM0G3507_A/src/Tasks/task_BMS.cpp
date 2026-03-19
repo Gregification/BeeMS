@@ -252,17 +252,17 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     uint16_t temp;
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::StackVoltage,
-                            &batch.stack_10mV,
+                            &batch.stack_cV,
                             2
                         )) {
                         error = __LINE__;
                         ALT::srtCpy(ARRANDN(errorStr),  STRM(__LINE__) " BBQ SPI transaction failed");
                         break;
-                        static_assert(sizeof(batch.stack_10mV) >= 2);
+                        static_assert(sizeof(batch.stack_cV) >= 2);
                     }
 
 
-                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68 (100mK)
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68 (100mDegC)
                             &temp,
                             2
                         )) {
@@ -271,9 +271,9 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp) >= 2);
                     }
-                    batch.die_10mCl = temp * 10 - 2731;
+                    batch.die_dDegC = temp * 10 - 2731;
 
-                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::ALERTTemperature,  // 0x68 (100mK)
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::TS1Temperature,  // (100mDegC)
                             &temp,
                             2
                         )) {
@@ -282,6 +282,73 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp) >= 2);
                     }
+                    batch.therms_100mCl[batch.THERM_IDX::TS1] = temp * 10 - 2731;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::TS2Temperature,  // (100mDegC)
+                            &temp,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp) >= 2);
+                    }
+                    batch.therms_100mCl[batch.THERM_IDX::TS2] = temp * 10 - 2731;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::TS3Temperature,  // (100mDegC)
+                            &temp,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp) >= 2);
+                    }
+                    batch.therms_100mCl[batch.THERM_IDX::TS3] = temp * 10 - 2731;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::ALERTTemperature,  // (100mDegC)
+                            &temp,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp) >= 2);
+                    }
+                    batch.therms_100mCl[batch.THERM_IDX::ALERT] = temp * 10 - 2731;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::DCHGTemperature,  // (100mDegC)
+                            &temp,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp) >= 2);
+                    }
+                    batch.therms_100mCl[batch.THERM_IDX::DCHG] = temp * 10 - 2731;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::DDSGTemperature,  // (100mDegC)
+                            &temp,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp) >= 2);
+                    }
+                    batch.therms_100mCl[batch.THERM_IDX::DDSG] = temp * 10 - 2731;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::DFETOFFTemperature,  // (100mDegC)
+                            &temp,
+                            2
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp) >= 2);
+                    }
+                    batch.therms_100mCl[batch.THERM_IDX::DFETOFF] = temp * 10 - 2731;
 
                     // todo read therms
 
