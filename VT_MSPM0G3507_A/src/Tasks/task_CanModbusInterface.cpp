@@ -135,7 +135,9 @@ void Task::canModbusInterface_task(void *){
 //                uart.nputs(ARRANDN(NEWLINE));
 //            }
 
-            if(Modbus::ProcessRequest(&rxbuf.mbap, sizeof(rxbuf), &txbuf.mbap, sizeof(txbuf))) {
+            static_assert(sizeof(rxbuf) >= Bridge::CANModbus::PKTBUFFSIZE);
+            static_assert(sizeof(txbuf) >= Bridge::CANModbus::PKTBUFFSIZE);
+            if(Modbus::ProcessRequest(&rxbuf.mbap, Bridge::CANModbus::PKTBUFFSIZE, &txbuf.mbap, Bridge::CANModbus::PKTBUFFSIZE)) {
 //                uart.nputs(ARRANDN(" processed Modbus request" NEWLINE));
 
                 if(Bridge::CANModbus::ModbusTCP_to_CAN(&txbuf.mbap, &rxbuf.cantx, &meta)){

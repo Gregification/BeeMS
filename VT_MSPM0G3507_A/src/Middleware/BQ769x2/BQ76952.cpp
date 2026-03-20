@@ -210,6 +210,30 @@ bool BQ76952::setConfig(BQ76952SSetting const * config){
     return success;
 }
 
+bool BQ76952::setMaxBalCells(uint8_t n) {
+    bool success = false;
+
+        if(!sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE))
+            return false;
+        vTaskDelay(pdMS_TO_TICKS(8));
+
+
+        //-------------------
+
+        if(setRegister(BQ769X2_PROTOCOL::RegAddr::CellBalanceMaxCells, ARRANDN(n)))
+            success = true;
+
+        //-------------------
+
+
+        vTaskDelay(pdMS_TO_TICKS(9));
+        if(!sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE))
+            success = false;
+        vTaskDelay(pdMS_TO_TICKS(9));
+
+        return success;
+}
+
 bool BQ76952::BQ76952PinConfig::operator==(const BQ76952PinConfig& other) const{
     return Raw == other.Raw;
 }

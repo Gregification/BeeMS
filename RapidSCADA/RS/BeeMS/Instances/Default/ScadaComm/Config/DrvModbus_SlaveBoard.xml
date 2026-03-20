@@ -39,6 +39,28 @@
       <Elem type="ushort" isBitMask="false" tagCode="t6 (cDegC)" name="t6 (cDegC)" />
       <Elem type="ushort" isBitMask="false" tagCode="t7 (cDegC)" name="t7 (cDegC)" />
     </ElemGroup>
+    <ElemGroup active="true" dataBlock="HoldingRegisters" address="90" name="Cell Balancing Control">
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="CB MODE" name="CB MODE" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="CB max active cells" name="CB max active cells" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="CB manual, by threshold (mV)" name="CB manual, by threshold (mV)" />
+      <Elem type="ushort" readOnly="false" isBitMask="true" tagCode="CB manual, by mask" name="CB manual, by mask" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="DiscreteInputs" address="100" name="Cell Ballancing Cell Status">
+      <Elem tagCode="CB c1" name="CB c1" />
+      <Elem tagCode="CB c2" name="CB c2" />
+      <Elem tagCode="CB c3" name="CB c3" />
+      <Elem tagCode="CB c4" name="CB c4" />
+      <Elem tagCode="CB c5" name="CB c5" />
+      <Elem tagCode="CB c6" name="CB c6" />
+      <Elem tagCode="CB c7" name="CB c7" />
+      <Elem tagCode="CB c8" name="CB c8" />
+      <Elem tagCode="CB c9" name="CB c9" />
+      <Elem tagCode="CB c10" name="CB c10" />
+      <Elem tagCode="CB c11" name="CB c11" />
+      <Elem tagCode="CB c12" name="CB c12" />
+      <Elem tagCode="CB c13" name="CB c13" />
+      <Elem tagCode="CB c14" name="CB c14" />
+    </ElemGroup>
   </ElemGroups>
   <Cmds />
 </DeviceTemplate>

@@ -63,7 +63,7 @@ uint8_t                         sockets[] = {0,1,2,3};
 
 wiz_NetInfo netConfig = {
            .mac = {0xBE,0xEE,0xEE,0x00,0x00,0x00}, // arbitrary
-//           .ip  = {192,168,1,252},
+//           .ip  = {192,168,1,2},
 //           .sn  = {255,255,255,0},
            .ip  = {169,254,0,1},
            .sn  = {255,255,0,0},
@@ -124,7 +124,7 @@ void Task::ethModbus_task(void *){
     {
         wiz_NetTimeout timeout = {
                .retry_cnt = 3,
-               .time_100us = 15000,
+               .time_100us = 1500,
             };
         wizchip_settimeout(&timeout);
     }

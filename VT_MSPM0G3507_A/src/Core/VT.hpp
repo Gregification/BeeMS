@@ -49,6 +49,9 @@ namespace VT {
 
         uint16_t cell_mV_min;
         uint16_t cell_mV_max;
+
+        uint16_t cellB_lower_limit_mV;     // MCU enforced lower limit for CB
+        uint8_t cellsBalancingAtOnce_MAX : 5;
     };
     extern OpProfile_t opProfile;
 
@@ -59,9 +62,8 @@ namespace VT {
         struct __attribute__((__packed__)) BBQ_t {
 
             static constexpr uint8_t MAX_CELLS_N = 14;
-//            UNIT_uint cells_u;
 
-            enum THERM_IDX : uint8_t {
+            enum class THERM_IDX : uint8_t {
                 TS1,TS2,TS3,
                 ALERT,
                 DCHG,
@@ -70,13 +72,13 @@ namespace VT {
 
                 _end
             };
-            static constexpr uint8_t MAX_THERMS_N = THERM_IDX::_end;
+            static constexpr uint8_t MAX_THERMS_N = (uint8_t)THERM_IDX::_end;
             UNIT_uint therms_100mCl[MAX_THERMS_N];
 
             BQ76952 bq;
             GPIO::GPIO const & resetPin;
 
-            enum State_t : uint8_t {
+            enum class State_t : uint8_t {
                 INIT,
                 INIT_VERI,              // verify init completed successfully
                 ON_NORMAL,
@@ -90,13 +92,25 @@ namespace VT {
             uint16_t cell_mV[MAX_CELLS_N];
             uint16_t stack_cV;
             uint16_t die_dDegC;                 // degrees celsius (10mCl)
-            UNIT_uint cell_balancing_status;    // bit mask of what cells are currently balancing
+
+            enum class CB_OP_t : uint8_t {
+                DISABLED    = 0,
+                MANUAL      = 1,    // manually select cells to balance
+                THRESH      = 2,    // balance all to predetermined voltage
+                AUTO        = 3,    // let the BQ do its thing
+                _end,               // software reference
+            };
+            CB_OP_t cellB_enabled;             // is cell balancing allowed now?
+            UNIT_uint cellB_curr_active;             // bit mask of what cells are currently balancing
+            UNIT_uint cellB_man_mask;
+            uint16_t cellB_man_thresh_mV;
+
 
             uint8_t _strikes;                   // internal counter of how many errors have accumulated
         } bbqs[NUM_BBQs];
-        uint8_t user_selected_BQ;                   // the BQ chip thats selected by the user for edits
+        uint8_t user_selected_BQ;               // the BQ chip thats selected by the user for edits
 
-        bool HRLV_IL_sw_dsrd            : 1;        // software desired state of IL enable
+        bool HRLV_IL_sw_dsrd            : 1;    // software desired state of IL enable
 
     };
     extern OpVars_t opVars;

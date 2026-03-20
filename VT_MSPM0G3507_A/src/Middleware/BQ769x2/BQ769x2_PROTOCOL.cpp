@@ -172,7 +172,7 @@ uint8_t BQ769X2_PROTOCOL::readRegister(System::SPI::SPI * spi, System::GPIO::GPI
 
     // memory value in little endian format out of the transfer buffer (0x40 to 0x5F)
     uint8_t datalen_r; // response length
-    if(!spi24b_readReg(spi, cs, 0x61, &datalen))
+    if(!spi24b_readReg(spi, cs, 0x61, &datalen_r))
         return false;
     if(datalen_r < datalen)
         datalen = datalen_r;

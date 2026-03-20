@@ -761,6 +761,8 @@ struct BQ76952 {
 //    bool getConfig(BQ76952SSetting *);
     bool setConfig(BQ76952SSetting const *);
 
+    bool setMaxBalCells(uint8_t);
+
     bool unseal(uint32_t key);
 
     bool sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd cmd);

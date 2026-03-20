@@ -598,7 +598,6 @@ void Task::BBQ_test_task(void *){
             bq.spi.giveResource();
 
             System::uart_ui.put32d(internalTempRaw);
-
         }
 
         uint16_t balTime = 0;
@@ -618,34 +617,6 @@ void Task::BBQ_test_task(void *){
 
         vTaskDelay(pdMS_TO_TICKS(2e3));
     }
-
-    /* pesudo code
-     * {
-     *      - POST
-     *
-     *      - use existing model if available
-     *
-     *      while(1){
-     *
-     *          - DAQ
-     *
-     *          - safety check
-     *              - cell balance
-     *              - fan pwm
-     *
-     *          - iterate model
-     *              - rebase model if needed
-     *              - periodically save model, like ~1h
-     *
-     *          - periodically/as-necessary TX to CAN ...
-     *              - ~1s, DAQ
-     *              - ~5s, safe operating ranges
-     *
-     *          - check and respond to ...
-     *              - CAN
-     *      }
-     * }
-     */
 
     System::FailHard("bbq_test_task ended" NEWLINE);
     vTaskDelete(NULL);

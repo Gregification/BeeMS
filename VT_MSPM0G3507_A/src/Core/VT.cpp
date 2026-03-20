@@ -353,7 +353,7 @@ namespace VT::BBQ {
                   .minCellTemp_C     = -20,
                   .maxCellTemp_C     = 60,
                   .maxInternalTemp_C = 80,
-                  .cellBalanceInterval_s = 5,
+                  .cellBalanceInterval_s = 1,
                   .cellBalanceMaxCells   = 16,
                   .cellBalanceMinCellV_Charge_mV = 2000,
                   .cellBalanceMinDelta_Charge_mV = 50,
@@ -385,11 +385,13 @@ void VT::postScheduler_init(){
        for(auto & i : opVars.bbqs) {
            i.stack_cV = 0;
            i.die_dDegC = 0;
-           i.cell_balancing_status = 0;
+           i.cellB_curr_active = 0;
            for(auto & j : i.therms_100mCl)
                j = 0;
            for(auto & j : i.cell_mV)
                j = 0;
+           i.cellB_enabled = VT::OpVars_t::BBQ_t::CB_OP_t::DISABLED;
+           i.state = VT::OpVars_t::BBQ_t::State_t::INIT;
        }
    }
 }

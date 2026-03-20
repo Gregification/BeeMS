@@ -46,11 +46,58 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
         case RegAddr::CELL5_dDegC:     *out = VT::getSelectedBBQ().therms_100mCl[4]; break;
         case RegAddr::CELL6_dDegC:     *out = VT::getSelectedBBQ().therms_100mCl[5]; break;
         case RegAddr::CELL7_dDegC:     *out = VT::getSelectedBBQ().therms_100mCl[6]; break;
+
+        case RegAddr::CB_MODE_SELECT:               *out = (uint16_t)VT::getSelectedBBQ().cellB_enabled; break;
+        case RegAddr::CB_MAX_ACTIVE_CELLS:          *out = VT::opProfile.cellsBalancingAtOnce_MAX; break;
+        case RegAddr::CB_MAN_BY_MASK_mask:          *out = VT::getSelectedBBQ().cellB_man_mask; break;
+        case RegAddr::CB_MAN_BY_THERSH_thresh_mV:   *out = VT::getSelectedBBQ().cellB_man_thresh_mV; break;
+
+        case RegAddr::CELL1_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(0); break;
+        case RegAddr::CELL2_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(1); break;
+        case RegAddr::CELL3_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(2); break;
+        case RegAddr::CELL4_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(3); break;
+        case RegAddr::CELL5_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(4); break;
+        case RegAddr::CELL6_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(5); break;
+        case RegAddr::CELL7_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(6); break;
+        case RegAddr::CELL8_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(7); break;
+        case RegAddr::CELL9_CB_active:      *out = VT::getSelectedBBQ().cellB_curr_active & BV(8); break;
+        case RegAddr::CELL10_CB_active:     *out = VT::getSelectedBBQ().cellB_curr_active & BV(9); break;
+        case RegAddr::CELL11_CB_active:     *out = VT::getSelectedBBQ().cellB_curr_active & BV(10); break;
+        case RegAddr::CELL12_CB_active:     *out = VT::getSelectedBBQ().cellB_curr_active & BV(11); break;
+        case RegAddr::CELL13_CB_active:     *out = VT::getSelectedBBQ().cellB_curr_active & BV(12); break;
+        case RegAddr::CELL14_CB_active:     *out = VT::getSelectedBBQ().cellB_curr_active & BV(13); break;
+
     }
 
     return true;
 }
 
 bool Networking::Modbus::VTRegisters::setReg(uint16_t addr, uint16_t val) {
+    switch(addr) {
+        default:
+            System::uart_ui.nputs(ARRANDN("UNKNOWN WRITE REG: "));
+            System::uart_ui.putu32d(addr);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+            return false;
+
+        case RegAddr::CB_MODE_SELECT: {
+                static_assert((uint16_t)VT::OpVars_t::BBQ_t::CB_OP_t::_end > 0);
+                if(val >= (uint16_t)VT::OpVars_t::BBQ_t::CB_OP_t::_end)
+                    val = (uint16_t)VT::OpVars_t::BBQ_t::CB_OP_t::_end - 1;
+
+                VT::getSelectedBBQ().cellB_enabled = (VT::OpVars_t::BBQ_t::CB_OP_t)val;
+            } break;
+        case RegAddr::CB_MAX_ACTIVE_CELLS: {
+                if(val > 16) val = 16;
+                VT::opProfile.cellsBalancingAtOnce_MAX = val;
+            } break;
+        case RegAddr::CB_MAN_BY_MASK_mask:          VT::getSelectedBBQ().cellB_man_mask = val; break;
+        case RegAddr::CB_MAN_BY_THERSH_thresh_mV:   VT::getSelectedBBQ().cellB_man_thresh_mV = val; break;
+    }
+
+    return true;
+}
+
+bool Networking::Modbus::VTCommands::command(uint16_t command, uint16_t data) {
     return false;
 }

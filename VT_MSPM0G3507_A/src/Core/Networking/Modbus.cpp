@@ -8,6 +8,7 @@
 #include <Core/Networking/ModbusRegisters.hpp>
 #include "Modbus.hpp"
 #include "Core/system.hpp"
+#include "Core/std alternatives/string.hpp"
 
 
 bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_t rxlen, MBAPHeader * txheader, buffersize_t txlen) {
@@ -19,16 +20,12 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
     /*** general validation ***********************************/
 
     // is user bonkers
-    if(!rxheader || !txheader) {
-        uart.nputs(ARRANDN("Modbus::ProcessRequest : user is bonkers" NEWLINE));
+    if(!rxheader || !txheader)
         return false;
-    }
 
     // is user stupid
-    if(rxlen < sizeof(MBAPHeader) + ntoh16(rxheader->len)) {
-        uart.nputs(ARRANDN("Modbus::ProcessRequest : user is stupid" NEWLINE));
+    if(rxlen < sizeof(MBAPHeader) + ntoh16(rxheader->len))
         return false;
-    }
 
 
     /*** packet specific response *****************************/
@@ -75,9 +72,9 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                         resp->byteCount++;
                     }
 
-                    uart.nputs(ARRANDN("\tregister: "));
-                    uart.putu32d(ntoh16(query->start) + i);
-                    uart.nputs(ARRANDN(NEWLINE));
+//                    uart.nputs(ARRANDN("\tregister: "));
+//                    uart.putu32d(ntoh16(query->start) + i);
+//                    uart.nputs(ARRANDN(NEWLINE));
 
                     if(!Networking::Modbus::VTRegisters::getReg(ntoh16(query->start) + i, &res))
                         return false;
@@ -108,25 +105,17 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                 txadu       = rxadu;
                 resp->byteCount = 0;
 
-//                System::uart_ui.nputs(ARRANDN("- ntoh16(query->len):"));
-//                System::uart_ui.put32d(ntoh16(query->len));
-//                System::uart_ui.nputs(ARRANDN(NEWLINE));
+//                uart.nputs(ARRANDN("- ntoh16(query->len):"));
+//                uart.put32d(ntoh16(query->len));
+//                uart.nputs(ARRANDN(NEWLINE));
                 for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
                     uint16_t res;
 
-                    if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i){ // constrain to tx buffer size
-                        uart.nputs(ARRANDN("Modbus::ProcessRequest : R in/ho regs, too big: "));
-                        uart.put32d(i);
-                        uart.nputs(ARRANDN(NEWLINE));
+                    if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i) // constrain to tx buffer size
                         return false;
-                    }
 
-                    if(!Networking::Modbus::VTRegisters::getReg(ntoh16(query->start) + i, &res)) {
-                        uart.nputs(ARRANDN("Modbus::ProcessRequest : R in/ho regs, unknown #: "));
-                        uart.put32d(ntoh16(query->start) + i);
-                        uart.nputs(ARRANDN(NEWLINE));
+                    if(!Networking::Modbus::VTRegisters::getReg(ntoh16(query->start) + i, &res))
                         return false;
-                    }
 
 
                     resp->val16[i] = hton16(res);
@@ -134,43 +123,66 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                 }
 
                 txheader->len = hton16((uint16_t)resp->byteCount + sizeof(F_Range_RES) + sizeof(ADUPacket));
-
-                return true;
-            } break;
-
-        case Function::W_COIL: {
-                uart.nputs(ARRANDN("W_COIL" NEWLINE));
-                auto query  = reinterpret_cast<F_W_COIL const *>(rxadu.data);
-                auto resp   = reinterpret_cast<F_W_COIL *>(txadu.data);
-
-                /*** validation ***********/
-
-                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ))
-                    return false;
-
-
-                /*** response *************/
-
-                *txheader   = *rxheader;
-                txadu       = rxadu;
-
-                uart.nputs(ARRANDN("\tregister: "));
-                uart.putu32d(ntoh16(query->addr));
-                uart.nputs(ARRANDN(NEWLINE));
-
-                if(!Networking::Modbus::VTRegisters::setReg(ntoh16(query->addr), ntoh16(query->val)))
-                    return false;
-
-                txheader->len = rxheader->len;
-                *resp = *query;
+//                txheader->len = hton16(7);
+//                uart.nputs(ARRANDN("mbapheader len: "));
+//                uart.put32d(ntoh16(txheader->len));
+//                uart.nputs(ARRANDN(" \t, resp->bytecount:"));
+//                uart.put32d(resp->byteCount);
+//                uart.nputs(ARRANDN(" \t, sizeof(F_Range_RES):"));
+//                uart.put32d(sizeof(F_Range_RES));
+//                uart.nputs(ARRANDN(" \t, sizeof(ADUPacket):"));
+//                uart.put32d(sizeof(ADUPacket));
+//                uart.nputs(ARRANDN(NEWLINE));
 
                 return true;
             } break;
 
         case Function::W_REG:
-            uart.nputs(ARRANDN("W_REG unhandled" NEWLINE));
-            return false;
-            break;
+        case Function::W_COIL: {
+//                uart.nputs(ARRANDN("W_COIL/REG" NEWLINE));
+                auto query  = reinterpret_cast<F_W_COIL const *>(rxadu.data);
+                auto resp   = reinterpret_cast<F_W_COIL *>(txadu.data);
+
+                /*** validation ***********/
+
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ)) {
+                    uart.nputs(ARRANDN("W_COIL/REG: undersized packet" NEWLINE));
+                    return false;
+                }
+
+                if(txlen < rxlen) { // must echo back identical packet on success
+                    uart.nputs(ARRANDN("W_COIL/REG: undersized buffer" NEWLINE));
+                    return false;
+                }
+
+                /*** response *************/
+
+//                uart.nputs(ARRANDN("\tregister: "));
+//                uart.putu32d(ntoh16(query->addr));
+//                uart.nputs(ARRANDN(NEWLINE));
+//                uart.nputs(ARRANDN("\tvalue: "));
+//                uart.putu32d(ntoh16(query->val));
+//                uart.nputs(ARRANDN(NEWLINE));
+
+                // assume is normal register operation?
+                if(!Networking::Modbus::VTRegisters::setReg(ntoh16(query->addr), ntoh16(query->val))) {
+                    // not register operation, try as 'command'
+                    if(!Networking::Modbus::VTCommands::command(ntoh16(query->addr), ntoh16(query->val)))
+                    {
+                        uart.nputs(ARRANDN("\tmodbes w_coil/reg failed D:" NEWLINE));uart.nputs(ARRANDN("\tregister: "));
+                        uart.putu32d(ntoh16(query->addr));
+                        uart.nputs(ARRANDN(NEWLINE));
+                        uart.nputs(ARRANDN("\tvalue: "));
+                        uart.putu32d(ntoh16(query->val));
+                        uart.nputs(ARRANDN(NEWLINE));
+                    }
+                }
+
+                // echo back identical packet
+                ALT::memcpy(rxheader, txheader, ntoh16(rxheader->len) + sizeof(MBAPHeader)); // brute force
+
+                return true;
+            } break;
 
         case Function::W_COILS:
             uart.nputs(ARRANDN("W_COILS unhandled" NEWLINE));
