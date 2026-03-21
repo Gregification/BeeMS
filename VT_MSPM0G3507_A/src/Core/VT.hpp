@@ -105,6 +105,11 @@ namespace VT {
             UNIT_uint cellB_man_mask;
             uint16_t cellB_man_thresh_mV;
 
+            struct __attribute__((__packed__)) {
+                BQ76952::SafetyStatusA A;
+                BQ76952::SafetyStatusB B;
+                BQ76952::SafetyStatusC C;
+            } safetyStatus;
 
             uint8_t _strikes;                   // internal counter of how many errors have accumulated
         } bbqs[NUM_BBQs];

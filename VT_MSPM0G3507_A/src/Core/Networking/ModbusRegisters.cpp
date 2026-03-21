@@ -67,6 +67,10 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
         case RegAddr::CELL13_CB_active:     *out = VT::getSelectedBBQ().cellB_curr_active & BV(12); break;
         case RegAddr::CELL14_CB_active:     *out = VT::getSelectedBBQ().cellB_curr_active & BV(13); break;
 
+        case RegAddr::BQ_SAFETY_STATUS_A:   *out = VT::getSelectedBBQ().safetyStatus.A.Raw; break;
+        case RegAddr::BQ_SAFETY_STATUS_B:   *out = VT::getSelectedBBQ().safetyStatus.B.Raw; break;
+        case RegAddr::BQ_SAFETY_STATUS_C:   *out = VT::getSelectedBBQ().safetyStatus.C.Raw; break;
+
     }
 
     return true;

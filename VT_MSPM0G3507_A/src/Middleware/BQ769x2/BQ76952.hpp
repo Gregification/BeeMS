@@ -730,6 +730,50 @@ struct BQ76952 {
 
     } Power;
 
+    union __attribute__((packed)) SafetyStatusA {
+        uint8_t Raw;
+        struct __attribute__((packed)) {
+            unsigned int    : 2;    // reserved
+            bool CUV        : 1;
+            bool COV        : 1;
+            bool OCC        : 1;
+            bool OCD1       : 1;
+            bool OCD2       : 1;
+            bool SCD        : 1;
+        };
+    };
+    static_assert(sizeof(SafetyStatusA) == sizeof(uint8_t));
+
+    union __attribute__((packed)) SafetyStatusB {
+        uint8_t Raw;
+        struct __attribute__((packed)) {
+            bool UTC        : 1;
+            bool UTD        : 1;
+            bool UTINT      : 1;
+            unsigned int    : 1;    // reserved
+            bool OTC        : 1;
+            bool OTD        : 1;
+            bool OTINT      : 1;
+            bool OTF        : 1;
+        };
+    };
+    static_assert(sizeof(SafetyStatusB) == sizeof(uint8_t));
+
+    union __attribute__((packed)) SafetyStatusC {
+        uint8_t Raw;
+        struct __attribute__((packed)) {
+            unsigned int    : 1;    // reserved
+            bool HWDF       : 1;
+            bool PTO        : 1;
+            unsigned int    : 1;    // reserved
+            bool COUL       : 1;
+            bool OCDL       : 1;
+            bool SCDL       : 1;
+            bool OCD3       : 1;
+        };
+    };
+    static_assert(sizeof(SafetyStatusC) == sizeof(uint8_t));
+
     struct __attribute__((packed)) DAStatus5 {
         uint16_t Vreg18;          // Bytes 0-1: VREG18, 16-bit ADC counts
         uint16_t VSS;             // Bytes 2-3: VSS, 16-bit ADC counts

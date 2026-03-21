@@ -72,6 +72,10 @@ namespace Networking {
                 CELL13_CB_active                    ,       // <discrete>
                 CELL14_CB_active                    ,       // <discrete>
 
+                BQ_SAFETY_STATUS_A                  = 130,  // <input>
+                BQ_SAFETY_STATUS_B                  ,       // <input>
+                BQ_SAFETY_STATUS_C                  ,       // <input>
+
                 _end                                ,       // software reference
             };
 

@@ -361,8 +361,37 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-
                     batch.cellB_curr_active = temp16;
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::SafetyStatusA,
+                            &batch.safetyStatus.A,
+                            sizeof(batch.safetyStatus.A)
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(batch.safetyStatus.A) == 1);
+                    }
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::SafetyStatusB,
+                            &batch.safetyStatus.B,
+                            sizeof(batch.safetyStatus.B)
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(batch.safetyStatus.B) == 1);
+                    }
+
+                    if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::SafetyStatusC,
+                            &batch.safetyStatus.C,
+                            sizeof(batch.safetyStatus.C)
+                        )) {
+                        error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(batch.safetyStatus.C) == 1);
+                    }
 
                     do{
                         static TickType_t former = xTaskGetTickCount();
