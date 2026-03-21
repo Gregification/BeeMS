@@ -806,6 +806,7 @@ struct BQ76952 {
     bool setConfig(BQ76952SSetting const *);
 
     bool setMaxBalCells(uint8_t);
+    bool setCellEnableMask(uint16_t);
 
     bool unseal(uint32_t key);
 

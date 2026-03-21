@@ -46,12 +46,14 @@ namespace VT {
         bool HRLV_IL_usr_dsrd           : 1;
 
         bool balancing_enable           : 1;
+        uint8_t cellsBalancingAtOnce_MAX : 5;
 
         uint16_t cell_mV_min;
         uint16_t cell_mV_max;
 
         uint16_t cellB_lower_limit_mV;     // MCU enforced lower limit for CB
-        uint8_t cellsBalancingAtOnce_MAX : 5;
+
+        uint16_t cellPositionMask;
     };
     extern OpProfile_t opProfile;
 

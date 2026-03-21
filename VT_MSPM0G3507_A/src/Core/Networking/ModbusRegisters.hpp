@@ -28,6 +28,7 @@ namespace Networking {
                 HW_ID                               = 0,    // <input>
                 SW_VER                              = 1,    // <input>
 
+                CELL_POSITIONS_mask                 = 19,   // <holding>
                 STACK_cV                            = 20,   // <input>          stack voltage (10mV)
                 CELL1_mV                            = 21,   // <input>          cell voltage (mV)
                 CELL2_mV                            ,       // <input>

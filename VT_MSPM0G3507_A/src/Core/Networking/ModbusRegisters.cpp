@@ -22,6 +22,7 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
         case RegAddr::HW_ID:        *out = System::mcuID; break;
         case RegAddr::SW_VER:       *out = 3; break;
 
+        case RegAddr::CELL_POSITIONS_mask:      *out = VT::opProfile.cellPositionMask; break;
         case RegAddr::STACK_cV:     *out = VT::getSelectedBBQ().stack_cV; break;
         case RegAddr::CELL1_mV:     *out = VT::getSelectedBBQ().cell_mV[0]; break;
         case RegAddr::CELL2_mV:     *out = VT::getSelectedBBQ().cell_mV[1]; break;
@@ -83,6 +84,8 @@ bool Networking::Modbus::VTRegisters::setReg(uint16_t addr, uint16_t val) {
             System::uart_ui.putu32d(addr);
             System::uart_ui.nputs(ARRANDN(NEWLINE));
             return false;
+
+        case RegAddr::CELL_POSITIONS_mask: VT::opProfile.cellPositionMask = val; break;
 
         case RegAddr::CB_MODE_SELECT: {
                 static_assert((uint16_t)VT::OpVars_t::BBQ_t::CB_OP_t::_end > 0);

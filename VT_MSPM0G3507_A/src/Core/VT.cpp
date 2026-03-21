@@ -17,6 +17,7 @@ namespace VT {
              .balancing_enable  = false,
              .cell_mV_min       = 1300,
              .cell_mV_max       = 4300,
+             .cellPositionMask  = 0xFFFF,
         };
 
     OpVars_t opVars = {
@@ -124,7 +125,7 @@ namespace VT::BBQ {
                      .tint_en    = 1, // die temp used as a cell temp? 0:no, 1:yes.
                      .tint_fett  = 1, // die tmep used as fet temp? 0:no, 1:yes
                  },
-                 .VcellMode  = 0b0011'1111'1111'1111,
+                 .VcellMode  = VT::opProfile.cellPositionMask, //0b0011'1111'1111'1111,
                  .CC3Samples = 0x80,
              },
 
@@ -137,8 +138,8 @@ namespace VT::BBQ {
                     .PF_OTP          = 0, // Bit 5: PF status preserved across reset/written to OTP (Default: 0)
                     .PACK_FUSE       = 0, // Bit 7: Use PACK voltage for Min Blow Fuse Voltage check (Default: 0)
                     .FETF_FUSE       = 0, // Bit 8: FETF bypasses Min Blow Fuse Voltage check (Default: 0)
-                    .OCDL_CURR_RECOV = 0, // Bit 9: OCD Latch recovers based on charge current (Default: 0)
-                    .SCDL_CURR_RECOV = 0, // Bit 10: SCD Latch recovers based on charge current (Default: 0)
+                    .OCDL_CURR_RECOV = 1, // Bit 9: OCD Latch recovers based on charge current (Default: 0)
+                    .SCDL_CURR_RECOV = 1, // Bit 10: SCD Latch recovers based on charge current (Default: 0)
                  },
                  .enabledProtectionsA = {
                      .CUV  = 1, // Bit 2: Cell Undervoltage Protection (Default: 0)
@@ -151,7 +152,7 @@ namespace VT::BBQ {
                  .enabledProtectionsB = {
                      .UTC   = 0, // Bit 0: Undertemperature in Charge (Default: 0)
                      .UTD   = 0, // Bit 1: Undertemperature in Discharge (Default: 0)
-                     .UTINT = 0, // Bit 2: Internal Undertemperature (Default: 0)
+                     .UTINT = 1, // Bit 2: Internal Undertemperature (Default: 0)
                      .OTC   = 0, // Bit 4: Overtemperature in Charge (Default: 0)
                      .OTD   = 0, // Bit 5: Overtemperature in Discharge (Default: 0)
                      .OTINT = 1, // Bit 6: Internal Overtemperature (Default: 0)

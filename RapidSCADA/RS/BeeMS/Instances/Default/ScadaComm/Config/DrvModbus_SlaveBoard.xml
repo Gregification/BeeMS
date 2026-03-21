@@ -14,6 +14,7 @@
     </ElemGroup>
     <ElemGroup active="true" dataBlock="InputRegisters" address="20" name="Pack Voltage">
       <Elem type="ushort" isBitMask="false" tagCode="stack (10mV)" name="stack (10mV)" />
+      <Elem type="ushort" isBitMask="false" tagCode="c0 (mV)" name="c0 (mV)" />
       <Elem type="ushort" isBitMask="false" tagCode="c1 (mV)" name="c1 (mV)" />
       <Elem type="ushort" isBitMask="false" tagCode="c2 (mV)" name="c2 (mV)" />
       <Elem type="ushort" isBitMask="false" tagCode="c3 (mV)" name="c3 (mV)" />
@@ -27,7 +28,9 @@
       <Elem type="ushort" isBitMask="false" tagCode="c11 (mV)" name="c11 (mV)" />
       <Elem type="ushort" isBitMask="false" tagCode="c12 (mV)" name="c12 (mV)" />
       <Elem type="ushort" isBitMask="false" tagCode="c13 (mV)" name="c13 (mV)" />
-      <Elem type="ushort" isBitMask="false" tagCode="c14 (mV)" name="c14 (mV)" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="HoldingRegisters" address="19" name="Cell Enable">
+      <Elem type="ushort" readOnly="false" isBitMask="true" tagCode="cell enable mask" name="cell enable mask" />
     </ElemGroup>
     <ElemGroup active="true" dataBlock="InputRegisters" address="70" name="Pack Temperature">
       <Elem type="ushort" isBitMask="false" tagCode="die (cDegC)" name="die (cDegC)" />
@@ -46,6 +49,7 @@
       <Elem type="ushort" readOnly="false" isBitMask="true" tagCode="CB manual, by mask" name="CB manual, by mask" />
     </ElemGroup>
     <ElemGroup active="true" dataBlock="DiscreteInputs" address="100" name="Cell Ballancing Cell Status">
+      <Elem tagCode="CB c0" name="CB c0" />
       <Elem tagCode="CB c1" name="CB c1" />
       <Elem tagCode="CB c2" name="CB c2" />
       <Elem tagCode="CB c3" name="CB c3" />
@@ -59,7 +63,6 @@
       <Elem tagCode="CB c11" name="CB c11" />
       <Elem tagCode="CB c12" name="CB c12" />
       <Elem tagCode="CB c13" name="CB c13" />
-      <Elem tagCode="CB c14" name="CB c14" />
     </ElemGroup>
     <ElemGroup active="true" dataBlock="InputRegisters" address="130" name="BQ Safety Status">
       <Elem type="ushort" isBitMask="false" tagCode="BQ Saftey Status A" name="BQ Saftey Status A" />

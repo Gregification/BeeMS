@@ -231,6 +231,44 @@ bool BQ76952::setMaxBalCells(uint8_t n) {
             success = false;
         vTaskDelay(pdMS_TO_TICKS(9));
 
+        // clear alarms
+        {
+            uint16_t alarm;
+            sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt::AlarmStatus, &alarm, sizeof(alarm));
+            sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt::AlarmStatus, &alarm, sizeof(alarm));
+        }
+
+        return success;
+}
+
+bool BQ76952::setCellEnableMask(uint16_t n) {
+    bool success = false;
+
+        if(!sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::SET_CFGUPDATE))
+            return false;
+        vTaskDelay(pdMS_TO_TICKS(8));
+
+
+        //-------------------
+
+        if(setRegister(BQ769X2_PROTOCOL::RegAddr::VCellMode, ARRANDN(n)))
+            success = true;
+
+        //-------------------
+
+
+        vTaskDelay(pdMS_TO_TICKS(9));
+        if(!sendCommandSubcommand(BQ769X2_PROTOCOL::Cmd::EXIT_CFGUPDATE))
+            success = false;
+        vTaskDelay(pdMS_TO_TICKS(9));
+
+        // clear alarms
+        {
+            uint16_t alarm;
+            sendDirectCommandR(BQ769X2_PROTOCOL::CmdDrt::AlarmStatus, &alarm, sizeof(alarm));
+            sendDirectCommandW(BQ769X2_PROTOCOL::CmdDrt::AlarmStatus, &alarm, sizeof(alarm));
+        }
+
         return success;
 }
 

@@ -195,6 +195,8 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
             } break;
 
         case OpVars_t::BBQ_t::State_t::ON_NORMAL: {
+                uint16_t temp16;
+                uint8_t temp8;
 
                 if(bq.spi.takeResource(10))
                     break;
@@ -222,7 +224,8 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                             break;
                     }
 
-                    for(int i = 0; i < VT::OpVars_t::BBQ_t::MAX_CELLS_N && !error; i++) {
+                    for(int i = 0; i < VT::OpVars_t::BBQ_t::MAX_CELLS_N; i++) {
+
                         if(!bq.sendDirectCommandR(
                                 (BQ769X2_PROTOCOL::CmdDrt)(BQ769X2_PROTOCOL::CmdDrt::Cell1Voltage + 2 * i),
                                 batch.cell_mV + i,
@@ -234,23 +237,34 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                             static_assert(sizeof(batch.cell_mV[0]) >= 2);
                         }
 
+                        if(!(BV(i) & VT::opProfile.cellPositionMask))
+                            continue;
+
                         if(batch.cell_mV[i] < VT::opProfile.cell_mV_min){
                             error = batch.cell_mV[i];
                             if(!error) error++;
                             ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " cell UV, mV");
-                            break;
                         }
 
                         if(batch.cell_mV[i] > VT::opProfile.cell_mV_max){
                             error = batch.cell_mV[i];
                             if(!error) error++;
                             ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " cell OV, mV");
-                            break;
                         }
                     }
 
-                    uint16_t temp16;
-                    uint8_t temp8;
+                    if(!bq.getRegister(BQ769X2_PROTOCOL::RegAddr::VCellMode,
+                                &temp16,
+                                2
+                            )) {
+                            error = __LINE__;
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
+                        break;
+                        static_assert(sizeof(temp16) >= 2);
+                    }
+                    if(temp16 != VT::opProfile.cellPositionMask)
+                        VT::getSelectedBBQ().bq.setCellEnableMask(VT::opProfile.cellPositionMask);
+
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::StackVoltage,
                             &batch.stack_cV,
