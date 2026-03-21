@@ -354,7 +354,7 @@ namespace VT::BBQ {
                   .minCellTemp_C     = -20,
                   .maxCellTemp_C     = 60,
                   .maxInternalTemp_C = 80,
-                  .cellBalanceInterval_s = 1,
+                  .cellBalanceInterval_s = 10,
                   .cellBalanceMaxCells   = 16,
                   .cellBalanceMinCellV_Charge_mV = 2000,
                   .cellBalanceMinDelta_Charge_mV = 50,
