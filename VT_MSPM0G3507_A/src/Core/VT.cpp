@@ -17,7 +17,6 @@ namespace VT {
              .balancing_enable  = false,
              .cell_mV_min       = 1300,
              .cell_mV_max       = 4300,
-             .cellPositionMask  = 0xFFFF,
         };
 
     OpVars_t opVars = {
@@ -125,7 +124,7 @@ namespace VT::BBQ {
                      .tint_en    = 1, // die temp used as a cell temp? 0:no, 1:yes.
                      .tint_fett  = 1, // die tmep used as fet temp? 0:no, 1:yes
                  },
-                 .VcellMode  = VT::opProfile.cellPositionMask, //0b0011'1111'1111'1111,
+                 .VcellMode  = 0b1111'1111'1111'1111,
                  .CC3Samples = 0x80,
              },
 
@@ -367,11 +366,18 @@ namespace VT::BBQ {
 
 }
 
-VT::OpVars_t::BBQ_t & VT::getSelectedBBQ() {
+VT::OpVars_t::BBQ_t & VT::getSelectedBBQvar() {
     if(opVars.user_selected_BQ > NUM_BBQs)
         opVars.user_selected_BQ = NUM_BBQs - 1;
     return opVars.bbqs[opVars.user_selected_BQ];
 }
+
+VT::OpProfile_t::BBQ_t & VT::getSelectedBBQprof() {
+    if(opVars.user_selected_BQ > NUM_BBQs)
+        opVars.user_selected_BQ = NUM_BBQs - 1;
+    return opProfile.bbqs[opVars.user_selected_BQ];
+}
+
 
 void VT::preScheduler_init(){
     // dont put stuff here unless it needs to be here
@@ -382,6 +388,10 @@ void VT::postScheduler_init(){
        using namespace VT;
        opVars.user_selected_BQ = 0;
        opVars.HRLV_IL_sw_dsrd = false;
+
+       for(auto & i : opProfile.bbqs) {
+           i.cellPositionMask = 0xFFFF;
+       }
 
        for(auto & i : opVars.bbqs) {
            i.stack_cV = 0;

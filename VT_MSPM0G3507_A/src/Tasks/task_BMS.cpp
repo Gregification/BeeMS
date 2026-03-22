@@ -237,7 +237,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                             static_assert(sizeof(batch.cell_mV[0]) >= 2);
                         }
 
-                        if(!(BV(i) & VT::opProfile.cellPositionMask))
+                        if(!(BV(i) & VT::getSelectedBBQprof().cellPositionMask))
                             continue;
 
                         if(batch.cell_mV[i] < VT::opProfile.cell_mV_min){
@@ -262,8 +262,8 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    if(temp16 != VT::opProfile.cellPositionMask)
-                        VT::getSelectedBBQ().bq.setCellEnableMask(VT::opProfile.cellPositionMask);
+                    if(temp16 != VT::getSelectedBBQprof().cellPositionMask)
+                        VT::getSelectedBBQvar().bq.setCellEnableMask(VT::getSelectedBBQprof().cellPositionMask);
 
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::StackVoltage,
@@ -286,7 +286,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    batch.die_dDegC = temp16 * 10 - 2731;
+                    batch.die_dDegC = temp16;
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::TS1Temperature,  // (100mDegC)
                             &temp16,
@@ -297,7 +297,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::TS1] = temp16 * 10 - 2731;
+                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::TS1] = temp16;
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::TS2Temperature,  // (100mDegC)
                             &temp16,
@@ -308,7 +308,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::TS2] = temp16 * 10 - 2731;
+                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::TS2] = temp16;
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::TS3Temperature,  // (100mDegC)
                             &temp16,
@@ -319,7 +319,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::TS3] = temp16 * 10 - 2731;
+                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::TS3] = temp16;
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::ALERTTemperature,  // (100mDegC)
                             &temp16,
@@ -330,7 +330,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::ALERT] = temp16 * 10 - 2731;
+                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::ALERT] = temp16;
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::DCHGTemperature,  // (100mDegC)
                             &temp16,
@@ -341,7 +341,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::DCHG] = temp16 * 10 - 2731;
+                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::DCHG] = temp16;
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::DDSGTemperature,  // (100mDegC)
                             &temp16,
@@ -352,7 +352,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::DDSG] = temp16 * 10 - 2731;
+                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::DDSG] = temp16;
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::DFETOFFTemperature,  // (100mDegC)
                             &temp16,
@@ -363,7 +363,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(temp16) >= 2);
                     }
-                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::DFETOFF] = temp16 * 10 - 2731;
+                    batch.therms_100mCl[(UNIT_uint)VT::OpVars_t::BBQ_t::THERM_IDX::DFETOFF] = temp16;
 
 
                     if(!bq.sendCommandR( BQ769X2_PROTOCOL::Cmd::CB_ACTIVE_CELLS,
@@ -438,8 +438,8 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                             case VT::OpVars_t::BBQ_t::CB_OP_t::THRESH:
                             case VT::OpVars_t::BBQ_t::CB_OP_t::AUTO:
                             case VT::OpVars_t::BBQ_t::CB_OP_t::MANUAL:
-                                if(cb_n != VT::opProfile.cellsBalancingAtOnce_MAX)
-                                    batch.bq.setMaxBalCells(VT::opProfile.cellsBalancingAtOnce_MAX);
+                                if(cb_n != VT::getSelectedBBQprof().cellsBalancingAtOnce_MAX)
+                                    batch.bq.setMaxBalCells(VT::getSelectedBBQprof().cellsBalancingAtOnce_MAX);
                         }
 
                         switch(batch.cellB_enabled) {

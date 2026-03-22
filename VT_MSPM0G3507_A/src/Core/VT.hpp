@@ -46,14 +46,16 @@ namespace VT {
         bool HRLV_IL_usr_dsrd           : 1;
 
         bool balancing_enable           : 1;
-        uint8_t cellsBalancingAtOnce_MAX : 5;
 
         uint16_t cell_mV_min;
         uint16_t cell_mV_max;
 
         uint16_t cellB_lower_limit_mV;     // MCU enforced lower limit for CB
 
-        uint16_t cellPositionMask;
+        struct __attribute__((__packed__)) BBQ_t {
+            uint8_t cellsBalancingAtOnce_MAX : 5;
+            uint16_t cellPositionMask;
+        } bbqs[NUM_BBQs];
     };
     extern OpProfile_t opProfile;
 
@@ -96,7 +98,7 @@ namespace VT {
             uint16_t die_dDegC;                 // degrees celsius (10mCl)
 
             enum class CB_OP_t : uint8_t {
-                DISABLED    = 0,
+                DISABLED    = 0,    // disable all balancing
                 MANUAL      = 1,    // manually select cells to balance
                 THRESH      = 2,    // balance all to predetermined voltage
                 AUTO        = 3,    // let the BQ do its thing
@@ -122,7 +124,8 @@ namespace VT {
     };
     extern OpVars_t opVars;
 
-    OpVars_t::BBQ_t & getSelectedBBQ();
+    OpProfile_t::BBQ_t & getSelectedBBQprof();
+    OpVars_t::BBQ_t & getSelectedBBQvar();
 
     void preScheduler_init();
     void postScheduler_init();
