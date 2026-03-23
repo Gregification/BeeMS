@@ -4,6 +4,9 @@
 	(generator_version "9.0")
 	(uuid "56204dec-f6e3-47f3-b627-cc03be7f9b12")
 	(paper "A4")
+	(title_block
+		(comment 1 "Files at github.com/Gregification/BeeMS")
+	)
 	(lib_symbols
 		(symbol "Device:C_Small"
 			(pin_numbers
@@ -3909,16 +3912,6 @@
 	)
 	(wire
 		(pts
-			(xy 144.78 35.56) (xy 153.67 35.56)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "31171cbf-15c2-4e29-b992-2159bc273aba")
-	)
-	(wire
-		(pts
 			(xy 26.67 81.28) (xy 26.67 184.15)
 		)
 		(stroke
@@ -5126,6 +5119,16 @@
 			(type default)
 		)
 		(uuid "7c7e8512-d5ae-4d71-816e-2a4c76edbbe0")
+	)
+	(wire
+		(pts
+			(xy 144.78 35.56) (xy 153.67 35.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7cff59b3-8658-47ee-b093-d43c0df2b6e3")
 	)
 	(wire
 		(pts
@@ -7408,7 +7411,7 @@
 		)
 		(uuid "ffa7d5a6-86f5-497f-8434-31a863f98fde")
 	)
-	(label "C1Jc"
+	(label "C4Jc"
 		(at 116.84 105.41 0)
 		(effects
 			(font
@@ -7418,7 +7421,7 @@
 		)
 		(uuid "00bf1ed4-d176-4a9d-b4a9-ac4f14ed96e8")
 	)
-	(label "C1Jc"
+	(label "C13Jc"
 		(at 43.18 66.04 0)
 		(effects
 			(font
@@ -7428,7 +7431,7 @@
 		)
 		(uuid "14ee1952-c376-4aac-aeea-4a043801876e")
 	)
-	(label "C1Jc"
+	(label "C7Jc"
 		(at 116.84 44.45 0)
 		(effects
 			(font
@@ -7448,7 +7451,7 @@
 		)
 		(uuid "1b55f634-6461-4fe3-a798-7c060fc26415")
 	)
-	(label "C1Jc"
+	(label "C9Jc"
 		(at 43.18 147.32 0)
 		(effects
 			(font
@@ -7458,7 +7461,7 @@
 		)
 		(uuid "24bb9e2c-f102-4c5a-b859-584ba1bf9807")
 	)
-	(label "C1Jc"
+	(label "C10Jc"
 		(at 43.18 127 0)
 		(effects
 			(font
@@ -7468,7 +7471,7 @@
 		)
 		(uuid "26c61f0f-00ab-4a40-9567-1f41938f7c54")
 	)
-	(label "C1Jc"
+	(label "C14Jc"
 		(at 43.18 45.72 0)
 		(effects
 			(font
@@ -7488,7 +7491,7 @@
 		)
 		(uuid "2a06e43d-1393-46a1-a22f-53d5aa2aebfb")
 	)
-	(label "C1Jc"
+	(label "C12Jc"
 		(at 43.18 86.36 0)
 		(effects
 			(font
@@ -7528,7 +7531,7 @@
 		)
 		(uuid "4df2c14e-5311-415e-9dc9-85675f945a5b")
 	)
-	(label "C1Jc"
+	(label "C8Jc"
 		(at 43.18 167.64 0)
 		(effects
 			(font
@@ -7548,7 +7551,7 @@
 		)
 		(uuid "50609082-d805-41cf-bbcb-6dece5f00cc2")
 	)
-	(label "C1Jc"
+	(label "C2Jc"
 		(at 116.84 146.05 0)
 		(effects
 			(font
@@ -7568,7 +7571,7 @@
 		)
 		(uuid "5d565448-c441-49c1-825e-4fffccd4e489")
 	)
-	(label "C1Jc"
+	(label "C5Jc"
 		(at 116.84 85.09 0)
 		(effects
 			(font
@@ -7578,7 +7581,7 @@
 		)
 		(uuid "795925cf-cb5f-40d2-a596-50a73ef822f0")
 	)
-	(label "C1Jc"
+	(label "C3Jc"
 		(at 116.84 125.73 0)
 		(effects
 			(font
@@ -7588,7 +7591,7 @@
 		)
 		(uuid "a1bc986f-23b0-45ca-9ae5-dbc37cb21f68")
 	)
-	(label "C1Jc"
+	(label "C6Jc"
 		(at 116.84 64.77 0)
 		(effects
 			(font
@@ -7608,7 +7611,7 @@
 		)
 		(uuid "d92b9d79-d942-41e9-a2c8-fdaaf2b055a3")
 	)
-	(label "C1Jc"
+	(label "C11Jc"
 		(at 43.18 106.68 0)
 		(effects
 			(font
@@ -8050,51 +8053,6 @@
 	(rule_area
 		(polyline
 			(pts
-				(xy 33.02 161.925) (xy 33.02 181.9275) (xy 73.66 181.9592) (xy 73.66 161.9567)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 05540063-a157-488b-9f61-c90ff2e2ce53)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 106.68 160.655) (xy 106.68 180.6575) (xy 151.13 180.6574) (xy 151.13 160.6549)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 1ca262ff-51a7-4de0-9b3f-43aa625fc3d9)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 106.68 99.695) (xy 106.68 119.6975) (xy 151.13 119.6974) (xy 151.13 99.6949)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 27c89829-9c95-4de8-a13a-354b32b95150)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
 				(xy 106.68 120.015) (xy 106.68 140.0175) (xy 151.13 140.0174) (xy 151.13 120.0149)
 			)
 			(stroke
@@ -8104,67 +8062,7 @@
 			(fill
 				(type none)
 			)
-			(uuid 54440452-d25a-4b01-9673-4e1c9ea21827)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 106.68 38.735) (xy 106.68 58.7375) (xy 151.13 58.7374) (xy 151.13 38.7349)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 54c53ef9-2cfe-4cc1-8579-5c6ecd49d733)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 138.43 39.37) (xy 151.13 39.37) (xy 151.13 31.75) (xy 138.43 31.75)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 61072c56-e122-4d23-a8b0-148db997033a)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 33.02 60.325) (xy 33.02 80.3275) (xy 73.66 80.3592) (xy 73.66 60.3567)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 6550a295-c437-4206-bbd9-f4d53374ee8a)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 106.68 59.055) (xy 106.68 79.0575) (xy 151.13 79.0574) (xy 151.13 59.0549)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 727de814-7884-4bf7-b1a6-3296019d076f)
+			(uuid 079d78f3-205e-4693-af47-2d341efc053a)
 		)
 	)
 	(rule_area
@@ -8179,67 +8077,7 @@
 			(fill
 				(type none)
 			)
-			(uuid 8b542bfd-da57-4b88-8b6d-94f375cd4fd9)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 33.02 141.605) (xy 33.02 161.6075) (xy 73.66 161.6392) (xy 73.66 141.6367)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid 8c1f3c0d-7877-4513-9b99-4ccdf5047d27)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 33.02 40.005) (xy 33.02 60.0075) (xy 73.66 60.0392) (xy 73.66 40.0367)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid b3ed645d-ca2f-4f0f-be3f-774933e47808)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 106.68 140.335) (xy 106.68 160.3375) (xy 151.13 160.3374) (xy 151.13 140.3349)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid b5fb734c-2f95-4671-8128-aca7cd701dee)
-		)
-	)
-	(rule_area
-		(polyline
-			(pts
-				(xy 33.02 100.965) (xy 33.02 120.9675) (xy 73.66 120.9992) (xy 73.66 100.9967)
-			)
-			(stroke
-				(width 0)
-				(type dash)
-			)
-			(fill
-				(type none)
-			)
-			(uuid bde4be85-8e94-4674-8aa0-a65814fba52d)
+			(uuid 0c71501d-5443-4df3-a3d6-dec036e9fcaf)
 		)
 	)
 	(rule_area
@@ -8254,7 +8092,82 @@
 			(fill
 				(type none)
 			)
-			(uuid f587bc24-1457-479e-a902-a91d207f9ad1)
+			(uuid 1846602e-f69c-4681-a3a7-668ecdfade38)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 106.68 59.055) (xy 106.68 79.0575) (xy 151.13 79.0574) (xy 151.13 59.0549)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 25479953-486d-401e-9dae-403d2ffd87c0)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 106.68 160.655) (xy 106.68 180.6575) (xy 151.13 180.6574) (xy 151.13 160.6549)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 50e9bfd7-0d80-4dfe-aa42-0bd72818a527)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 33.02 40.005) (xy 33.02 60.0075) (xy 73.66 60.0392) (xy 73.66 40.0367)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 69389594-485f-4063-a43c-bba66ecf7ee5)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 106.68 99.695) (xy 106.68 119.6975) (xy 151.13 119.6974) (xy 151.13 99.6949)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 70a98b3a-8406-4561-ad22-61ee71c89d51)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 33.02 100.965) (xy 33.02 120.9675) (xy 73.66 120.9992) (xy 73.66 100.9967)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 8e54d01e-8113-4e8b-bfbf-726742e51727)
 		)
 	)
 	(rule_area
@@ -8269,7 +8182,97 @@
 			(fill
 				(type none)
 			)
-			(uuid fbb029c3-9ccd-41c2-91a8-169c5f99b54f)
+			(uuid 9d5c345b-dd03-42b7-889c-424843fc585e)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 106.68 38.735) (xy 106.68 58.7375) (xy 151.13 58.7374) (xy 151.13 38.7349)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid a751bdf3-9f20-4917-9848-07f03f98f18c)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 33.02 60.325) (xy 33.02 80.3275) (xy 73.66 80.3592) (xy 73.66 60.3567)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid aee5ca82-36fb-4bd8-a995-4383c3a8c642)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 33.02 161.925) (xy 33.02 181.9275) (xy 73.66 181.9592) (xy 73.66 161.9567)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid b6f0257a-df06-4256-93ad-fd7fdb9f4c33)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 106.68 140.335) (xy 106.68 160.3375) (xy 151.13 160.3374) (xy 151.13 140.3349)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid c36e5a40-f41c-43e5-aea8-7dfe645d85fa)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 138.43 39.37) (xy 151.13 39.37) (xy 151.13 31.75) (xy 138.43 31.75)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid f12c42cc-e92c-4c1c-b473-3042db0aeb73)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 33.02 141.605) (xy 33.02 161.6075) (xy 73.66 161.6392) (xy 73.66 141.6367)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid fa6f2791-7626-4b2f-9fdf-ab1995d3457e)
 		)
 	)
 	(netclass_flag ""
@@ -8485,16 +8488,16 @@
 	(netclass_flag ""
 		(length 2.54)
 		(shape round)
-		(at 144.78 35.56 270)
+		(at 151.13 34.29 90)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
 		(uuid "607d1e99-1354-4482-998c-2336f8679812")
 		(property "Netclass" ""
-			(at -92.71 -76.2 0)
+			(at 388.62 146.05 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8502,13 +8505,13 @@
 			)
 		)
 		(property "Component Class" "C8bal"
-			(at 145.288 33.782 0)
+			(at 150.622 36.068 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 					(italic yes)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 	)
@@ -8748,7 +8751,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 139.7 179.07 0)
 			(effects
 				(font
@@ -9289,16 +9292,16 @@
 	)
 	(symbol
 		(lib_id "Device:D_Zener_Small")
-		(at 54.61 74.93 270)
+		(at 54.61 176.53 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "12ea849f-a2fe-4395-99e4-f5cdd0a594ca")
-		(property "Reference" "D202"
-			(at 57.15 73.6599 90)
+		(uuid "17b5ee6e-889a-44a2-95c9-60c7de0336c0")
+		(property "Reference" "D212"
+			(at 57.15 175.2599 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9306,8 +9309,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "15v"
-			(at 57.15 76.1999 90)
+		(property "Value" "13V"
+			(at 57.15 177.7999 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9315,8 +9318,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 54.61 74.93 90)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 54.61 176.53 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9325,7 +9328,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 54.61 74.93 90)
+			(at 54.61 176.53 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9334,7 +9337,43 @@
 			)
 		)
 		(property "Description" "Zener diode, small symbol"
-			(at 54.61 74.93 0)
+			(at 54.61 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 54.61 176.53 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 54.61 176.53 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 54.61 176.53 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 54.61 176.53 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -9343,85 +9382,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "29c153b6-ea05-4db4-a7c8-a66e21846036")
+			(uuid "7bf0d256-98a3-4849-bdd5-16f8ff1c4c68")
 		)
 		(pin "1"
-			(uuid "a38ff1a1-af53-4453-8b90-cd17a67fb090")
+			(uuid "b661e8c7-ef77-4850-b2d0-e0032da94802")
 		)
 		(instances
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D202")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 128.27 154.94 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "16a99e8d-1ff5-4e50-9341-0855f9b1939e")
-		(property "Reference" "D213"
-			(at 130.81 153.6699 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 130.81 156.2099 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 128.27 154.94 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 128.27 154.94 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 128.27 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "2c3f9d9c-00ac-4d95-b8e3-6809f02f172a")
-		)
-		(pin "1"
-			(uuid "92a9cd8b-0023-41b1-8e13-4eaacd6d5b0d")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D213")
+					(reference "D212")
 					(unit 1)
 				)
 			)
@@ -9453,7 +9422,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 66.04 38.1 0)
 			(effects
 				(font
@@ -9584,7 +9553,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 139.7 118.11 0)
 			(effects
 				(font
@@ -9958,76 +9927,6 @@
 			(project "VoltageTap_B"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "R235")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 54.61 95.25 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "1ff44738-9c23-463d-81b0-eba97bc5d1ef")
-		(property "Reference" "D203"
-			(at 57.15 93.9799 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 57.15 96.5199 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 54.61 95.25 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 54.61 95.25 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 54.61 95.25 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "3134c4a6-124c-4bef-9c48-1afedf6aa8d0")
-		)
-		(pin "1"
-			(uuid "d96435f6-7ff9-41f0-ae22-11554ed9d038")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D203")
 					(unit 1)
 				)
 			)
@@ -10497,7 +10396,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 66.04 119.38 0)
 			(effects
 				(font
@@ -11493,7 +11392,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 66.04 78.74 0)
 			(effects
 				(font
@@ -11817,6 +11716,112 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 128.27 53.34 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "3ffac0b8-32df-4dd2-870d-004e76be3a64")
+		(property "Reference" "D205"
+			(at 130.81 52.0699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 130.81 54.6099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 128.27 53.34 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 128.27 53.34 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 128.27 53.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 128.27 53.34 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 128.27 53.34 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 128.27 53.34 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 128.27 53.34 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "14871547-644f-4a2c-9c93-2ee3b7792fbd")
+		)
+		(pin "1"
+			(uuid "690e4a84-b1e6-4380-836b-d1ffa6e390c5")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D205")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 128.27 143.51 0)
 		(mirror x)
@@ -11984,7 +11989,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 66.04 58.42 0)
 			(effects
 				(font
@@ -12233,76 +12238,6 @@
 	)
 	(symbol
 		(lib_id "Device:D_Zener_Small")
-		(at 54.61 115.57 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "5377a775-00bc-4c27-9fa7-d7b6622c0e41")
-		(property "Reference" "D204"
-			(at 57.15 114.2999 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 57.15 116.8399 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 54.61 115.57 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 54.61 115.57 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 54.61 115.57 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "7d19ab1a-96d4-4447-9029-879b4176ecfd")
-		)
-		(pin "1"
-			(uuid "247e078a-4be6-4dc4-9087-a1ff4f19115c")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D204")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Zener_Small")
 		(at 128.27 175.26 270)
 		(unit 1)
 		(exclude_from_sim no)
@@ -12320,7 +12255,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "15v"
+		(property "Value" "13V"
 			(at 130.81 176.5299 90)
 			(effects
 				(font
@@ -12329,7 +12264,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
 			(at 128.27 175.26 90)
 			(effects
 				(font
@@ -12356,6 +12291,42 @@
 				(hide yes)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 128.27 175.26 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 128.27 175.26 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 128.27 175.26 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 128.27 175.26 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "0aba38b8-b8e4-48ac-8875-73fe432cd9b8")
 		)
@@ -12366,76 +12337,6 @@
 			(project ""
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "D214")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 128.27 73.66 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "551b1768-8d47-4929-b6c8-e8b767db22b5")
-		(property "Reference" "D209"
-			(at 130.81 72.3899 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 130.81 74.9299 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 128.27 73.66 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 128.27 73.66 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 128.27 73.66 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "90f4e520-8550-4672-885e-a5c52fb2346e")
-		)
-		(pin "1"
-			(uuid "8607d731-7c7c-41ea-8917-e3c5eaef1333")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D209")
 					(unit 1)
 				)
 			)
@@ -12551,76 +12452,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 128.27 114.3 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "59036c91-6fe1-44a5-9f32-44fb5852c46a")
-		(property "Reference" "D211"
-			(at 130.81 113.0299 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 130.81 115.5699 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 128.27 114.3 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 128.27 114.3 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 128.27 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "1b58b008-8029-46e9-abf5-8d60693edf2a")
-		)
-		(pin "1"
-			(uuid "72e8af90-cf6b-4fb2-9c12-5ad96ded2d40")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D211")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 246.38 35.56 0)
 		(mirror x)
@@ -12648,7 +12479,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 246.38 35.56 0)
 			(effects
 				(font
@@ -12779,7 +12610,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 139.7 97.79 0)
 			(effects
 				(font
@@ -13536,7 +13367,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 139.7 57.15 0)
 			(effects
 				(font
@@ -14156,76 +13987,6 @@
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "C210")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 128.27 53.34 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "74b155c3-6155-4d57-9acc-d1bca936f92e")
-		(property "Reference" "D208"
-			(at 130.81 52.0699 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 130.81 54.6099 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 128.27 53.34 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 128.27 53.34 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 128.27 53.34 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "dd28ed74-e072-4eba-9d2a-7a7ca5952eb3")
-		)
-		(pin "1"
-			(uuid "47cb28fc-6e32-42ef-851d-36c694664fca")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D208")
 					(unit 1)
 				)
 			)
@@ -15110,6 +14871,112 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 54.61 156.21 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "837d6663-6f2e-4495-93a2-561ecea00e96")
+		(property "Reference" "D211"
+			(at 57.15 154.9399 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 57.15 157.4799 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 54.61 156.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 54.61 156.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 54.61 156.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 54.61 156.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 54.61 156.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 54.61 156.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 54.61 156.21 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "62ed7969-05d6-4288-bcd4-598235a3a7bf")
+		)
+		(pin "1"
+			(uuid "9ff5559c-ef3b-47ec-b975-4ffa74341436")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D211")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 66.04 91.44 90)
 		(unit 1)
@@ -15252,6 +15119,112 @@
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "R220")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 54.61 74.93 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "857bb15e-4f8e-4edc-a438-4d05d2a9aa4a")
+		(property "Reference" "D207"
+			(at 57.15 73.6599 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 57.15 76.1999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 54.61 74.93 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 54.61 74.93 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 54.61 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 54.61 74.93 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 54.61 74.93 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 54.61 74.93 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 54.61 74.93 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "055b0ed1-a104-4794-9188-9fd1dc97818d")
+		)
+		(pin "1"
+			(uuid "9fa1136a-dc99-43b3-ab48-a3b4737a1972")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D207")
 					(unit 1)
 				)
 			)
@@ -16577,16 +16550,16 @@
 	)
 	(symbol
 		(lib_id "Device:D_Zener_Small")
-		(at 54.61 135.89 270)
+		(at 128.27 114.3 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "92f4d46c-9ee8-47c2-87fe-474e876a6da3")
-		(property "Reference" "D205"
-			(at 57.15 134.6199 90)
+		(uuid "9342a53f-a88a-46d5-b751-bd2dc09362e9")
+		(property "Reference" "D202"
+			(at 130.81 113.0299 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16594,8 +16567,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "15v"
-			(at 57.15 137.1599 90)
+		(property "Value" "13V"
+			(at 130.81 115.5699 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16603,8 +16576,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 54.61 135.89 90)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 128.27 114.3 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16613,7 +16586,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 54.61 135.89 90)
+			(at 128.27 114.3 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16622,7 +16595,43 @@
 			)
 		)
 		(property "Description" "Zener diode, small symbol"
-			(at 54.61 135.89 0)
+			(at 128.27 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 128.27 114.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 128.27 114.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 128.27 114.3 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 128.27 114.3 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16631,15 +16640,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "9b9b2f72-dbbc-49f5-8316-9f0966e7fb63")
+			(uuid "d5fc05d8-c9fe-4a1d-9a9c-64ad496c3375")
 		)
 		(pin "1"
-			(uuid "7c326f7e-1194-4383-94a2-e03d5323df90")
+			(uuid "f395540a-c9fc-4a62-931d-54fd817bc737")
 		)
 		(instances
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D205")
+					(reference "D202")
 					(unit 1)
 				)
 			)
@@ -16671,7 +16680,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 66.04 139.7 0)
 			(effects
 				(font
@@ -17086,7 +17095,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 66.04 160.02 0)
 			(effects
 				(font
@@ -17186,6 +17195,112 @@
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "R227")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 128.27 134.62 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9da25c8e-e30a-48bc-98fc-3d5858f3c57e")
+		(property "Reference" "D201"
+			(at 130.81 133.3499 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 130.81 135.8899 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 128.27 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 128.27 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 128.27 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 128.27 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 128.27 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 128.27 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 128.27 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "d0593d0e-3699-4deb-971b-9e60c152951f")
+		)
+		(pin "1"
+			(uuid "cb06fa98-7a9c-43e3-9747-c1b094e18869")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D201")
 					(unit 1)
 				)
 			)
@@ -17326,7 +17441,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 142.24 35.56 0)
 			(effects
 				(font
@@ -17575,16 +17690,16 @@
 	)
 	(symbol
 		(lib_id "Device:D_Zener_Small")
-		(at 54.61 156.21 270)
+		(at 54.61 54.61 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "a309133b-6cc1-4681-abaf-04d4f9d3d65d")
+		(uuid "a5d9ed18-3b95-4f19-a569-b50830d3a4c2")
 		(property "Reference" "D206"
-			(at 57.15 154.9399 90)
+			(at 57.15 53.3399 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17592,8 +17707,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "15v"
-			(at 57.15 157.4799 90)
+		(property "Value" "13V"
+			(at 57.15 55.8799 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17601,8 +17716,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 54.61 156.21 90)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 54.61 54.61 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17611,7 +17726,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 54.61 156.21 90)
+			(at 54.61 54.61 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17620,7 +17735,43 @@
 			)
 		)
 		(property "Description" "Zener diode, small symbol"
-			(at 54.61 156.21 0)
+			(at 54.61 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 54.61 54.61 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 54.61 54.61 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 54.61 54.61 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 54.61 54.61 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17629,85 +17780,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "ea910552-d373-4c53-a3ed-ad4748278791")
+			(uuid "ac5ba013-feb7-4f4c-8a18-38e67eeac51d")
 		)
 		(pin "1"
-			(uuid "a0103427-96d7-4379-a35c-7f9949a377f8")
+			(uuid "9bb440d8-7d8e-40ee-95a8-3cf81494d491")
 		)
 		(instances
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "D206")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 128.27 93.98 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "a3ef7f58-af93-4dc4-9900-9872f495f001")
-		(property "Reference" "D210"
-			(at 130.81 92.7099 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 130.81 95.2499 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 128.27 93.98 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 128.27 93.98 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 128.27 93.98 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "555e48f1-efd2-4a7e-85b7-425fd2d79881")
-		)
-		(pin "1"
-			(uuid "4e989ded-8a56-4c28-a447-0aa913f06d5e")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D210")
 					(unit 1)
 				)
 			)
@@ -17739,7 +17820,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 139.7 138.43 0)
 			(effects
 				(font
@@ -18491,6 +18572,112 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 128.27 154.94 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ab637ef2-ef2e-46b9-b941-7da721a18139")
+		(property "Reference" "D213"
+			(at 130.81 153.6699 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 130.81 156.2099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 128.27 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 128.27 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 128.27 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 128.27 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 128.27 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 128.27 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 128.27 154.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "f52bb9a0-650c-45d5-8aad-6c725d930263")
+		)
+		(pin "1"
+			(uuid "5e121371-985a-42cf-a5b4-61d7f8755162")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D213")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 139.7 151.13 90)
 		(unit 1)
@@ -19032,6 +19219,112 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 54.61 135.89 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b5934c53-5c51-47fc-afa2-b129b2e82863")
+		(property "Reference" "D210"
+			(at 57.15 134.6199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 57.15 137.1599 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 54.61 135.89 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 54.61 135.89 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 54.61 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 54.61 135.89 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 54.61 135.89 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 54.61 135.89 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 54.61 135.89 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0dd3589a-5cf6-43ff-b839-40487bc79c50")
+		)
+		(pin "1"
+			(uuid "8b421581-bed2-4ecb-88ad-b4727486b6f6")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D210")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 153.67 114.3 0)
 		(unit 1)
@@ -19194,6 +19487,112 @@
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "C213")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 128.27 93.98 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "b9626841-26df-4e71-960e-2cd9eca8f09a")
+		(property "Reference" "D203"
+			(at 130.81 92.7099 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 130.81 95.2499 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 128.27 93.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 128.27 93.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 128.27 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 128.27 93.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 128.27 93.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 128.27 93.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 128.27 93.98 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "1526601a-a624-4f76-9993-3202acb01ba4")
+		)
+		(pin "1"
+			(uuid "088e8036-dc7b-45b7-8267-7f69f2dd0b5f")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D203")
 					(unit 1)
 				)
 			)
@@ -19681,6 +20080,112 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 54.61 95.25 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c3e1eb80-5fff-42a7-8614-289e3e810816")
+		(property "Reference" "D208"
+			(at 57.15 93.9799 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 57.15 96.5199 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 54.61 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 54.61 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 54.61 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 54.61 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 54.61 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 54.61 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 54.61 95.25 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "2c33fdeb-0e76-4c7d-bf13-ec64f6dd0e72")
+		)
+		(pin "1"
+			(uuid "f39f18a8-f341-4dfb-bd58-bbe3c8235884")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D208")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 66.04 50.8 90)
 		(unit 1)
@@ -19971,76 +20476,6 @@
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
 					(reference "R228")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 54.61 176.53 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "c67a51d2-98a9-4a05-b497-85a6c4eee634")
-		(property "Reference" "D207"
-			(at 57.15 175.2599 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 57.15 177.7999 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 54.61 176.53 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 54.61 176.53 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 54.61 176.53 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "73f7602a-18e2-457f-b1d5-4a738a2ce51a")
-		)
-		(pin "1"
-			(uuid "feff4568-0dc0-4449-ba01-e3b7a7cdf33b")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D207")
 					(unit 1)
 				)
 			)
@@ -21284,76 +21719,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:D_Zener_Small")
-		(at 128.27 134.62 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "dbb58b34-b6c9-4929-9d8b-ed1203eb1eff")
-		(property "Reference" "D212"
-			(at 130.81 133.3499 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "15v"
-			(at 130.81 135.8899 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 128.27 134.62 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 128.27 134.62 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Zener diode, small symbol"
-			(at 128.27 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "af47a3ce-5b50-462e-bb0c-0b872cfe3ff6")
-		)
-		(pin "1"
-			(uuid "eb73e317-17a7-485e-89f4-5fc6b0b942e6")
-		)
-		(instances
-			(project "VoltageTap_Bee"
-				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D212")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 193.04 120.65 0)
 		(unit 1)
@@ -21451,16 +21816,16 @@
 	)
 	(symbol
 		(lib_id "Device:D_Zener_Small")
-		(at 54.61 54.61 270)
+		(at 128.27 73.66 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "dd497ee3-8ab2-439a-9492-8a9f46c61f08")
-		(property "Reference" "D201"
-			(at 57.15 53.3399 90)
+		(uuid "dd99c540-5209-463e-81ba-c283bcb83a4e")
+		(property "Reference" "D204"
+			(at 130.81 72.3899 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21468,8 +21833,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "15v"
-			(at 57.15 55.8799 90)
+		(property "Value" "13V"
+			(at 130.81 74.9299 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21477,8 +21842,8 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Diode_SMD:D_SOD-123"
-			(at 54.61 54.61 90)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 128.27 73.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21487,7 +21852,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 54.61 54.61 90)
+			(at 128.27 73.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21496,7 +21861,43 @@
 			)
 		)
 		(property "Description" "Zener diode, small symbol"
-			(at 54.61 54.61 0)
+			(at 128.27 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 128.27 73.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 128.27 73.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 128.27 73.66 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 128.27 73.66 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21505,15 +21906,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "9b0c855d-9fb7-49f4-a9a7-aa0aefa14a49")
+			(uuid "d64b3df0-1cd6-4b95-9d2e-630d42031f53")
 		)
 		(pin "1"
-			(uuid "b6caafb0-0f54-435a-a405-9f1efc840535")
+			(uuid "f483c186-4ef8-48c4-b303-dff2f4b5873f")
 		)
 		(instances
 			(project "VoltageTap_Bee"
 				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
-					(reference "D201")
+					(reference "D204")
 					(unit 1)
 				)
 			)
@@ -21662,7 +22063,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 139.7 77.47 0)
 			(effects
 				(font
@@ -22132,6 +22533,112 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:D_Zener_Small")
+		(at 54.61 115.57 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e878e4f5-48cf-4f25-8dc3-6163db532d54")
+		(property "Reference" "D209"
+			(at 57.15 114.2999 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "13V"
+			(at 57.15 116.8399 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Diode_SMD:D_MiniMELF"
+			(at 54.61 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 54.61 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Zener diode, small symbol"
+			(at 54.61 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Vishay-Semiconductors/TZM5243B-GS08?qs=8Acm1RElxHLzJeiYRz6gSQ%3D%3D"
+			(at 54.61 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x1" "0.10"
+			(at 54.61 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x10" "0.047"
+			(at 54.61 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "unit x100" "0.042"
+			(at 54.61 115.57 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5bd38bb0-9c8e-4ad7-9846-c2fb748a791c")
+		)
+		(pin "1"
+			(uuid "4df363c7-9581-47bb-826e-8c37e0aba2ae")
+		)
+		(instances
+			(project "VoltageTap_Bee"
+				(path "/24c6cb45-cbeb-4148-a23c-ec2e76234670/5ed1aefd-4d0e-4d3d-a5a2-f479b00e73a5"
+					(reference "D209")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_US")
 		(at 127 191.77 90)
 		(unit 1)
@@ -22278,7 +22785,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 139.7 158.75 0)
 			(effects
 				(font
@@ -22808,7 +23315,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
 			(at 66.04 99.06 0)
 			(effects
 				(font
