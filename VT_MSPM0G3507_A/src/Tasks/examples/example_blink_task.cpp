@@ -22,6 +22,7 @@ void Task::blink_task(void*) {
 //    auto &led = System::GPIO::PB26; // LP RED
 //    auto &led = System::GPIO::PB27; // LP GREEN
 //    auto &led = System::GPIO::PA7; // v3
+
     auto &led = VT::Indicator::scheduler; // VT Bee
 
     DL_GPIO_initDigitalOutputFeatures(

@@ -24,32 +24,42 @@ void Task::SDC_test_task(void *){
     UINT bw;
     WORD n = 0;
     char Line[128];
+
+
     System::UART::uart_ui.nputs(ARRANDN("Disc init.... \n\r res: "));
     System::UART::uart_ui.putu32h(disk_initialize());
-    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+
+    vTaskDelay(100);
 
 
     System::UART::uart_ui.nputs(ARRANDN("Mounting.... \n\r res: "));
     System::UART::uart_ui.putu32h(pf_mount(&fs));
-    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+
+    vTaskDelay(100);
 
     System::UART::uart_ui.nputs(ARRANDN("opening file.txt.... \n\r res: "));
     System::UART::uart_ui.putu32h(pf_open("file.txt"));
-    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+
+    vTaskDelay(100);
 
     strcat(Line,"Do I need to panik? Probably.\r\n");
 
     System::UART::uart_ui.nputs(ARRANDN("Writing.... \n\r res: "));
     System::UART::uart_ui.putu32h(pf_write(Line, strlen(Line), &bw));
-    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+
+    vTaskDelay(100);
 
     System::UART::uart_ui.nputs(ARRANDN("Finalizing.... \n\r res: "));
     System::UART::uart_ui.putu32h(pf_write(0, 0, &bw));
-    System::UART::uart_ui.nputs(ARRANDN("\r\r"));
+    System::UART::uart_ui.nputs(ARRANDN("\n\n"));
 
 
 
-
+    vTaskDelay(100);
 
 
     System::FailHard("SDC_test_task ended" NEWLINE);

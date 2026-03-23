@@ -62,12 +62,11 @@
 
 /*--- IC footprint -------------------------------------*/
 // when changing footprints update this manually then match the library using the project settings.
-
-//#define MSPM0G3507_LQFP64   // UG.6.1/6
+#define MSPM0G3507_LQFP64   // UG.6.1/6
 //#define MSPM0G3507_LQFP48   // UG.6.1/7
 //#define MSPM0G3507_VQFN48   // UG.6.1/8
 //#define MSPM0G3507_VQFN32   // UG.6.1/9
-#define MSPM0G3507_VSSOP28  // UG.6.1/9
+//#define MSPM0G3507_VSSOP28  // UG.6.1/9
 
 /*--- shorthand ----------------------------------------*/
 
@@ -104,7 +103,7 @@
 #define PROJECT_ENABLE_UART0        // LP
 //#define PROJECT_ENABLE_UART2        // MB_A 1.0
 
-//#define PROJECT_ENABLE_SPI0
+#define PROJECT_ENABLE_SPI0
 #define PROJECT_ENABLE_SPI1
 
 //#define PROJECT_ENABLE_I2C0

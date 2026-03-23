@@ -207,9 +207,9 @@ void System::init() {
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
-        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PA14
-                IOMUX_PINCM36,
-                IOMUX_PINCM36_PF_SPI0_PICO,
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI, PB17
+                IOMUX_PINCM43,
+                IOMUX_PINCM43_PF_SPI0_PICO,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
@@ -217,8 +217,8 @@ void System::init() {
             );
         DL_GPIO_enableHiZ(IOMUX_PINCM35);
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA12));
-//        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
-        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA14));
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PB17));
 
         /*--- SPI config -----------------*/
 

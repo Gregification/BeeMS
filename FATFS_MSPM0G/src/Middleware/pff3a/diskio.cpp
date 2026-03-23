@@ -10,12 +10,12 @@
 #include "Core/system.hpp"
 #include <ti/driverlib/driverlib.h>
 
-auto & spi_mmc = System::SPI::spi1;
-System::GPIO::GPIO const * cs_mmc;
+auto & spi_mmc = System::SPI::spi0;
+auto & cs_mmc = System::GPIO::PA15;
 
-#define DELAY_100US() delay_cycles(8000)  /* ( 100us/(1/16Mhz) )  = 1600 ticks */
-#define SELECT()    cs_mmc->set()      /* CS = L */
-#define DESELECT()  cs_mmc->clear()       /* CS = H */
+#define DELAY_100US() delay_cycles(8000)  /* ( 100us/(1/80Mhz) )  =  8000ticks */
+#define SELECT()      cs_mmc.clear()    /* CS = L */
+#define DESELECT()    cs_mmc.set()    /* CS = H */
 
 /* Definitions for MMC/SDC command */
 #define CMD0    (0x40+0)    /* GO_IDLE_STATE */
@@ -41,14 +41,14 @@ static BYTE CardType;
  BYTE spi_receive()
  {
      uint8_t rx;
-     spi_mmc.transfer_blocking(NULL, &rx, 1, cs_mmc);
+     spi_mmc.transfer_blocking(NULL, &rx, 1, &cs_mmc);
      return rx;
  }
 
  void spi_send(BYTE val)
  {
       uint8_t rx, tx;
-      spi_mmc.transfer_blocking(&tx, &rx, 1, cs_mmc);
+      spi_mmc.transfer_blocking(&tx, &rx, 1, &cs_mmc);
  }
 
 /*-----------------------------------------------------------------------*/
@@ -102,22 +102,24 @@ DSTATUS disk_initialize(void) {
     BYTE n, cmd, ty, ocr[4];
     UINT tmr;
 
-    if (CardType && cs_mmc->get())
+    if (CardType && cs_mmc.get())
         disk_writep(0, 0); /* Finalize write process if it is in progress */
 
     //spi_set_divisor(SPI_250kHz);
     spi_mmc.setSCLKTarget(250e3);
-        DL_GPIO_enableOutput(GPIOPINPUX(System::GPIO::PA14)); // SPI CS
-        DL_GPIO_initDigitalOutputFeatures(
-                System::GPIO::PA14.iomux,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-                DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
-                DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-            );
+
+    DL_GPIO_enableOutput(GPIOPINPUX(cs_mmc)); // SPI CS
+    DL_GPIO_initDigitalOutputFeatures(
+            cs_mmc.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+
 
     DESELECT();
-    for (n = 10; n; n--)
+   for (n = 10; n; n--)
         spi_receive(); /* 80 dummy clocks with CS=H */
 
     ty = 0;
