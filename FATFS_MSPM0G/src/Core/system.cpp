@@ -217,7 +217,7 @@ void System::init() {
             );
         DL_GPIO_enableHiZ(IOMUX_PINCM35);
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA12));
-        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
+        //DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA13));
         DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PB17));
 
         /*--- SPI config -----------------*/

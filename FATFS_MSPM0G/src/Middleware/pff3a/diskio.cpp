@@ -14,8 +14,8 @@ auto & spi_mmc = System::SPI::spi0;
 auto & cs_mmc = System::GPIO::PA15;
 
 #define DELAY_100US() delay_cycles(8000)  /* ( 100us/(1/80Mhz) )  =  8000ticks */
-#define SELECT()      cs_mmc.clear()    /* CS = L */
-#define DESELECT()    cs_mmc.set()    /* CS = H */
+#define SELECT()        cs_mmc.set() /* CS = L */
+#define DESELECT()       cs_mmc.clear()  /* CS = H */
 
 /* Definitions for MMC/SDC command */
 #define CMD0    (0x40+0)    /* GO_IDLE_STATE */
@@ -40,15 +40,18 @@ static BYTE CardType;
 /*-----------------------------------------------------------------------*/
  BYTE spi_receive()
  {
-     uint8_t rx;
-     spi_mmc.transfer_blocking(NULL, &rx, 1, &cs_mmc);
+     uint8_t rx, tx;
+     tx = 0xff;
+     spi_mmc.transfer_blocking(&tx, &rx, 1, NULL);
      return rx;
  }
 
- void spi_send(BYTE val)
+ BYTE spi_send(BYTE val)
  {
       uint8_t rx, tx;
-      spi_mmc.transfer_blocking(&tx, &rx, 1, &cs_mmc);
+      tx = val;
+      spi_mmc.transfer_blocking(&tx, &rx, 1, NULL);
+      return rx;
  }
 
 /*-----------------------------------------------------------------------*/
@@ -59,6 +62,8 @@ static BYTE send_cmd(BYTE cmd, /* 1st byte (Start + Index) */
 DWORD arg /* Argument (32 bits) */
 ) {
     BYTE n, res;
+    uint8_t rx [10];
+    uint8_t tx [10];
 
     if (cmd & 0x80) { /* ACMD<n> is the command sequense of CMD55-CMD<n> */
         cmd &= 0x7F;
@@ -78,6 +83,13 @@ DWORD arg /* Argument (32 bits) */
     spi_send((BYTE) (arg >> 16)); /* Argument[23..16] */
     spi_send((BYTE) (arg >> 8)); /* Argument[15..8] */
     spi_send((BYTE) arg); /* Argument[7..0] */
+
+//    tx[0] = (BYTE) cmd; /* Start + Command index */
+//    tx[1] = (BYTE) (arg >> 24); /* Argument[31..24] */
+//    tx[2] = (BYTE) (arg >> 16); /* Argument[23..16] */
+//    tx[3] = (BYTE) (arg >> 8); /* Argument[15..8] */
+//    tx[4] = (BYTE) arg; /* Argument[7..0] */
+
     n = 0x01; /* Dummy CRC + Stop */
     if (cmd == CMD0)
         n = 0x95; /* Valid CRC for CMD0(0) */
@@ -85,11 +97,19 @@ DWORD arg /* Argument (32 bits) */
         n = 0x87; /* Valid CRC for CMD8(0x1AA) */
     spi_send(n);
 
+
+    //spi_mmc.transfer_blocking(&tx, &rx, 6, NULL);
+
+
     /* Receive a command response */
     n = 10; /* Wait for a valid response in timeout of 10 attempts */
+//    spi_mmc.transfer_blocking(NULL, &rx, 10, NULL);
+
     do {
         res = spi_receive();
     } while ((res & 0x80) && --n);
+
+
 
     return res; /* Return with the response value */
 }
@@ -110,12 +130,12 @@ DSTATUS disk_initialize(void) {
 
     DL_GPIO_enableOutput(GPIOPINPUX(cs_mmc)); // SPI CS
     DL_GPIO_initDigitalOutputFeatures(
-            cs_mmc.iomux,
-            DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
-            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
-            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
-            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
-        );
+        cs_mmc.iomux,
+        DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE,
+        DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+        DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+        DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+    );
 
 
     DESELECT();

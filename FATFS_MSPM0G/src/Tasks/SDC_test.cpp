@@ -26,9 +26,9 @@ void Task::SDC_test_task(void *){
     char Line[128];
 
 
-    System::UART::uart_ui.nputs(ARRANDN("Disc init.... \n\r res: "));
-    System::UART::uart_ui.putu32h(disk_initialize());
-    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+//    System::UART::uart_ui.nputs(ARRANDN("Disc init.... \n\r res: "));
+//    System::UART::uart_ui.putu32h(disk_initialize());
+//    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
 
     vTaskDelay(100);
 
