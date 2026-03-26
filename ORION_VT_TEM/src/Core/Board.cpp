@@ -124,18 +124,31 @@ void BOARD::init() {
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE);
 
         DL_GPIO_disableOutput(GPIOPINPUX(UI::SWITCHES::cm.pin));
-        DL_GPIO_initDigitalInputFeatures(
-                UI::SWITCHES::cm.pin.iomux,
-                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
-                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
-                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
-                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE);
+        DL_GPIO_initDigitalInput(UI::SWITCHES::cm.pin.iomux);
+        DL_GPIO_setAnalogInternalResistor(UI::SWITCHES::cm.pin.iomux,
+                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
 
         DL_ADC12_disableConversions(UI::SWITCHES::cm.adc.adc);
         DL_ADC12_configConversionMem(
-                    UI::SWITCHES::cm.adc.adc,
-                    UI::SWITCHES::cm.idx,
-                    UI::SWITCHES::cm.channel,
+                UI::SWITCHES::cm.adc.adc,
+                UI::SWITCHES::cm.idx,
+                UI::SWITCHES::cm.channel,
+                DL_ADC12_REFERENCE_VOLTAGE_VDDA,
+                DL_ADC12_SAMPLE_TIMER_SOURCE_SCOMP0,
+                DL_ADC12_AVERAGING_MODE_ENABLED,
+                DL_ADC12_BURN_OUT_SOURCE_DISABLED,
+                DL_ADC12_TRIGGER_MODE_AUTO_NEXT,
+                DL_ADC12_WINDOWS_COMP_MODE_DISABLED
+            );
+
+        for(unsigned int i = 0; i < Therm::THERM_N; i++){
+            DL_GPIO_initDigitalInput(Therm::TB[i].cm.pin.iomux);
+            DL_GPIO_setAnalogInternalResistor(Therm::TB[i].cm.pin.iomux,
+                      DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+            DL_ADC12_configConversionMem(
+                    Therm::TB[i].cm.adc.adc,
+                    Therm::TB[i].cm.idx,
+                    Therm::TB[i].cm.channel,
                     DL_ADC12_REFERENCE_VOLTAGE_VDDA,
                     DL_ADC12_SAMPLE_TIMER_SOURCE_SCOMP0,
                     DL_ADC12_AVERAGING_MODE_ENABLED,
@@ -143,6 +156,8 @@ void BOARD::init() {
                     DL_ADC12_TRIGGER_MODE_AUTO_NEXT,
                     DL_ADC12_WINDOWS_COMP_MODE_DISABLED
                 );
+        }
+
         DL_ADC12_enableConversions(UI::SWITCHES::cm.adc.adc);
     }
 }

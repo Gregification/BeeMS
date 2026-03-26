@@ -17,7 +17,8 @@ void Task::TEM_task(void*) {
     using namespace BOARD;
 
     while(1){
-        //uint16_t val = 0xbeef;
+        vTaskDelay(pdMS_TO_TICKS(80));
+
         UI::SWITCHES::cm.sample_blocking();
         uint16_t val = UI::SWITCHES::cm.getResult();
 
@@ -25,7 +26,6 @@ void Task::TEM_task(void*) {
         System::UART::uart_ui.put32d(val);
         System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
-        vTaskDelay(pdMS_TO_TICKS(1e3));
     }
 }
 
