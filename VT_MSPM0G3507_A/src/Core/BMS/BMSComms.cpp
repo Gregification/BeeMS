@@ -17,10 +17,10 @@ bool BMSComms::isValidPacketID(DL_MCAN_RxBufElement const & pkt) {
         switch(System::CANFD::getID(pkt)) {
             default: break;
 
-            case BMSComms::J1939_PF::MS:
-            case BMSComms::J1939_PF::SM:
-            case BMSComms::J1939_PF::MOD:
-            case BMSComms::J1939_PF::B:
+            case BMSComms::J1939_PF_e::MS:
+            case BMSComms::J1939_PF_e::SM:
+            case BMSComms::J1939_PF_e::MOD:
+            case BMSComms::J1939_PF_e::B:
                 return true;
         }
     } else {
@@ -33,7 +33,7 @@ bool BMSComms::isValidPacketID(DL_MCAN_RxBufElement const & pkt) {
     return false;
 }
 
-bool BMSComms::sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset, void const * data, uint8_t len) {
+bool BMSComms::sendPacket(J1939_PF_e type, uint8_t J1939_JS, int8_t priorityOffset, void const * data, uint8_t len) {
     if(len > MAX_PKT_SIZE_BYTES)
         return false;
 
@@ -59,16 +59,16 @@ bool BMSComms::sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset
         id->data_page   = 0;
 
         switch(type){
-            case BMSComms::J1939_PF::MS:
-            case BMSComms::J1939_PF::SM:
+            case BMSComms::J1939_PF_e::MS:
+            case BMSComms::J1939_PF_e::SM:
                 id->priority = Networking::CAN::getPriOffset(priorityOffset, BASE_PRI_INT);
                 break;
 
-            case BMSComms::J1939_PF::MOD:
+            case BMSComms::J1939_PF_e::MOD:
                 id->priority = Networking::CAN::getPriOffset(priorityOffset, PRI_MODBUS);
                 break;
 
-            case BMSComms::J1939_PF::B:
+            case BMSComms::J1939_PF_e::B:
             default:
                 id->priority = BASE_PRI_BRD;
                 break;

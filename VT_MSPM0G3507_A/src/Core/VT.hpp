@@ -43,13 +43,12 @@ namespace VT {
      * - use explicit variable names
      */
     struct __attribute__((__packed__)) OpProfile_t {
+        unsigned int canPacketSpacing_mS : 14;
+
         bool HRLV_IL_usr_dsrd           : 1;
-
         bool balancing_enable           : 1;
-
         uint16_t cell_mV_min;
         uint16_t cell_mV_max;
-
         uint16_t cellB_lower_limit_mV;     // MCU enforced lower limit for CB
 
         struct __attribute__((__packed__)) BBQ_t {
@@ -109,7 +108,7 @@ namespace VT {
             UNIT_uint cellB_man_mask;
             uint16_t cellB_man_thresh_mV;
 
-            struct __attribute__((__packed__)) {
+            struct __attribute__((__packed__)) SafetyStatus_t {
                 BQ76952::SafetyStatusA A;
                 BQ76952::SafetyStatusB B;
                 BQ76952::SafetyStatusC C;

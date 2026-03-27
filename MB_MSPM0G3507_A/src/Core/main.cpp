@@ -45,22 +45,24 @@ int main(){
     System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     MstrB::init();
-//    {
-//        char errorMsg[MAX_STR_ERROR_LEN] = "";
-//        uint32_t error = MstrB::POST(errorMsg, sizeof(errorMsg));
-//        if(error) {
-//            while(1) {
-//                System::UART::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE "POST ERROR #"));
-//                System::UART::uart_ui.putu32h(error);
-//                System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "\"\"\"" NEWLINE));
-//                System::UART::uart_ui.nputs(errorMsg, sizeof(errorMsg));
-//                System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "\"\"\"" NEWLINE));
-//                DL_GPIO_togglePins(GPIOPINPUX(MstrB::Indi::LED::fault));
-//
-//                delay_cycles(System::CLK::CPUCLK);
-//            }
-//        }
-//    }
+    {
+        char errorMsg[MAX_STR_ERROR_LEN] = "";
+        uint32_t error = MstrB::POST(errorMsg, sizeof(errorMsg));
+        if(error) {
+            while(1) {
+                System::UART::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE "POST ERROR #"));
+                System::UART::uart_ui.putu32h(error);
+                System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "\"\"\"" NEWLINE));
+                System::UART::uart_ui.nputs(errorMsg, sizeof(errorMsg));
+                System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "\"\"\"" NEWLINE));
+                DL_GPIO_togglePins(GPIOPINPUX(MstrB::Indi::LED::fault));
+
+                delay_cycles(System::CLK::CPUCLK);
+            }
+        } else {
+            System::UART::uart_ui.nputs(ARRANDN(CLIRESET "POST: " CLIGOOD "OK" CLIRESET NEWLINE));
+        }
+    }
 
     xTaskCreate(Task::blink_task,
             "blink_task",

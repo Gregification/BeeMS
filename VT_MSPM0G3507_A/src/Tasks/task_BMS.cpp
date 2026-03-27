@@ -209,7 +209,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                             2
                         )){
                         error = __LINE__;
-                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " failed SPI test transaction");
+                        ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " BBQ SPI transaction failed");
                         break;
                         static_assert(sizeof(batstat) == 2);
                     }
@@ -275,7 +275,6 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         break;
                         static_assert(sizeof(batch.stack_cV) >= 2);
                     }
-
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68 (100mDegC)
                             &temp16,
@@ -408,12 +407,13 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     }
 
                     do{
-                        static TickType_t former = xTaskGetTickCount();
-                        TickType_t t = xTaskGetTickCount();
-
-                        if((t - former) * portTICK_PERIOD_MS < 500)
-                            break;
-                        former = t;
+                        { // every 500mS
+                            static TickType_t former = xTaskGetTickCount();
+                            TickType_t t = xTaskGetTickCount();
+                            if((t - former) * portTICK_PERIOD_MS < 500)
+                                break;
+                            former = t;
+                        }
 
                         uint8_t cb_n;
                         if(!bq.getRegister(BQ769X2_PROTOCOL::RegAddr::CellBalanceMaxCells,
@@ -425,7 +425,6 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                             break;
                             static_assert(sizeof(cb_n) == 1);
                         }
-
 
                         // set proper cell count for balancing
                         switch(batch.cellB_enabled) {
@@ -480,7 +479,6 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     } while(false);
                     if(error) break;
 
-                    // todo balancing reading
 
                 } while(false);
                 bq.spi.giveResource();

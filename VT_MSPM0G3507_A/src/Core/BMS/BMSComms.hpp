@@ -11,6 +11,7 @@
 #include "Core/common.h"
 #include "Core/Networking/CAN.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
+#include "Core/VT.hpp"
 
 /**
  * CAN bus packet content being sent between and from BMS devices.
@@ -35,7 +36,7 @@ namespace BMSComms {
      *  - limited by CAN ram settings (see settings.hpp).
      *      - tradeoff <rx fifo elements> vs <element size>
      */
-    constexpr uint8_t MAX_PKT_SIZE_BYTES= 20;
+    constexpr uint8_t MAX_PKT_SIZE_BYTES = 20;
 
     /** id's for 11b packets*/
     enum STD_ID : uint16_t {
@@ -46,7 +47,7 @@ namespace BMSComms {
      * - PF's >= 240 are broadcast
      * - ALL CHANGES HERE MUST BE UPDATED IN CAN ID FILTER (see system.hpp)
      */
-    enum J1939_PF : uint8_t {
+    enum J1939_PF_e : uint8_t {
         MS      = 103,  // Master   -> Slave        (fifo) master ignores
         SM      = 104,  // Slave    -> Master       (fifo) slave ignores
 
@@ -54,31 +55,81 @@ namespace BMSComms {
 
         B       = 247,  // general use broadcast    all listen
     };
-    static_assert(J1939_PF::B >= 240); // J1939 standard, broadcasts >=240
+    static_assert(J1939_PF_e::B >= 240); // J1939 standard, broadcasts >=240
 
     /** packet intended for Slave --> Master transmissions */
-    enum PktSM_t : uint32_t {
-        CELLV               = 0,    // cell voltage
-        CELLT               = 1,    // cell temp
+    enum PktSM_JS_e : uint32_t {
+        STATUS1             = 0,    // state of operations
+        CELLV               = 1,    // cell voltage
+        CELLT               = 2,    // cell temp
 
         // add entries & corresponding struct as needed
         // maximum message count limited by "type" size in PacketHeader
     };
 
     /** packet intended for Master --> Slave transmissions */
-    enum PktMS_t : uint8_t {
+    enum PktMS_JS_e : uint8_t {
+        MODB_REG            = 0,    // modbus but packed custom so its smaller and faster, used for general r/w operaitons
 
     };
 
     /** packet intended for BMS --> <3rd party> transmissions */
-    enum PktCanSt_t : uint8_t {
+    enum PktCanSt_JS_e : uint8_t {
 
     };
+
+    /*** data packets: SM *********************************************/
+
+    struct __attribute__((__packed__)) SM_STATUS1_t {
+//        bool IL_in_present          : 1;    // true if interlock input is >~11V
+        bool IL_passing               : 1;    // true if interlock is OK
+
+        VT::OpVars_t::BBQ_t::SafetyStatus_t safetyStatus[VT::NUM_BBQs];
+
+        uint16_t maxNonCellTemp_dDegC;
+    };
+    static_assert(sizeof(SM_STATUS1_t) <= MAX_PKT_SIZE_BYTES);
+
+    struct __attribute__((__packed__)) SM_CELLV_t {
+        static constexpr int MAX_CELL_N = MAX_PKT_SIZE_BYTES/2 - 2;
+
+        uint8_t base_cell;                   // starting cell. cell1+ would be #0
+        unsigned int cellCount       : 6;
+        unsigned int                 : 2;    // reserved
+        uint16_t mV[MAX_CELL_N];
+    };
+    static_assert(sizeof(SM_CELLV_t) != MAX_PKT_SIZE_BYTES);
+    static_assert(SM_CELLV_t::MAX_CELL_N < 10, "very small packet? something is wrong");
+
+    struct __attribute__((__packed__)) SM_CELLT_t {
+        static constexpr int MAX_CELL_N = MAX_PKT_SIZE_BYTES/2 - 2;
+
+        uint8_t base_cell;                   // starting cell. cell1+ would be #0
+        unsigned int cellCount       : 6;
+        unsigned int                 : 2;    // reserved
+        int16_t dDegC[MAX_CELL_N];
+    };
+    static_assert(sizeof(SM_CELLT_t) != MAX_PKT_SIZE_BYTES);
+    static_assert(SM_CELLT_t::MAX_CELL_N < 10, "very small packet? something is wrong");
+
+
+    /*** data packets: MS *********************************************/
+
+    struct __attribute__((__packed__)) MS_MODB_REG_t {
+        //TODO
+    };
+    static_assert(sizeof(MS_MODB_REG_t) <= MAX_PKT_SIZE_BYTES);
+
+
+    /*** data packets: broadcasts *************************************/
+
+
+    /******************************************************************/
 
     /** returns true if is a valid BMS packet id. does not check if intended for this device */
     bool isValidPacketID(DL_MCAN_RxBufElement const &);
 
-    bool sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset, void const * data, uint8_t len);
+    bool sendPacket(J1939_PF_e type, uint8_t J1939_JS, int8_t priorityOffset, void const * data, uint8_t len);
 
     uint8_t getID();
 };

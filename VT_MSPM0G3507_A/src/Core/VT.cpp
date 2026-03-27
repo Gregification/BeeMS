@@ -17,6 +17,7 @@ namespace VT {
              .balancing_enable  = false,
              .cell_mV_min       = 1300,
              .cell_mV_max       = 4300,
+             .canPacketSpacing_mS   = 20,
         };
 
     OpVars_t opVars = {

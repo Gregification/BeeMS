@@ -19,6 +19,7 @@ void Task::adc_task(void *){
         uartt.nputs(ARRANDN("adc: "));
         uartt.putu32d(val);
         uartt.nputs(ARRANDN(NEWLINE));
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
     System::FailHard("adc_task ended" NEWLINE);
