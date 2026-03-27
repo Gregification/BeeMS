@@ -3,26 +3,30 @@
 
 #include <Middleware/MCP33151/MCP33151.hpp>
 
-namespace ADC
-{
-    uint16_t MCP33151_R(System::SPI::SPI &spi, System::GPIO::GPIO const &cs)
-    {
-        uint8_t tx[2] = { 0x00, 0x00 };   // get 16 clocks for 16 bits (2 leading zeros- data is 14 bits)
-        uint8_t rx[2];
+uint16_t MCP33151::read() {
+    uint16_t rx;
 
-        spi.transfer_blocking(tx, rx, 2, &cs);
+    spi.takeResource(0);
+    spi.transfer_blocking(NULL, &rx, 2, &cs);
+    spi.giveResource();
+    rx >>= 2;
+    return ((rx & 0x3F) << 8) | ((rx & 0xFF00) >> 8);
+}
 
-        return ((uint16_t) rx[0] << 8) | rx[1];
+bool MCP33151::calabrate() {
+    spi.takeResource(0);
+
+    cs.set();
+    uint8_t rx[8];
+    for(int i = 0; i < 1024/sizeof(rx); i++){
+        static_assert(sizeof(rx) * (1024/sizeof(rx)) == 1024);
+
+        spi.transfer_blocking(NULL, rx, sizeof(rx), NULL);
     }
+    vTaskDelay(pdMS_TO_TICKS(500));
+    cs.clear();
 
-    uint16_t read_precise_adc()
-    {
-        return MCP33151_R(MstrB::MHCS::spi, MstrB::MHCS::cs_precise);
-    }
+    spi.giveResource();
 
-    uint16_t read_imprecise_adc()
-    {
-        return MCP33151_R(MstrB::MHCS::spi, MstrB::MHCS::cs_imprecise);
-    }
-
+    return 0;
 }

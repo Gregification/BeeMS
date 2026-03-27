@@ -20,9 +20,19 @@ namespace MstrB {
             .GLV_IL_RELAY_engage = false,
         };
 
-    System::SPI::SPI & MHCS::spi  = System::SPI::spi1;
     System::SPI::SPI & Eth::spi   = System::SPI::spi0;
-    System::SPI::SPI & FS::spi    = MHCS::spi;
+    System::SPI::SPI & FS::spi    = SPI::spi1;
+
+    namespace MCHS {
+        MCP33151 ADCpercise = {
+               .spi = SPI::spi1,
+               .cs  = GPIO::PB19,
+            };
+        MCP33151 ADCimpercise = {
+               .spi = SPI::spi1,
+               .cs  = GPIO::PB18,
+            };
+    }
 }
 
 //#define TS_ADC  ADC0
@@ -37,27 +47,30 @@ namespace System::UART {
  */
 void MstrB::init() {
     {
-        using namespace MHCS;
+        using namespace MCHS;
 
         DL_GPIO_initDigitalOutputFeatures(
-                    cs_precise.iomux,
+                    ADCpercise.cs.iomux,
                     DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE, // active low
                     DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
                     DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                     DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
                 );
-        DL_GPIO_clearPins(GPIOPINPUX(cs_precise));
-        DL_GPIO_enableOutput(GPIOPINPUX(cs_precise));
+        DL_GPIO_clearPins(GPIOPINPUX(ADCpercise.cs));
+        DL_GPIO_enableOutput(GPIOPINPUX(ADCpercise.cs));
 
         DL_GPIO_initDigitalOutputFeatures(
-                    cs_imprecise.iomux,
+                    ADCimpercise.cs.iomux,
                     DL_GPIO_INVERSION::DL_GPIO_INVERSION_ENABLE, // active low
                     DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
                     DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                     DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
                 );
-        DL_GPIO_clearPins(GPIOPINPUX(cs_imprecise));
-        DL_GPIO_enableOutput(GPIOPINPUX(cs_imprecise));
+        DL_GPIO_clearPins(GPIOPINPUX(ADCimpercise.cs));
+        DL_GPIO_enableOutput(GPIOPINPUX(ADCimpercise.cs));
+
+        ADCimpercise.spi.setSCLKTarget(16e6);
+        ADCpercise.spi.setSCLKTarget(16e6);
     }
 
     {
@@ -349,40 +362,4 @@ bool MCHScalibrationADC(System::SPI::SPI& spi) {
     }
 
     return ret;
-}
-
-bool MstrB::MHCS::calibrationADCPer() {
-    bool ret;
-    cs_precise.set();
-    ret = MCHScalibrationADC(spi);
-    cs_precise.clear();
-    return ret;
-}
-
-bool MstrB::MHCS::calibrationADCImp() {
-    bool ret;
-    cs_imprecise.set();
-    ret = MCHScalibrationADC(spi);
-    cs_imprecise.clear();
-    return ret;
-}
-
-uint16_t MstrB::MHCS::readRawPer() {
-    uint16_t raw;
-    spi.transfer_blocking(NULL, &raw, sizeof(raw), &cs_precise);
-    return raw;
-}
-
-uint16_t MstrB::MHCS::readRawImp() {
-    uint16_t raw;
-    spi.transfer_blocking(NULL, &raw, sizeof(raw), &cs_imprecise);
-    return raw;
-}
-
-uint16_t MstrB::MHCS::readPer_mV() {
-    return readRawPer() * (ADCReference_100uV / BV(ADCResolution_b)) / 10;
-}
-
-uint16_t MstrB::MHCS::readImp_mV() {
-    return readRawImp() * (ADCReference_100uV / BV(ADCResolution_b)) / 10;
 }

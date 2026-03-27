@@ -787,7 +787,7 @@ void System::SPI::SPI::transfer_blocking(void * tx, void * rx, buffersize_t len,
     transfer(tx,rx,len,cs);
     while(isBusy())
         vTaskDelay(0);
-    if(cs){ // extra fast clear
+    if(cs) { // extra fast clear
         cs->clear();
     }
 }

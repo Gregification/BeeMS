@@ -5,19 +5,21 @@
  *      Author: Roman
  */
 
-#ifndef SRC_CORE_ADC_HPP_
-#define SRC_CORE_ADC_HPP_
+#ifndef SRC_CORE_MCP33151_HPP_
+#define SRC_CORE_MCP33151_HPP_
 
 #include <stdint.h>
 #include "Core/system.hpp"
-#include "Core/MasterBoard.hpp"
 
-namespace ADC 
-{
-    uint16_t MCP33151_R(System::SPI::SPI &spi, System::GPIO::GPIO const &cs);
+struct MCP33151 {
+    System::SPI::SPI & spi;
+    System::GPIO::GPIO const & cs;
 
-    uint16_t read_precise_adc();
-    uint16_t read_imprecise_adc();
-}
+    /* 14b ADC raw*/
+    uint16_t read();
 
-#endif /* SRC_CORE_ADC_HPP_ */
+    /* takes ~400mS to complete */
+    bool calabrate();
+};
+
+#endif /* SRC_CORE_MCP33151_HPP_ */

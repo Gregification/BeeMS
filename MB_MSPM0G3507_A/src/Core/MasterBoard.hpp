@@ -9,6 +9,7 @@
 #define SRC_MASTERBOARD_HPP_
 
 #include "system.hpp"
+#include "Middleware/MCP33151/MCP33151.hpp"
 
 namespace System {
     //OCCUPY(ADC0); // used by TempSense
@@ -40,24 +41,12 @@ namespace MstrB {
     void init();
 
     /** Main Current Hall Sensor */
-    namespace MHCS {
-        extern SPI::SPI & spi;
-        const GPIO::GPIO
-            cs_precise      = GPIO::PB18,
-            cs_imprecise    = GPIO::PB19;
+    namespace MCHS {
+        extern MCP33151 ADCpercise;
+        extern MCP33151 ADCimpercise;
 
         const uint16_t  ADCReference_100uV = 40960;
         const uint8_t   ADCResolution_b = 14;
-
-        /** return true on success. REQUIRES RTOS. DOES NOT WORK, BROKEN */
-        // auto calibration takes place ~40mS after the ADC gets power.
-        bool calibrationADCPer();
-        bool calibrationADCImp();
-
-        uint16_t readRawPer();
-        uint16_t readRawImp();
-        uint16_t readPer_mV();
-        uint16_t readImp_mV();
     }
 
     /** Indicator LEDs */

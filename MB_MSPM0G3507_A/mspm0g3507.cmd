@@ -40,7 +40,6 @@ MEMORY
     SRAM            (RWX) : origin = 0x20200000, length = 0x00008000
     BCR_CONFIG      (R)   : origin = 0x41C00000, length = 0x00000080
     BSL_CONFIG      (R)   : origin = 0x41C00100, length = 0x00000080
-
 }
 
 SECTIONS
