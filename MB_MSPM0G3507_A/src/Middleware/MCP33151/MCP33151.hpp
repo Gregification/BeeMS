@@ -16,7 +16,9 @@ struct MCP33151 {
     System::GPIO::GPIO const & cs;
 
     /* 14b ADC raw*/
-    uint16_t read();
+    uint16_t readRaw();
+
+    int16_t readmV();
 
     /* takes ~400mS to complete */
     bool calabrate();

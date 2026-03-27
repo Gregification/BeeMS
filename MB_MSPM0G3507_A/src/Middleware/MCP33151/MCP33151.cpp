@@ -3,7 +3,7 @@
 
 #include <Middleware/MCP33151/MCP33151.hpp>
 
-uint16_t MCP33151::read() {
+uint16_t MCP33151::readRaw() {
     uint16_t rx;
 
     spi.takeResource(0);
@@ -11,6 +11,19 @@ uint16_t MCP33151::read() {
     spi.giveResource();
     rx >>= 2;
     return ((rx & 0x3F) << 8) | ((rx & 0xFF00) >> 8);
+}
+
+int16_t MCP33151::readmV() {
+    int16_t rx;
+
+    spi.takeResource(0);
+    spi.transfer_blocking(NULL, &rx, 2, &cs);
+    spi.giveResource();
+
+    rx >>= 2;
+    rx = ((rx & 0x3F) << 8) | ((rx & 0xFF00) >> 8);
+
+    return rx >> 2;
 }
 
 bool MCP33151::calabrate() {
