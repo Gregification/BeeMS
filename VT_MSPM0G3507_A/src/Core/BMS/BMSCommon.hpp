@@ -10,19 +10,12 @@
 
 #include "Core/common.h"
 
-struct __attribute__((packed)) TempSensor {
-    /** describes what the temperature measurement is of.
-     *  different safety ranges for different hardware */
-    enum TSTarget {
-        CELL,           // battery cell itself, abides by cell limits
-        MID_RANGE,      // considered in safety, abides by mid-range limits
-        HIGH_RANGE,     // considered in safety, abides by high-range limits
-        UNCHECKED,      // not considered in safety
-    };
+namespace BMSCommon {
+    typedef uint32_t SafteyStatus_t;
 
-    TSTarget type       : 3;
-    unsigned int degdC  : 13;   // degrees in 0.1C
+    /* maximum number IC's per "module".
+     */
+    constexpr uint8_t MAX_ICsPerModule  = 2;
 };
-static_assert(sizeof(TempSensor) == sizeof(uint16_t));
 
 #endif /* SRC_CORE_BMS_BMSCOMMON_HPP_ */

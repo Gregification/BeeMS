@@ -20,7 +20,8 @@ void Task::task_CanPeriodicPackets(void *) {
             SM_STATUS1_t d;
             d.IL_passing    = VT::opVars.HRLV_IL_sw_dsrd;
             for(int i = 0; i < VT::NUM_BBQs; i++)
-                d.safetyStatus[i] = VT::opVars.bbqs[i].safetyStatus;
+                d.ICSafetyStatus[i] = *(BMSCommon::SafteyStatus_t*)(void *)(&(VT::opVars.bbqs[i].safetyStatus));
+            static_assert(sizeof(d.ICSafetyStatus[0]) >= sizeof(VT::opVars.bbqs[0].safetyStatus));
 
             sendPacket(J1939_PF_e::SM, PktSM_JS_e::STATUS1, 0, &d, sizeof(d));
         }

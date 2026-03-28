@@ -129,6 +129,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
                     batch.state = OpVars_t::BBQ_t::State_t::INIT_VERI;
                     batch._strikes = 0;
+                    System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "INIT VERIFICATION" CLIRESET NEWLINE));
                 }while(false);
                 bq.spi.giveResource();
 
@@ -179,6 +180,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
                     batch.state = OpVars_t::BBQ_t::State_t::ON_NORMAL;
                     batch._strikes = 0;
+                    System::uart_ui.nputs(ARRANDN(CLIGOOD "NORMAL OPERATION" CLIRESET NEWLINE));
                 } while(false);
                 bq.spi.giveResource();
 
@@ -190,6 +192,14 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     System::uart_ui.nputs(ARRANDN("\t --> "));
                     System::uart_ui.put32d(error);
                     System::uart_ui.nputs(ARRANDN(NEWLINE));
+
+                    if(batch._strikes > 10) {
+                        batch.state = OpVars_t::BBQ_t::State_t::INIT;
+                        batch._strikes = 0;
+                        System::uart_ui.nputs(ARRANDN(CLIBAD "INIT VERIFICATION FAILED. RESTARTING INIT ... " CLIRESET NEWLINE));
+                    } else {
+                        vTaskDelay(10 * batch._strikes);
+                    }
                 }
 
             } break;

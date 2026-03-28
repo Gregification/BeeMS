@@ -12,6 +12,7 @@
 #include "Core/Networking/CAN.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
 #include "Core/VT.hpp"
+#include "BMSCommon.hpp"
 
 /**
  * CAN bus packet content being sent between and from BMS devices.
@@ -78,13 +79,14 @@ namespace BMSComms {
 
     };
 
+
     /*** data packets: SM *********************************************/
 
     struct __attribute__((__packed__)) SM_STATUS1_t {
 //        bool IL_in_present          : 1;    // true if interlock input is >~11V
         bool IL_passing               : 1;    // true if interlock is OK
 
-        VT::OpVars_t::BBQ_t::SafetyStatus_t safetyStatus[VT::NUM_BBQs];
+        BMSCommon::SafteyStatus_t ICSafetyStatus[BMSCommon::MAX_ICsPerModule];
 
         uint16_t maxNonCellTemp_dDegC;
     };
