@@ -5,7 +5,6 @@
  *      Author: turtl
  */
 
-
 #include "Tasks/task_CanPeriodicPackets.hpp"
 #include "Core/system.hpp"
 #include "Core/VT.hpp"
@@ -19,8 +18,19 @@ void Task::task_CanPeriodicPackets(void *) {
         { // send status update
             SM_STATUS1_t d;
             d.IL_passing    = VT::opVars.HRLV_IL_sw_dsrd;
-            for(int i = 0; i < VT::NUM_BBQs; i++)
-                d.ICSafetyStatus[i] = *(BMSCommon::SafteyStatus_t*)(void *)(&(VT::opVars.bbqs[i].safetyStatus));
+            for(int i = 0; i < VT::NUM_BBQs; i++) {
+                // translate device specific safety status to generic one.
+                // the compiler gets angry when i do a reinterpert cast. idk
+                static_assert(3 <= sizeof(d.ICSafetyStatus[0]));
+                static_assert(1 == sizeof(VT::opVars.bbqs[i].safetyStatus.A));
+                static_assert(1 == sizeof(VT::opVars.bbqs[i].safetyStatus.B));
+                static_assert(1 == sizeof(VT::opVars.bbqs[i].safetyStatus.C));
+
+                d.ICSafetyStatus[i] = 0;
+                d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.A.Raw;
+                d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.B.Raw << 8;
+                d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.C.Raw << 16;
+            }
             static_assert(sizeof(d.ICSafetyStatus[0]) >= sizeof(VT::opVars.bbqs[0].safetyStatus));
 
             sendPacket(J1939_PF_e::SM, PktSM_JS_e::STATUS1, 0, &d, sizeof(d));

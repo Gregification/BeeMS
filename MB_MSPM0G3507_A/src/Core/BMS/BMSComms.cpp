@@ -7,8 +7,8 @@
 
 #include "BMSComms.hpp"
 #include "Core/system.hpp"
-#include "Core/MasterBoard.hpp"
 #include "Core/std alternatives/string.hpp"
+
 
 bool BMSComms::isValidPacketID(DL_MCAN_RxBufElement const & pkt) {
     if(pkt.xtd) {
@@ -16,10 +16,10 @@ bool BMSComms::isValidPacketID(DL_MCAN_RxBufElement const & pkt) {
         switch(System::CANFD::getID(pkt)) {
             default: break;
 
-            case BMSComms::J1939_PF::MS:
-            case BMSComms::J1939_PF::SM:
-            case BMSComms::J1939_PF::MOD:
-            case BMSComms::J1939_PF::B:
+            case BMSComms::J1939_PF_e::MS:
+            case BMSComms::J1939_PF_e::SM:
+            case BMSComms::J1939_PF_e::MOD:
+            case BMSComms::J1939_PF_e::B:
                 return true;
         }
     } else {
@@ -32,8 +32,11 @@ bool BMSComms::isValidPacketID(DL_MCAN_RxBufElement const & pkt) {
     return false;
 }
 
-bool BMSComms::sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset, void const * data, uint8_t len) {
+bool BMSComms::sendPacket(J1939_PF_e type, uint8_t J1939_JS, int8_t priorityOffset, void const * data, uint8_t len) {
     if(len > MAX_PKT_SIZE_BYTES)
+        return false;
+
+    if(!data)
         return false;
 
     DL_MCAN_TxBufElement msg = {
@@ -41,7 +44,7 @@ bool BMSComms::sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset
             .rtr    = 0,        // 0: data frame, 1: remote frame
             .xtd    = 1,        // 0: 11b id, 1: 29b id
             .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-            .dlc    = len,      // data byte count, see DL comments
+            .dlc    = 0,        // data byte count, see DL comments
             .brs    = 1,        // 0: no bit rate switching, 1: yes brs
             .fdf    = 1,        // FD format, 0: classic CAN, 1: CAN FD format
             .efc    = 0,        // 0: dont store Tx events, 1: store
@@ -49,6 +52,7 @@ bool BMSComms::sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset
         };
 
     ALT::memcpy(data, msg.data, len);
+    msg.dlc = System::CANFD::len2DLC(len);
 
     { // set up ID
         Networking::CAN::J1939::ID * id = reinterpret_cast<Networking::CAN::J1939::ID *>(&(msg.id));
@@ -58,16 +62,16 @@ bool BMSComms::sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset
         id->data_page   = 0;
 
         switch(type){
-            case BMSComms::J1939_PF::MS:
-            case BMSComms::J1939_PF::SM:
+            case BMSComms::J1939_PF_e::MS:
+            case BMSComms::J1939_PF_e::SM:
                 id->priority = Networking::CAN::getPriOffset(priorityOffset, BASE_PRI_INT);
                 break;
 
-            case BMSComms::J1939_PF::MOD:
+            case BMSComms::J1939_PF_e::MOD:
                 id->priority = Networking::CAN::getPriOffset(priorityOffset, PRI_MODBUS);
                 break;
 
-            case BMSComms::J1939_PF::B:
+            case BMSComms::J1939_PF_e::B:
             default:
                 id->priority = BASE_PRI_BRD;
                 break;
@@ -75,7 +79,8 @@ bool BMSComms::sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset
     }
 
     { // transmit
-        System::CANFD::canFD0.takeResource(pdMS_TO_TICKS(10));
+        if(!System::CANFD::canFD0.takeResource(pdMS_TO_TICKS(10)))
+            return false;
 
         DL_MCAN_TxFIFOStatus tf;
 
@@ -96,7 +101,7 @@ bool BMSComms::sendPacket(J1939_PF type, uint8_t J1939_JS, int8_t priorityOffset
 }
 
 uint8_t BMSComms::getID() {
-    return MstrB::getUnitBoardID();
+    return System::mcuID;
 }
 
 static_assert(BMSComms::BASE_PRI_ERROR <= 0b111, "limit of J1939 pkt");

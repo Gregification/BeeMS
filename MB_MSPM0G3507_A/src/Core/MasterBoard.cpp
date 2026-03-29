@@ -255,6 +255,38 @@ uint32_t MstrB::POST(char * error_msg, uint16_t max_msg_len) {
     }
     #endif
 
+    { // check hard wired pins
+        DL_GPIO_initDigitalInputFeatures(
+                System::GPIO::PA31.iomux,
+                DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
+                DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+            );
+        DL_GPIO_initDigitalInputFeatures(
+                    System::GPIO::PB17.iomux,
+                    DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                    DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                    DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
+                    DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+                );
+        DL_GPIO_initDigitalInputFeatures(
+                    System::GPIO::PB9.iomux,
+                    DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                    DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+                    DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_ENABLE,
+                    DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
+                );
+        if(         !System::GPIO::PA31.get()
+                ||  !System::GPIO::PB17.get()
+                ||  System::GPIO::PB9.get()
+            ) {
+            ALT::srtCpy(error_msg, max_msg_len, "bad hardware signature");
+            return __LINE__;
+        }
+
+    }
+
     IL::getStatus(); // force update
 
     MstrB::Indi::LED::i1.set();

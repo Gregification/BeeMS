@@ -470,7 +470,7 @@ void System::init() {
 
             { /* modbus packets routed to modbus rx fifo , if device ID matches*/
                 const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
-                    .efid1  = (((uint32_t)BMSComms::J1939_PF::MOD) << 16) | ((uint32_t)BMSComms::getID() << 8),
+                    .efid1  = (((uint32_t)BMSComms::J1939_PF_e::MOD) << 16) | ((uint32_t)BMSComms::getID() << 8),
                     .efec   = CANFD::MODBUS_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
                     .efid2  = 0xFFFF << 8,
                     .eft    = 0b10
@@ -479,7 +479,7 @@ void System::init() {
             }
             { /* broadcast packets routed to operational rx fifo */
                 const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
-                    .efid1  = ((uint32_t)BMSComms::J1939_PF::B) << 16,
+                    .efid1  = ((uint32_t)BMSComms::J1939_PF_e::B) << 16,
                     .efec   = CANFD::OP_RXFIFO == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
                     .efid2  = 0xFF << 16,
                     .eft    = 0b10
@@ -488,7 +488,7 @@ void System::init() {
             }
             { /* SM packets routed to operational rx fifo , if device ID matches */
                 const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
-                    .efid1  = (((uint32_t)BMSComms::J1939_PF::SM) << 16) | ((uint32_t)BMSComms::getID() << 8),
+                    .efid1  = (((uint32_t)BMSComms::J1939_PF_e::SM) << 16) | ((uint32_t)BMSComms::getID() << 8),
                     .efec   = CANFD::OP_RXFIFO == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
                     .efid2  = 0xFFFF << 8,
                     .eft    = 0b10

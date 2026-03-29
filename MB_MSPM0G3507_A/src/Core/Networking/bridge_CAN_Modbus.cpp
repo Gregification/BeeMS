@@ -53,7 +53,7 @@ bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * 
     { // set up ID
         J1939::ID * id   = reinterpret_cast<J1939::ID *>(&(tx->id));
         id->src_addr    = BMSComms::getID();        // message from this device, used as modbus unit ID
-        id->pdu_format  = BMSComms::J1939_PF::MOD;  // is a Modbus thing
+        id->pdu_format  = BMSComms::J1939_PF_e::MOD;// is a Modbus thing
         id->pdu_specific= meta->initiatorID;        // CAN packet goes to this device
         id->data_page   = 0;                        // unused
         id->priority    = BMSComms::PRI_MODBUS;     // standard priority
@@ -120,7 +120,7 @@ bool Networking::Bridge::CANModbus::CAN_to_ModbusTCP(DL_MCAN_RxBufElement const 
         return false;
 
     // is not PDU for a translated packet
-    if(rxid->pdu_format != BMSComms::J1939_PF::MOD)
+    if(rxid->pdu_format != BMSComms::J1939_PF_e::MOD)
         return false;
 
     // is socket funky

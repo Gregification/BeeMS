@@ -123,8 +123,8 @@ void Task::ethModbus_task(void *){
     wizchip_setnetinfo(&netConfig);
     {
         wiz_NetTimeout timeout = {
-               .retry_cnt = 3,
-               .time_100us = 1500,
+               .retry_cnt = 2,
+               .time_100us = 1000,
             };
         wizchip_settimeout(&timeout);
     }
@@ -225,6 +225,7 @@ void Task::ethModbus_task(void *){
     while(true) {
         for(uint8_t i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++){
             checkSocket(sockets[i], &rxbuf, &txbuf);
+//            vTaskDelay(pdMS_TO_TICKS(1));// some delay for the thingy-ma-jig to do its stuff
         }
         checkCAN(&rxbuf, &txbuf);
     }
@@ -316,7 +317,9 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                     return;
                 case SOCKERR_SOCKSTATUS:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
+                    disconnect(sn);
                     close(sn);
+                    vTaskDelay(pdMS_TO_TICKS(5));
                     return;
                 default:
                     if(status >= 0 && status <= sizeof(rxbuf->arr)){
@@ -444,7 +447,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
         case SOCK_TIME_WAIT:
 //            uart.nputs(ARRANDN("SOCK_TIME_WAIT" NEWLINE));
-            break;
+//            break;
 
         case SOCK_FIN_WAIT:
         case SOCK_CLOSING:

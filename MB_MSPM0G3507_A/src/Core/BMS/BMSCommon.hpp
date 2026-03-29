@@ -9,12 +9,13 @@
 #define SRC_CORE_BMS_BMSCOMMON_HPP_
 
 #include "Core/common.h"
-#include "Core/system.hpp"
 
 namespace BMSCommon {
-    constexpr uint8_t NUM_BBQs = 1;
-
     typedef uint32_t SafteyStatus_t;
+
+    /* maximum number IC's per "module".
+     */
+    constexpr uint8_t MAX_ICsPerModule  = 2;
 };
 
 #endif /* SRC_CORE_BMS_BMSCOMMON_HPP_ */

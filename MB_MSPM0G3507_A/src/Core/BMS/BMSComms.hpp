@@ -11,6 +11,7 @@
 #include "Core/common.h"
 #include "Core/Networking/CAN.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
+#include "BMSCommon.hpp"
 
 /**
  * CAN bus packet content being sent between and from BMS devices.
@@ -72,11 +73,6 @@ namespace BMSComms {
 
     };
 
-    /** packet intended for BMS --> <3rd party> transmissions */
-    enum PktCanSt_JS_e : uint8_t {
-
-    };
-
 
     /*** data packets: SM *********************************************/
 
@@ -84,7 +80,7 @@ namespace BMSComms {
 //        bool IL_in_present          : 1;    // true if interlock input is >~11V
         bool IL_passing               : 1;    // true if interlock is OK
 
-        uint32_t safetyStatus[4];   // maximum unique IC's supported on each board
+        BMSCommon::SafteyStatus_t ICSafetyStatus[BMSCommon::MAX_ICsPerModule];
 
         uint16_t maxNonCellTemp_dDegC;
     };

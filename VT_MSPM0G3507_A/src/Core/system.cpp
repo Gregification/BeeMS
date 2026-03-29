@@ -626,7 +626,8 @@ void System::FailHard(const char *str) {
 }
 
 buffersize_t System::UART::UART::nputs(const char *str, buffersize_t n) {
-    buffersize_t i;
+    buffersize_t i = 0;
+    if(str)
     for(i = 0; (i < n) && (str[i] != '\0'); i++){
         DL_UART_transmitDataBlocking(reg, str[i]);
     }

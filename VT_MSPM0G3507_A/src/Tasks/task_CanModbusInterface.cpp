@@ -146,18 +146,21 @@ void Task::canModbusInterface_task(void *){
 
                     DL_MCAN_TxFIFOStatus tf;
 
-                    for(uint8_t i = 3; i != 0; i--) {
-                        DL_MCAN_getTxFIFOQueStatus(can.reg, &tf);
+                    if(can.takeResource(pdMS_TO_TICKS(10))) {
+                        for(uint8_t i = 3; i != 0; i--) {
+                            DL_MCAN_getTxFIFOQueStatus(can.reg, &tf);
 
-                        if(tf.fifoFull){
-                            vTaskDelay(pdMS_TO_TICKS(2));
-                            continue;
+                            if(tf.fifoFull){
+                                vTaskDelay(pdMS_TO_TICKS(2));
+                                continue;
+                            }
+
+                            DL_MCAN_writeMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, tf.putIdx, &rxbuf.cantx);
+                            DL_MCAN_TXBufAddReq(can.reg, tf.getIdx);
+
+                            break;
                         }
-
-                        DL_MCAN_writeMsgRam(can.reg, DL_MCAN_MEM_TYPE_FIFO, tf.putIdx, &rxbuf.cantx);
-                        DL_MCAN_TXBufAddReq(can.reg, tf.getIdx);
-
-                        break;
+                        can.giveResource();
                     }
 
                 } else

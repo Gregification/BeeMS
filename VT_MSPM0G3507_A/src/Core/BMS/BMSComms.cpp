@@ -37,12 +37,15 @@ bool BMSComms::sendPacket(J1939_PF_e type, uint8_t J1939_JS, int8_t priorityOffs
     if(len > MAX_PKT_SIZE_BYTES)
         return false;
 
+    if(!data)
+        return false;
+
     DL_MCAN_TxBufElement msg = {
             .id     = 0,        // CAN id, 11b->[28:18], 29b->[] when using 11b can id
             .rtr    = 0,        // 0: data frame, 1: remote frame
             .xtd    = 1,        // 0: 11b id, 1: 29b id
             .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
-            .dlc    = len,      // data byte count, see DL comments
+            .dlc    = 0,        // data byte count, see DL comments
             .brs    = 1,        // 0: no bit rate switching, 1: yes brs
             .fdf    = 1,        // FD format, 0: classic CAN, 1: CAN FD format
             .efc    = 0,        // 0: dont store Tx events, 1: store
@@ -50,6 +53,7 @@ bool BMSComms::sendPacket(J1939_PF_e type, uint8_t J1939_JS, int8_t priorityOffs
         };
 
     ALT::memcpy(data, msg.data, len);
+    msg.dlc = System::CANFD::len2DLC(len);
 
     { // set up ID
         Networking::CAN::J1939::ID * id = reinterpret_cast<Networking::CAN::J1939::ID *>(&(msg.id));
@@ -76,7 +80,8 @@ bool BMSComms::sendPacket(J1939_PF_e type, uint8_t J1939_JS, int8_t priorityOffs
     }
 
     { // transmit
-        System::canFD0.takeResource(pdMS_TO_TICKS(10));
+        if(!System::canFD0.takeResource(pdMS_TO_TICKS(10)))
+            return false;
 
         DL_MCAN_TxFIFOStatus tf;
 

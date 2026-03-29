@@ -74,11 +74,6 @@ namespace BMSComms {
 
     };
 
-    /** packet intended for BMS --> <3rd party> transmissions */
-    enum PktCanSt_JS_e : uint8_t {
-
-    };
-
 
     /*** data packets: SM *********************************************/
 

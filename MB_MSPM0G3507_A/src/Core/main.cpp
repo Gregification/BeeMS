@@ -24,6 +24,7 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
+#include <Tasks/task_CC_sampler.hpp>
 
 #include "Core/system.hpp"
 #include "Core/MasterBoard.hpp"
@@ -31,7 +32,6 @@
 #include "Tasks/task_ethModbus.hpp"
 #include "Tasks/examples/example_blink_task.hpp"
 #include "Tasks/examples/example_MCAN_task.hpp"
-#include "Tasks/task_ADC.hpp"
 
 
 int main(){
@@ -73,7 +73,7 @@ int main(){
 
     xTaskCreate(Task::BMS_task,
             "BMS_task",
-            configMINIMAL_STACK_SIZE*20,
+            MAX(1024, configMINIMAL_STACK_SIZE),
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
@@ -87,17 +87,17 @@ int main(){
 
     xTaskCreate(Task::ethModbus_task,
             "ethModbus_task",
-            configMINIMAL_STACK_SIZE*7,
+            MAX(1024, configMINIMAL_STACK_SIZE),
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::adc_task,
-//            "adc_task",
-//            configMINIMAL_STACK_SIZE,
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
+    xTaskCreate(Task::adc_CC_sampler,
+            "adc_CC_sampler",
+            MAX(124, configMINIMAL_STACK_SIZE),
+            NULL,
+            MIN(configMAX_PRIORITIES, configMAX_PRIORITIES - 1),
+            NULL);
 
     vTaskStartScheduler();
 

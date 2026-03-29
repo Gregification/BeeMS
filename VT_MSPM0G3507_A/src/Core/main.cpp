@@ -34,6 +34,7 @@
 #include "Tasks/task_BMS.hpp"
 #include "Tasks/examples/example_blink_task.hpp"
 #include "Tasks/examples/example_MCAN_task.hpp"
+#include "Tasks/task_CanPeriodicPackets.hpp"
 
 
 int main(){
@@ -81,10 +82,17 @@ int main(){
 
 //    xTaskCreate(Task::MCAN_test_task,
 //        "MCAN_test_task",
-//        configMINIMAL_STACK_SIZE * 2,
+//        MAX(384, configMINIMAL_STACK_SIZE),
 //        NULL,
 //        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //        NULL);
+
+    xTaskCreate(Task::task_CanPeriodicPackets,
+        "CanPeriodicPackets",
+        MAX(1024, configMINIMAL_STACK_SIZE),
+        NULL,
+        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+        NULL);
 
     vTaskStartScheduler();
 

@@ -24,6 +24,10 @@
 #define ARRANDN(ARR)                (ARR),sizeof(ARR)
 #define PT2ANDN(ARR)                (&(ARR)),sizeof(ARR)  // for pointer to a object
 #define ARRLEN(ARR)                 (sizeof((ARR))/sizeof((ARR)[0]))
+#define MIN(A,B)                    ((A) < (B) ? (A):(B))
+#define MAX(A,B)                    ((A) > (B) ? (A):(B))
+#define STR(X)                      #X
+#define STRM(X)                     STR(X)
 
 //--- program constants ---------------------------------------
 
@@ -46,6 +50,8 @@
 typedef uint16_t buffersize_t;
 
 //--- functions -----------------------------------------------
+
+bool arrCmp(void const * a, void const * b, buffersize_t len);
 
 //--- general macros ------------------------------------------
 
