@@ -9,6 +9,7 @@
 
 #include "Core/system.hpp"
 #include "Core/MasterBoard.hpp"
+#include "Core/BMS/BMSCommon.hpp"
 
 
 using namespace Networking::Modbus::MasterRegisters;
@@ -18,7 +19,6 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, volatile uint16_
         return false;
 
     switch(addr){
-        default: return false;
 
         case RegAddr::MCU_HARDWARE_ID: // <input>
             *out = System::mcuID;
@@ -67,6 +67,46 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, volatile uint16_
         case RegAddr::HRLV_PRESENCE:    // <discrete>
             *out = MstrB::HRLV::presence_HRLV.get();
             break;
+
+
+        default: {
+          if(addr < RegAddr::_modules_uid_end && addr > RegAddr::_modules_uid_start) {
+              uint16_t module_i = addr - RegAddr::_modules_uid_start - 1;
+              static_assert(0 == RegAddr::M1_unitID - RegAddr::_modules_uid_start - 1);
+
+              BMSCommon::Module & module = MstrB::opVars.modules[module_i];
+              *out = module.unitID;
+              return true;
+          }
+
+          if(addr < RegAddr::_modules_enable_end && addr > RegAddr::_modules_enable_start) {
+              uint16_t module_i = addr - RegAddr::_modules_enable_start - 1;
+              static_assert(0 == RegAddr::M1_enable - RegAddr::_modules_enable_start - 1);
+
+              BMSCommon::Module & module = MstrB::opVars.modules[module_i];
+              *out = module.enabled;
+              return true;
+          }
+
+          if(addr < RegAddr::_modules_saftey_status_end && addr > RegAddr::_modules_saftey_status_start) {
+              uint16_t module_i = addr - RegAddr::_modules_saftey_status_start - 1;
+              static_assert(0 == RegAddr::M1_safety_status - RegAddr::_modules_saftey_status_start - 1);
+
+              BMSCommon::Module & module = MstrB::opVars.modules[module_i];
+              for(int i = 0; i < BMSCommon::Module::MAX_ICs; i++)
+                  if(module.safetyStatus[i]) {
+                      // need to squeeze into 16b, just to it non zero if the original is non zero
+                      //    user diagnosing should be done on the module level anyways
+                      *out = module.safetyStatus[i] | (module.safetyStatus[i] >> 16);
+                      return true;
+                      static_assert(sizeof(BMSCommon::SafteyStatus_t) == 4);
+                  }
+              *out = 0;
+              return true;
+          }
+
+          return 67;
+        } break;
     }
 
     return true;
@@ -75,8 +115,6 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, volatile uint16_
 bool Networking::Modbus::MasterRegisters::setReg(uint16_t addr, uint16_t val) {
 
     switch(addr){
-        default: return false;
-
         case RegAddr::GLV_IL_CTRL_usr_dsrd:   // <coil>
             MstrB::opProfile.GLV_IL_RELAY_usr_requested = val;
             break;
@@ -88,6 +126,29 @@ bool Networking::Modbus::MasterRegisters::setReg(uint16_t addr, uint16_t val) {
         case RegAddr::GLV_IL_CTRL_STATUS:   // <coil>
             MstrB::opProfile.GLV_IL_RELAY_usr_requested = val;
             break;
+
+        default: {
+
+                if(addr < RegAddr::_modules_uid_end && addr > RegAddr::_modules_uid_start) {
+                    uint16_t module_i = addr - RegAddr::_modules_uid_start - 1;
+                    static_assert(0 == RegAddr::M1_unitID - RegAddr::_modules_uid_start - 1);
+
+                    BMSCommon::Module & module = MstrB::opVars.modules[module_i];
+                    module.unitID = val;
+                    return true;
+                }
+
+                if(addr < RegAddr::_modules_enable_end && addr > RegAddr::_modules_enable_start) {
+                    uint16_t module_i = addr - RegAddr::_modules_enable_start - 1;
+                    static_assert(0 == RegAddr::M1_enable - RegAddr::_modules_enable_start - 1);
+
+                    BMSCommon::Module & module = MstrB::opVars.modules[module_i];
+                    module.enabled = val != 0;
+                    return true;
+                }
+
+                return false;
+            } break;
     }
 
     return true;

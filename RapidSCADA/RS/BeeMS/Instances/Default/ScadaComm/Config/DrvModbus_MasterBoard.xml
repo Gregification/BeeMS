@@ -30,6 +30,64 @@
       <Elem tagCode="HRLV IL presence" name="HRLV IL presence" />
       <Elem tagCode="HRLV LV presence" name="HRLV LV presence" />
     </ElemGroup>
+    <ElemGroup active="true" dataBlock="HoldingRegisters" address="51" name="Modules 1 to 8 . unit ID">
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 1. ID" name="mod 1. ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 2. ID" name="mod 2. ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 3. ID" name="mod 3. ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 4. ID" name="mod 4. ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 5. ID" name="mod 5. ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 6. ID" name="mod 6. ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 7. ID" name="mod 7. ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 8. ID" name="mod 8. ID" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="HoldingRegisters" address="59" name="Modules 9 to 16 . unit ID">
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 9 . ID" name="mod 9 . ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 10 . ID" name="mod 10 . ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 11 . ID" name="mod 11 . ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 12 . ID" name="mod 12 . ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 13 . ID" name="mod 13 . ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 14 . ID" name="mod 14 . ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 15 . ID" name="mod 15 . ID" />
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="mod 16 . ID" name="mod 16 . ID" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="Coils" address="81" name="Modules 1 to 16 . enable">
+      <Elem readOnly="false" tagCode="mod 1 . enable" name="mod 1 . enable" />
+      <Elem readOnly="false" tagCode="mod 2 . enable" name="mod 2 . enable" />
+      <Elem readOnly="false" tagCode="mod 3 . enable" name="mod 3 . enable" />
+      <Elem readOnly="false" tagCode="mod 4 . enable" name="mod 4 . enable" />
+      <Elem readOnly="false" tagCode="mod 5 . enable" name="mod 5 . enable" />
+      <Elem readOnly="false" tagCode="mod 6 . enable" name="mod 6 . enable" />
+      <Elem readOnly="false" tagCode="mod 7 . enable" name="mod 7 . enable" />
+      <Elem readOnly="false" tagCode="mod 8 . enable" name="mod 8 . enable" />
+      <Elem readOnly="false" tagCode="mod 9 . enable" name="mod 9 . enable" />
+      <Elem readOnly="false" tagCode="mod 10 . enable" name="mod 10 . enable" />
+      <Elem readOnly="false" tagCode="mod 11 . enable" name="mod 11 . enable" />
+      <Elem readOnly="false" tagCode="mod 12 . enable" name="mod 12 . enable" />
+      <Elem readOnly="false" tagCode="mod 13 . enable" name="mod 13 . enable" />
+      <Elem readOnly="false" tagCode="mod 14 . enable" name="mod 14 . enable" />
+      <Elem readOnly="false" tagCode="mod 15. enable" name="mod 15. enable" />
+      <Elem readOnly="false" tagCode="mod 16 . enable" name="mod 16 . enable" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="InputRegisters" address="101" name="Modules 1 to 8 . safety status">
+      <Elem type="ushort" isBitMask="false" tagCode="mod 1 . safety status" name="mod 1 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 2 . safety status" name="mod 2 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 3 . safety status" name="mod 3 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 4 . safety status" name="mod 4 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 5 . safety status" name="mod 5 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 6 . safety status" name="mod 6 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 7 . safety status" name="mod 7 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 8 . safety status" name="mod 8 . safety status" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="InputRegisters" address="109" name="Modules 9 to 16 . safety status">
+      <Elem type="ushort" isBitMask="false" tagCode="mod 9 . safety status" name="mod 9 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 10 . safety status" name="mod 10 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 11 . safety status" name="mod 11 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 12 . safety status" name="mod 12 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 13 . safety status" name="mod 13 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 14 . safety status" name="mod 14 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 15 . safety status" name="mod 15 . safety status" />
+      <Elem type="ushort" isBitMask="false" tagCode="mod 16 . safety status" name="mod 16 . safety status" />
+    </ElemGroup>
   </ElemGroups>
   <Cmds>
     <Cmd dataBlock="HoldingRegisters" multiple="false" address="28" cmdNum="0" cmdCode="GLV IL burp" name="GLV IL burp" />

@@ -225,7 +225,7 @@ void Task::ethModbus_task(void *){
     while(true) {
         for(uint8_t i = 0; i < sizeof(sockets)/sizeof(sockets[0]); i++){
             checkSocket(sockets[i], &rxbuf, &txbuf);
-//            vTaskDelay(pdMS_TO_TICKS(1));// some delay for the thingy-ma-jig to do its stuff
+            vTaskDelay(pdMS_TO_TICKS(3));// some delay for the thingy-ma-jig to do its stuff
         }
         checkCAN(&rxbuf, &txbuf);
     }
@@ -435,7 +435,7 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 //                uart.nputs(ARRANDN("processed request, sending response" NEWLINE));
                 send(sn, txbuf->arr, sizeof(MBAPHeader) + ntoh16(txbuf->mbap.len));
             } else {
-                uart.nputs(ARRANDN("failed to process request" NEWLINE));
+                uart.nputs(ARRANDN("failed to process request: top level" NEWLINE));
             }
 
 

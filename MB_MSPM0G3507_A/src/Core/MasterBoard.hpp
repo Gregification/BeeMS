@@ -10,6 +10,7 @@
 
 #include "system.hpp"
 #include "Middleware/MCP33151/MCP33151.hpp"
+#include "Core/BMS/BMSCommon.hpp"
 
 namespace System {
     //OCCUPY(ADC0); // used by TempSense
@@ -25,6 +26,7 @@ namespace MstrB {
     struct __attribute__((__packed__)) OpProfile_t {
         bool GLV_IL_RELAY_allow_usr_ovrd            : 1;
         bool GLV_IL_RELAY_usr_requested             : 1;
+        TickType_t maxModuleUpdatePeriod_mS         = 200;
     };
     extern OpProfile_t opProfile;
 
@@ -32,7 +34,10 @@ namespace MstrB {
      * operation variables. for internal software use.
      */
     struct __attribute__((__packed__)) OpVars_t {
-        bool GLV_IL_RELAY_engage                    : 1;
+        bool GLV_IL_RELAY_module_dsrd              : 1; // IL desired by module IL
+        bool GLV_IL_RELAY_engage                   : 1; // IL desired by software
+
+        BMSCommon::Module modules[BMSCommon::Module::MAX_MODULES];
     };
     extern OpVars_t opVars;
 
@@ -68,22 +73,13 @@ namespace MstrB {
 
         /** returns fails if fails to set to desired value */
         bool setEnable(bool);
+        /** returns what the software wants it set to */
+        bool getEnable();
         /** returns true if IL is in OK state*/
         bool getStatus();
         /** returns true if IL input is present*/
         bool getInput();
         bool isUserOverriding();
-    }
-
-    /** on board temperature sensors */
-    // TODO: test if adc code actually does anything. do it as a modbus register
-    namespace TempSense {
-//        extern ADC12_Regs * const adc;
-
-//        const ADC::ChannelMap ts1 = {
-//            .mem = DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_0,
-//            .chan = DL_ADC12_INPUT_CHAN_3,
-//        };
     }
 
     /** High Risk Low Voltage system , aka TSBP LV */

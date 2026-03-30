@@ -7,7 +7,6 @@
 
 #include "BMSComms.hpp"
 #include "Core/system.hpp"
-#include "Core/VT.hpp"
 #include "Core/std alternatives/string.hpp"
 
 
@@ -102,7 +101,7 @@ bool BMSComms::sendPacket(J1939_PF_e type, uint8_t J1939_JS, int8_t priorityOffs
 }
 
 uint8_t BMSComms::getID() {
-    return VT::getID();
+    return System::mcuID;
 }
 
 static_assert(BMSComms::BASE_PRI_ERROR <= 0b111, "limit of J1939 pkt");

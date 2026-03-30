@@ -17,7 +17,31 @@ void Task::task_CanPeriodicPackets(void *) {
         vTaskDelay(pdMS_TO_TICKS(VT::opProfile.canPacketSpacing_mS));
         { // send status update
             SM_STATUS1_t d;
-            d.IL_passing    = VT::opVars.HRLV_IL_sw_dsrd;
+
+            for(uint8_t i = 0; i < VT::NUM_BBQs; i++) {
+                switch(VT::opVars.bbqs[i].state) {
+                    case VT::OpVars_t::BBQ_t::State_t::OFF:
+                    case VT::OpVars_t::BBQ_t::State_t::INIT_VERI:
+                    case VT::OpVars_t::BBQ_t::State_t::INIT:
+                        d.state = BMSCommon::Module::STATE_e::INITING;
+                        break;
+
+                    case VT::OpVars_t::BBQ_t::State_t::ON_NORMAL:
+                        d.state = BMSCommon::Module::STATE_e::READY;
+                        break;
+
+                    case VT::OpVars_t::BBQ_t::State_t::SHUTDOWN_VERI:
+                    case VT::OpVars_t::BBQ_t::State_t::SHUTDOWN:
+                        d.state = BMSCommon::Module::STATE_e::RECOVERING;
+                        break;
+
+                    case VT::OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH:
+                    default:
+                        d.state = BMSCommon::Module::STATE_e::FAULT;
+                        break;
+                };
+            }
+
             for(int i = 0; i < VT::NUM_BBQs; i++) {
                 // translate device specific safety status to generic one.
                 // the compiler gets angry when i do a reinterpert cast. idk
@@ -34,6 +58,24 @@ void Task::task_CanPeriodicPackets(void *) {
             static_assert(sizeof(d.ICSafetyStatus[0]) >= sizeof(VT::opVars.bbqs[0].safetyStatus));
 
             sendPacket(J1939_PF_e::SM, PktSM_JS_e::STATUS1, 0, &d, sizeof(d));
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(VT::opProfile.canPacketSpacing_mS));
+        { // send status update
+            SM_STATUS2_t d;
+
+            d.ambient = 0;
+            for(int i = 0; i < VT::NUM_BBQs; i++) {
+                static_assert(VT::NUM_BBQs == 1); // do quick division here
+                d.ambient += VT::opVars.bbqs[i].die_dDegC;
+            }
+
+            d.board.avg_dDegC = d.ambient;
+            d.board.min_dDegC = d.ambient;
+            d.board.max_dDegC = d.ambient;
+
+
+            sendPacket(J1939_PF_e::SM, PktSM_JS_e::STATUS2, 0, &d, sizeof(d));
         }
 
         vTaskDelay(pdMS_TO_TICKS(VT::opProfile.canPacketSpacing_mS));

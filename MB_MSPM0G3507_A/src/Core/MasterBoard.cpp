@@ -312,6 +312,10 @@ bool MstrB::IL::setEnable(bool v){
     return getStatus() == v;
 }
 
+bool MstrB::IL::getEnable(){
+    return opVars.GLV_IL_RELAY_engage;
+}
+
 bool MstrB::IL::getStatus() {
     // 1. if overridden, use overridden value
     // 2. if user wants it on, software must also want it on

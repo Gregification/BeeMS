@@ -11,7 +11,6 @@
 #include "Core/common.h"
 #include "Core/Networking/CAN.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
-#include "Core/VT.hpp"
 #include "BMSCommon.hpp"
 
 /**
@@ -61,8 +60,9 @@ namespace BMSComms {
     /** packet intended for Slave --> Master transmissions */
     enum PktSM_JS_e : uint32_t {
         STATUS1             = 0,    // state of operations
-        CELLV               = 1,    // cell voltage
-        CELLT               = 2,    // cell temp
+        STATUS2             = 1,    // state of operations
+        CELLV               = 5,    // cell voltage
+        CELLT               = 6,    // cell temp
 
         // add entries & corresponding struct as needed
         // maximum message count limited by "type" size in PacketHeader
@@ -70,22 +70,39 @@ namespace BMSComms {
 
     /** packet intended for Master --> Slave transmissions */
     enum PktMS_JS_e : uint8_t {
-        MODB_REG            = 0,    // modbus but packed custom so its smaller and faster, used for general r/w operaitons
+        MODB_REG                    = 0,    // modbus but packed custom so its smaller and faster, used for general r/w operaitons
+        RESTART                     = 1,    // restarts slave device
 
+        //TODO
+//        LOAD_BUFFER_FROM_CAN        = 19,   // reads can packet into buffer
+//        SAVE_PROFILE_TO_BUFF        = 20,   // slave writes settings to buffer
+//        LOAD_PROFILE_FROM_BUFF      = 21,   // slave loads buffer contents as profile
+//        SAVE_BUFFER_AS_PROFILE      = 22,   // writes buffer contents to profile non volatile memory
+//        LOAD_PROFILE_NVM_TO_BUFF    = 23,   // loads profile from memory to buffer
     };
 
 
     /*** data packets: SM *********************************************/
 
+    /** this packet is a keep alive, if not periodically sent BMS will fault */
     struct __attribute__((__packed__)) SM_STATUS1_t {
-//        bool IL_in_present          : 1;    // true if interlock input is >~11V
-        bool IL_passing               : 1;    // true if interlock is OK
+        bool error                  : 1;    // true if interlock is OK
 
-        BMSCommon::SafteyStatus_t ICSafetyStatus[BMSCommon::MAX_ICsPerModule];
-
-        uint16_t maxNonCellTemp_dDegC;
+        BMSCommon::SafteyStatus_t ICSafetyStatus[BMSCommon::Module::MAX_ICs];
+        BMSCommon::packcV_t stack_cV;
+        BMSCommon::Module::STATE_e state;
     };
     static_assert(sizeof(SM_STATUS1_t) <= MAX_PKT_SIZE_BYTES);
+
+    struct __attribute__((__packed__)) SM_STATUS2_t {
+        struct __attribute__((__packed__)) {
+            BMSCommon::cDegC_t  min_dDegC;
+            BMSCommon::cDegC_t  max_dDegC;
+            BMSCommon::cDegC_t  avg_dDegC;
+        } board;
+        BMSCommon::cDegC_t  ambient;
+    };
+    static_assert(sizeof(SM_STATUS2_t) <= MAX_PKT_SIZE_BYTES);
 
     struct __attribute__((__packed__)) SM_CELLV_t {
         static constexpr int MAX_CELL_N = MAX_PKT_SIZE_BYTES/2 - 2;
@@ -93,7 +110,7 @@ namespace BMSComms {
         uint8_t base_cell;                   // starting cell. cell1+ would be #0
         unsigned int cellCount       : 6;
         unsigned int                 : 2;    // reserved
-        uint16_t mV[MAX_CELL_N];
+        BMSCommon::cellmV_t mV[MAX_CELL_N];
     };
     static_assert(sizeof(SM_CELLV_t) != MAX_PKT_SIZE_BYTES);
     static_assert(SM_CELLV_t::MAX_CELL_N < 10, "very small packet? something is wrong");
@@ -104,7 +121,7 @@ namespace BMSComms {
         uint8_t base_cell;                   // starting cell. cell1+ would be #0
         unsigned int cellCount       : 6;
         unsigned int                 : 2;    // reserved
-        int16_t dDegC[MAX_CELL_N];
+        BMSCommon::cDegC_t dDegC[MAX_CELL_N];
     };
     static_assert(sizeof(SM_CELLT_t) != MAX_PKT_SIZE_BYTES);
     static_assert(SM_CELLT_t::MAX_CELL_N < 10, "very small packet? something is wrong");
@@ -113,7 +130,15 @@ namespace BMSComms {
     /*** data packets: MS *********************************************/
 
     struct __attribute__((__packed__)) MS_MODB_REG_t {
-        //TODO
+        static constexpr int MAX_DATA_16N = MAX_PKT_SIZE_BYTES/2 - 2;
+
+        enum OP {
+            R,W,
+        };
+        unsigned int operation      : 2;
+        unsigned int data8len       : 6;
+        uint16_t reg_addr;
+        uint16_t data[MAX_DATA_16N];
     };
     static_assert(sizeof(MS_MODB_REG_t) <= MAX_PKT_SIZE_BYTES);
 

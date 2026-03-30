@@ -12,8 +12,9 @@
 
 bool BMSComms::isValidPacketID(DL_MCAN_RxBufElement const & pkt) {
     if(pkt.xtd) {
+        Networking::CAN::J1939::ID id = {.raw = System::CANFD::getID(pkt) };
         // is 29b id
-        switch(System::CANFD::getID(pkt)) {
+        switch(id.pdu_format) {
             default: break;
 
             case BMSComms::J1939_PF_e::MS:

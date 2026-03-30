@@ -12,6 +12,7 @@
 #define SRC_TASKS_MASTERMODBUSREGISTERS_HPP_
 
 #include <stdint.h>
+#include "Core/BMS/BMSCommon.hpp"
 
 /**
  * Master board "registers" available on the Modbus interface
@@ -46,8 +47,66 @@ namespace Networking {
                 HRLV_IL_PRESENCE            = 30, // <discrete>     active if HRLV IL is OK; a voltage >11V is present on the HRLV IL. This IL operates as a common fault bus. Single PU, all nodes are open drain.
                 HRLV_PRESENCE               = 31, // <discrete>     active if HRLV has sufficient power; a voltage >6V is present on the HRLV LV network.
 
+                _modules_uid_start          = 50,
+                M1_unitID                   ,       // <holding>
+                M2_unitID                   ,
+                M3_unitID                   ,
+                M4_unitID                   ,
+                M5_unitID                   ,
+                M6_unitID                   ,
+                M7_unitID                   ,
+                M8_unitID                   ,
+                M9_unitID                   ,
+                M10_unitID                  ,
+                M11_unitID                  ,
+                M12_unitID                  ,
+                M13_unitID                  ,
+                M14_unitID                  ,
+                M15_unitID                  ,
+                M16_unitID                  ,
+                _modules_uid_end            ,
+                _modules_enable_start       = 80,
+                M1_enable                   ,       // <coil>
+                M2_enable                   ,
+                M3_enable                   ,
+                M4_enable                   ,
+                M5_enable                   ,
+                M6_enable                   ,
+                M7_enable                   ,
+                M8_enable                   ,
+                M9_enable                   ,
+                M10_enable                  ,
+                M11_enable                  ,
+                M12_enable                  ,
+                M13_enable                  ,
+                M14_enable                  ,
+                M15_enable                  ,
+                M16_enable                  ,
+                _modules_enable_end         ,
+                _modules_saftey_status_start= 100,
+                M1_safety_status            ,       // <input>
+                M2_safety_status            ,
+                M3_safety_status            ,
+                M4_safety_status            ,
+                M5_safety_status            ,
+                M6_safety_status            ,
+                M7_safety_status            ,
+                M8_safety_status            ,
+                M9_safety_status            ,
+                M10_safety_status           ,
+                M11_safety_status           ,
+                M12_safety_status           ,
+                M13_safety_status           ,
+                M14_safety_status           ,
+                M15_safety_status           ,
+                M16_safety_status           ,
+                _modules_saftey_status_end  ,
+
                 _end
             };
+            static_assert(BMSCommon::Module::MAX_MODULES == RegAddr::_modules_uid_end - RegAddr::_modules_uid_start - 1); // -1 for enum offset
+            static_assert(BMSCommon::Module::MAX_MODULES == RegAddr::_modules_enable_end - RegAddr::_modules_enable_start - 1);
+            static_assert(BMSCommon::Module::MAX_MODULES == RegAddr::_modules_saftey_status_end - RegAddr::_modules_saftey_status_start - 1);
 
             /** returns true if is valid operation */
             bool getReg(uint16_t addr, volatile uint16_t * out);

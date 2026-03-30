@@ -24,8 +24,10 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
         return false;
 
     // is user stupid
-    if(rxlen < sizeof(MBAPHeader) + ntoh16(rxheader->len))
+    if(rxlen < sizeof(MBAPHeader) + ntoh16(rxheader->len)) {
+        uart.nputs(ARRANDN("buffer too small" NEWLINE));
         return false;
+    }
 
 
     /*** packet specific response *****************************/
@@ -44,8 +46,10 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
 
                 /*** validation ***********/
 
-                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ))
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ)) {
+                    uart.nputs(ARRANDN("R_DISRETE_INPUTS or R_COILS too big _50" NEWLINE));
                     return false;
+                }
 
 
                 /*** response *************/
@@ -65,8 +69,10 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                     if(i % 8 == 0 && i != 0) {
                         b++;
 
-                        if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + b) // constrain to tx buffer size
+                        if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + b) { // constrain to tx buffer size
+                            uart.nputs(ARRANDN("R_DISRETE_INPUTS or R_COILS too wompy _72" NEWLINE));
                             return false;
+                        }
 
                         resp->val8[b] = 0;
                         resp->byteCount++;
@@ -76,8 +82,10 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
 //                    uart.putu32d(ntoh16(query->start) + i);
 //                    uart.nputs(ARRANDN(NEWLINE));
 
-                    if(!Networking::Modbus::MasterRegisters::getReg(ntoh16(query->start) + i, &res))
+                    if(!Networking::Modbus::MasterRegisters::getReg(ntoh16(query->start) + i, &res)) {
+                        uart.nputs(ARRANDN("R_DISRETE_INPUTS or R_COILS too wompy _86" NEWLINE));
                         return false;
+                    }
 
                     if(res)
                         resp->val8[b] |= BV(i%8);
@@ -95,8 +103,10 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
 
                 /*** validation ***********/
 
-                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ))
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ)) {
+                    uart.nputs(ARRANDN("R_INPUT_REGS or R_HOLDING_REGS too big _107" NEWLINE));
                     return false;
+                }
 
 
                 /*** response *************/
@@ -111,11 +121,17 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
                 for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
                     uint16_t res;
 
-                    if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i) // constrain to tx buffer size
+                    if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i) { // constrain to tx buffer size
+                        uart.nputs(ARRANDN("R_INPUT_REGS or R_HOLDING_REGS too big _125" NEWLINE));
                         return false;
+                    }
 
-                    if(!Networking::Modbus::MasterRegisters::getReg(ntoh16(query->start) + i, &res))
+                    if(!Networking::Modbus::MasterRegisters::getReg(ntoh16(query->start) + i, &res)) {
+                        uart.nputs(ARRANDN("R_INPUT_REGS or R_HOLDING_REGS too big _130" NEWLINE));
+                        uart.put32d(ntoh16(query->start) + i);
+                        uart.nputs(ARRANDN(NEWLINE));
                         return false;
+                    }
 
 
                     resp->val16[i] = hton16(res);
@@ -145,11 +161,15 @@ bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_
 
                 /*** validation ***********/
 
-                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ))
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ)) {
+                    uart.nputs(ARRANDN("W_REG or W_COIL too big _163" NEWLINE));
                     return false;
+                }
 
-                if(txlen < rxlen) // must echo back identical packet on success
+                if(txlen < rxlen) { // must echo back identical packet on success
+                    uart.nputs(ARRANDN("W_REG or W_COIL too big _168" NEWLINE));
                     return false;
+                }
 
                 /*** response *************/
 
