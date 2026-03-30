@@ -307,6 +307,16 @@ uint8_t MstrB::getUnitBoardID() {
     return 123;
 }
 
+void MstrB::MCHS::recalADC() {
+    ADCpercise.calabrate();
+    ADCimpercise.calabrate();
+}
+
+void MstrB::MCHS::zeroV() {
+    opProfile.MCHS_percise_zero_mV = ADCpercise.readmV();
+    opProfile.MCHS_impercise_zero_mV = ADCimpercise.readmV();
+}
+
 bool MstrB::IL::setEnable(bool v){
     opVars.GLV_IL_RELAY_engage = v;
     return getStatus() == v;

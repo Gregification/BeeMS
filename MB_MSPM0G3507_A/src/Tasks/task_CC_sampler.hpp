@@ -11,7 +11,7 @@
 #include "Core/system.hpp"
 
 namespace Task {
-    void adc_CC_sampler(void *);
+    void sampler_packCurrent(void *);
 }
 
 

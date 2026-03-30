@@ -68,6 +68,39 @@ bool Networking::Modbus::MasterRegisters::getReg(uint16_t addr, volatile uint16_
             *out = MstrB::HRLV::presence_HRLV.get();
             break;
 
+        case RegAddr::MCHS_maxA:
+            *out = MstrB::opProfile.MCHS_maxA;
+            break;
+
+        case RegAddr::MCHS_maxA_surge:
+            *out = MstrB::opProfile.MCHS_maxA_SURGE;
+            break;
+
+        case RegAddr::MCHS_surge_time_mS:
+            *out = MstrB::opProfile.MCHS_surge_maxTime_mS;
+            break;
+
+        case RegAddr::MCHS_sampling_period_mS:
+            *out = MstrB::opProfile.MCHS_samplingPeriod_mS;
+            break;
+
+        case RegAddr::MCHS_pack_current_mA_0_15:
+            *out = MstrB::opVars.packcurrentmA & 0xFFFF;
+            break;
+
+        case RegAddr::MCHS_pack_current_mA_16_31:
+            *out = (MstrB::opVars.packcurrentmA >> 16) & 0xFFFF;
+            break;
+
+        case RegAddr::MSTR_SafteyStatus_0_15:
+            static_assert(sizeof(BMSCommon::SafteyStatus_t) > 2);
+            *out = MstrB::opVars.masterSafteyStatus & 0xFFFF;
+            break;
+
+        case RegAddr::MSTR_SafteyStatus_16_31:
+            static_assert(sizeof(BMSCommon::SafteyStatus_t) > 2);
+            *out = (MstrB::opVars.masterSafteyStatus >> 16) & 0xFFFF;
+            break;
 
         default: {
           if(addr < RegAddr::_modules_uid_end && addr > RegAddr::_modules_uid_start) {
@@ -127,6 +160,27 @@ bool Networking::Modbus::MasterRegisters::setReg(uint16_t addr, uint16_t val) {
             MstrB::opProfile.GLV_IL_RELAY_usr_requested = val;
             break;
 
+        case RegAddr::MCHS_maxA:
+            MstrB::opProfile.MCHS_maxA = val;
+            break;
+
+        case RegAddr::MCHS_maxA_surge:
+            MstrB::opProfile.MCHS_maxA_SURGE = val;
+            break;
+
+        case RegAddr::MCHS_surge_time_mS:
+            MstrB::opProfile.MCHS_surge_maxTime_mS = val;
+            break;
+
+        case RegAddr::MCHS_sampling_period_mS:
+            MstrB::opProfile.MCHS_samplingPeriod_mS = val;
+            break;
+
+        case RegAddr::MSTR_SafteyStatus_0_15:
+            MstrB::opVars.masterSafteyStatus = 0; // reset safety
+        case RegAddr::MSTR_SafteyStatus_16_31:
+            break;
+
         default: {
 
                 if(addr < RegAddr::_modules_uid_end && addr > RegAddr::_modules_uid_start) {
@@ -184,6 +238,10 @@ bool Networking::Modbus::MasterCommands::command(uint16_t command, uint16_t data
                         &task);
                 }
             } break;
+
+        case CmdAddr::MCHS_zero_adc :
+            MstrB::MCHS::zeroV();
+            break;
     }
 
     return true;

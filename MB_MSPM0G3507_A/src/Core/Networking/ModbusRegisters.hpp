@@ -47,6 +47,17 @@ namespace Networking {
                 HRLV_IL_PRESENCE            = 30, // <discrete>     active if HRLV IL is OK; a voltage >11V is present on the HRLV IL. This IL operates as a common fault bus. Single PU, all nodes are open drain.
                 HRLV_PRESENCE               = 31, // <discrete>     active if HRLV has sufficient power; a voltage >6V is present on the HRLV LV network.
 
+                _cmd_MCHS_zero_adc          = 35,
+                MCHS_maxA                   = 36,   // <holding>
+                MCHS_maxA_surge             = 37,   // <holding>
+                MCHS_surge_time_mS          = 38,   // <holding>
+                MCHS_sampling_period_mS     = 39,   // <holding>
+                MCHS_pack_current_mA_0_15   = 40,   // <input>
+                MCHS_pack_current_mA_16_31  = 41,   // <input>
+
+                MSTR_SafteyStatus_0_15      = 44,   // <32b RW>
+                MSTR_SafteyStatus_16_31     = 45,
+
                 _modules_uid_start          = 50,
                 M1_unitID                   ,       // <holding>
                 M2_unitID                   ,
@@ -131,6 +142,9 @@ namespace Networking {
                  */
                 GLV_IL_RELAY_burp          = MasterRegisters::RegAddr::GLV_IL_CTRL_sw_dsrd,
 
+                /** recailibrates ADC to internal reference voltage
+                 */
+                MCHS_zero_adc              = MasterRegisters::RegAddr::_cmd_MCHS_zero_adc,
             };
 
             bool command(uint16_t command, uint16_t data);

@@ -119,7 +119,7 @@ void process29bCANPacket(DL_MCAN_RxBufElement & rx, TickType_t timestamp) {
 
             BMSCommon::Module * m = getModule(id.src_addr);
             if(!m) {
-//                System::UART::uart_ui.nputs(ARRANDN("received SM from invalid module :"));
+//                System::UART::uart_ui.nputs(ARRANDN("received SM from invalid module  :"));
 //                System::UART::uart_ui.put32d(id.src_addr);
 //                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
                 break;

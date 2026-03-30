@@ -92,7 +92,7 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-    xTaskCreate(Task::adc_CC_sampler,
+    xTaskCreate(Task::sampler_packCurrent,
             "adc_CC_sampler",
             MAX(124, configMINIMAL_STACK_SIZE),
             NULL,
@@ -150,7 +150,8 @@ void vApplicationIdleHook(void)
      * idle task to clean up memory allocated by the kernel to any task that
      * has since been deleted.
      */
-    System::UART::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
+//    System::UART::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
+//    volatile int a = 0;
 }
 
 /*-----------------------------------------------------------*/
