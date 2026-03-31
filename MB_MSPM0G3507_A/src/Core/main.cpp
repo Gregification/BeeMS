@@ -24,8 +24,7 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
-#include <Tasks/task_CC_sampler.hpp>
-
+#include <Tasks/task_sampler_packCurrent.hpp>
 #include "Core/system.hpp"
 #include "Core/MasterBoard.hpp"
 #include "Tasks/task_BMS.hpp"
@@ -45,6 +44,7 @@ int main(){
     System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     MstrB::init();
+    MstrB::IL::setEnable(false);
     {
         char errorMsg[MAX_STR_ERROR_LEN] = "";
         uint32_t error = MstrB::POST(errorMsg, sizeof(errorMsg));
@@ -93,8 +93,8 @@ int main(){
             NULL);
 
     xTaskCreate(Task::sampler_packCurrent,
-            "adc_CC_sampler",
-            MAX(124, configMINIMAL_STACK_SIZE),
+            "sampler_packCurrent",
+            configMINIMAL_STACK_SIZE,
             NULL,
             MIN(configMAX_PRIORITIES, configMAX_PRIORITIES - 1),
             NULL);

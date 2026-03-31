@@ -22,7 +22,12 @@ namespace MstrB {
     union __attribute__((__packed__)) MstrSafteyStatus_t {
         BMSCommon::SafteyStatus_t Raw;
         struct __attribute__((__packed__)) {
-            int a;
+            bool pack_OC                : 1;
+            bool pack_OV                : 1;
+            bool pack_module_timeout    : 1;
+            bool pack_module_error      : 1;
+            uint8_t module              = BMSCommon::Module::BAD_MODULE_ID;
+            static_assert(BMSCommon::Module::BAD_MODULE_ID == 0 && sizeof(BMSCommon::Module::BAD_MODULE_ID) == 1);
         };
     };
     static_assert(sizeof(MstrSafteyStatus_t) == sizeof(BMSCommon::SafteyStatus_t));
@@ -132,6 +137,8 @@ namespace MstrB {
      * Returns 0 on successful post.
      */
     uint32_t POST(char * error_msg, uint16_t max_msg_len);
+
+    void logSnapshot(bool forceLog);
 }
 
 

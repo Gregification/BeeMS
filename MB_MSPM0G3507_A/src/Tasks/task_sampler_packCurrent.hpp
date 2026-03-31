@@ -5,8 +5,8 @@
  *      Author: power
  */
 
-#ifndef SRC_TASKS_TASK_CC_SAMPLER_HPP_
-#define SRC_TASKS_TASK_CC_SAMPLER_HPP_
+#ifndef SRC_TASKS_TASK_SAMPLER_PACKCURRENT_HPP_
+#define SRC_TASKS_TASK_SAMPLER_PACKCURRENT_HPP_
 
 #include "Core/system.hpp"
 
@@ -15,4 +15,4 @@ namespace Task {
 }
 
 
-#endif /* SRC_TASKS_TASK_CC_SAMPLER_HPP_ */
+#endif /* SRC_TASKS_TASK_SAMPLER_PACKCURRENT_HPP_ */

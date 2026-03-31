@@ -35,6 +35,39 @@ namespace MstrB {
     }
 }
 
+void MstrB::logSnapshot(bool forceLog) {
+    taskENTER_CRITICAL();
+    if(MstrB::opVars.masterSafteyStatus.Raw != 0) {
+        bool previsiouslyOK = MstrB::IL::getEnable();
+
+        MstrB::IL::setEnable(false);
+
+        // log if this is what causes transition into fault state
+        if(!MstrB::IL::getEnable() && previsiouslyOK) {
+            forceLog = true;
+        }
+    }
+
+    TickType_t now = xTaskGetTickCount();
+
+    {
+        static TickType_t lastLog = xTaskGetTickCount();
+        if(!forceLog) {
+            if((now - lastLog) < pdMS_TO_TICKS(1e3)) {
+                taskEXIT_CRITICAL();
+                return;
+            }
+        }
+        lastLog = now;
+
+    }
+    taskEXIT_CRITICAL();
+
+
+    // log & timestamp everything in OpVars and OpProfile
+
+}
+
 //#define TS_ADC  ADC0
 //ADC12_Regs * const MstrB::TempSense::adc  = TS_ADC;
 
