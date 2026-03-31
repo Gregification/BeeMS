@@ -12,8 +12,9 @@
 #include "Middleware/pff3a/diskio.h"
 #include "Middleware/pff3a/pff.h"
 
-/*** setup ***************************************************/
-
+//#define READ
+#define WRITE
+#define BUFF_SIZE 128
 
 void printFS(FATFS fs);
 
@@ -22,9 +23,10 @@ void Task::SDC_test_task(void *){
 
     FRESULT res;
     FATFS fs; /* File system object */
-    UINT bw;
+    UINT byte_count;
+    int total_bytes = 0;
     WORD n = 0;
-    char Line[128];
+    char Line[BUFF_SIZE];
 
 
 //    System::UART::uart_ui.nputs(ARRANDN("Disc init.... \n\r res: "));
@@ -49,28 +51,55 @@ void Task::SDC_test_task(void *){
 
     vTaskDelay(100);
 
+#ifdef WRITE
+
     Line[0] = 'p';
     Line[1] = 'a';
     Line[2] = 'n';
     Line[3] = 'i';
     Line[4] = 'k';
-    Line[5] = '\0';
+    Line[5] = '\n';
 
-    System::UART::uart_ui.nputs(ARRANDN("Writing.... \""));
-    System::UART::uart_ui.nputs(ARRANDN(Line));
-    System::UART::uart_ui.nputs(ARRANDN("\"\n\r res: "));
-
-    System::UART::uart_ui.putu32h(pf_write(Line, 6, &bw));
+    System::UART::uart_ui.nputs(ARRANDN("Writing.... \n\r"));
+    System::UART::uart_ui.nputs(ARRANDN("res:"));
+    System::UART::uart_ui.putu32h(pf_write(Line, 6, &byte_count));
     System::UART::uart_ui.nputs(ARRANDN("\n\r"));
-
     System::UART::uart_ui.nputs(ARRANDN("bytes written: "));
-    System::UART::uart_ui.putu32h(bw);
+    System::UART::uart_ui.putu32d(byte_count);
     System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+
+    System::UART::uart_ui.nputs(ARRANDN("Writing 500 times.... \n\r"));
+
+    for(int i = 0; i < 500; i++)
+    {
+        pf_write(Line, 6, &byte_count);
+        total_bytes += byte_count;
+    }
+    System::UART::uart_ui.nputs(ARRANDN("bytes written: "));
+    System::UART::uart_ui.putu32d(total_bytes);
+    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+
 
     System::UART::uart_ui.nputs(ARRANDN("Finalizing.... \n\r res: "));
-    System::UART::uart_ui.putu32h(pf_write(0, 0, &bw));
+    System::UART::uart_ui.putu32h(pf_write(0, 0, &byte_count));
     System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
 
+#endif
+
+#ifdef READ
+    System::UART::uart_ui.nputs(ARRANDN("Reading.... "));
+    System::UART::uart_ui.nputs(ARRANDN("\n\r res: "));
+
+    System::UART::uart_ui.putu32h(pf_read(Line, BUFF_SIZE, &byte_count));
+    System::UART::uart_ui.nputs(ARRANDN("\n\r"));
+
+    System::UART::uart_ui.nputs(ARRANDN("bytes read: "));
+    System::UART::uart_ui.putu32h(byte_count);
+    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+
+    System::UART::uart_ui.nputs(ARRANDN("Data: \n\r"));
+    System::UART::uart_ui.nputs(ARRANDN(Line));
+#endif
     while(1);
 
 

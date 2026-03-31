@@ -51,7 +51,7 @@ int main(){
 
     xTaskCreate(Task::SDC_test_task,
                 "SDC_test_task",
-                configMINIMAL_STACK_SIZE*4,
+                configMINIMAL_STACK_SIZE*10,
                 NULL,
                 tskIDLE_PRIORITY, //configMAX_PRIORITIES,
                 NULL);
