@@ -115,6 +115,7 @@ void Task::ethModbus_task(void *){
     /*** W5500 init *****************/
 
     uart.nputs(ARRANDN(CLIHIGHLIGHT "awaiting W5500 response ..." CLIRESET NEWLINE));
+
     while(!setupWizchip()) {
         uart.nputs(ARRANDN(CLIERROR "non-fatal: W5500 init failed! retrying..." CLIRESET NEWLINE));
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -220,6 +221,12 @@ void Task::ethModbus_task(void *){
             sendto(s, addr, 1, addr, 1234);
         }
         close(s);
+    }
+
+    {
+        MstrB::Indi::LED::i1.set();
+        vTaskDelay(pdMS_TO_TICKS(300));
+        MstrB::Indi::LED::i1.clear();
     }
 
     while(true) {
@@ -364,34 +371,6 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
             /*** process packet *************/
 
-            switch(rxbuf->mbap.adu->func) {
-                case Networking::Modbus::Function::W_COIL:
-//                    uart.nputs(ARRANDN("W_COIL" NEWLINE));
-                    break;
-
-                case Networking::Modbus::Function::W_COILS:
-//                    uart.nputs(ARRANDN("W_COILS" NEWLINE));
-                    break;
-
-                case Networking::Modbus::Function::W_REG:
-//                    uart.nputs(ARRANDN("W_REG" NEWLINE));
-                    break;
-
-                case Networking::Modbus::Function::W_REGS:
-//                    uart.nputs(ARRANDN("W_REGS" NEWLINE));
-                    break;
-
-                case Networking::Modbus::Function::R_COILS:
-                case Networking::Modbus::Function::R_DISRETE_INPUTS:
-                case Networking::Modbus::Function::R_HOLDING_REGS:
-                case Networking::Modbus::Function::R_INPUT_REGS:
-//                    uart.nputs(ARRANDN("R_" NEWLINE));
-                    break;
-                default:
-//                    uart.nputs(ARRANDN("D_" NEWLINE));
-                    break;
-            }
-
 //            if(rxbuf->mbap.adu->func == Networking::Modbus::Function::W_COIL)
 //            {
 //                uart.nputs(ARRANDN(NEWLINE " \tReceived Eth Modbus: "));
@@ -459,8 +438,8 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
             //      the w5500 will report to the mcu the socket is closed,
             //      rapid scada will keep thinking hte socket is still in use
             //      it will get stuck in that loop.
-            disconnect(sn);
             close(sn);
+            disconnect(sn);
             break;
 
         case SOCK_SYNRECV:
@@ -473,8 +452,8 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
         default:
 //            uart.nputs(ARRANDN("DEFAULT" NEWLINE));
-            disconnect(sn);
             close(sn);
+            disconnect(sn);
             break;
     }
 

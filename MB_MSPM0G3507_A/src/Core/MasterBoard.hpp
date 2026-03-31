@@ -19,6 +19,19 @@ namespace System {
 namespace MstrB {
     using namespace System;
 
+    union __attribute__((__packed__)) MstrSafteyStatus_t {
+        BMSCommon::SafteyStatus_t Raw;
+        struct __attribute__((__packed__)) {
+            bool pack_OC                : 1;
+            bool pack_OV                : 1;
+            bool pack_module_timeout    : 1;
+            bool pack_module_error      : 1;
+            uint8_t module              = BMSCommon::Module::BAD_MODULE_ID;
+            static_assert(BMSCommon::Module::BAD_MODULE_ID == 0 && sizeof(BMSCommon::Module::BAD_MODULE_ID) == 1);
+        };
+    };
+    static_assert(sizeof(MstrSafteyStatus_t) == sizeof(BMSCommon::SafteyStatus_t));
+
     /**
      * operator configuration
      * - use explicit variable names
@@ -27,6 +40,13 @@ namespace MstrB {
         bool GLV_IL_RELAY_allow_usr_ovrd            : 1;
         bool GLV_IL_RELAY_usr_requested             : 1;
         TickType_t maxModuleUpdatePeriod_mS         = 200;
+
+        int16_t MCHS_percise_zero_mV                : 14;
+        int16_t MCHS_impercise_zero_mV              : 14;
+        int16_t MCHS_maxA                           ;
+        int16_t MCHS_maxA_SURGE                     ;
+        uint16_t MCHS_surge_maxTime_mS              ;
+        uint8_t MCHS_samplingPeriod_mS              = 10;
     };
     extern OpProfile_t opProfile;
 
@@ -38,6 +58,9 @@ namespace MstrB {
         bool GLV_IL_RELAY_engage                   : 1; // IL desired by software
 
         BMSCommon::Module modules[BMSCommon::Module::MAX_MODULES];
+
+        uint32_t packcurrentmA;
+        MstrSafteyStatus_t masterSafteyStatus;
     };
     extern OpVars_t opVars;
 
@@ -50,8 +73,8 @@ namespace MstrB {
         extern MCP33151 ADCpercise;
         extern MCP33151 ADCimpercise;
 
-        const uint16_t  ADCReference_100uV = 40960;
-        const uint8_t   ADCResolution_b = 14;
+        void recalADC();
+        void zeroV();
     }
 
     /** Indicator LEDs */
@@ -114,6 +137,8 @@ namespace MstrB {
      * Returns 0 on successful post.
      */
     uint32_t POST(char * error_msg, uint16_t max_msg_len);
+
+    void logSnapshot(bool forceLog);
 }
 
 

@@ -25,6 +25,8 @@ BMSCommon::Module * getModule(uint8_t id);
 void Task::BMS_task(void *){
     System::UART::uart_ui.nputs(ARRANDN("BMS_task start" NEWLINE));
 
+    vTaskDelay(pdMS_TO_TICKS(1500));
+
     while(true) {
         { // every X mS
             constexpr int32_t dt = 10;
@@ -46,7 +48,9 @@ void Task::BMS_task(void *){
             // error if module reports error
             for(uint8_t j = 0; j < BMSCommon::Module::MAX_ICs; j++) {
                 if(m.safetyStatus[j]) {
-                    MstrB::IL::setEnable(false);
+                    MstrB::opVars.masterSafteyStatus.module = i;
+                    MstrB::opVars.masterSafteyStatus.pack_module_error = true;
+                    MstrB::logSnapshot(false);
                     break;
                 }
             }
@@ -55,9 +59,19 @@ void Task::BMS_task(void *){
 
             // error on timeout
             if(m.lastSafteyStatusUpdate * portTICK_PERIOD_MS > MstrB::opProfile.maxModuleUpdatePeriod_mS) {
-                MstrB::IL::setEnable(false);
+                MstrB::opVars.masterSafteyStatus.module = i;
+                MstrB::opVars.masterSafteyStatus.pack_module_timeout = true;
+                MstrB::logSnapshot(false);
                 break;
             }
+        }
+
+        if(MstrB::opVars.masterSafteyStatus.Raw != 0) {
+            MstrB::Indi::LED::fault.set();
+            MstrB::IL::setEnable(false);
+        } else {
+            MstrB::Indi::LED::fault.clear();
+            MstrB::IL::setEnable(true);
         }
     }
 
@@ -119,7 +133,7 @@ void process29bCANPacket(DL_MCAN_RxBufElement & rx, TickType_t timestamp) {
 
             BMSCommon::Module * m = getModule(id.src_addr);
             if(!m) {
-//                System::UART::uart_ui.nputs(ARRANDN("received SM from invalid module :"));
+//                System::UART::uart_ui.nputs(ARRANDN("received SM from invalid module  :"));
 //                System::UART::uart_ui.put32d(id.src_addr);
 //                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
                 break;

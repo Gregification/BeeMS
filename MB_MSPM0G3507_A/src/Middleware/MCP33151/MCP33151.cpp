@@ -14,16 +14,18 @@ uint16_t MCP33151::readRaw() {
 }
 
 int16_t MCP33151::readmV() {
-    int16_t rx;
+    uint16_t rx = 0; // Use uint16_t for bit manipulation to avoid sign-extension issues
 
     spi.takeResource(0);
-    spi.transfer_blocking(NULL, &rx, 2, &cs);
+    spi.transfer_blocking(NULL, (int16_t*)&rx, 2, &cs);
     spi.giveResource();
 
-    rx >>= 2;
-    rx = ((rx & 0x3F) << 8) | ((rx & 0xFF00) >> 8);
+    uint16_t raw = ((rx & 0x00FF) << 8) | ((rx & 0xFF00) >> 8);
 
-    return rx >> 2;
+    raw >>= 2;
+    raw &= 0x3FFF;
+
+    return raw >> 2;
 }
 
 bool MCP33151::calabrate() {

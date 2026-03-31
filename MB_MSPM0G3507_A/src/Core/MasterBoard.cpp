@@ -35,6 +35,39 @@ namespace MstrB {
     }
 }
 
+void MstrB::logSnapshot(bool forceLog) {
+    taskENTER_CRITICAL();
+    if(MstrB::opVars.masterSafteyStatus.Raw != 0) {
+        bool previsiouslyOK = MstrB::IL::getEnable();
+
+        MstrB::IL::setEnable(false);
+
+        // log if this is what causes transition into fault state
+        if(!MstrB::IL::getEnable() && previsiouslyOK) {
+            forceLog = true;
+        }
+    }
+
+    TickType_t now = xTaskGetTickCount();
+
+    {
+        static TickType_t lastLog = xTaskGetTickCount();
+        if(!forceLog) {
+            if((now - lastLog) < pdMS_TO_TICKS(1e3)) {
+                taskEXIT_CRITICAL();
+                return;
+            }
+        }
+        lastLog = now;
+
+    }
+    taskEXIT_CRITICAL();
+
+
+    // log & timestamp everything in OpVars and OpProfile
+
+}
+
 //#define TS_ADC  ADC0
 //ADC12_Regs * const MstrB::TempSense::adc  = TS_ADC;
 
@@ -305,6 +338,16 @@ uint32_t MstrB::POST(char * error_msg, uint16_t max_msg_len) {
 uint8_t MstrB::getUnitBoardID() {
     // TODO: should be physically configurable on the board, just read back those settings.
     return 123;
+}
+
+void MstrB::MCHS::recalADC() {
+    ADCpercise.calabrate();
+    ADCimpercise.calabrate();
+}
+
+void MstrB::MCHS::zeroV() {
+    opProfile.MCHS_percise_zero_mV = ADCpercise.readmV();
+    opProfile.MCHS_impercise_zero_mV = ADCimpercise.readmV();
 }
 
 bool MstrB::IL::setEnable(bool v){

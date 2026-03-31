@@ -96,7 +96,7 @@
 
 /* Constants that build features in or out. */
 #define configUSE_MUTEXES                       1
-#define configUSE_TICKLESS_IDLE                 1
+#define configUSE_TICKLESS_IDLE                 0
 #define configUSE_APPLICATION_TASK_TAG          0
 /*
  * Co-routines are intended for use on very small processes with severe RAM
@@ -114,6 +114,7 @@
 
 
 /* Constants that define which hook (callback) functions should be used. */
+void vApplicationIdleHook(void);
 #define configUSE_IDLE_HOOK                     0
 #define configUSE_TICK_HOOK                     0
 #define configUSE_MALLOC_FAILED_HOOK            0
