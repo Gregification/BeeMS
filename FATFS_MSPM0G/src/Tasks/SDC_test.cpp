@@ -12,7 +12,7 @@
 #include "Middleware/pff3a/diskio.h"
 #include "Middleware/pff3a/pff.h"
 
-//#define READ
+#define READ
 #define WRITE
 #define BUFF_SIZE 128
 
@@ -87,6 +87,12 @@ void Task::SDC_test_task(void *){
 #endif
 
 #ifdef READ
+
+
+    System::UART::uart_ui.nputs(ARRANDN("opening file.txt.... \n\r res: "));
+    System::UART::uart_ui.putu32h(pf_open("FILE.TXT"));
+    System::UART::uart_ui.nputs(ARRANDN("\n\n\r"));
+
     System::UART::uart_ui.nputs(ARRANDN("Reading.... "));
     System::UART::uart_ui.nputs(ARRANDN("\n\r res: "));
 
