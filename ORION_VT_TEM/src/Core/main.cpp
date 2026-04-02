@@ -27,19 +27,21 @@
 #include <task.h>
 
 #include "Core/system.hpp"
-#include "Tasks/examples/example_blink_task.hpp"
+#include "Tasks/blink_task.hpp"
 #include "Tasks/TEM_task.hpp"
 
 
 int main(){
+
+//    while(1);
     System::init();
 
-    System::UART::uart_ui.setBaudTarget(115200);
-    System::UART::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
-    System::UART::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
-    System::UART::uart_ui.nputs(ARRANDN("\t Device: "));
-    System::UART::uart_ui.putu32h(System::mcuID);
-    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
+//    System::UART::uart_ui.setBaudTarget(115200);
+//    System::UART::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
+//    System::UART::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
+//    System::UART::uart_ui.nputs(ARRANDN("\t Device: "));
+//    System::UART::uart_ui.putu32h(System::mcuID);
+//    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     BOARD::init();
 
@@ -49,12 +51,12 @@ int main(){
     BOARD::UI::LED::fault.clear();
     BOARD::UI::LED::scheduler.clear();
 
-//    xTaskCreate(Task::blink_task,
-//            "blink_task",
-//            configMINIMAL_STACK_SIZE,
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
+    xTaskCreate(Task::blink_task,
+            "blink_task",
+            configMINIMAL_STACK_SIZE,
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
 
     xTaskCreate(Task::TEM_task,
             "non_BMS_functions_task",
@@ -62,13 +64,6 @@ int main(){
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
-
-//    xTaskCreate(Task::MCAN_test_task,
-//            "non_BMS_functions_task",
-//            configMINIMAL_STACK_SIZE * 3,
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
 
     vTaskStartScheduler();
 
@@ -99,7 +94,7 @@ void vApplicationMallocFailedHook(void)
      */
     taskDISABLE_INTERRUPTS();
     for (;;) {
-        System::UART::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
+//        System::UART::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
         delay_cycles(20e6);
     }
 }
@@ -120,7 +115,7 @@ void vApplicationIdleHook(void)
      * idle task to clean up memory allocated by the kernel to any task that
      * has since been deleted.
      */
-    System::UART::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
+//    System::UART::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
 }
 
 /*-----------------------------------------------------------*/
@@ -147,9 +142,9 @@ vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
     taskDISABLE_INTERRUPTS();
 
     for (;;){
-        System::UART::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
-        System::UART::uart_ui.nputs(ARRANDN(pcTaskName));
-        System::UART::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE));
+//        System::UART::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
+//        System::UART::uart_ui.nputs(ARRANDN(pcTaskName));
+//        System::UART::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE));
         delay_cycles(20e6);
     }
 }

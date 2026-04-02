@@ -20,7 +20,13 @@ auto &led = BOARD::UI::LED::scheduler;
 void Task::blink_task(void*) {
 
     for(;;){
+        DL_GPIO_setPins(GPIOPINPUX(BOARD::UI::LED::scheduler));
+        vTaskDelay(pdMS_TO_TICKS(10));
         DL_GPIO_togglePins(GPIOPINPUX(BOARD::UI::LED::scheduler));
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(10));
+        DL_GPIO_togglePins(GPIOPINPUX(BOARD::UI::LED::scheduler));
+        vTaskDelay(pdMS_TO_TICKS(10));
+        DL_GPIO_togglePins(GPIOPINPUX(BOARD::UI::LED::scheduler));
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }

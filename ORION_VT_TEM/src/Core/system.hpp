@@ -102,7 +102,7 @@
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
 
-#define PROJECT_ENABLE_UART0        // LP
+//#define PROJECT_ENABLE_UART0        // LP
 //#define PROJECT_ENABLE_UART2        // MB_A 1.0
 
 //#define PROJECT_ENABLE_SPI0
@@ -405,7 +405,7 @@ namespace System {
 
     /** a reference to the UART acting as the main text UI */
     namespace UART {
-        extern UART &uart_ui;
+//        extern UART &uart_ui;
 
         #ifdef PROJECT_ENABLE_UART0
             extern UART uart0;

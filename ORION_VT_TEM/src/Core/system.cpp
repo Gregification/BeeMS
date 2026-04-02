@@ -621,10 +621,10 @@ void System::FailHard(const char *str) {
 
     static uint32_t count = 0;
     while(1) {
-        System::UART::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
-        System::UART::uart_ui.putu32d(count);
-        System::UART::uart_ui.nputs(ARRANDN(" : " CLIRESET));
-        System::UART::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
+//        System::UART::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
+//        System::UART::uart_ui.putu32d(count);
+//        System::UART::uart_ui.nputs(ARRANDN(" : " CLIRESET));
+//        System::UART::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
 
         delay_cycles(System::CLK::CPUCLK * 10);
         count++;
@@ -1029,7 +1029,7 @@ uint32_t System::CANFD::len2DLC(uint32_t size) {
     { while(1){} }
     extern "C" void HardFault_Handler(void) // if this is giving u a problem check if your using IRQ safe funcitons in your IRQ
     { while(1){
-        System::UART::uart_ui.nputs(ARRANDN("HARD FAULT" NEWLINE));
+//        System::UART::uart_ui.nputs(ARRANDN("HARD FAULT" NEWLINE));
         delay_cycles(System::CLK::CPUCLK);
     } }
     extern "C" void GROUP0_IRQHandler(void)

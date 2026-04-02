@@ -11,11 +11,13 @@
 // absurd naming!!! yippie!
 
 namespace System::UART {
-    UART & uart_ui = uart0;
+//    UART & uart_ui = uart0;
 }
 
 
 namespace BOARD {
+    CAN_MODE can_mode = CAN_MODE::A500k_D500k;
+    uint8_t id = 0;
 
     CANFD::CANFD & can = System::CANFD::canFD0;
 
@@ -141,7 +143,7 @@ void BOARD::init() {
                 DL_ADC12_WINDOWS_COMP_MODE_DISABLED
             );
 
-        for(unsigned int i = 0; i < Therm::THERM_N; i++){
+        for(unsigned int i = 0; i < Therm::THERMB_N; i++){
             DL_GPIO_initDigitalInput(Therm::TB[i].cm.pin.iomux);
             DL_GPIO_setAnalogInternalResistor(Therm::TB[i].cm.pin.iomux,
                       DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
@@ -160,4 +162,330 @@ void BOARD::init() {
 
         DL_ADC12_enableConversions(UI::SWITCHES::cm.adc.adc);
     }
+}
+
+BOARD::CAN_MODE BOARD::UI::SWITCHES::getCANmode() {
+    const GPIO::GPIO gpios[] = {cb_1, cb_2};
+
+    CAN_MODE ret;
+
+    for(auto pin : gpios) {
+        DL_GPIO_setAnalogInternalResistor(pin.iomux,
+                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+    }
+    delay_cycles(1000);
+
+    uint8_t id = 0;
+    for(int i = 0, j = 0; i < 3 && j < 5; i++) {
+        uint8_t newid = 0;
+        if(cb_1.get())
+            newid |= BV(0);
+        if(cb_2.get())
+            newid |= BV(1);
+
+        if(newid != id) {
+            id = newid;
+            i = -1;
+            j++;
+        }
+
+        switch(newid) {
+            default:
+            case CAN_MODE::A500k_D500k:
+                ret = CAN_MODE::A500k_D500k;
+                break;
+            case CAN_MODE::A500k_D2M:
+                ret = CAN_MODE::A500k_D2M;
+                break;
+            case CAN_MODE::A1M_D1M:
+                ret = CAN_MODE::A1M_D1M;
+                break;
+            case CAN_MODE::A1M_D4M:
+                ret = CAN_MODE::A1M_D4M;
+                break;
+        };
+
+    }
+
+    for(auto pin : gpios) {
+        DL_GPIO_setAnalogInternalResistor(pin.iomux,
+                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
+    }
+
+    return ret;
+}
+
+uint8_t BOARD::UI::SWITCHES::getUID() {
+    const GPIO::GPIO gpios[] = {uid_1, cm.pin};
+    uint8_t id = 0;
+
+    for(auto pin : gpios) {
+        DL_GPIO_setAnalogInternalResistor(pin.iomux,
+                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+    }
+    delay_cycles(1000);
+
+    // id must be read back identically at least x times to be accepted, otherwise defaults
+    {
+        int j = 0;
+        for(int i = 0; i < 3; i++) {
+            cm.sample_blocking();
+            uint16_t adc = cm.getResult();
+
+            uint8_t newid = 0;
+
+            constexpr float adc_max = 4096;
+            struct ADCID_t {
+                uint16_t val;
+                uint8_t id;
+            };
+            constexpr float centers[7] = {0.3503,0.3792,0.4050,0.5124,0.5377,0.6089,0.6785};
+            constexpr ADCID_t thresh_and_val[7] = {
+                    {
+                        .val = (uint16_t)(adc_max * ((centers[0] + centers[1]) / 2)),
+                        .id = 0b111
+                    },{
+                        .val = (uint16_t)(adc_max * ((centers[1] + centers[2]) / 2)),
+                        .id = 0b011
+                    },{
+                        .val = (uint16_t)(adc_max * ((centers[2] + centers[3]) / 2)),
+                        .id = 0b101
+                    },{
+                        .val = (uint16_t)(adc_max * ((centers[3] + centers[4]) / 2)),
+                        .id = 0b001
+                    },{
+                        .val = (uint16_t)(adc_max * ((centers[4] + centers[5]) / 2)),
+                        .id = 0b110
+                    },{
+                        .val = (uint16_t)(adc_max * ((centers[5] + centers[6]) / 2)),
+                        .id = 0b010
+                    },{
+                        .val = (uint16_t)(adc_max * (1)),
+                        .id = 0b100
+                    },
+            };
+
+            for(unsigned int k = 0; k < sizeof(thresh_and_val)/sizeof(thresh_and_val[0]); k++) {
+                if(adc <= thresh_and_val[k].val) {
+                    newid = thresh_and_val[k].id;
+                    break;
+                }
+            }
+
+            if(id != newid) {
+                id = newid;
+                i = -1;
+                j++;
+                if(j >= 10) {
+                    id = 0;
+                    break;
+                }
+            }
+        }
+    }
+
+    id <<= 1;
+    if(uid_1.get())
+        id |= BV(0);
+
+    for(auto pin : gpios) {
+        DL_GPIO_setAnalogInternalResistor(pin.iomux,
+                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
+    }
+
+    return id;
+}
+
+void BOARD::setCanMode(CAN_MODE newmode) {
+    auto & can = System::CANFD::canFD0;
+    can.takeResource(pdMS_TO_TICKS(0));
+
+    /* Put MCAN in SW initialization mode. */
+    DL_MCAN_setOpMode(can.reg, DL_MCAN_OPERATION_MODE_SW_INIT);
+    while(DL_MCAN_OPERATION_MODE_SW_INIT != DL_MCAN_getOpMode(can.reg))
+        ;
+
+    constexpr DL_MCAN_BitTimingParams   a500k_d500k = {
+            .nomRatePrescalar   = 4,    /* Arbitration Baud Rate Pre-scaler. */
+            .nomTimeSeg1        = 26,   /* Arbitration Time segment before sample point. */
+            .nomTimeSeg2        = 3,    /* Arbitration Time segment after sample point. */
+            .nomSynchJumpWidth  = 3,    /* Arbitration (Re)Synchronization Jump Width Range. */
+            .dataRatePrescalar  = 4,    /* Data Baud Rate Pre-scaler. */
+            .dataTimeSeg1       = 26,    /* Data Time segment before sample point. */
+            .dataTimeSeg2       = 3,    /* Data Time segment after sample point. */
+            .dataSynchJumpWidth = 3,    /* Data (Re)Synchronization Jump Width.   */
+        };
+
+    constexpr DL_MCAN_BitTimingParams   a500k_d2M = {
+            .nomRatePrescalar   = 1,    /* Arbitration Baud Rate Pre-scaler. */
+            .nomTimeSeg1        = 68,   /* Arbitration Time segment before sample point. */
+            .nomTimeSeg2        = 9,    /* Arbitration Time segment after sample point. */
+            .nomSynchJumpWidth  = 9,    /* Arbitration (Re)Synchronization Jump Width Range. */
+            .dataRatePrescalar  = 1,    /* Data Baud Rate Pre-scaler. */
+            .dataTimeSeg1       = 16,    /* Data Time segment before sample point. */
+            .dataTimeSeg2       = 1,    /* Data Time segment after sample point. */
+            .dataSynchJumpWidth = 1,    /* Data (Re)Synchronization Jump Width.   */
+        };
+
+    constexpr DL_MCAN_BitTimingParams a1M_d1M = {
+            .nomRatePrescalar   = 1,   /* 80MHz / 1 / (1 + 69 + 10) = 1MHz */
+            .nomTimeSeg1        = 69,  /* 70 TQ before sample point (87.5%) */
+            .nomTimeSeg2        = 9,   /* 10 TQ after sample point */
+            .nomSynchJumpWidth  = 9,
+            .dataRatePrescalar  = 1,
+            .dataTimeSeg1       = 69,
+            .dataTimeSeg2       = 9,
+            .dataSynchJumpWidth = 9,
+        };
+
+    constexpr DL_MCAN_BitTimingParams a1M_d4M = {
+            .nomRatePrescalar   = 1,   /* 80MHz / 1 / (1 + 69 + 10) = 1MHz */
+            .nomTimeSeg1        = 69,  /* 87.5% Sample Point */
+            .nomTimeSeg2        = 9,
+            .nomSynchJumpWidth  = 9,
+            .dataRatePrescalar  = 1,   /* 80MHz / 1 / (1 + 15 + 4) = 4MHz */
+            .dataTimeSeg1       = 15,  /* 16 TQ before sample point (80%) */
+            .dataTimeSeg2       = 3,   /* 4 TQ after sample point */
+            .dataSynchJumpWidth = 3,
+        };
+
+    can_mode = newmode;
+    switch(newmode) {
+        default:
+        case CAN_MODE::A500k_D500k:
+            DL_MCAN_setBitTime(can.reg, &a500k_d500k);
+            break;
+        case CAN_MODE::A500k_D2M:
+            DL_MCAN_setBitTime(can.reg, &a500k_d2M);
+            break;
+        case CAN_MODE::A1M_D1M:
+            DL_MCAN_setBitTime(can.reg, &a1M_d1M);
+            break;
+        case CAN_MODE::A1M_D4M:
+            DL_MCAN_setBitTime(can.reg, &a1M_d4M);
+            break;
+    }
+
+    /* Take MCAN out of the SW initialization mode */
+    DL_MCAN_setOpMode(can.reg, DL_MCAN_OPERATION_MODE_NORMAL);
+    while(DL_MCAN_OPERATION_MODE_NORMAL != DL_MCAN_getOpMode(can.reg))
+        ;
+
+    can.giveResource();
+}
+
+uint8_t BOARD::Therm::getThermID(uint8_t tb_i, uint8_t t_i) {
+    uint8_t base;
+    switch(tb_i) {
+        default: break;
+        case 0:
+            base = 0;
+            switch(t_i) {
+                case 0: return base+3;
+                case 1: return base+1;
+                case 2: return base+0;
+                case 3: return base+2;
+                case 4: return base+7;
+                case 5: return base+6;
+                case 6: return base+5;
+                case 7: return base+4;
+            };
+            break;
+        case 1:
+            base = 8 * 1;
+            switch(t_i) {
+                case 0: return base+4;
+                case 1: return base+3;
+                case 2: return base+2;
+                case 3: return base+6;
+                case 4: return base+5;
+                case 5: return base+1;
+                case 6: return base+7;
+                case 7: return base+0;
+            };
+            break;
+        case 2:
+            base = 8 * 2;
+            switch(t_i) {
+                case 0: return base+2;
+                case 1: return base+4;
+                case 2: return base+;
+                case 3: return base+;
+                case 4: return base+;
+                case 5: return base+;
+                case 6: return base+;
+                case 7: return base+;
+            };
+            break;
+    }
+
+    return 0xFF;
+}
+
+void BOARD::Therm::ThermBank_t::update() {
+    cm.adc.takeResource(0);
+
+    DL_GPIO_setAnalogInternalResistor(cm.pin.iomux,
+          DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+
+    for(uint8_t i = 0; i <= 0b111; i++) {
+        if(i & BV(0))   a.set();
+        else            a.clear();
+        if(i & BV(1))   b.set();
+        else            b.clear();
+        if(i & BV(2))   c.set();
+        else            c.clear();
+
+        vTaskDelay(STAB_TIME);
+
+        cm.sample_blocking();
+        degcC[i] = cm.getResult();
+        if(degcC[i] == 4096) {
+            degcC[i] = 0;
+            error[i] = true;
+        } else
+            error = false;
+
+        degcC[i] = 40e3 * (degcC[i] / (4096.0 - (float)degcC[i])); // to resistance
+
+        // theres a look up table in the DS so i just use that, https://www.mouser.com/catalog/specsheets/semitec%20usa%20corporation_smtcd00017-7.pdf
+        constexpr struct {
+            int32_t tempcC;
+            int32_t thermR;
+        } lut[] = {
+               {-500    , 367700},
+               {-400    , 204700},
+               {-300    , 118500},
+               {-200    , 71020},
+               {-100    , 43670},
+               {0       , 27700},
+               {100     , 18070},
+               {200     , 12110},
+               {300     , 8301},
+               {400     , 5811},
+               {500     , 4147},
+               {600     , 3011},
+               {700     , 2224},
+               {800     , 1668},
+               {900     , 1267},
+        };
+        int j = 0;
+        if(degcC[i] > lut[j].thermR) {
+            degcC[i] = lut[j].tempcC;
+        } else {
+            for(j = 1; j < sizeof(lut)/sizeof(lut[0]); j++) {
+                if(degcC[i] > lut[j].thermR) {
+                    degcC[i] = lut[j].tempcC + (degcC[i] - lut[j].thermR) * (lut[j-1].tempcC - lut[j].tempcC) / (lut[j-1].thermR - lut[j].thermR);
+                    break;
+                }
+            }
+            if(j == sizeof(lut)/sizeof(lut[0]))
+                degcC[i] = lut[j-1].tempcC;
+        }
+    }
+
+    DL_GPIO_setAnalogInternalResistor(cm.pin.iomux,
+          DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
+
+    cm.adc.giveResource();
 }
