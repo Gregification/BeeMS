@@ -375,46 +375,42 @@ void BOARD::setCanMode(CAN_MODE newmode) {
 }
 
 uint8_t BOARD::Therm::getThermID(uint8_t tb_i, uint8_t t_i) {
-    uint8_t base;
     switch(tb_i) {
         default: break;
         case 0:
-            base = 0;
             switch(t_i) {
-                case 0: return base+3;
-                case 1: return base+1;
-                case 2: return base+0;
-                case 3: return base+2;
-                case 4: return base+7;
-                case 5: return base+6;
-                case 6: return base+5;
-                case 7: return base+4;
+                case 0: return 3;
+                case 1: return 1;
+                case 2: return 0;
+                case 3: return 2;
+                case 4: return 7;
+                case 5: return 6;
+                case 6: return 5;
+                case 7: return 4;
             };
             break;
         case 1:
-            base = 8 * 1;
             switch(t_i) {
-                case 0: return base+4;
-                case 1: return base+3;
-                case 2: return base+2;
-                case 3: return base+6;
-                case 4: return base+5;
-                case 5: return base+1;
-                case 6: return base+7;
-                case 7: return base+0;
+                case 0: return 13;
+                case 1: return 11;
+                case 2: return 10;
+                case 3: return 15;
+                case 4: return 12;
+                case 5: return 9;
+                case 6: return 14;
+                case 7: return 8;
             };
             break;
         case 2:
-            base = 8 * 2;
             switch(t_i) {
-                case 0: return base+2;
-                case 1: return base+4;
-                case 2: return base+;
-                case 3: return base+;
-                case 4: return base+;
-                case 5: return base+;
-                case 6: return base+;
-                case 7: return base+;
+                case 0: return 21;
+                case 1: return 19;
+                case 2: return 18;
+//                case 3: return 23; // is not a cell tap, is for fan
+                case 4: return 20;
+                case 5: return 17;
+                case 6: return 22;
+                case 7: return 16;
             };
             break;
     }

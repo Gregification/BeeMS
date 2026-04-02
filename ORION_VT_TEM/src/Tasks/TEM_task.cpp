@@ -42,13 +42,30 @@ void Task::TEM_task(void*) {
         uint16_t val = UI::SWITCHES::cm.getResult();
 
         GeneralBroadcast gb;
+        gb.numTherms = 23;
+        gb.highestThermID = 0;
+        gb.lowestThermID = 0;
+        gb.max_C = -128;
+        gb.min_C = 127;
 
         for(int i = 0; i < Therm::THERMB_N; i++) {
             auto & tb = Therm::TB[i];
             tb.update();
 
-            for(auto v : tb.degcC) {
-                if(gb.)
+            for(int j = 0; j < sizeof(tb.degcC)/sizeof(tb.degcC[0]); j++) {
+                uint8_t tid = Therm::getThermID(i, j);
+                if(tid == 0xFF) // is not a cell therm
+                    continue;
+                if(tb.degcC[j] / 10 < gb.min_C) {
+                    gb.min_C = tb.degcC[j] / 10;
+                    gb.lowestThermID =  tid;
+                }
+                if(tb.degcC[j] / 10 > gb.max_C) {
+                    gb.max_C = tb.degcC[j] / 10;
+                    gb.highestThermID =  tid;
+                }
+                if(tb.error[j])
+                    gb.numTherms |= 0x80;
             }
         }
 
@@ -59,6 +76,8 @@ void Task::TEM_task(void*) {
             for(int i = 0 ; i < sizeof(gb); i++)
                 gb.chksum += ((uint8_t *)&gb)[i];
         }
+
+        sendCan11b(0x1838'F380, sizeof(gb), &gb);
     }
 }
 
