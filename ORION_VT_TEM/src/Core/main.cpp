@@ -32,16 +32,7 @@
 
 
 int main(){
-
-//    while(1);
     System::init();
-
-//    System::UART::uart_ui.setBaudTarget(115200);
-//    System::UART::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
-//    System::UART::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
-//    System::UART::uart_ui.nputs(ARRANDN("\t Device: "));
-//    System::UART::uart_ui.putu32h(System::mcuID);
-//    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     BOARD::init();
 

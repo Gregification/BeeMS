@@ -14,8 +14,7 @@
 #include "Core/std alternatives/string.hpp"
 
 
-auto & can = System::CANFD::canFD0;
-void sendCan11b(uint16_t canid, uint8_t datalen, void * data);
+void sendCan29b(uint32_t canid, uint8_t datalen, void * data);
 
 struct GeneralBroadcast {
     uint8_t temID;
@@ -34,6 +33,31 @@ static_assert(sizeof(GeneralBroadcast) == 8);
 
 void Task::TEM_task(void*) {
     using namespace BOARD;
+
+    DL_GPIO_setAnalogInternalResistor(System::GPIO::PA18.iomux,
+                      DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
+
+//    while(1) {
+//        vTaskDelay(pdMS_TO_TICKS(100));
+//        UI::SWITCHES::cm.sample_blocking();
+//        uint16_t data = UI::SWITCHES::cm.getResult();
+//        sendCan29b(0xbeef, sizeof(data), &data);
+//    }
+
+    while(1) {
+        vTaskDelay(pdMS_TO_TICKS(100));
+        auto & tb = Therm::TB[2];
+        tb.a.set();
+        tb.b.set();
+        tb.c.set();
+        DL_GPIO_setAnalogInternalResistor(tb.cm.pin.iomux,
+                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+
+        tb.cm.sample_blocking();
+
+        uint16_t data = tb.cm.getResult();
+        sendCan29b(0xbeef, sizeof(data), &data);
+    }
 
     while(1){
         vTaskDelay(pdMS_TO_TICKS(80));
@@ -77,17 +101,17 @@ void Task::TEM_task(void*) {
                 gb.chksum += ((uint8_t *)&gb)[i];
         }
 
-        sendCan11b(0x1838'F380, sizeof(gb), &gb);
+        sendCan29b(0x1838'F380, sizeof(gb), &gb);
     }
 }
 
-void sendCan11b(uint16_t canid, uint8_t datalen, void * data) {
+void sendCan29b(uint32_t canid, uint8_t datalen, void * data) {
     if(datalen > 8)
         datalen = 8;
     DL_MCAN_TxBufElement txmsg = {
             .id     = 0,  // CAN id, 11b->[28:18], 29b->[] when using 11b can id
             .rtr    = 0,        // 0: data frame, 1: remote frame
-            .xtd    = 0,        // 0: 11b id, 1: 29b id
+            .xtd    = 1,        // 0: 11b id, 1: 29b id
             .esi    = 0,        // error state indicator, 0: passive flag, 1: transmission recessive
             .dlc    = 3,        // data byte count, see DL comments
             .brs    = 0,        // 0: no bit rate switching, 1: yes brs
@@ -96,7 +120,7 @@ void sendCan11b(uint16_t canid, uint8_t datalen, void * data) {
             .mm     = 0x3,      // In order to track which transmit frame corresponds to which TX Event FIFO element, you can use the MM(Message Marker) bits in the transmit frame. The corresponding TX Event FIFO element will have the same message marker.
         };
 
-    txmsg.id = (canid & 0x7FF) << 18;
+    txmsg.id = canid;
     ALT::memcpy(data, txmsg.data, datalen);
     txmsg.dlc = datalen;
 
@@ -109,14 +133,18 @@ void sendCan11b(uint16_t canid, uint8_t datalen, void * data) {
             break;
     };
 
+    BOARD::can.takeResource(pdMS_TO_TICKS(10));
+
     DL_MCAN_TxFIFOStatus tf;
-    DL_MCAN_getTxFIFOQueStatus(can.reg, &tf);
+    DL_MCAN_getTxFIFOQueStatus(BOARD::can.reg, &tf);
     if(tf.fifoFull){
+        BOARD::can.giveResource();
         return;
     }
 
-    DL_MCAN_writeMsgRam(can.reg, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txmsg);
-    DL_MCAN_TXBufAddReq(can.reg, tf.putIdx);
+    DL_MCAN_writeMsgRam(BOARD::can.reg, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txmsg);
+    DL_MCAN_TXBufAddReq(BOARD::can.reg, tf.putIdx);
+    BOARD::can.giveResource();
 }
 
 #endif /* SRC_TASKS_TEM_CPP_ */

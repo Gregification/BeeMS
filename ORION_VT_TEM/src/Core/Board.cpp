@@ -125,28 +125,48 @@ void BOARD::init() {
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE);
 
-        DL_GPIO_disableOutput(GPIOPINPUX(UI::SWITCHES::cm.pin));
-        DL_GPIO_initDigitalInput(UI::SWITCHES::cm.pin.iomux);
-        DL_GPIO_setAnalogInternalResistor(UI::SWITCHES::cm.pin.iomux,
-                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
 
-        DL_ADC12_disableConversions(UI::SWITCHES::cm.adc.adc);
-        DL_ADC12_configConversionMem(
-                UI::SWITCHES::cm.adc.adc,
-                UI::SWITCHES::cm.idx,
-                UI::SWITCHES::cm.channel,
-                DL_ADC12_REFERENCE_VOLTAGE_VDDA,
-                DL_ADC12_SAMPLE_TIMER_SOURCE_SCOMP0,
-                DL_ADC12_AVERAGING_MODE_ENABLED,
-                DL_ADC12_BURN_OUT_SOURCE_DISABLED,
-                DL_ADC12_TRIGGER_MODE_AUTO_NEXT,
-                DL_ADC12_WINDOWS_COMP_MODE_DISABLED
-            );
+        {
+            DL_GPIO_disableOutput(GPIOPINPUX(UI::SWITCHES::cm.pin));
+            DL_GPIO_initDigitalInput(UI::SWITCHES::cm.pin.iomux);
+            DL_GPIO_setAnalogInternalResistor(UI::SWITCHES::cm.pin.iomux,
+                      DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+
+            DL_ADC12_disableConversions(UI::SWITCHES::cm.adc.adc);
+            DL_ADC12_configConversionMem(
+                    UI::SWITCHES::cm.adc.adc,
+                    UI::SWITCHES::cm.idx,
+                    UI::SWITCHES::cm.channel,
+                    DL_ADC12_REFERENCE_VOLTAGE_VDDA,
+                    DL_ADC12_SAMPLE_TIMER_SOURCE_SCOMP0,
+                    DL_ADC12_AVERAGING_MODE_ENABLED,
+                    DL_ADC12_BURN_OUT_SOURCE_DISABLED,
+                    DL_ADC12_TRIGGER_MODE_AUTO_NEXT,
+                    DL_ADC12_WINDOWS_COMP_MODE_DISABLED
+                );
+            DL_ADC12_enableConversions(UI::SWITCHES::cm.adc.adc);
+        }
 
         for(unsigned int i = 0; i < Therm::THERMB_N; i++){
+
+            for(auto & v : (System::GPIO::GPIO[]){Therm::TB[i].a,Therm::TB[i].b,Therm::TB[i].c}) {
+                DL_GPIO_initDigitalOutputFeatures(
+                        v.iomux,
+                        DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+                        DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+                        DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+                        DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+                    );
+                DL_GPIO_clearPins(GPIOPINPUX(v));
+                DL_GPIO_enableOutput(GPIOPINPUX(v));
+            }
+
+            DL_ADC12_disableConversions(Therm::TB[i].cm.adc.adc);
+
+            DL_GPIO_disableOutput(GPIOPINPUX(Therm::TB[i].cm.pin));
             DL_GPIO_initDigitalInput(Therm::TB[i].cm.pin.iomux);
             DL_GPIO_setAnalogInternalResistor(Therm::TB[i].cm.pin.iomux,
-                      DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+                      DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN); // DO NOT LEAVE PA18 in PU. it will soft lock out the programmer
             DL_ADC12_configConversionMem(
                     Therm::TB[i].cm.adc.adc,
                     Therm::TB[i].cm.idx,
@@ -158,9 +178,10 @@ void BOARD::init() {
                     DL_ADC12_TRIGGER_MODE_AUTO_NEXT,
                     DL_ADC12_WINDOWS_COMP_MODE_DISABLED
                 );
+
+            DL_ADC12_enableConversions(Therm::TB[i].cm.adc.adc);
         }
 
-        DL_ADC12_enableConversions(UI::SWITCHES::cm.adc.adc);
     }
 }
 
@@ -436,13 +457,12 @@ void BOARD::Therm::ThermBank_t::update() {
 
         cm.sample_blocking();
         degcC[i] = cm.getResult();
-        if(degcC[i] == 4096) {
-            degcC[i] = 0;
-            error[i] = true;
-        } else
-            error = false;
+        error[i] = degcC[i] == 4096;
 
         degcC[i] = 40e3 * (degcC[i] / (4096.0 - (float)degcC[i])); // to resistance
+
+        if(error[i])
+            degcC[i]= 0xffff;
 
         // theres a look up table in the DS so i just use that, https://www.mouser.com/catalog/specsheets/semitec%20usa%20corporation_smtcd00017-7.pdf
         constexpr struct {

@@ -73,6 +73,15 @@ void System::init() {
         DL_ADC12_setPowerDownMode(ADC0, DL_ADC12_POWER_DOWN_MODE_MANUAL);
         DL_ADC12_setSampleTime0(ADC0, 1e3); // 1mS
         DL_ADC12_configHwAverage(ADC0, DL_ADC12_HW_AVG_NUM_ACC_16, DL_ADC12_HW_AVG_DEN_DIV_BY_16);
+
+        DL_ADC12_initSingleSample(ADC0,
+              DL_ADC12_REPEAT_MODE_DISABLED,
+              DL_ADC12_SAMPLING_SOURCE_AUTO,
+              DL_ADC12_TRIG_SRC_SOFTWARE,
+              DL_ADC12_SAMP_CONV_RES_12_BIT,
+              DL_ADC12_SAMP_CONV_DATA_FORMAT_UNSIGNED
+          );
+
         DL_ADC12_clearInterruptStatus(ADC0,(System::ADC::ADC_IRQ_MEM_MASK));
         DL_ADC12_enableInterrupt(ADC0,(System::ADC::ADC_IRQ_MEM_MASK));
         NVIC_EnableIRQ(ADC0_INT_IRQn);
@@ -93,7 +102,16 @@ void System::init() {
         }
         DL_ADC12_setPowerDownMode(ADC1, DL_ADC12_POWER_DOWN_MODE_MANUAL);
         DL_ADC12_setSampleTime0(ADC1, 1e3); // 1mS
-//        DL_ADC12_configHwAverage(ADC1, DL_ADC12_HW_AVG_NUM_ACC_16, DL_ADC12_HW_AVG_DEN_DIV_BY_16);
+        DL_ADC12_configHwAverage(ADC1, DL_ADC12_HW_AVG_NUM_ACC_16, DL_ADC12_HW_AVG_DEN_DIV_BY_16);
+
+        DL_ADC12_initSingleSample(ADC1,
+              DL_ADC12_REPEAT_MODE_DISABLED,
+              DL_ADC12_SAMPLING_SOURCE_AUTO,
+              DL_ADC12_TRIG_SRC_SOFTWARE,
+              DL_ADC12_SAMP_CONV_RES_12_BIT,
+              DL_ADC12_SAMP_CONV_DATA_FORMAT_UNSIGNED
+          );
+
         DL_ADC12_clearInterruptStatus(ADC1,(System::ADC::ADC_IRQ_MEM_MASK));
         DL_ADC12_enableInterrupt(ADC1,(System::ADC::ADC_IRQ_MEM_MASK));
         NVIC_EnableIRQ(ADC1_INT_IRQn);
@@ -533,6 +551,25 @@ void System::ADC::ADC::_irq() {
 
 void System::ADC::ChannelMap::sample_blocking() const {
     adc._task = xTaskGetCurrentTaskHandle();
+    DL_ADC12_disableConversions(adc.adc);
+    uint32_t addr;
+    switch(idx) { // be explicit for portability between DL versions
+        default:
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_0 :     addr = DL_ADC12_SEQ_START_ADDR_00; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_1 :     addr = DL_ADC12_SEQ_START_ADDR_01; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_2 :     addr = DL_ADC12_SEQ_START_ADDR_02; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_3 :     addr = DL_ADC12_SEQ_START_ADDR_03; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_4 :     addr = DL_ADC12_SEQ_START_ADDR_04; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_5 :     addr = DL_ADC12_SEQ_START_ADDR_05; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_6 :     addr = DL_ADC12_SEQ_START_ADDR_06; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_7 :     addr = DL_ADC12_SEQ_START_ADDR_07; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_8 :     addr = DL_ADC12_SEQ_START_ADDR_08; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_9 :     addr = DL_ADC12_SEQ_START_ADDR_09; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_10 :    addr = DL_ADC12_SEQ_START_ADDR_10; break;
+        case DL_ADC12_MEM_IDX::DL_ADC12_MEM_IDX_11 :    addr = DL_ADC12_SEQ_START_ADDR_11; break;
+    };
+    DL_ADC12_setStartAddress(adc.adc, addr);
+    DL_ADC12_enableConversions(adc.adc);
     DL_ADC12_startConversion(adc.adc);
     ulTaskNotifyTakeIndexed(TASK_NOTIFICATION_ARRAY_INDEX_FOR_SYSTEM_ADC_IRQ, pdTRUE, portMAX_DELAY);
     DL_ADC12_enableConversions(adc.adc);
