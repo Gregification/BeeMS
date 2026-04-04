@@ -47,15 +47,11 @@ void Task::TEM_task(void*) {
     while(1) {
         vTaskDelay(pdMS_TO_TICKS(100));
         auto & tb = Therm::TB[2];
-        tb.a.set();
-        tb.b.set();
-        tb.c.set();
-        DL_GPIO_setAnalogInternalResistor(tb.cm.pin.iomux,
-                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+        tb.update();
 
-        tb.cm.sample_blocking();
-
-        uint16_t data = tb.cm.getResult();
+        uint16_t data = tb.degcC[6];
+//        if(tb.error[6])
+//            data = 0xff;
         sendCan29b(0xbeef, sizeof(data), &data);
     }
 

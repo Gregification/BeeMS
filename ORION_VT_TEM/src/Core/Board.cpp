@@ -165,8 +165,6 @@ void BOARD::init() {
 
             DL_GPIO_disableOutput(GPIOPINPUX(Therm::TB[i].cm.pin));
             DL_GPIO_initDigitalInput(Therm::TB[i].cm.pin.iomux);
-            DL_GPIO_setAnalogInternalResistor(Therm::TB[i].cm.pin.iomux,
-                      DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN); // DO NOT LEAVE PA18 in PU. it will soft lock out the programmer
             DL_ADC12_configConversionMem(
                     Therm::TB[i].cm.adc.adc,
                     Therm::TB[i].cm.idx,
@@ -309,10 +307,10 @@ uint8_t BOARD::UI::SWITCHES::getUID() {
     if(uid_1.get())
         id |= BV(0);
 
-    for(auto pin : gpios) {
-        DL_GPIO_setAnalogInternalResistor(pin.iomux,
-                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
-    }
+//    for(auto pin : gpios) {
+//        DL_GPIO_setAnalogInternalResistor(pin.iomux,
+//                  DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
+//    }
 
     return id;
 }
@@ -448,21 +446,25 @@ void BOARD::Therm::ThermBank_t::update() {
     for(uint8_t i = 0; i <= 0b111; i++) {
         if(i & BV(0))   a.set();
         else            a.clear();
+        vTaskDelay(pdMS_TO_TICKS(1));
         if(i & BV(1))   b.set();
         else            b.clear();
+        vTaskDelay(pdMS_TO_TICKS(1));
         if(i & BV(2))   c.set();
         else            c.clear();
+        vTaskDelay(pdMS_TO_TICKS(1));
 
         vTaskDelay(STAB_TIME);
 
         cm.sample_blocking();
+
         degcC[i] = cm.getResult();
-        error[i] = degcC[i] == 4096;
+        if(degcC[i] <= 20)
+            error[i] = true;
+        if(degcC[i] >= 4070)
+            error[i] = true;
 
-        degcC[i] = 40e3 * (degcC[i] / (4096.0 - (float)degcC[i])); // to resistance
-
-        if(error[i])
-            degcC[i]= 0xffff;
+       // degcC[i] = 40.0e3 * ((float)degcC[i] / (4096.0 - (float)degcC[i])); // to resistance
 
         // theres a look up table in the DS so i just use that, https://www.mouser.com/catalog/specsheets/semitec%20usa%20corporation_smtcd00017-7.pdf
         constexpr struct {
@@ -486,22 +488,22 @@ void BOARD::Therm::ThermBank_t::update() {
                {900     , 1267},
         };
         int j = 0;
-        if(degcC[i] > lut[j].thermR) {
-            degcC[i] = lut[j].tempcC;
-        } else {
-            for(j = 1; j < sizeof(lut)/sizeof(lut[0]); j++) {
-                if(degcC[i] > lut[j].thermR) {
-                    degcC[i] = lut[j].tempcC + (degcC[i] - lut[j].thermR) * (lut[j-1].tempcC - lut[j].tempcC) / (lut[j-1].thermR - lut[j].thermR);
-                    break;
-                }
-            }
-            if(j == sizeof(lut)/sizeof(lut[0]))
-                degcC[i] = lut[j-1].tempcC;
-        }
+//        if(degcC[i] > lut[j].thermR) {
+//            degcC[i] = lut[j].tempcC;
+//        } else {
+//            for(j = 1; j < sizeof(lut)/sizeof(lut[0]); j++) {
+//                if(degcC[i] > lut[j].thermR) {
+//                    degcC[i] = lut[j].tempcC + (degcC[i] - lut[j].thermR) * (lut[j-1].tempcC - lut[j].tempcC) / (lut[j-1].thermR - lut[j].thermR);
+//                    break;
+//                }
+//            }
+//            if(j == sizeof(lut)/sizeof(lut[0]))
+//                degcC[i] = lut[j-1].tempcC;
+//        }
     }
 
     DL_GPIO_setAnalogInternalResistor(cm.pin.iomux,
-          DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
+              DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
 
     cm.adc.giveResource();
 }

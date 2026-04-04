@@ -55,7 +55,7 @@ namespace BOARD {
 
     namespace Therm {
         struct ThermBank_t {
-            constexpr static TickType_t STAB_TIME = pdMS_TO_TICKS(100);
+            constexpr static TickType_t STAB_TIME = pdMS_TO_TICKS(3);
 
             GPIO::GPIO const        &a,&b,&c;
             ADC::ChannelMap const   cm;
