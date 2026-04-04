@@ -26,9 +26,14 @@ void Task::BMS(void *) {
         auto & uart = System::uart_ui;
         vTaskDelay(pdMS_TO_TICKS(10));
         uart.nputs(ARRANDN("BMS_task start" NEWLINE "postScheduler init ..." NEWLINE));
+
+        VT::postScheduler_init();
+
+        uart.nputs(ARRANDN("bms loop start ... " NEWLINE));
     }
 
-    VT::postScheduler_init();
+
+
 
     while(true) {
         for(uint8_t i = 0; i < sizeof(VT::OpVars_t::bbqs)/sizeof(VT::OpVars_t::bbqs[0]); i++) {
@@ -131,12 +136,20 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     batch._strikes = 0;
                     System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "INIT VERIFICATION" CLIRESET NEWLINE));
                 }while(false);
+                batch._strikes++;
                 bq.spi.giveResource();
 
                 if(error){
-                    if(batch._strikes > 5) {
+                    if(batch._strikes > 10) {
                         batch.state = OpVars_t::BBQ_t::State_t::SHUTDOWN;
                         batch._strikes = 0;
+                        System::uart_ui.nputs(ARRANDN("task BMS > "));
+                        System::uart_ui.put32d(batch._strikes);
+                        System::uart_ui.nputs(ARRANDN(" > INIT error: "));
+                        System::uart_ui.nputs(ARRANDN(errorStr));
+                        System::uart_ui.nputs(ARRANDN("\t --> "));
+                        System::uart_ui.put32d(error);
+                        System::uart_ui.nputs(ARRANDN(NEWLINE));
                     }
 
                     vTaskDelay(pdMS_TO_TICKS(batch._strikes * 10));
@@ -518,12 +531,36 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
             } break;
 
         case OpVars_t::BBQ_t::State_t::SHUTDOWN: {
+                System::uart_ui.nputs(ARRANDN("task BMS > "));
+                System::uart_ui.put32d(batch._strikes);
+                System::uart_ui.nputs(ARRANDN(" > SHUTDOWN error: "));
+                System::uart_ui.nputs(ARRANDN(errorStr));
+                System::uart_ui.nputs(ARRANDN("\t --> "));
+                System::uart_ui.put32d(error);
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                batch.state = OpVars_t::BBQ_t::State_t::SHUTDOWN_VERI;
             } break;
 
         case OpVars_t::BBQ_t::State_t::SHUTDOWN_VERI: {
+                System::uart_ui.nputs(ARRANDN("task BMS > "));
+                System::uart_ui.put32d(batch._strikes);
+                System::uart_ui.nputs(ARRANDN(" > SHUTDOWN_VERI error: "));
+                System::uart_ui.nputs(ARRANDN(errorStr));
+                System::uart_ui.nputs(ARRANDN("\t --> "));
+                System::uart_ui.put32d(error);
+                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                batch.state = OpVars_t::BBQ_t::State_t::OFF;
             } break;
 
         case OpVars_t::BBQ_t::State_t::OFF: {
+            System::uart_ui.nputs(ARRANDN("task BMS > "));
+            System::uart_ui.put32d(batch._strikes);
+            System::uart_ui.nputs(ARRANDN(" > OFF error: "));
+            System::uart_ui.nputs(ARRANDN(errorStr));
+            System::uart_ui.nputs(ARRANDN("\t --> "));
+            System::uart_ui.put32d(error);
+            System::uart_ui.nputs(ARRANDN(NEWLINE));
+            batch.state = OpVars_t::BBQ_t::State_t::INIT;
             } break;
 
         default: System::FailHard("BMS loop, unknown batch state");

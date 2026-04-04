@@ -21,8 +21,13 @@ namespace VT {
 
     namespace Indicator {
         const GPIO::GPIO
-            scheduler   = GPIO::PA3;
+            scheduler   = GPIO::PA9;
     };
+
+    namespace IL {
+        const GPIO::GPIO
+                control     = GPIO::PA25;
+    }
 
     namespace BBQ {
 

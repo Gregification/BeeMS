@@ -50,6 +50,12 @@ int main(){
     System::uart_ui.putu32d(VT::getID());
     System::uart_ui.nputs(ARRANDN(NEWLINE));
 
+    VT::Indicator::scheduler.set();
+    VT::IL::control.set();
+    delay_cycles(System::CLK::CPUCLK * 2);
+    VT::Indicator::scheduler.clear();
+    VT::IL::control.clear();
+
     // don't have this task on release
     // used a an sanity check
     xTaskCreate(Task::blink_task,

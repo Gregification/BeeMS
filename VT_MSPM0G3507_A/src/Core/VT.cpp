@@ -25,9 +25,9 @@ namespace VT {
             {
                 .bq = {
                     .spi = System::spi1,
-                    .cs  = System::GPIO::PA14,
+                    .cs  = System::GPIO::PA21,
                 },
-                .resetPin = System::GPIO::PA15,
+                .resetPin = System::GPIO::PA24,
             }
         },
     };
@@ -381,7 +381,25 @@ VT::OpProfile_t::BBQ_t & VT::getSelectedBBQprof() {
 
 
 void VT::preScheduler_init(){
-    // dont put stuff here unless it needs to be here
+    DL_GPIO_initDigitalOutputFeatures(
+            Indicator::scheduler.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+    DL_GPIO_clearPins(GPIOPINPUX(Indicator::scheduler));
+    DL_GPIO_enableOutput(GPIOPINPUX(Indicator::scheduler));
+
+    DL_GPIO_initDigitalOutputFeatures(
+            IL::control.iomux,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+    DL_GPIO_clearPins(GPIOPINPUX(IL::control));
+    DL_GPIO_enableOutput(GPIOPINPUX(IL::control));
 }
 
 void VT::postScheduler_init(){
