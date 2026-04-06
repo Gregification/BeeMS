@@ -37,13 +37,6 @@ void Task::TEM_task(void*) {
     DL_GPIO_setAnalogInternalResistor(System::GPIO::PA18.iomux,
                       DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
 
-//    while(1) {
-//        vTaskDelay(pdMS_TO_TICKS(100));
-//        UI::SWITCHES::cm.sample_blocking();
-//        uint16_t data = UI::SWITCHES::cm.getResult();
-//        sendCan29b(0xbeef, sizeof(data), &data);
-//    }
-
     while(1) {
         vTaskDelay(pdMS_TO_TICKS(100));
         auto & tb = Therm::TB[2];
@@ -56,10 +49,7 @@ void Task::TEM_task(void*) {
     }
 
     while(1){
-        vTaskDelay(pdMS_TO_TICKS(80));
-
-        UI::SWITCHES::cm.sample_blocking();
-        uint16_t val = UI::SWITCHES::cm.getResult();
+        vTaskDelay(pdMS_TO_TICKS(70));
 
         GeneralBroadcast gb;
         gb.numTherms = 23;
@@ -126,6 +116,7 @@ void sendCan29b(uint32_t canid, uint8_t datalen, void * data) {
             txmsg.brs = 1;
             break;
         default:
+            txmsg.brs = 0;
             break;
     };
 
@@ -140,6 +131,7 @@ void sendCan29b(uint32_t canid, uint8_t datalen, void * data) {
 
     DL_MCAN_writeMsgRam(BOARD::can.reg, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txmsg);
     DL_MCAN_TXBufAddReq(BOARD::can.reg, tf.putIdx);
+
     BOARD::can.giveResource();
 }
 
