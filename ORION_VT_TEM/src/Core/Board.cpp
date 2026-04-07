@@ -10,6 +10,77 @@
 
 // absurd naming!!! yippie!
 
+namespace {
+    constexpr float ADC_FULL_SCALE = 4095.0f;
+    constexpr float THERM_PULLUP_OHM = 40000.0f;
+
+    struct ThermLUTPoint_t {
+        int32_t tempcC;   // 0.1 degC units
+        float thermR;     // ohms
+    };
+
+    constexpr ThermLUTPoint_t THERM_LUT[] = {
+            {-500, 367700.0f},
+            {-400, 204700.0f},
+            {-300, 118500.0f},
+            {-200,  71020.0f},
+            {-100,  43670.0f},
+            {   0,  27700.0f},
+            { 100,  18070.0f},
+            { 200,  12110.0f},
+            { 300,   8301.0f},
+            { 400,   5811.0f},
+            { 500,   4147.0f},
+            { 600,   3011.0f},
+            { 700,   2224.0f},
+            { 800,   1668.0f},
+            { 900,   1267.0f},
+        };
+
+    static uint16_t median5(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e) {
+        uint16_t v[5] = {a, b, c, d, e};
+        for(int i = 0; i < 4; i++) {
+            for(int j = i + 1; j < 5; j++) {
+                if(v[j] < v[i]) {
+                    uint16_t t = v[i];
+                    v[i] = v[j];
+                    v[j] = t;
+                }
+            }
+        }
+        return v[2];
+    }
+
+    static uint16_t sample_filtered_adc(System::ADC::ChannelMap const & cm) {
+        cm.sample_blocking();
+        (void)cm.getResult(); // throw away first sample after mux state change
+
+        cm.sample_blocking(); uint16_t s0 = cm.getResult();
+        cm.sample_blocking(); uint16_t s1 = cm.getResult();
+        cm.sample_blocking(); uint16_t s2 = cm.getResult();
+        cm.sample_blocking(); uint16_t s3 = cm.getResult();
+        cm.sample_blocking(); uint16_t s4 = cm.getResult();
+
+        return median5(s0, s1, s2, s3, s4);
+    }
+
+    static int32_t thermR_to_degcC(float thermR_ohm) {
+        if(thermR_ohm >= THERM_LUT[0].thermR)
+            return THERM_LUT[0].tempcC;
+        if(thermR_ohm <= THERM_LUT[(sizeof(THERM_LUT) / sizeof(THERM_LUT[0])) - 1].thermR)
+            return THERM_LUT[(sizeof(THERM_LUT) / sizeof(THERM_LUT[0])) - 1].tempcC;
+
+        for(unsigned int i = 1; i < (sizeof(THERM_LUT) / sizeof(THERM_LUT[0])); i++) {
+            if((thermR_ohm <= THERM_LUT[i - 1].thermR) && (thermR_ohm >= THERM_LUT[i].thermR)) {
+                float frac = (thermR_ohm - THERM_LUT[i].thermR) / (THERM_LUT[i - 1].thermR - THERM_LUT[i].thermR);
+                return (int32_t)(THERM_LUT[i].tempcC + frac * (THERM_LUT[i - 1].tempcC - THERM_LUT[i].tempcC));
+            }
+        }
+
+        return 0;
+    }
+}
+
 namespace System::UART {
 //    UART & uart_ui = uart0;
 }
@@ -438,72 +509,48 @@ uint8_t BOARD::Therm::getThermID(uint8_t tb_i, uint8_t t_i) {
 }
 
 void BOARD::Therm::ThermBank_t::update() {
-    cm.adc.takeResource(0);
+    cm.adc.takeResource(portMAX_DELAY);
+
+    for(uint8_t i = 0; i < 8; i++)
+        updateSingle(i);
+
+    cm.adc.giveResource();
+}
+
+void BOARD::Therm::ThermBank_t::updateSingle(uint8_t therm_i) {
+    if(therm_i > 0b111)
+        return;
+
+    error[therm_i] = false;
 
     DL_GPIO_setAnalogInternalResistor(cm.pin.iomux,
           DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
 
-    for(uint8_t i = 0; i <= 0b111; i++) {
-        if(i & BV(0))   a.set();
-        else            a.clear();
-        vTaskDelay(pdMS_TO_TICKS(1));
-        if(i & BV(1))   b.set();
-        else            b.clear();
-        vTaskDelay(pdMS_TO_TICKS(1));
-        if(i & BV(2))   c.set();
-        else            c.clear();
-        vTaskDelay(pdMS_TO_TICKS(1));
+    if(therm_i & BV(0))   a.set();
+    else                  a.clear();
+    if(therm_i & BV(1))   b.set();
+    else                  b.clear();
+    if(therm_i & BV(2))   c.set();
+    else                  c.clear();
 
-        vTaskDelay(STAB_TIME);
+    vTaskDelay(STAB_TIME);
 
-        cm.sample_blocking();
-
-        degcC[i] = cm.getResult();
-        if(degcC[i] <= 20)
-            error[i] = true;
-        if(degcC[i] >= 4070)
-            error[i] = true;
-
-       // degcC[i] = 40.0e3 * ((float)degcC[i] / (4096.0 - (float)degcC[i])); // to resistance
-
-        // theres a look up table in the DS so i just use that, https://www.mouser.com/catalog/specsheets/semitec%20usa%20corporation_smtcd00017-7.pdf
-        constexpr struct {
-            int32_t tempcC;
-            int32_t thermR;
-        } lut[] = {
-               {-500    , 367700},
-               {-400    , 204700},
-               {-300    , 118500},
-               {-200    , 71020},
-               {-100    , 43670},
-               {0       , 27700},
-               {100     , 18070},
-               {200     , 12110},
-               {300     , 8301},
-               {400     , 5811},
-               {500     , 4147},
-               {600     , 3011},
-               {700     , 2224},
-               {800     , 1668},
-               {900     , 1267},
-        };
-        int j = 0;
-//        if(degcC[i] > lut[j].thermR) {
-//            degcC[i] = lut[j].tempcC;
-//        } else {
-//            for(j = 1; j < sizeof(lut)/sizeof(lut[0]); j++) {
-//                if(degcC[i] > lut[j].thermR) {
-//                    degcC[i] = lut[j].tempcC + (degcC[i] - lut[j].thermR) * (lut[j-1].tempcC - lut[j].tempcC) / (lut[j-1].thermR - lut[j].thermR);
-//                    break;
-//                }
-//            }
-//            if(j == sizeof(lut)/sizeof(lut[0]))
-//                degcC[i] = lut[j-1].tempcC;
-//        }
+    uint16_t adc = sample_filtered_adc(cm);
+    if(adc <= 20 || adc >= 4070) {
+        error[therm_i] = true;
+        degcC[therm_i] = 0;
+        return;
     }
 
-    DL_GPIO_setAnalogInternalResistor(cm.pin.iomux,
-              DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP);
+    float thermR = THERM_PULLUP_OHM * ((float)adc / (ADC_FULL_SCALE - (float)adc));
+    constexpr float THERM_R_MAX = THERM_LUT[0].thermR;
+    constexpr float THERM_R_MIN = THERM_LUT[(sizeof(THERM_LUT) / sizeof(THERM_LUT[0])) - 1].thermR;
 
-    cm.adc.giveResource();
+    if(thermR > THERM_R_MAX || thermR < THERM_R_MIN) {
+        error[therm_i] = true;
+        degcC[therm_i] = 0;
+        return;
+    }
+
+    degcC[therm_i] = thermR_to_degcC(thermR);
 }

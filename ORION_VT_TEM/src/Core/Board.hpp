@@ -63,6 +63,7 @@ namespace BOARD {
             bool error[8];
 
             void update();
+            void updateSingle(uint8_t therm_i);
         };
 
         constexpr unsigned int THERMB_N = 3;

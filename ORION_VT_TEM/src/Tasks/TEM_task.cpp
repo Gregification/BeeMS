@@ -21,15 +21,19 @@ struct GeneralBroadcast {
     int8_t min_C;
     int8_t max_C;
     int8_t avg_C;
-    struct __attribute__((packed)) {
-        bool thermError     : 1;
-        uint8_t numTherms   : 7;
-    };
+    uint8_t thermStatus; // bit0: thermError, bits[7:1]: numTherms
     uint8_t highestThermID;
     uint8_t lowestThermID;
     uint8_t chksum;
 };
 static_assert(sizeof(GeneralBroadcast) == 8);
+
+static uint8_t calcOrionChecksum(const GeneralBroadcast & gb) {
+    uint8_t sum = (uint8_t)(0x39 + sizeof(GeneralBroadcast));
+    for(unsigned int i = 0; i < sizeof(GeneralBroadcast) - 1; i++)
+        sum = (uint8_t)(sum + ((uint8_t const *)&gb)[i]);
+    return sum;
+}
 
 void Task::TEM_task(void*) {
     using namespace BOARD;
@@ -37,26 +41,20 @@ void Task::TEM_task(void*) {
     DL_GPIO_setAnalogInternalResistor(System::GPIO::PA18.iomux,
                       DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN);
 
-    while(1) {
-        vTaskDelay(pdMS_TO_TICKS(100));
-        auto & tb = Therm::TB[2];
-        tb.update();
-
-        uint16_t data = tb.degcC[6];
-//        if(tb.error[6])
-//            data = 0xff;
-        sendCan29b(0xbeef, sizeof(data), &data);
-    }
-
     while(1){
-        vTaskDelay(pdMS_TO_TICKS(70));
+        vTaskDelay(pdMS_TO_TICKS(100));
 
         GeneralBroadcast gb;
-        gb.numTherms = 23;
+        gb.temID = id;
+        gb.thermStatus = (uint8_t)((23u << 1) & 0xFE);
         gb.highestThermID = 0;
         gb.lowestThermID = 0;
         gb.max_C = -128;
         gb.min_C = 127;
+        gb.avg_C = 0;
+
+        int32_t sum_C = 0;
+        uint8_t valid_count = 0;
 
         for(int i = 0; i < Therm::THERMB_N; i++) {
             auto & tb = Therm::TB[i];
@@ -66,26 +64,38 @@ void Task::TEM_task(void*) {
                 uint8_t tid = Therm::getThermID(i, j);
                 if(tid == 0xFF) // is not a cell therm
                     continue;
-                if(tb.degcC[j] / 10 < gb.min_C) {
-                    gb.min_C = tb.degcC[j] / 10;
+
+                if(tb.error[j]) {
+                    gb.thermStatus |= 0x01;
+                    continue;
+                }
+
+                int8_t tempC = (int8_t)(tb.degcC[j] / 10);
+                if(tempC < gb.min_C) {
+                    gb.min_C = tempC;
                     gb.lowestThermID =  tid;
                 }
-                if(tb.degcC[j] / 10 > gb.max_C) {
-                    gb.max_C = tb.degcC[j] / 10;
+                if(tempC > gb.max_C) {
+                    gb.max_C = tempC;
                     gb.highestThermID =  tid;
                 }
-                if(tb.error[j])
-                    gb.numTherms |= 0x80;
+
+                sum_C += tempC;
+                valid_count++;
             }
         }
-
-        {
-            gb.temID = id;
-
-            gb.chksum = 0x39 + 8;
-            for(int i = 0 ; i < sizeof(gb); i++)
-                gb.chksum += ((uint8_t *)&gb)[i];
+        if(valid_count > 0) {
+            gb.avg_C = (int8_t)(sum_C / valid_count);
+        } else {
+            gb.min_C = 0;
+            gb.max_C = 0;
+            gb.avg_C = 0;
+            gb.highestThermID = 0;
+            gb.lowestThermID = 0;
+            gb.thermStatus |= 0x01;
         }
+
+        gb.chksum = calcOrionChecksum(gb);
 
         sendCan29b(0x1838'F380, sizeof(gb), &gb);
     }
@@ -116,7 +126,6 @@ void sendCan29b(uint32_t canid, uint8_t datalen, void * data) {
             txmsg.brs = 1;
             break;
         default:
-            txmsg.brs = 0;
             break;
     };
 
@@ -131,7 +140,6 @@ void sendCan29b(uint32_t canid, uint8_t datalen, void * data) {
 
     DL_MCAN_writeMsgRam(BOARD::can.reg, DL_MCAN_MEM_TYPE_BUF, tf.putIdx, &txmsg);
     DL_MCAN_TXBufAddReq(BOARD::can.reg, tf.putIdx);
-
     BOARD::can.giveResource();
 }
 
