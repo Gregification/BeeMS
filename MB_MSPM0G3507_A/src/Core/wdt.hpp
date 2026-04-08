@@ -8,12 +8,11 @@
 namespace WDT {
 
     enum TaskBit : uint32_t {
-        BMS         = (1 << 0),
-        ETH_MODBUS  = (1 << 1),
-        SAMPLER     = (1 << 2),
+        BLINK         = (1 << 0),
+
         // add bits here as you add tasks
 
-        ALL_TASKS   = BMS | ETH_MODBUS | SAMPLER,
+        ALL_TASKS   = BLINK, // | (OR) with any new tasks added
     };
 
     extern volatile uint32_t _checkinMask;

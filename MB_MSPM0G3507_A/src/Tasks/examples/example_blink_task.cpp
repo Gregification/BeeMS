@@ -13,7 +13,10 @@
 
 #include "Core/MasterBoard.hpp"
 
+#include "Core/wdt.hpp"
 void Task::blink_task(void*) {
+
+    WDT::checkin(WDT::BLINK); // check into the wdt asap
 
     /* different iterations of the board use different pins for the blink led
      * see schematic of exact version for correct pin.

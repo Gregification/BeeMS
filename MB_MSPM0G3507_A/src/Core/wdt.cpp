@@ -3,8 +3,8 @@
  * Only the monitor task should call kick(). Individual tasks call checkin().
  */
 
-#include "watchdog.hpp"
-#include <ti/driverlib/driverlib.h>
+#include "wdt.hpp"
+#include <ti/driverlib/dl_wwdt.h>
 #include "Core/system.hpp"
 
 namespace WDT
@@ -14,12 +14,13 @@ namespace WDT
 
     void init()
     {
-        DL_WWDT_initFreeRunningMode(WWDT0, DL_WWDT_CLOCK_DIVIDE_1,
-                                    DL_WWDT_TIMER_PERIOD_15_TO_16_BITS, // ~1000ms timeout
-                                    DL_WWDT_SLEEP_MODE_RUN
-                                    );
+        DL_WWDT_enablePower(WWDT0);
 
-        DL_WWDT_enableModule(WWDT0, DL_WWDT_MODE_WATCHDOG);
+        DL_WWDT_initWatchdogMode(WWDT0, DL_WWDT_CLOCK_DIVIDE_1,
+                                    DL_WWDT_TIMER_PERIOD_15_BITS, // ~1s timeout
+                                    DL_WWDT_STOP_IN_SLEEP, // double check- i dont think we want in sleep (right ??)
+                                    DL_WWDT_WINDOW_PERIOD_0, DL_WWDT_WINDOW_PERIOD_0
+                                    );
     }
 
     void kick()
