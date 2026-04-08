@@ -35,7 +35,7 @@
 #include "Tasks/examples/example_blink_task.hpp"
 #include "Tasks/examples/example_MCAN_task.hpp"
 #include "Tasks/task_CanPeriodicPackets.hpp"
-
+#include "Tasks/task_flash.hpp"
 
 int main(){
     System::init();
@@ -65,12 +65,15 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
+   Task::flash_init();
+
     xTaskCreate(Task::BMS,
             "BMS_task",
             MAX(2048, configMINIMAL_STACK_SIZE),
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
+
 
 //    xTaskCreate(Task::BBQ_test_task,
 //            "BBQ_test_task",
