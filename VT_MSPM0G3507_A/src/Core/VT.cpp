@@ -24,7 +24,7 @@ namespace VT {
         .bbqs = {
             {
                 .bq = {
-                    .spi = System::spi1,
+                    .spi = System::SPI::spi1,
                     .cs  = System::GPIO::PA21,
                 },
                 .resetPin = System::GPIO::PA24,

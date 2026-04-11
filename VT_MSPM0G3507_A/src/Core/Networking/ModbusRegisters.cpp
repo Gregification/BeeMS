@@ -80,9 +80,9 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
 bool Networking::Modbus::VTRegisters::setReg(uint16_t addr, uint16_t val) {
     switch(addr) {
         default:
-            System::uart_ui.nputs(ARRANDN("UNKNOWN WRITE REG: "));
-            System::uart_ui.putu32d(addr);
-            System::uart_ui.nputs(ARRANDN(NEWLINE));
+            System::UART::uart_ui.nputs(ARRANDN("UNKNOWN WRITE REG: "));
+            System::UART::uart_ui.putu32d(addr);
+            System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
             return false;
 
         case RegAddr::CELL_POSITIONS_mask: VT::getSelectedBBQprof().cellPositionMask = val; break;

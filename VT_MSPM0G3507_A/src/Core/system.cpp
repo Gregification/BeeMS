@@ -10,7 +10,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
-#include "Core/BMS/BMSComms.hpp"
+#include "BMSCommon.hpp"
+#include "BMSComms.hpp"
 #include "Core/Networking/bridge_CAN_Modbus.hpp"
 #include "VT.hpp"
 
@@ -19,26 +20,26 @@
 namespace System {
     uint16_t mcuID = 0;
 
-    // we should move to uboot one bright sunny day
+    // we should move to a can bus BLS one bright sunny day
 
-    UART::UART &uart_ui = uart0;
+    UART::UART &UART::uart_ui = uart0;
 
     #ifdef PROJECT_ENABLE_UART0
-        UART::UART uart0 = {.reg = UART0};
+        UART::UART UART::uart0 = {.reg = UART0};
     #endif
 
     #ifdef PROJECT_ENABLE_SPI0
-        SPI::SPI spi0 = {.reg = SPI0, .irq_type = IRQn_Type::SPI0_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
+        SPI::SPI SPI::spi0 = {.reg = SPI0, .irq_type = IRQn_Type::SPI0_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
     #endif
     #ifdef PROJECT_ENABLE_SPI1
-        SPI::SPI spi1 = {.reg = SPI1, .irq_type = IRQn_Type::SPI1_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
+        SPI::SPI SPI::spi1 = {.reg = SPI1, .irq_type = IRQn_Type::SPI1_INT_IRQn, .TRANSFER_FILLER_BYTE = 0};
     #endif
     #ifdef PROJECT_ENABLE_I2C1
-        I2C::I2C i2c1 = {.reg = I2C1};
+        I2C::I2C I2C::i2c1 = {.reg = I2C1};
     #endif
 
     #ifdef PROJECT_ENABLE_MCAN0
-        CANFD::CANFD canFD0 = {.reg = CANFD0};
+        CANFD::CANFD CANFD::canFD0 = {.reg = CANFD0};
     #endif
 }
 
@@ -112,10 +113,10 @@ void System::init() {
 //    DL_FlashCTL_executeClearStatus(); // ERRNO thing
 
     #ifdef PROJECT_ENABLE_UART0
-        System::uart0.partialInit();
+        System::UART::uart0.partialInit();
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
-        DL_UART_enable(System::uart0.reg);
+        DL_UART_enable(System::UART::uart0.reg);
     #endif
 
     #ifdef PROJECT_ENABLE_I2C0
@@ -247,7 +248,7 @@ void System::init() {
     {
         // high speed SPI
 
-        DL_SPI_enablePower(spi1.reg);
+        DL_SPI_enablePower(SPI::spi1.reg);
         delay_cycles(POWER_STARTUP_DELAY);
 
         /*--- GPIO config ----------------*/
@@ -287,7 +288,7 @@ void System::init() {
                  .clockSel      = DL_SPI_CLOCK::DL_SPI_CLOCK_BUSCLK, // 40e6
                  .divideRatio   = DL_SPI_CLOCK_DIVIDE_RATIO::DL_SPI_CLOCK_DIVIDE_RATIO_1,
             };
-        DL_SPI_setClockConfig(spi1.reg, &clk_config);
+        DL_SPI_setClockConfig(SPI::spi1.reg, &clk_config);
         DL_SPI_Config config = {
                 .mode           = DL_SPI_MODE::DL_SPI_MODE_CONTROLLER,
                 .frameFormat    = DL_SPI_FRAME_FORMAT::DL_SPI_FRAME_FORMAT_MOTO4_POL0_PHA0,
@@ -296,16 +297,16 @@ void System::init() {
                 .bitOrder       = DL_SPI_BIT_ORDER::DL_SPI_BIT_ORDER_MSB_FIRST,
                 .chipSelectPin  = DL_SPI_CHIP_SELECT::DL_SPI_CHIP_SELECT_NONE,
             };
-        DL_SPI_init(spi1.reg, &config);
-        DL_SPI_setFIFOThreshold(spi1.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
-        DL_SPI_disablePacking(spi1.reg);
-        spi1.setSCLKTarget(125e3);
-        DL_SPI_enable(spi1.reg);
+        DL_SPI_init(SPI::spi1.reg, &config);
+        DL_SPI_setFIFOThreshold(SPI::spi1.reg, DL_SPI_RX_FIFO_LEVEL::DL_SPI_RX_FIFO_LEVEL_1_2_FULL, DL_SPI_TX_FIFO_LEVEL::DL_SPI_TX_FIFO_LEVEL_1_2_EMPTY);
+        DL_SPI_disablePacking(SPI::spi1.reg);
+        SPI::spi1.setSCLKTarget(125e3);
+        DL_SPI_enable(SPI::spi1.reg);
 
-        spi1._trxBuffer.rx_i = -1;
+        SPI::spi1._trxBuffer.rx_i = -1;
 
-        NVIC_EnableIRQ(spi1.irq_type);
-        DL_SPI_enableInterrupt(spi1.reg,
+        NVIC_EnableIRQ(SPI::spi1.irq_type);
+        DL_SPI_enableInterrupt(SPI::spi1.reg,
                   DL_SPI_INTERRUPT_RX
                 | DL_SPI_INTERRUPT_TX
                 | DL_SPI_INTERRUPT_IDLE
@@ -607,10 +608,10 @@ void System::FailHard(const char *str) {
 
     static uint32_t count = 0;
     while(1) {
-        System::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
-        System::uart_ui.putu32d(count);
-        System::uart_ui.nputs(ARRANDN(" : " CLIRESET));
-        System::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
+        System::UART::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
+        System::UART::uart_ui.putu32d(count);
+        System::UART::uart_ui.nputs(ARRANDN(" : " CLIRESET));
+        System::UART::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
 
         for(int i = 0; i < 6; i++){
             DL_GPIO_togglePins(GPIOPINPUX(VT::Indicator::scheduler));
@@ -997,7 +998,7 @@ uint32_t System::CANFD::getID(DL_MCAN_TxBufElement const & pkt) {
     extern "C" void SPI0_IRQHandler(void){ System::spi0._irq(); }
 #endif
 #ifdef PROJECT_ENABLE_SPI1
-    extern "C" void SPI1_IRQHandler(void){ System::spi1._irq(); }
+    extern "C" void SPI1_IRQHandler(void){ System::SPI::spi1._irq(); }
 #endif
 
 
@@ -1007,7 +1008,7 @@ uint32_t System::CANFD::getID(DL_MCAN_TxBufElement const & pkt) {
     { while(1){} }
     extern "C" void HardFault_Handler(void) // if this is giving u a problem check if your using IRQ safe funcitons in your IRQ
     { while(1){
-        System::uart_ui.nputs(ARRANDN("HARD FAULT" NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("HARD FAULT" NEWLINE));
         delay_cycles(System::CLK::CPUCLK);
     } }
     extern "C" void GROUP0_IRQHandler(void)

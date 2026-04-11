@@ -195,6 +195,13 @@ namespace System {
             void put32d(int32_t);
             void putu32h(uint32_t);
         };
+
+        /** a reference to the UART acting as the main text UI */
+        extern UART &uart_ui;
+
+        #ifdef PROJECT_ENABLE_UART0
+            extern UART uart0;
+        #endif
     }
 
     namespace GPIO {
@@ -283,13 +290,21 @@ namespace System {
                 System::GPIO::GPIO const * cs;
             } _trxBuffer;
         };
+
+        #ifdef PROJECT_ENABLE_SPI0
+            extern SPI::SPI spi0;
+        #endif
+        #ifdef PROJECT_ENABLE_SPI1
+            extern SPI spi1;
+        #endif
     }
 
     namespace I2C {
 
 
         /** I2C peripheral controller interface
-         * - master only device */
+         * - master only device
+         * needs rewritten, is hardcoded junk */
         struct I2C : Lockable {
 
             I2C_Regs * const reg;
@@ -309,6 +324,14 @@ namespace System {
              */
             bool rx_blocking(uint8_t addr, void * data, buffersize_t size, TickType_t timeout);
         };
+
+        #ifdef PROJECT_ENABLE_I2C0
+            #error "I2C needs rewritten"
+        #endif
+        #ifdef PROJECT_ENABLE_I2C1
+            #error "I2C needs rewritten"
+            extern I2C::I2C i2c1;
+        #endif
     }
 
     namespace CANFD {
@@ -347,6 +370,11 @@ namespace System {
 
         uint32_t getID(DL_MCAN_RxBufElement const &);
         uint32_t getID(DL_MCAN_TxBufElement const &);
+
+
+        #ifdef PROJECT_ENABLE_MCAN0
+            extern CANFD canFD0;
+        #endif
     }
 
     namespace CRCn {
@@ -359,33 +387,6 @@ namespace System {
     /* bring system to immediate stop . requires chip reset to escape this */
     void FailHard(char const * str = nullptr);
 
-
-    /*--- system globals -----------------------------------*/
-
-    /** a reference to the UART acting as the main text UI */
-    extern UART::UART &uart_ui;
-
-    #ifdef PROJECT_ENABLE_UART0
-        extern UART::UART uart0;
-    #endif
-
-    #ifdef PROJECT_ENABLE_SPI0
-        extern SPI::SPI spi0;
-    #endif
-    #ifdef PROJECT_ENABLE_SPI1
-        extern SPI::SPI spi1;
-    #endif
-
-    #ifdef PROJECT_ENABLE_I2C0
-        #error "I2C0 not implimented"
-    #endif
-    #ifdef PROJECT_ENABLE_I2C1
-        extern I2C::I2C i2c1;
-    #endif
-
-    #ifdef PROJECT_ENABLE_MCAN0
-        extern CANFD::CANFD canFD0;
-    #endif
 }
 
 #endif /* SRC_CORE_SYSTEM_HPP_ */

@@ -73,7 +73,7 @@ void Task::flash_init(void)
     FlashTapConfig_t cfg = {};
 
     if (!Task::flash_read_tap_config(&cfg)) {
-        System::uart_ui.nputs(ARRANDN("flash: no valid config, writing defaults" NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("flash: no valid config, writing defaults" NEWLINE));
 
         cfg.magic               = FLASH_MAGIC_KEY;
         cfg.num_taps            = 12;
@@ -97,11 +97,11 @@ void Task::flash_init(void)
     }
 
     // 2. always print so you can see it on every boot
-    System::uart_ui.nputs(ARRANDN("flash: magic=0x"));
-    System::uart_ui.putu32h(cfg.magic);
-    System::uart_ui.nputs(ARRANDN(NEWLINE "flash: num_taps="));
-    System::uart_ui.putu32d(cfg.num_taps);
-    System::uart_ui.nputs(ARRANDN(NEWLINE "flash: tap config OK" NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN("flash: magic=0x"));
+    System::UART::uart_ui.putu32h(cfg.magic);
+    System::UART::uart_ui.nputs(ARRANDN(NEWLINE "flash: num_taps="));
+    System::UART::uart_ui.putu32d(cfg.num_taps);
+    System::UART::uart_ui.nputs(ARRANDN(NEWLINE "flash: tap config OK" NEWLINE));
 
     // 4. power cycle — nothing to add in code, just observe:
     // first boot:  "writing defaults" then "tap config OK"

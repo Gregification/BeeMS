@@ -27,8 +27,8 @@
 #include "Core/Networking/bridge_CAN_Modbus.hpp"
 #include "Core/Networking/ModbusRegisters.hpp"
 
-auto & uart     = System::uart_ui;
-auto & can      = System::canFD0;
+static auto & uart     = System::UART::uart_ui;
+static auto & can      = System::CANFD::canFD0;
 constexpr DL_MCAN_RX_FIFO_NUM canfifo = DL_MCAN_RX_FIFO_NUM::DL_MCAN_RX_FIFO_NUM_0;
 
 void Task::canModbusInterface_task(void *){
@@ -81,7 +81,7 @@ void Task::canModbusInterface_task(void *){
             can.giveResource();
         } else {
             vTaskDelay(pdMS_TO_TICKS(100)); // eye-balled value
-            System::uart_ui.nputs(ARRANDN("CAN-Modbus failed to lock can resource" NEWLINE));
+            System::UART::uart_ui.nputs(ARRANDN("CAN-Modbus failed to lock can resource" NEWLINE));
             continue;
         }
 

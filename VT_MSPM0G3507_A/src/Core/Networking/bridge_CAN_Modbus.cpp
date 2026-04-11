@@ -13,7 +13,7 @@
 #include "Core/system.hpp"
 #include "Core/common.h"
 #include "Core/std alternatives/string.hpp"
-#include "Core/BMS/BMSComms.hpp"
+#include "BMSComms.hpp"
 
 bool Networking::Bridge::CANModbus::ModbusTCP_to_CAN(Modbus::MBAPHeader const * mbap, DL_MCAN_TxBufElement * tx, Meta_t const * meta) {
     using namespace CAN;

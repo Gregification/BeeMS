@@ -30,10 +30,8 @@
 #include "Core/VT.hpp"
 
 #include "Tasks/task_CanModbusInterface.hpp"
-#include "Tasks/task_BBQ_test.hpp"
 #include "Tasks/task_BMS.hpp"
-#include "Tasks/examples/example_blink_task.hpp"
-#include "Tasks/examples/example_MCAN_task.hpp"
+#include "Tasks/task_blink.hpp"
 #include "Tasks/task_CanPeriodicPackets.hpp"
 #include "Tasks/task_flash.hpp"
 
@@ -41,14 +39,14 @@ int main(){
     System::init();
     VT::preScheduler_init();
 
-    System::uart_ui.setBaudTarget(115200);
-    System::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
-    System::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
-    System::uart_ui.nputs(ARRANDN("\t - MCU HARDWARE ID: "));
-    System::uart_ui.putu32d(System::mcuID);
-    System::uart_ui.nputs(ARRANDN(NEWLINE "\t - MCU unit ID: "));
-    System::uart_ui.putu32d(VT::getID());
-    System::uart_ui.nputs(ARRANDN(NEWLINE));
+    System::UART::uart_ui.setBaudTarget(115200);
+    System::UART::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
+    System::UART::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
+    System::UART::uart_ui.nputs(ARRANDN("\t - MCU HARDWARE ID: "));
+    System::UART::uart_ui.putu32d(System::mcuID);
+    System::UART::uart_ui.nputs(ARRANDN(NEWLINE "\t - MCU unit ID: "));
+    System::UART::uart_ui.putu32d(VT::getID());
+    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     VT::Indicator::scheduler.set();
     VT::IL::control.set();
@@ -80,13 +78,6 @@ int main(){
             NULL,
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
-
-//    xTaskCreate(Task::MCAN_test_task,
-//        "MCAN_test_task",
-//        MAX(384, configMINIMAL_STACK_SIZE),
-//        NULL,
-//        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//        NULL);
 
     xTaskCreate(Task::task_CanPeriodicPackets,
         "CanPeriodicPackets",
@@ -125,7 +116,7 @@ void vApplicationMallocFailedHook(void)
      */
     taskDISABLE_INTERRUPTS();
     for (;;) {
-        System::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("vApplicationMallocFailedHook" NEWLINE));
         delay_cycles(20e6);
     }
 }
@@ -146,7 +137,7 @@ void vApplicationIdleHook(void)
      * idle task to clean up memory allocated by the kernel to any task that
      * has since been deleted.
      */
-    System::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN("vApplicationIdleHook" NEWLINE));
 }
 
 /*-----------------------------------------------------------*/
@@ -173,9 +164,9 @@ vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
     taskDISABLE_INTERRUPTS();
 
     for (;;){
-        System::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
-        System::uart_ui.nputs(ARRANDN(pcTaskName));
-        System::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE));
+        System::UART::uart_ui.nputs(ARRANDN("vApplicationStackOverflowHook: "));
+        System::UART::uart_ui.nputs(ARRANDN(pcTaskName));
+        System::UART::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE));
         delay_cycles(20e6);
     }
 }

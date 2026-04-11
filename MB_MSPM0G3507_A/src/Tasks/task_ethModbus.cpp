@@ -65,8 +65,10 @@ wiz_NetInfo netConfig = {
            .mac = {0xBE,0xEE,0xEE,0x00,0x00,0x00}, // arbitrary
 //           .ip  = {192,168,1,2},
 //           .sn  = {255,255,255,0},
-           .ip  = {169,254,0,1},
-           .sn  = {255,255,0,0},
+           .ip  = {192,168,1,21},
+           .sn  = {255,255,255,0},
+//           .ip  = {169,254,0,1},
+//           .sn  = {255,255,0,0},
            .gw  = {192,168,1,1},
            .dns = {8,8,8,8},
            .dhcp= NETINFO_STATIC
@@ -312,20 +314,19 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
                     return;
                 case SOCKERR_DATALEN:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: zero data length" CLIRESET NEWLINE));
-                    close(sn);
+                    disconnect(sn);
                     return;
                 case SOCKERR_SOCKNUM:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket number" CLIRESET NEWLINE));
-                    close(sn);
+                    disconnect(sn);
                     return;
                 case SOCKERR_SOCKMODE:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid operation in the socket" CLIRESET NEWLINE));
-                    close(sn);
+                    disconnect(sn);
                     return;
                 case SOCKERR_SOCKSTATUS:
                     uart.nputs(ARRANDN(CLIWARN "Modbus: Invalid socket status for socket operation" CLIRESET NEWLINE));
                     disconnect(sn);
-                    close(sn);
                     vTaskDelay(pdMS_TO_TICKS(5));
                     return;
                 default:
@@ -438,8 +439,6 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
             //      the w5500 will report to the mcu the socket is closed,
             //      rapid scada will keep thinking hte socket is still in use
             //      it will get stuck in that loop.
-            close(sn);
-            disconnect(sn);
             break;
 
         case SOCK_SYNRECV:
@@ -452,7 +451,6 @@ void checkSocket(uint8_t sn, _RXBuffer * rxbuf, _TXBuffer * txbuf){
 
         default:
 //            uart.nputs(ARRANDN("DEFAULT" NEWLINE));
-            close(sn);
             disconnect(sn);
             break;
     }

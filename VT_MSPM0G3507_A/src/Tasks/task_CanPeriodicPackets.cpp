@@ -8,7 +8,7 @@
 #include "Tasks/task_CanPeriodicPackets.hpp"
 #include "Core/system.hpp"
 #include "Core/VT.hpp"
-#include "Core/BMS/BMSComms.hpp"
+#include "BMSComms.hpp"
 
 void Task::task_CanPeriodicPackets(void *) {
     using namespace BMSComms;

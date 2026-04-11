@@ -23,7 +23,7 @@ void Task::BMS(void *) {
     using namespace VT;
 
     {
-        auto & uart = System::uart_ui;
+        auto & uart = System::UART::uart_ui;
         vTaskDelay(pdMS_TO_TICKS(10));
         uart.nputs(ARRANDN("BMS_task start" NEWLINE "postScheduler init ..." NEWLINE));
 
@@ -31,8 +31,6 @@ void Task::BMS(void *) {
 
         uart.nputs(ARRANDN("bms loop start ... " NEWLINE));
     }
-
-
 
 
     while(true) {
@@ -103,19 +101,19 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     if(batstat.SEC == 0) // is not initialized
                         break;
 
-                    System::uart_ui.nputs(ARRANDN("BBQ security state:" NEWLINE));
+                    System::UART::uart_ui.nputs(ARRANDN("BBQ security state:" NEWLINE));
                     if(batstat.SEC == 3) { // is sealed
-                        System::uart_ui.nputs(ARRANDN("SEALED , attempting security key (0x"));
-                        System::uart_ui.putu32h(BQ76952::DEFAULT_UNSEAL_KEY);
-                        System::uart_ui.nputs(ARRANDN(") ..." NEWLINE));
+                        System::UART::uart_ui.nputs(ARRANDN("SEALED , attempting security key (0x"));
+                        System::UART::uart_ui.putu32h(BQ76952::DEFAULT_UNSEAL_KEY);
+                        System::UART::uart_ui.nputs(ARRANDN(") ..." NEWLINE));
                         batch.bq.unseal(BQ76952::DEFAULT_UNSEAL_KEY);
                         break;
                     }
                     if(batstat.SEC == 2) {
-                        System::uart_ui.nputs(ARRANDN("UNSEALED" NEWLINE));
+                        System::UART::uart_ui.nputs(ARRANDN("UNSEALED" NEWLINE));
                     }
                     else if(batstat.SEC == 1) {
-                        System::uart_ui.nputs(ARRANDN("FULL ACCESS" NEWLINE));
+                        System::UART::uart_ui.nputs(ARRANDN("FULL ACCESS" NEWLINE));
                     }
 
                     if(batstat.POR) {
@@ -134,7 +132,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
                     batch.state = OpVars_t::BBQ_t::State_t::INIT_VERI;
                     batch._strikes = 0;
-                    System::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "INIT VERIFICATION" CLIRESET NEWLINE));
+                    System::UART::uart_ui.nputs(ARRANDN(CLIHIGHLIGHT "INIT VERIFICATION" CLIRESET NEWLINE));
                 }while(false);
                 batch._strikes++;
                 bq.spi.giveResource();
@@ -143,13 +141,13 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     if(batch._strikes > 10) {
                         batch.state = OpVars_t::BBQ_t::State_t::SHUTDOWN;
                         batch._strikes = 0;
-                        System::uart_ui.nputs(ARRANDN("task BMS > "));
-                        System::uart_ui.put32d(batch._strikes);
-                        System::uart_ui.nputs(ARRANDN(" > INIT error: "));
-                        System::uart_ui.nputs(ARRANDN(errorStr));
-                        System::uart_ui.nputs(ARRANDN("\t --> "));
-                        System::uart_ui.put32d(error);
-                        System::uart_ui.nputs(ARRANDN(NEWLINE));
+                        System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
+                        System::UART::uart_ui.put32d(batch._strikes);
+                        System::UART::uart_ui.nputs(ARRANDN(" > INIT error: "));
+                        System::UART::uart_ui.nputs(ARRANDN(errorStr));
+                        System::UART::uart_ui.nputs(ARRANDN("\t --> "));
+                        System::UART::uart_ui.put32d(error);
+                        System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
                     }
 
                     vTaskDelay(pdMS_TO_TICKS(batch._strikes * 10));
@@ -193,23 +191,23 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
                     batch.state = OpVars_t::BBQ_t::State_t::ON_NORMAL;
                     batch._strikes = 0;
-                    System::uart_ui.nputs(ARRANDN(CLIGOOD "NORMAL OPERATION" CLIRESET NEWLINE));
+                    System::UART::uart_ui.nputs(ARRANDN(CLIGOOD "NORMAL OPERATION" CLIRESET NEWLINE));
                 } while(false);
                 bq.spi.giveResource();
 
                 if(error) {
-                    System::uart_ui.nputs(ARRANDN("task BMS > "));
-                    System::uart_ui.put32d(batch._strikes);
-                    System::uart_ui.nputs(ARRANDN(" > INIT_VERI error: "));
-                    System::uart_ui.nputs(ARRANDN(errorStr));
-                    System::uart_ui.nputs(ARRANDN("\t --> "));
-                    System::uart_ui.put32d(error);
-                    System::uart_ui.nputs(ARRANDN(NEWLINE));
+                    System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
+                    System::UART::uart_ui.put32d(batch._strikes);
+                    System::UART::uart_ui.nputs(ARRANDN(" > INIT_VERI error: "));
+                    System::UART::uart_ui.nputs(ARRANDN(errorStr));
+                    System::UART::uart_ui.nputs(ARRANDN("\t --> "));
+                    System::UART::uart_ui.put32d(error);
+                    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
                     if(batch._strikes > 10) {
                         batch.state = OpVars_t::BBQ_t::State_t::INIT;
                         batch._strikes = 0;
-                        System::uart_ui.nputs(ARRANDN(CLIBAD "INIT VERIFICATION FAILED. RESTARTING INIT ... " CLIRESET NEWLINE));
+                        System::UART::uart_ui.nputs(ARRANDN(CLIBAD "INIT VERIFICATION FAILED. RESTARTING INIT ... " CLIRESET NEWLINE));
                     } else {
                         vTaskDelay(10 * batch._strikes);
                     }
@@ -508,58 +506,58 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
                 if(error) {
 //                    batch.state = OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH;
-                    System::uart_ui.nputs(ARRANDN("task BMS > "));
-                    System::uart_ui.put32d(batch._strikes);
-                    System::uart_ui.nputs(ARRANDN(" > NORMAL_ON error: "));
-                    System::uart_ui.nputs(ARRANDN(errorStr));
-                    System::uart_ui.nputs(ARRANDN("\t --> "));
-                    System::uart_ui.put32d(error);
-                    System::uart_ui.nputs(ARRANDN(NEWLINE));
+                    System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
+                    System::UART::uart_ui.put32d(batch._strikes);
+                    System::UART::uart_ui.nputs(ARRANDN(" > NORMAL_ON error: "));
+                    System::UART::uart_ui.nputs(ARRANDN(errorStr));
+                    System::UART::uart_ui.nputs(ARRANDN("\t --> "));
+                    System::UART::uart_ui.put32d(error);
+                    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
                     break;
                 }
 
             } break;
 
         case OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH: {
-                System::uart_ui.nputs(ARRANDN("task BMS > "));
-                System::uart_ui.put32d(batch._strikes);
-                System::uart_ui.nputs(ARRANDN(" > ON_ERROR_LATCH error: "));
-                System::uart_ui.nputs(ARRANDN(errorStr));
-                System::uart_ui.nputs(ARRANDN("\t --> "));
-                System::uart_ui.put32d(error);
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
+                System::UART::uart_ui.put32d(batch._strikes);
+                System::UART::uart_ui.nputs(ARRANDN(" > ON_ERROR_LATCH error: "));
+                System::UART::uart_ui.nputs(ARRANDN(errorStr));
+                System::UART::uart_ui.nputs(ARRANDN("\t --> "));
+                System::UART::uart_ui.put32d(error);
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
             } break;
 
         case OpVars_t::BBQ_t::State_t::SHUTDOWN: {
-                System::uart_ui.nputs(ARRANDN("task BMS > "));
-                System::uart_ui.put32d(batch._strikes);
-                System::uart_ui.nputs(ARRANDN(" > SHUTDOWN error: "));
-                System::uart_ui.nputs(ARRANDN(errorStr));
-                System::uart_ui.nputs(ARRANDN("\t --> "));
-                System::uart_ui.put32d(error);
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
+                System::UART::uart_ui.put32d(batch._strikes);
+                System::UART::uart_ui.nputs(ARRANDN(" > SHUTDOWN error: "));
+                System::UART::uart_ui.nputs(ARRANDN(errorStr));
+                System::UART::uart_ui.nputs(ARRANDN("\t --> "));
+                System::UART::uart_ui.put32d(error);
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
                 batch.state = OpVars_t::BBQ_t::State_t::SHUTDOWN_VERI;
             } break;
 
         case OpVars_t::BBQ_t::State_t::SHUTDOWN_VERI: {
-                System::uart_ui.nputs(ARRANDN("task BMS > "));
-                System::uart_ui.put32d(batch._strikes);
-                System::uart_ui.nputs(ARRANDN(" > SHUTDOWN_VERI error: "));
-                System::uart_ui.nputs(ARRANDN(errorStr));
-                System::uart_ui.nputs(ARRANDN("\t --> "));
-                System::uart_ui.put32d(error);
-                System::uart_ui.nputs(ARRANDN(NEWLINE));
+                System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
+                System::UART::uart_ui.put32d(batch._strikes);
+                System::UART::uart_ui.nputs(ARRANDN(" > SHUTDOWN_VERI error: "));
+                System::UART::uart_ui.nputs(ARRANDN(errorStr));
+                System::UART::uart_ui.nputs(ARRANDN("\t --> "));
+                System::UART::uart_ui.put32d(error);
+                System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
                 batch.state = OpVars_t::BBQ_t::State_t::OFF;
             } break;
 
         case OpVars_t::BBQ_t::State_t::OFF: {
-            System::uart_ui.nputs(ARRANDN("task BMS > "));
-            System::uart_ui.put32d(batch._strikes);
-            System::uart_ui.nputs(ARRANDN(" > OFF error: "));
-            System::uart_ui.nputs(ARRANDN(errorStr));
-            System::uart_ui.nputs(ARRANDN("\t --> "));
-            System::uart_ui.put32d(error);
-            System::uart_ui.nputs(ARRANDN(NEWLINE));
+            System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
+            System::UART::uart_ui.put32d(batch._strikes);
+            System::UART::uart_ui.nputs(ARRANDN(" > OFF error: "));
+            System::UART::uart_ui.nputs(ARRANDN(errorStr));
+            System::UART::uart_ui.nputs(ARRANDN("\t --> "));
+            System::UART::uart_ui.put32d(error);
+            System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
             batch.state = OpVars_t::BBQ_t::State_t::INIT;
             } break;
 
