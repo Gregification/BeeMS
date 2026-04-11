@@ -65,14 +65,14 @@ int main(){
         }
     }
 
-    WDT::init();
-
-    xTaskCreate(Task::watchdog_task,
-             "wdt_task",
-             configMINIMAL_STACK_SIZE,
-             NULL,
-             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-             NULL);
+//    WDT::init();
+//
+//    xTaskCreate(Task::watchdog_task,
+//             "wdt_task",
+//             configMINIMAL_STACK_SIZE,
+//             NULL,
+//             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//             NULL);
 
     xTaskCreate(Task::blink_task,
             "blink_task",
@@ -81,12 +81,12 @@ int main(){
             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
             NULL);
 
-//    xTaskCreate(Task::BMS_task,
-//            "BMS_task",
-//            MAX(1024, configMINIMAL_STACK_SIZE),
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
+    xTaskCreate(Task::BMS_task,
+            "BMS_task",
+            MAX(1024, configMINIMAL_STACK_SIZE),
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
 //            "BQ769x2_PROTOCOL_Test_V_Task",

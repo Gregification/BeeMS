@@ -67,22 +67,19 @@ int main(){
 
 //   Task::flash_init();
 
-//    xTaskCreate(T
+    xTaskCreate(Task::BMS,
+            "BBQ_test_task",
+            MAX(384, configMINIMAL_STACK_SIZE),
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
 
-
-//    xTaskCreate(Task::BBQ_test_task,
-//            "BBQ_test_task",
-//            MAX(384, configMINIMAL_STACK_SIZE),
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
-
-//    xTaskCreate(Task::canModbusInterface_task,
-//            "non_BMS_functions_task",
-//            MAX(384, configMINIMAL_STACK_SIZE),
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
+    xTaskCreate(Task::canModbusInterface_task,
+            "non_BMS_functions_task",
+            MAX(384, configMINIMAL_STACK_SIZE),
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
 
 //    xTaskCreate(Task::MCAN_test_task,
 //        "MCAN_test_task",
@@ -91,12 +88,12 @@ int main(){
 //        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //        NULL);
 
-//    xTaskCreate(Task::task_CanPeriodicPackets,
-//        "CanPeriodicPackets",
-//        MAX(1024, configMINIMAL_STACK_SIZE),
-//        NULL,
-//        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//        NULL);
+    xTaskCreate(Task::task_CanPeriodicPackets,
+        "CanPeriodicPackets",
+        MAX(1024, configMINIMAL_STACK_SIZE),
+        NULL,
+        tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+        NULL);
 
     vTaskStartScheduler();
 
