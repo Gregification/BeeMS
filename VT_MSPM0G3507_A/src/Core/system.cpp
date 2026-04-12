@@ -18,7 +18,7 @@
 /*--- variables ------------------------------------------------------------------------*/
 
 namespace System {
-    uint16_t mcuID = 0;
+    volatile uint16_t mcuID = 0;
 
     // we should move to a can bus BLS one bright sunny day
 

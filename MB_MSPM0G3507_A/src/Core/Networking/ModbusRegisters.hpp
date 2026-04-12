@@ -113,11 +113,19 @@ namespace Networking {
                 M16_safety_status           ,
                 _modules_saftey_status_end  ,
 
+                _cells_voltage_start        = 1000, // units of 1mV
+                // RESERVED RANGE                   // <input>
+                _cells_voltage_end          = _cells_voltage_start + BMSCommon::PACK_MAX_CELLS,
+                _cells_temp_start           = 1400, // units of 0.1 degree c (dDegC)
+                // RESERVED RANGE                   // <input>
+                _cells_temp_end             = _cells_temp_start + BMSCommon::PACK_MAX_CELLS,
+
                 _end
             };
             static_assert(BMSCommon::Module::MAX_MODULES == RegAddr::_modules_uid_end - RegAddr::_modules_uid_start - 1); // -1 for enum offset
             static_assert(BMSCommon::Module::MAX_MODULES == RegAddr::_modules_enable_end - RegAddr::_modules_enable_start - 1);
             static_assert(BMSCommon::Module::MAX_MODULES == RegAddr::_modules_saftey_status_end - RegAddr::_modules_saftey_status_start - 1);
+            static_assert((RegAddr::_cells_voltage_end - RegAddr::_cells_voltage_start) == (RegAddr::_cells_temp_end - RegAddr::_cells_temp_start), "each cell must have a temperature");
 
             /** returns true if is valid operation */
             bool getReg(uint16_t addr, volatile uint16_t * out);

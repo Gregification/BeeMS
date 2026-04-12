@@ -57,8 +57,9 @@
 /*--- meta ---------------------------------------------*/
 
 #define PROJECT_NAME            "Voltage Tap"
-#define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "3.0" // [project version].[hardware version].[software version]
+#define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS . VT implementation using \"BQ7697204\""
+#define PROJECT_VERSION         "3.1" // [project version].[hardware version].[software version]
+#define PROJECT_VERSION_N       310
 
 /*--- IC footprint -------------------------------------*/
 
@@ -141,7 +142,7 @@ namespace System {
 /*------------------------------------------------------*/
 
 namespace System {
-    extern uint16_t mcuID; // unique ID of the MCU. different for every chip
+    extern volatile uint16_t mcuID; // unique ID of the MCU. different for every chip
 
     /** wrapper for controlling access to limited hardware resource.
      * purpose is to standardize resource access.
@@ -214,6 +215,9 @@ namespace System {
 
             void inline set() const { DL_GPIO_setPins(port, pin); }
             void inline clear() const { DL_GPIO_clearPins(port, pin); }
+
+            bool get() const { return DL_GPIO_readPins(port, pin); }
+            bool getOutput() const { return port->DOUT31_0 & pin; }
         };
 
         // Port A (PA) pins

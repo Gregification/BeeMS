@@ -36,7 +36,9 @@ void Task::BMS(void *) {
     while(true) {
         for(uint8_t i = 0; i < sizeof(VT::OpVars_t::bbqs)/sizeof(VT::OpVars_t::bbqs[0]); i++) {
             loop(VT::opVars.bbqs[i], i);
-            vTaskDelay(pdMS_TO_TICKS(100));
+            vTaskDelay(pdMS_TO_TICKS(10));
+
+            VT::IL::getStatus();
         }
     }
 
@@ -50,6 +52,15 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
     auto & bq = batch.bq;
 
+    if(batch.state == OpVars_t::BBQ_t::State_t::ON_NORMAL) {
+        batch.safetyStatus.system.state = 0;
+    } else {
+        VT::IL::setEnable(false);
+        batch.safetyStatus.system.state = (uint8_t)batch.state;
+        if(!batch.safetyStatus.system.state)
+            batch.safetyStatus.system.state = ~batch.safetyStatus.system.state;
+    }
+
     switch(batch.state) {
 
         case OpVars_t::BBQ_t::State_t::INIT: {
@@ -59,7 +70,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                  *      - do not write to memory
                  */
 
-                bq.spi.setSCLKTarget(2e6 + 1); //2MHz max
+                bq.spi.setSCLKTarget(2e6); //2MHz max
 
                 DL_GPIO_enableOutput(GPIOPINPUX(bq.cs)); // SPI CS
                 DL_GPIO_initDigitalOutputFeatures(
@@ -116,15 +127,20 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                         System::UART::uart_ui.nputs(ARRANDN("FULL ACCESS" NEWLINE));
                     }
 
-                    if(batstat.POR) {
-                        BQ76952::BQ76952SSetting settings;
-                        if(!VT::BBQ::recalSetting(idx, &settings))
-                            settings = VT::BBQ::DEFAULT_BBQ_SETTING;
-
+                    {
                         batch.resetPin.set();
-                        vTaskDelay(pdMS_TO_TICKS(50)); // CS needs some time to get recognized by the slave
+                        vTaskDelay(pdMS_TO_TICKS(50)); // needs some time to get recognized by the slave
                         batch.resetPin.clear();
                         vTaskDelay(pdMS_TO_TICKS(10));
+
+                        BQ76952::BQ76952SSetting settings;
+                        if(batstat.POR) {
+                            if(!VT::BBQ::recalSetting(idx, &settings))
+                                settings = VT::BBQ::DEFAULT_BBQ_SETTING;
+                        } else {
+                            settings = VT::BBQ::DEFAULT_BBQ_SETTING;
+
+                        }
 
                         if(!bq.setConfig(&settings))
                             break;
@@ -159,7 +175,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                 // idk man, just see if a spi command gets though
                 // BQ76952 requires at least 3 cells so just make sure at least the 3 cells seem ok
 
-                if(bq.spi.takeResource(10))
+                if(!bq.spi.takeResource(10))
                     break;
 
                 do {
@@ -260,18 +276,6 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
                         if(!(BV(i) & VT::getSelectedBBQprof().cellPositionMask))
                             continue;
-
-                        if(batch.cell_mV[i] < VT::opProfile.cell_mV_min){
-                            error = batch.cell_mV[i];
-                            if(!error) error++;
-                            ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " cell UV, mV");
-                        }
-
-                        if(batch.cell_mV[i] > VT::opProfile.cell_mV_max){
-                            error = batch.cell_mV[i];
-                            if(!error) error++;
-                            ALT::srtCpy(ARRANDN(errorStr), STRM(__LINE__) " cell OV, mV");
-                        }
                     }
 
                     if(!bq.getRegister(BQ769X2_PROTOCOL::RegAddr::VCellMode,
@@ -288,13 +292,13 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
 
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::StackVoltage,
-                            &batch.stack_cV,
+                            &batch.stack_dV,
                             2
                         )) {
                         error = __LINE__;
                         ALT::srtCpy(ARRANDN(errorStr),  STRM(__LINE__) " BBQ SPI transaction failed");
                         break;
-                        static_assert(sizeof(batch.stack_cV) >= 2);
+                        static_assert(sizeof(batch.stack_dV) >= 2);
                     }
 
                     if(!bq.sendDirectCommandR( BQ769X2_PROTOCOL::CmdDrt::IntTemperature,  // 0x68 (100mDegC)
@@ -505,6 +509,7 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                 bq.spi.giveResource();
 
                 if(error) {
+                    VT::IL::setEnable(false);
 //                    batch.state = OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH;
                     System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
                     System::UART::uart_ui.put32d(batch._strikes);
@@ -514,11 +519,14 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
                     System::UART::uart_ui.put32d(error);
                     System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
                     break;
+                } else {
+                    VT::IL::setEnable(true);
                 }
 
             } break;
 
         case OpVars_t::BBQ_t::State_t::ON_ERROR_LATCH: {
+                VT::IL::setEnable(false);
                 System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
                 System::UART::uart_ui.put32d(batch._strikes);
                 System::UART::uart_ui.nputs(ARRANDN(" > ON_ERROR_LATCH error: "));
@@ -529,6 +537,9 @@ void loop(VT::OpVars_t::BBQ_t & batch, uint8_t idx) {
             } break;
 
         case OpVars_t::BBQ_t::State_t::SHUTDOWN: {
+                batch.bq.setMaxBalCells(0);
+                VT::IL::setEnable(false);
+
                 System::UART::uart_ui.nputs(ARRANDN("task BMS > "));
                 System::UART::uart_ui.put32d(batch._strikes);
                 System::UART::uart_ui.nputs(ARRANDN(" > SHUTDOWN error: "));

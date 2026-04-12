@@ -29,7 +29,7 @@ void Task::BMS_task(void *){
 
     while(true) {
         { // every X mS
-            constexpr int32_t dt = 10;
+            constexpr int32_t dt = 5;
             static TickType_t former = xTaskGetTickCount();
             TickType_t dt_mS = (xTaskGetTickCount() - former) * portTICK_PERIOD_MS;
             if(dt_mS < dt)
@@ -39,7 +39,6 @@ void Task::BMS_task(void *){
 
         processCAN();
 
-        // check for module errors
         for(uint8_t i = 0; i < BMSCommon::Module::MAX_MODULES; i++) {
             BMSCommon::Module & m = MstrB::opVars.modules[i];
 
@@ -55,10 +54,10 @@ void Task::BMS_task(void *){
                 }
             }
 
-            if(MstrB::IL::getEnable()) break;
+            if(MstrB::opVars.masterSafteyStatus.Raw) break;
 
             // error on timeout
-            if(m.lastSafteyStatusUpdate * portTICK_PERIOD_MS > MstrB::opProfile.maxModuleUpdatePeriod_mS) {
+            if(m.lastSafteyStatusUpdate > pdMS_TO_TICKS(MstrB::opProfile.maxModuleUpdatePeriod_mS)) {
                 MstrB::opVars.masterSafteyStatus.module = i;
                 MstrB::opVars.masterSafteyStatus.pack_module_timeout = true;
                 MstrB::logSnapshot(false);
@@ -154,7 +153,7 @@ void process29bCANPacket(DL_MCAN_RxBufElement & rx, TickType_t timestamp) {
                         if(cell > BMSCommon::Module::MAX_CELLS)
                             break;
 
-                        m->temp.cells[cell] = d->dDegC[i];
+                        m->cells_dDegC[cell] = d->dDegC[i];
                     }
                 }break;
 
@@ -168,7 +167,7 @@ void process29bCANPacket(DL_MCAN_RxBufElement & rx, TickType_t timestamp) {
                         if(cell > BMSCommon::Module::MAX_CELLS)
                             break;
 
-                        m->mV[cell] = d->mV[i];
+                        m->cells_mV[cell] = d->mV[i];
                     }
                 }break;
 
@@ -191,13 +190,13 @@ void process29bCANPacket(DL_MCAN_RxBufElement & rx, TickType_t timestamp) {
                 }break;
 
                 case PktSM_JS_e::STATUS2: {
-                    auto d = reinterpret_cast<BMSComms::SM_STATUS2_t *>(rx.data);
-                    if(System::CANFD::DLC2Len(&rx) < sizeof(*d)) break;
-
-                    m->temp.ambient = d->ambient;
-                    m->temp.board_avg = d->board.avg_dDegC;
-                    m->temp.board_min = d->board.min_dDegC;
-                    m->temp.board_max = d->board.max_dDegC;
+//                    auto d = reinterpret_cast<BMSComms::SM_STATUS2_t *>(rx.data);
+//                    if(System::CANFD::DLC2Len(&rx) < sizeof(*d)) break;
+//
+//                    m->temp.ambient = d->ambient;
+//                    m->temp.board_avg = d->board.avg_dDegC;
+//                    m->temp.board_min = d->board.min_dDegC;
+//                    m->temp.board_max = d->board.max_dDegC;
                 }break;
 
                 default: break;

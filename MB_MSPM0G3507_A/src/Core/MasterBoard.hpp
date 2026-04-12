@@ -58,6 +58,8 @@ namespace MstrB {
         bool GLV_IL_RELAY_engage                   : 1; // IL desired by software
 
         BMSCommon::Module modules[BMSCommon::Module::MAX_MODULES];
+        TickType_t lastStatus[BMSCommon::Module::MAX_MODULES];
+        static const TickType_t STATUS_TIMEOUT = pdMS_TO_TICKS(100);
 
         uint32_t packcurrentmA;
         MstrSafteyStatus_t masterSafteyStatus;
@@ -139,6 +141,21 @@ namespace MstrB {
     uint32_t POST(char * error_msg, uint16_t max_msg_len);
 
     void logSnapshot(bool forceLog);
+
+    /** Retrieves the last reported voltage of cell, 0 based indexing, starting from negative most cell.
+     * indexing does not include disabled cells
+     *  eg: 2 modules, each with 6 total cells but only 3 enabled . n=5 would be M2#2 not M1#5
+     * returns false if cell out of range
+     */
+    bool getCellmV(uint16_t num, BMSCommon::cellmV_t & out);
+
+    /** Retrieves the last reported temperature of cell, 0 based indexing, starting from negative most cell.
+     * temperature may not actually be of cell, is possible to be a interpolated value depending on module implementation
+     * indexing does not include disabled cells.
+     *  eg: 2 modules, each with 6 total cells but only 3 enabled . n=5 would be M2#2 not M1#5
+     * returns false if cell out of range
+     */
+    bool getCelldC(uint16_t num, BMSCommon::dDegC_t & out);
 }
 
 

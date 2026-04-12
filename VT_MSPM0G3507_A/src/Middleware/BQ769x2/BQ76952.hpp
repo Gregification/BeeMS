@@ -365,7 +365,7 @@ struct BQ76952 {
             static_assert(sizeof(dsgFetProtectionsB) == sizeof(uint8_t));
 
             /* BATRM.13.3.3.10/162 */
-            union {
+            union __attribute__((packed)) {
                 uint8_t Raw;
                 struct __attribute__((packed)) {
                     unsigned int : 1;                      // Bit 0: RSVD_0
@@ -380,6 +380,17 @@ struct BQ76952 {
 
             /* BATRM.13.3.3.11/163 */
             uint16_t bodyDiodeThreshold;
+
+            // ...
+
+            /* BATRM.13.3.3.11/179 */
+            uint8_t cell_undervoltage_threshold_506mV; // units of 50.6mV, 80 max
+
+            /* BATRM.13.3.3.11/179 */
+            uint16_t cell_undervoltage_delay_506mV; // units of 3.3mS, 2047 max. +10mS offset
+
+            /* BATRM.13.3.3.11/179 */
+            uint8_t cell_undervoltage_hysteresis_506mV; // units 0f 50.6mV, 20 max
         } Protection;
 
         struct __attribute__((packed)) Alarm_t {

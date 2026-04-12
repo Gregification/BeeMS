@@ -10,7 +10,12 @@
   <ElemGroups>
     <ElemGroup active="true" dataBlock="InputRegisters" address="0" name="Device">
       <Elem type="ushort" isBitMask="false" tagCode="MCU HARDWARE ID" name="MCU HARDWARE ID" />
+      <Elem type="ushort" isBitMask="false" tagCode="UNIT ID" name="UNIT ID" />
       <Elem type="ushort" isBitMask="false" tagCode="Software Version" name="Software Version" />
+    </ElemGroup>
+    <ElemGroup active="true" dataBlock="HoldingRegisters" address="5" name="Module">
+      <Elem type="ushort" readOnly="false" isBitMask="false" tagCode="MODULE cell number offset" name="MODULE cell number offset" />
+      <Elem type="ushort" readOnly="true" isBitMask="false" tagCode="MODULE cell count" name="MODULE cell count" />
     </ElemGroup>
     <ElemGroup active="true" dataBlock="InputRegisters" address="20" name="Pack Voltage">
       <Elem type="ushort" isBitMask="false" tagCode="stack (10mV)" name="stack (10mV)" />
@@ -68,6 +73,7 @@
       <Elem type="ushort" isBitMask="false" tagCode="BQ Saftey Status A" name="BQ Saftey Status A" />
       <Elem type="ushort" isBitMask="false" tagCode="BQ Saftey Status B" name="BQ Saftey Status B" />
       <Elem type="ushort" isBitMask="false" tagCode="BQ Saftey Status C" name="BQ Saftey Status C" />
+      <Elem type="ushort" isBitMask="false" tagCode="System Safety Status " name="System Safety Status " />
     </ElemGroup>
   </ElemGroups>
   <Cmds>

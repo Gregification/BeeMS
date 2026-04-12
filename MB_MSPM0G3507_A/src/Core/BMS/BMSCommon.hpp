@@ -31,7 +31,7 @@ namespace BMSCommon {
 
     /** units of 0.1 degree C
      * capable of representing any temperature involving the BMS */
-    typedef int16_t cDegC_t;
+    typedef int16_t dDegC_t;
 
     /** abstract representation of a module. a bundle of series cells, not like a 'Enepaq module'.
      *  if u want to mix and match IC's then rewrite for inheritance, this is intended for all physically identical modules
@@ -44,7 +44,7 @@ namespace BMSCommon {
         static constexpr uint8_t MAX_CELLS = 16;
 
         /** maximum number IC's per "module". some module settings are IC specific */
-        static constexpr uint8_t MAX_ICs = 2;
+        static constexpr uint8_t MAX_ICs = 1;
 
         static constexpr uint8_t BAD_MODULE_ID = 0;
         /** unique module ID*/
@@ -53,18 +53,12 @@ namespace BMSCommon {
         bool enabled : 1 = false;
 
         /** cell mV */
-        cellmV_t mV[MAX_CELLS];
+        cellmV_t cells_mV[MAX_CELLS];
         packcV_t stack_cV;
+        dDegC_t cells_dDegC[MAX_CELLS];
+        dDegC_t ambient_dDegC;
+        dDegC_t max_IC;
 
-        struct __attribute__((__packed__)) Temp_t {
-            cDegC_t cells[MAX_CELLS];
-            cDegC_t
-                board_min,
-                board_max,
-                board_avg;
-            cDegC_t
-                ambient;
-        } temp;
 
         /** bit flags to indicate error of IC.
          * if any of the bits are high a error is triggered and this value is explicitly logged */
@@ -80,6 +74,8 @@ namespace BMSCommon {
         } state;
 
     };
+
+    constexpr uint32_t PACK_MAX_CELLS = Module::MAX_CELLS * Module::MAX_MODULES;
 };
 
 #endif /* SRC_CORE_BMS_BMSCOMMON_HPP_ */

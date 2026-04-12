@@ -26,6 +26,7 @@ void Task::blink_task(void*) {
     auto &led = VT::Indicator::scheduler; // VT Bee
 
     for(;;){
+//        if(VT::opVars.)
         led.set();
         vTaskDelay(pdMS_TO_TICKS(300));
         led.clear();

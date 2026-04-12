@@ -26,7 +26,11 @@ namespace Networking {
              */
             enum RegAddr : uint16_t {
                 HW_ID                               = 0,    // <input>
-                SW_VER                              = 1,    // <input>
+                UNIT_ID                             = 1,    // <input>
+                SW_VER                              = 2,    // <input>
+
+                MODULE_CELL_REPORTING_OFFSET        = 5,    // <holding>        cell # offset for this module relative to the whole pack
+                MODULE_CELL_COUNT                   ,       // <input>          number of cells reported by this module
 
                 CELL_POSITIONS_mask                 = 19,   // <holding>
                 STACK_cV                            = 20,   // <input>          stack voltage (10mV)
@@ -73,9 +77,10 @@ namespace Networking {
                 CELL13_CB_active                    ,       // <discrete>
                 CELL14_CB_active                    ,       // <discrete>
 
-                BQ_SAFETY_STATUS_A                  = 130,  // <input>
-                BQ_SAFETY_STATUS_B                  ,       // <input>
-                BQ_SAFETY_STATUS_C                  ,       // <input>
+                SAFETY_STATUS_BQ_A                  = 130,  // <input>
+                SAFETY_STATUS_BQ_B                  ,       // <input>
+                SAFETY_STATUS_BQ_C                  ,       // <input>
+                SAFETY_STATUS_SYSTEM                ,       // <input>
 
                 _end                                ,       // software reference
             };

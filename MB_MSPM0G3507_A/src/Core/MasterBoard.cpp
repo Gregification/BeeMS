@@ -395,6 +395,16 @@ bool MstrB::IL::isUserOverriding() {
     return opProfile.GLV_IL_RELAY_allow_usr_ovrd;
 }
 
+
+bool MstrB::getCelldC(uint16_t num, BMSCommon::dDegC_t & out) {
+    // i dont bother caching anything so just brute force it every time
+
+}
+
+bool MstrB::getCellmV(uint16_t num, BMSCommon::cellmV_t & out) {
+
+}
+
 bool MCHScalibrationADC(System::SPI::SPI& spi) {
     uint8_t rx[8];
     bool ret = true;

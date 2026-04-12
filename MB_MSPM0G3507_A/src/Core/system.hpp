@@ -58,7 +58,8 @@
 
 #define PROJECT_NAME            "Master Board"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "MSPM0G3505 1-1-1" // [project version]-[hardware version]-[software version]
+#define PROJECT_VERSION         "3.1" // [project version].[hardware version].[software version]
+#define PROJECT_VERSION_N       310
 
 /*--- IC footprint -------------------------------------*/
 // when changing footprints update this manually then match the library using the project settings.

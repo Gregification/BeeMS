@@ -49,10 +49,10 @@ int main(){
     System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
 
     VT::Indicator::scheduler.set();
-    VT::IL::control.set();
+    VT::IL::_control.set();
     delay_cycles(System::CLK::CPUCLK * 2);
     VT::Indicator::scheduler.clear();
-    VT::IL::control.clear();
+    VT::IL::_control.clear();
 
     // don't have this task on release
     // used a an sanity check

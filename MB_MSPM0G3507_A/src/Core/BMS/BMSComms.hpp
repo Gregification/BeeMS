@@ -96,34 +96,34 @@ namespace BMSComms {
 
     struct __attribute__((__packed__)) SM_STATUS2_t {
         struct __attribute__((__packed__)) {
-            BMSCommon::cDegC_t  min_dDegC;
-            BMSCommon::cDegC_t  max_dDegC;
-            BMSCommon::cDegC_t  avg_dDegC;
+            BMSCommon::dDegC_t  min_dDegC;
+            BMSCommon::dDegC_t  max_dDegC;
+            BMSCommon::dDegC_t  avg_dDegC;
         } board;
-        BMSCommon::cDegC_t  ambient;
+        BMSCommon::dDegC_t  ambient;
     };
     static_assert(sizeof(SM_STATUS2_t) <= MAX_PKT_SIZE_BYTES);
 
     struct __attribute__((__packed__)) SM_CELLV_t {
-        static constexpr int MAX_CELL_N = MAX_PKT_SIZE_BYTES/2 - 2;
+        static constexpr int MAX_CELL_N = MAX_PKT_SIZE_BYTES/sizeof(BMSCommon::cellmV_t) - 3; // -3b for other stuff in the packet
 
-        uint8_t base_cell;                   // starting cell. cell1+ would be #0
+        uint16_t base_cell;                   // starting cell. cell1+ would be #0
         unsigned int cellCount       : 6;
         unsigned int                 : 2;    // reserved
         BMSCommon::cellmV_t mV[MAX_CELL_N];
     };
-    static_assert(sizeof(SM_CELLV_t) != MAX_PKT_SIZE_BYTES);
+    static_assert(sizeof(SM_CELLV_t) <= MAX_PKT_SIZE_BYTES);
     static_assert(SM_CELLV_t::MAX_CELL_N < 10, "very small packet? something is wrong");
 
     struct __attribute__((__packed__)) SM_CELLT_t {
-        static constexpr int MAX_CELL_N = MAX_PKT_SIZE_BYTES/2 - 2;
+        static constexpr int MAX_CELL_N = MAX_PKT_SIZE_BYTES/sizeof(BMSCommon::dDegC_t) - 2; // -2b for other stuff in the packet
 
         uint8_t base_cell;                   // starting cell. cell1+ would be #0
         unsigned int cellCount       : 6;
         unsigned int                 : 2;    // reserved
-        BMSCommon::cDegC_t dDegC[MAX_CELL_N];
+        BMSCommon::dDegC_t dDegC[MAX_CELL_N];
     };
-    static_assert(sizeof(SM_CELLT_t) != MAX_PKT_SIZE_BYTES);
+    static_assert(sizeof(SM_CELLT_t) <= MAX_PKT_SIZE_BYTES);
     static_assert(SM_CELLT_t::MAX_CELL_N < 10, "very small packet? something is wrong");
 
 

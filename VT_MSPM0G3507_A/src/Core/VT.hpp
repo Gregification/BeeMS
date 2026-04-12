@@ -10,6 +10,7 @@
 
 #include "Core/common.h"
 #include "system.hpp"
+#include "BMSComms.hpp"
 #include "Middleware/BQ769x2/BQ76952.hpp"
 
 /** variables, functions, stuff... focused on the voltage tap. exists for organizational reasons */
@@ -17,6 +18,8 @@ namespace VT {
     using namespace System;
 
     constexpr uint8_t NUM_BBQs = 1;
+    static_assert(NUM_BBQs <= BMSCommon::Module::MAX_ICs);
+
     typedef uint16_t UNIT_uint; // a unsigned integer big enough to act as a bit mask for all cells per BBQ
 
     namespace Indicator {
@@ -26,7 +29,15 @@ namespace VT {
 
     namespace IL {
         const GPIO::GPIO
-                control     = GPIO::PA25;
+                _control     = GPIO::PA25;
+
+        /** returns fails if fails to set to desired value */
+        bool setEnable(bool);
+        /** returns what the software wants it set to */
+        bool getEnable();
+        /** returns true if IL is in OK state*/
+        bool getStatus();
+        bool isUserOverriding();
     }
 
     namespace BBQ {
@@ -37,10 +48,6 @@ namespace VT {
         bool storeSetting(buffersize_t idx, BQ76952::BQ76952SSetting const *);// TODO
         /** read from non volatile storage */
         bool recalSetting(buffersize_t idx, BQ76952::BQ76952SSetting *);// TODO
-        /** write to BBQ */
-        bool applySetting(BQ76952 &, BQ76952::BQ76952SSetting const *);// TODO
-        /** read from BBQ */
-        bool retreiveSetting(BQ76952 const &, BQ76952::BQ76952SSetting *);// TODO
     }
 
     /**
@@ -52,14 +59,16 @@ namespace VT {
 
         bool HRLV_IL_usr_dsrd           : 1;
         bool balancing_enable           : 1;
-        uint16_t cell_mV_min;
-        uint16_t cell_mV_max;
+        int16_t cell_dDegC_max = 600;
+        int16_t cell_dDegC_min = -20;
         uint16_t cellB_lower_limit_mV;     // MCU enforced lower limit for CB
 
         struct __attribute__((__packed__)) BBQ_t {
             uint8_t cellsBalancingAtOnce_MAX : 5;
             uint16_t cellPositionMask;
         } bbqs[NUM_BBQs];
+
+        uint8_t base_cell_number; // relative to the whole pack, not just this module
     };
     extern OpProfile_t opProfile;
 
@@ -87,18 +96,18 @@ namespace VT {
             GPIO::GPIO const & resetPin;
 
             enum class State_t : uint8_t {
+                OFF,
                 INIT,
                 INIT_VERI,              // verify init completed successfully
                 ON_NORMAL,
                 ON_ERROR_LATCH,         // latch in this state when error, until some sort of explicit user reset
                 SHUTDOWN,
                 SHUTDOWN_VERI,          // verify shutdown completed successfully
-                OFF,
             } state = State_t::INIT;
 
             uint8_t const cell_n;
             uint16_t cell_mV[MAX_CELLS_N];
-            uint16_t stack_cV;
+            uint16_t stack_dV;
             uint16_t die_dDegC;                 // degrees celsius (10mCl)
 
             enum class CB_OP_t : uint8_t {
@@ -114,16 +123,26 @@ namespace VT {
             uint16_t cellB_man_thresh_mV;
 
             struct __attribute__((__packed__)) SafetyStatus_t {
-                BQ76952::SafetyStatusA A;
-                BQ76952::SafetyStatusB B;
-                BQ76952::SafetyStatusC C;
+                BQ76952::SafetyStatusA A;   // set by BQ
+                BQ76952::SafetyStatusB B;   // set by BQ
+                BQ76952::SafetyStatusC C;   // set by BQ
+                union __attribute__((__packed__)) System_t {
+                    BMSCommon::SafteyStatus_t Raw;
+                    struct __attribute__((__packed__)) {
+                        uint8_t state : 4; // issue caused by bad BQ state
+                    };
+                } system;   // set by this software
+                static_assert(sizeof(System_t) == sizeof(BMSCommon::SafteyStatus_t)); // too big :( . no size requirement but it shouldnt need to be so big
+
             } safetyStatus;
+            BMSCommon::Module::STATE_e module_state;
 
             uint8_t _strikes;                   // internal counter of how many errors have accumulated
         } bbqs[NUM_BBQs];
         uint8_t user_selected_BQ;               // the BQ chip thats selected by the user for edits
 
         bool HRLV_IL_sw_dsrd            : 1;    // software desired state of IL enable
+        bool HRLV_IL_user_ovrd          : 1 = false;    // allow user override?
 
     };
     extern OpVars_t opVars;

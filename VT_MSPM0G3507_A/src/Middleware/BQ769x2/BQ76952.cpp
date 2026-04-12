@@ -137,6 +137,9 @@ bool BQ76952::setConfig(BQ76952SSetting const * config){
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::DSGFETProtectionsB, ARRANDN(config->Protection.dsgFetProtectionsB.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::DSGFETProtectionsC, ARRANDN(config->Protection.dsgFetProtectionsC.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::BodyDiodeThreshold, ARRANDN(config->Protection.bodyDiodeThreshold)))
+    if(setRegister(BQ769X2_PROTOCOL::RegAddr::CUVThreshold, ARRANDN(config->Protection.cell_undervoltage_threshold_506mV)))
+    if(setRegister(BQ769X2_PROTOCOL::RegAddr::CUVDelay, ARRANDN(config->Protection.cell_undervoltage_delay_506mV)))
+    if(setRegister(BQ769X2_PROTOCOL::RegAddr::CUVRecoveryHysteresis, ARRANDN(config->Protection.cell_undervoltage_hysteresis_506mV)))
 
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::DefaultAlarmMask, ARRANDN(config->Alarm.defaultAlarmMask.Raw)))
     if(setRegister(BQ769X2_PROTOCOL::RegAddr::SFAlertMaskA, ARRANDN(config->Alarm.sfAlertMaskA.Raw)))

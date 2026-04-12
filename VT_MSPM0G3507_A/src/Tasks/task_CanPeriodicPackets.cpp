@@ -18,8 +18,9 @@ void Task::task_CanPeriodicPackets(void *) {
         { // send status update
             SM_STATUS1_t d;
 
-            for(uint8_t i = 0; i < VT::NUM_BBQs; i++) {
-                switch(VT::opVars.bbqs[i].state) {
+            for(auto bbq : VT::opVars.bbqs) {
+                static_assert(VT::NUM_BBQs == 1, "rewrite to properly indicate state according to readiness of all IC's");
+                switch(bbq.state) {
                     case VT::OpVars_t::BBQ_t::State_t::OFF:
                     case VT::OpVars_t::BBQ_t::State_t::INIT_VERI:
                     case VT::OpVars_t::BBQ_t::State_t::INIT:
@@ -45,17 +46,16 @@ void Task::task_CanPeriodicPackets(void *) {
             for(int i = 0; i < VT::NUM_BBQs; i++) {
                 // translate device specific safety status to generic one.
                 // the compiler gets angry when i do a reinterpert cast. idk
-                static_assert(3 <= sizeof(d.ICSafetyStatus[0]));
-                static_assert(1 == sizeof(VT::opVars.bbqs[i].safetyStatus.A));
-                static_assert(1 == sizeof(VT::opVars.bbqs[i].safetyStatus.B));
-                static_assert(1 == sizeof(VT::opVars.bbqs[i].safetyStatus.C));
 
                 d.ICSafetyStatus[i] = 0;
                 d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.A.Raw;
-                d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.B.Raw << 8;
-                d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.C.Raw << 16;
+                d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.B.Raw;
+                d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.C.Raw;
+                d.ICSafetyStatus[i] |= VT::opVars.bbqs[i].safetyStatus.system.Raw;
+                if(d.ICSafetyStatus[i] == 0 && // in case of mismatched type sizes causing some bits to get dropped
+                        (VT::opVars.bbqs[i].safetyStatus.system.Raw || VT::opVars.bbqs[i].safetyStatus.C.Raw || VT::opVars.bbqs[i].safetyStatus.B.Raw || VT::opVars.bbqs[i].safetyStatus.A.Raw))
+                    d.ICSafetyStatus[i] |= 0xF;
             }
-            static_assert(sizeof(d.ICSafetyStatus[0]) >= sizeof(VT::opVars.bbqs[0].safetyStatus));
 
             sendPacket(J1939_PF_e::SM, PktSM_JS_e::STATUS1, 0, &d, sizeof(d));
         }
@@ -78,12 +78,14 @@ void Task::task_CanPeriodicPackets(void *) {
             sendPacket(J1939_PF_e::SM, PktSM_JS_e::STATUS2, 0, &d, sizeof(d));
         }
 
-        vTaskDelay(pdMS_TO_TICKS(VT::opProfile.canPacketSpacing_mS));
         { // send cell voltages
             SM_CELLV_t d;
             constexpr unsigned int CELL_N = VT::OpVars_t::BBQ_t::MAX_CELLS_N * VT::NUM_BBQs;
             for(uint16_t i = 0; i < CELL_N;) {
+                vTaskDelay(pdMS_TO_TICKS(VT::opProfile.canPacketSpacing_mS));
+
                 d.base_cell = i;
+                static_assert(sizeof(d.base_cell) >= sizeof(VT::opProfile.base_cell_number), "undersized variable");
 
                 if(i + d.MAX_CELL_N < CELL_N)   d.cellCount = d.MAX_CELL_N;
                 else                            d.cellCount = CELL_N - i;
@@ -94,6 +96,7 @@ void Task::task_CanPeriodicPackets(void *) {
                 }
 
                 i += d.cellCount;
+                d.base_cell += VT::opProfile.base_cell_number;
                 sendPacket(J1939_PF_e::SM, PktSM_JS_e::CELLV, 0, &d, sizeof(d));
             }
         }

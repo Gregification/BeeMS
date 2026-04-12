@@ -20,10 +20,23 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
         default: return false;
 
         case RegAddr::HW_ID:        *out = System::mcuID; break;
-        case RegAddr::SW_VER:       *out = 3; break;
+        case RegAddr::UNIT_ID:      *out = VT::getID(); break;
+        case RegAddr::SW_VER:       *out = PROJECT_VERSION_N; break;
+
+        case RegAddr::MODULE_CELL_REPORTING_OFFSET: *out = VT::opProfile.base_cell_number; break;
+        case RegAddr::MODULE_CELL_COUNT: {
+                *out = 0;
+                for(auto const &bq : VT::opProfile.bbqs) {
+                    auto ce = bq.cellPositionMask;
+                    while(ce != 0) {
+                        ce >>= 1;
+                        *out += 1;
+                    }
+                }
+            } break;
 
         case RegAddr::CELL_POSITIONS_mask:      *out = VT::getSelectedBBQprof().cellPositionMask; break;
-        case RegAddr::STACK_cV:     *out = VT::getSelectedBBQvar().stack_cV; break;
+        case RegAddr::STACK_cV:     *out = VT::getSelectedBBQvar().stack_dV; break;
         case RegAddr::CELL1_mV:     *out = VT::getSelectedBBQvar().cell_mV[0]; break;
         case RegAddr::CELL2_mV:     *out = VT::getSelectedBBQvar().cell_mV[1]; break;
         case RegAddr::CELL3_mV:     *out = VT::getSelectedBBQvar().cell_mV[2]; break;
@@ -68,9 +81,10 @@ bool Networking::Modbus::VTRegisters::getReg(uint16_t addr, uint16_t * out) {
         case RegAddr::CELL13_CB_active:     *out = VT::getSelectedBBQvar().cellB_curr_active & BV(12); break;
         case RegAddr::CELL14_CB_active:     *out = VT::getSelectedBBQvar().cellB_curr_active & BV(13); break;
 
-        case RegAddr::BQ_SAFETY_STATUS_A:   *out = VT::getSelectedBBQvar().safetyStatus.A.Raw; break;
-        case RegAddr::BQ_SAFETY_STATUS_B:   *out = VT::getSelectedBBQvar().safetyStatus.B.Raw; break;
-        case RegAddr::BQ_SAFETY_STATUS_C:   *out = VT::getSelectedBBQvar().safetyStatus.C.Raw; break;
+        case RegAddr::SAFETY_STATUS_BQ_A:   *out = VT::getSelectedBBQvar().safetyStatus.A.Raw; break;
+        case RegAddr::SAFETY_STATUS_BQ_B:   *out = VT::getSelectedBBQvar().safetyStatus.B.Raw; break;
+        case RegAddr::SAFETY_STATUS_BQ_C:   *out = VT::getSelectedBBQvar().safetyStatus.C.Raw; break;
+        case RegAddr::SAFETY_STATUS_SYSTEM: *out = VT::getSelectedBBQvar().safetyStatus.system.Raw != 0; break;
 
     }
 
@@ -84,6 +98,8 @@ bool Networking::Modbus::VTRegisters::setReg(uint16_t addr, uint16_t val) {
             System::UART::uart_ui.putu32d(addr);
             System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
             return false;
+
+        case RegAddr::MODULE_CELL_REPORTING_OFFSET: VT::opProfile.base_cell_number = val; break;
 
         case RegAddr::CELL_POSITIONS_mask: VT::getSelectedBBQprof().cellPositionMask = val; break;
 

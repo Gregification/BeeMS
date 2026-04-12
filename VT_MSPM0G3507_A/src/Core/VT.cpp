@@ -15,9 +15,7 @@ namespace VT {
 
     OpProfile_t opProfile = {
              .balancing_enable  = false,
-             .cell_mV_min       = 1300,
-             .cell_mV_max       = 4300,
-             .canPacketSpacing_mS   = 20,
+             .canPacketSpacing_mS   = 15,
         };
 
     OpVars_t opVars = {
@@ -204,6 +202,9 @@ namespace VT::BBQ {
                      .SCDL = 1, // Bit 6: Short Circuit in Discharge Latch (Default: 1)
                      .OCD3 = 1, // Bit 7: Overcurrent in Discharge 3rd Tier Protection (Default: 1)
                  },
+                 .cell_undervoltage_threshold_506mV     = 19,   // units of 50.6mV, [20,80]. 48=2.4288,19=0.9614
+                 .cell_undervoltage_delay_506mV         = 20,   // units of 3.3mS, [1,2047]. +10ms overhead
+                 .cell_undervoltage_hysteresis_506mV    = 2,    // units of 50.6mV, [2,20]. recovers at thresh + hyst
              },
 
              .Alarm = {
@@ -355,8 +356,8 @@ namespace VT::BBQ {
                   .maxCellTemp_C     = 60,
                   .maxInternalTemp_C = 80,
                   .cellBalanceInterval_s = 10,
-                  .cellBalanceMaxCells   = 16,
-                  .cellBalanceMinCellV_Charge_mV = 2000,
+                  .cellBalanceMaxCells   = 0,
+                  .cellBalanceMinCellV_Charge_mV = 2200,
                   .cellBalanceMinDelta_Charge_mV = 50,
                   .cellBalanceStopDelta_Charge_mV= 10,
                   .cellBalanceMinCellV_Relax_mV  = 2200,
@@ -392,14 +393,14 @@ void VT::preScheduler_init(){
     DL_GPIO_enableOutput(GPIOPINPUX(Indicator::scheduler));
 
     DL_GPIO_initDigitalOutputFeatures(
-            IL::control.iomux,
+            IL::_control.iomux,
             DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
             DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_DOWN,
             DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
             DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
         );
-    DL_GPIO_clearPins(GPIOPINPUX(IL::control));
-    DL_GPIO_enableOutput(GPIOPINPUX(IL::control));
+    DL_GPIO_clearPins(GPIOPINPUX(IL::_control));
+    DL_GPIO_enableOutput(GPIOPINPUX(IL::_control));
 }
 
 void VT::postScheduler_init(){
@@ -413,7 +414,7 @@ void VT::postScheduler_init(){
        }
 
        for(auto & i : opVars.bbqs) {
-           i.stack_cV = 0;
+           i.stack_dV = 0;
            i.die_dDegC = 0;
            i.cellB_curr_active = 0;
            for(auto & j : i.therms_100mCl)
@@ -426,6 +427,44 @@ void VT::postScheduler_init(){
    }
 }
 
+bool VT::IL::setEnable(bool v) {
+    opVars.HRLV_IL_sw_dsrd = v;
+
+    return getStatus();
+}
+
+bool VT::IL::getEnable() {
+    return opVars.HRLV_IL_sw_dsrd;
+}
+
+bool VT::IL::getStatus() {
+    // 1. if overridden, use overridden value
+    // 2. if user wants it on, software must also want it on
+
+    do {
+        if(opVars.HRLV_IL_user_ovrd ) { // if use override
+            if(opProfile.HRLV_IL_usr_dsrd)
+                _control.set();
+            else
+                _control.clear();
+            break;
+        }
+
+        if(!opProfile.HRLV_IL_usr_dsrd) { // if user wants it off
+            _control.clear();
+             break;
+        }
+
+        if(opVars.HRLV_IL_sw_dsrd)
+            _control.set();
+        else
+            _control.clear();
+
+    } while(false);
+
+    return _control.getOutput();
+}
+
 /** write to non volatile storage */
 bool VT::BBQ::storeSetting(buffersize_t i, BQ76952::BQ76952SSetting const *) {
     return false;
@@ -433,16 +472,6 @@ bool VT::BBQ::storeSetting(buffersize_t i, BQ76952::BQ76952SSetting const *) {
 
 /** read from non volatile storage */
 bool VT::BBQ::recalSetting(buffersize_t i, BQ76952::BQ76952SSetting *) {
-    return false;
-}
-
-/** write to BBQ */
-bool VT::BBQ::applySetting(BQ76952 & bq, BQ76952::BQ76952SSetting const *) {
-    return false;
-}
-
-/** read from BBQ */
-bool VT::BBQ::retreiveSetting(BQ76952 const & bq, BQ76952::BQ76952SSetting *) {
     return false;
 }
 
