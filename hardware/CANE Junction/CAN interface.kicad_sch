@@ -5,7 +5,7 @@
 	(uuid "aecf819a-578c-4cfd-947c-62f2de7e5bbe")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Connector_Generic:Conn_02x03_Top_Bottom"
+		(symbol "Connector_Generic:Conn_01x04"
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -16,7 +16,7 @@
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "J"
-				(at 1.27 5.08 0)
+				(at 0 5.08 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -25,8 +25,8 @@
 					)
 				)
 			)
-			(property "Value" "Conn_02x03_Top_Bottom"
-				(at 1.27 -5.08 0)
+			(property "Value" "Conn_01x04"
+				(at 0 -7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -57,7 +57,7 @@
 					)
 				)
 			)
-			(property "Description" "Generic connector, double row, 02x03, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -79,7 +79,7 @@
 					)
 				)
 			)
-			(property "ki_fp_filters" "Connector*:*_2x??_*"
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -90,10 +90,10 @@
 					)
 				)
 			)
-			(symbol "Conn_02x03_Top_Bottom_1_1"
+			(symbol "Conn_01x04_1_1"
 				(rectangle
 					(start -1.27 3.81)
-					(end 3.81 -3.81)
+					(end 1.27 -6.35)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -136,30 +136,8 @@
 					)
 				)
 				(rectangle
-					(start 3.81 2.667)
-					(end 2.54 2.413)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 3.81 0.127)
-					(end 2.54 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start 3.81 -2.413)
-					(end 2.54 -2.667)
+					(start -1.27 -4.953)
+					(end 0 -5.207)
 					(stroke
 						(width 0.1524)
 						(type default)
@@ -223,7 +201,7 @@
 					)
 				)
 				(pin passive line
-					(at 7.62 2.54 180)
+					(at -5.08 -5.08 0)
 					(length 3.81)
 					(name "Pin_4"
 						(effects
@@ -233,42 +211,6 @@
 						)
 					)
 					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 0 180)
-					(length 3.81)
-					(name "Pin_5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 7.62 -2.54 180)
-					(length 3.81)
-					(name "Pin_6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -615,6 +557,258 @@
 						)
 					)
 					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Device:R_Pack04_SIP_Split"
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "RN"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R_Pack04_SIP_Split"
+				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Resistor_THT:R_Array_SIP8"
+				(at -2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "http://www.vishay.com/docs/31509/csc.pdf"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "4 resistor network, parallel topology, SIP package, split"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R network parallel topology isolated"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R?Array?SIP*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_Pack04_SIP_Split_0_1"
+				(rectangle
+					(start 1.016 2.54)
+					(end -1.016 -2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_Pack04_SIP_Split_1_1"
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "R1.1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "R1.2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "R_Pack04_SIP_Split_2_1"
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "R2.1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "R2.2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "R_Pack04_SIP_Split_3_1"
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "R3.1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "R3.2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "R_Pack04_SIP_Split_4_1"
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "R4.1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "R4.2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3499,16 +3693,16 @@
 		(uuid "159edcc0-fe12-4866-94dc-23b386866cc3")
 	)
 	(junction
+		(at 43.18 80.01)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "17016704-de49-40b4-a338-19db186c6f9b")
+	)
+	(junction
 		(at 129.54 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "1b198ada-9b58-40a0-9d87-e7bb3ec7e45c")
-	)
-	(junction
-		(at 38.1 72.39)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "4155c42a-669c-401f-9355-c055276a24fd")
 	)
 	(junction
 		(at 43.18 72.39)
@@ -3523,7 +3717,7 @@
 		(uuid "4776e53d-01dd-4797-9a52-83e07560ec07")
 	)
 	(junction
-		(at 43.18 85.09)
+		(at 43.18 88.9)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "51b1069b-d2d2-45ef-afc9-e00aad8e460d")
@@ -3559,10 +3753,28 @@
 		(uuid "6bf591fe-245d-4e9f-8bde-dd183b8f2934")
 	)
 	(junction
+		(at 38.1 72.39)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6ccb9e40-06e1-4c4b-a8ed-24b81d560fb0")
+	)
+	(junction
 		(at 62.23 57.15)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7e5ce76d-a4dc-41e0-a199-fbd9cea01749")
+	)
+	(junction
+		(at 38.1 88.9)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8716744d-d9c5-4289-9f10-09732d4b7a9d")
+	)
+	(junction
+		(at 97.79 113.03)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "88df7d02-a49c-4c6d-abce-e83076adfd6e")
 	)
 	(junction
 		(at 40.64 62.23)
@@ -3595,12 +3807,6 @@
 		(uuid "c35be34b-bd01-4c90-a9db-c1619116cd19")
 	)
 	(junction
-		(at 38.1 85.09)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d4633a64-0c97-4e9a-89a9-fd3af5fbaaa0")
-	)
-	(junction
 		(at 101.6 57.15)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3619,22 +3825,10 @@
 		(uuid "ded66660-eea2-4f40-b9c4-fd05a35f1e8b")
 	)
 	(junction
-		(at 97.79 113.03)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "e16426b5-7ba0-4667-a143-4dbb81dcb2bf")
-	)
-	(junction
 		(at 134.62 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e6c9c093-eace-4388-9211-71426d31a919")
-	)
-	(junction
-		(at 43.18 78.74)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ed037546-cb49-4631-b6cd-1268e41262bf")
 	)
 	(junction
 		(at 129.54 115.57)
@@ -3664,16 +3858,6 @@
 	)
 	(wire
 		(pts
-			(xy 40.64 78.74) (xy 43.18 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "06f018a4-b4a2-4f5a-8c86-b46d78ab13e8")
-	)
-	(wire
-		(pts
 			(xy 143.51 120.65) (xy 143.51 123.19)
 		)
 		(stroke
@@ -3684,7 +3868,7 @@
 	)
 	(wire
 		(pts
-			(xy 105.41 113.03) (xy 109.22 113.03)
+			(xy 107.95 113.03) (xy 109.22 113.03)
 		)
 		(stroke
 			(width 0)
@@ -3694,7 +3878,7 @@
 	)
 	(wire
 		(pts
-			(xy 38.1 72.39) (xy 38.1 76.2)
+			(xy 38.1 72.39) (xy 38.1 77.47)
 		)
 		(stroke
 			(width 0)
@@ -3731,16 +3915,6 @@
 			(type default)
 		)
 		(uuid "1d7e38c1-e175-416b-87ed-a124e83e3f12")
-	)
-	(wire
-		(pts
-			(xy 27.94 36.83) (xy 33.02 36.83)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1ed8c0d7-ac2f-4cb3-86e8-c1b6a3947a8b")
 	)
 	(wire
 		(pts
@@ -3794,6 +3968,16 @@
 	)
 	(wire
 		(pts
+			(xy 29.21 72.39) (xy 30.48 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c810928-dd62-4ea4-a848-6922ae1cc7ac")
+	)
+	(wire
+		(pts
 			(xy 139.7 54.61) (xy 129.54 54.61)
 		)
 		(stroke
@@ -3811,6 +3995,16 @@
 			(type default)
 		)
 		(uuid "45abd07a-f460-4217-b5c2-b4d4413df0e3")
+	)
+	(wire
+		(pts
+			(xy 137.16 85.09) (xy 134.62 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "47d33d7f-219c-4728-b6a1-e7f04b685d00")
 	)
 	(wire
 		(pts
@@ -3834,6 +4028,16 @@
 	)
 	(wire
 		(pts
+			(xy 20.32 72.39) (xy 21.59 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5e315ca8-8c99-4568-9f42-394b1e6dd703")
+	)
+	(wire
+		(pts
 			(xy 101.6 90.17) (xy 111.76 90.17)
 		)
 		(stroke
@@ -3851,6 +4055,16 @@
 			(type default)
 		)
 		(uuid "6c2c325c-9d12-4c7d-8dbb-1fc660a1ab86")
+	)
+	(wire
+		(pts
+			(xy 40.64 80.01) (xy 43.18 80.01)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6f1c14db-6718-4d3a-a151-df8a8a6bacc9")
 	)
 	(polyline
 		(pts
@@ -3945,7 +4159,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 85.09) (xy 43.18 83.82)
+			(xy 43.18 88.9) (xy 43.18 87.63)
 		)
 		(stroke
 			(width 0)
@@ -3982,16 +4196,6 @@
 			(type default)
 		)
 		(uuid "88588ee2-1a79-4a32-8ccd-ebb2d4e3f361")
-	)
-	(wire
-		(pts
-			(xy 30.48 72.39) (xy 27.94 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8a80a6e7-d4ca-43a1-91d5-3e14ffe69ec0")
 	)
 	(wire
 		(pts
@@ -4095,6 +4299,16 @@
 	)
 	(wire
 		(pts
+			(xy 129.54 85.09) (xy 127 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1d9b97d-613c-4da7-81c5-5ffb65a2d22b")
+	)
+	(wire
+		(pts
 			(xy 64.77 66.04) (xy 71.12 66.04)
 		)
 		(stroke
@@ -4115,7 +4329,7 @@
 	)
 	(wire
 		(pts
-			(xy 38.1 81.28) (xy 38.1 85.09)
+			(xy 38.1 82.55) (xy 38.1 88.9)
 		)
 		(stroke
 			(width 0)
@@ -4182,6 +4396,16 @@
 			(type default)
 		)
 		(uuid "c45a4eea-67fe-4894-8a98-a6ce72a5126c")
+	)
+	(wire
+		(pts
+			(xy 100.33 113.03) (xy 97.79 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cd599c26-9629-45ba-938c-1edf5ce832dd")
 	)
 	(wire
 		(pts
@@ -4275,16 +4499,6 @@
 	)
 	(wire
 		(pts
-			(xy 97.79 113.03) (xy 100.33 113.03)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea340db0-79d0-4d54-9dcc-bf9d1eff8c1e")
-	)
-	(wire
-		(pts
 			(xy 147.32 54.61) (xy 139.7 54.61)
 		)
 		(stroke
@@ -4315,7 +4529,7 @@
 	)
 	(wire
 		(pts
-			(xy 54.61 85.09) (xy 54.61 81.28)
+			(xy 54.61 88.9) (xy 54.61 81.28)
 		)
 		(stroke
 			(width 0)
@@ -4325,7 +4539,7 @@
 	)
 	(wire
 		(pts
-			(xy 38.1 85.09) (xy 43.18 85.09)
+			(xy 38.1 88.9) (xy 43.18 88.9)
 		)
 		(stroke
 			(width 0)
@@ -4345,7 +4559,7 @@
 	)
 	(wire
 		(pts
-			(xy 20.32 85.09) (xy 38.1 85.09)
+			(xy 20.32 88.9) (xy 38.1 88.9)
 		)
 		(stroke
 			(width 0)
@@ -4365,7 +4579,7 @@
 	)
 	(wire
 		(pts
-			(xy 43.18 85.09) (xy 54.61 85.09)
+			(xy 43.18 88.9) (xy 54.61 88.9)
 		)
 		(stroke
 			(width 0)
@@ -4383,16 +4597,6 @@
 		)
 		(uuid "fefb02b0-6e27-4197-92fc-13ef933017fc")
 	)
-	(wire
-		(pts
-			(xy 22.86 72.39) (xy 20.32 72.39)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ffc6aa03-42ac-43e1-b561-246d28141d9f")
-	)
 	(label "LV-"
 		(at 88.9 66.04 180)
 		(effects
@@ -4402,26 +4606,6 @@
 			(justify right bottom)
 		)
 		(uuid "09e1d1c8-10d8-4f43-a732-1dc8c222bee8")
-	)
-	(label "IL+"
-		(at 24.13 25.4 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "0ea71608-660c-4fe8-a1d7-5f87e59f30d5")
-	)
-	(label "LV-"
-		(at 36.83 27.94 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "0fc6cefd-9cfc-4e6e-8030-4bf461a62c48")
 	)
 	(label "5v"
 		(at 95.25 113.03 180)
@@ -4433,25 +4617,15 @@
 		)
 		(uuid "1a76a3e2-71ce-4daf-a540-86724bcb4faa")
 	)
-	(label "CAN+"
-		(at 24.13 30.48 180)
+	(label "IL-"
+		(at 24.13 19.05 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "1c28335b-fc22-45f4-b985-58963f4ffc36")
-	)
-	(label "LV+"
-		(at 24.13 27.94 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "21165b8a-d97d-42ef-8ceb-dbd46d36f726")
+		(uuid "1bb4113e-2e41-4ad6-9133-402e3b55b186")
 	)
 	(label "LV-"
 		(at 109.22 62.23 180)
@@ -4462,6 +4636,16 @@
 			(justify right bottom)
 		)
 		(uuid "29b2e453-8b37-4742-a60f-2cbe4a514dad")
+	)
+	(label "CAN+"
+		(at 24.13 24.13 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "2c6c1390-4ba1-4d23-8167-f837d2e61d00")
 	)
 	(label "CAN+"
 		(at 88.9 55.88 180)
@@ -4483,16 +4667,6 @@
 		)
 		(uuid "3d1e7464-17ac-478d-9109-ffcfe66012b8")
 	)
-	(label "IL-"
-		(at 36.83 25.4 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5f181740-cb9a-4be9-ad45-0538cb6318f9")
-	)
 	(label "CAN-"
 		(at 88.9 60.96 180)
 		(effects
@@ -4504,7 +4678,7 @@
 		(uuid "8c6c2b0a-5af9-4580-8a83-4039a3ce10e6")
 	)
 	(label "LV-"
-		(at 20.32 85.09 180)
+		(at 20.32 88.9 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4512,6 +4686,26 @@
 			(justify right bottom)
 		)
 		(uuid "92b999d8-5c3d-4a4c-a982-24cc6105b616")
+	)
+	(label "CAN-"
+		(at 24.13 26.67 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a343b0ad-8da6-42f5-b5c2-753418ff99de")
+	)
+	(label "IL+"
+		(at 24.13 21.59 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "a4837f68-7943-481b-a39f-962a0c01e8ac")
 	)
 	(label "5v"
 		(at 71.12 57.15 0)
@@ -4543,26 +4737,6 @@
 		)
 		(uuid "ae49925b-2b10-4201-9217-aa87b0a06118")
 	)
-	(label "CAN-"
-		(at 36.83 30.48 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ae853b0b-e73c-4e84-b58c-6175ebc53b92")
-	)
-	(label "IL+"
-		(at 27.94 36.83 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "c5d23269-238a-48a2-948f-cad70ca12394")
-	)
 	(label "CAN+"
 		(at 101.6 85.09 180)
 		(effects
@@ -4582,16 +4756,6 @@
 			(justify right bottom)
 		)
 		(uuid "d28d846b-1fbc-4602-b818-1243f159c536")
-	)
-	(label "IL-"
-		(at 33.02 36.83 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "d634e0fe-ec9c-4927-8d40-139d6eba428b")
 	)
 	(label "5v_ldo_ref"
 		(at 44.45 72.39 0)
@@ -4635,7 +4799,7 @@
 	)
 	(hierarchical_label "EN term"
 		(shape input)
-		(at 127 85.09 0)
+		(at 137.16 85.09 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4845,155 +5009,6 @@
 				)
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
 					(reference "C205")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 25.4 72.39 270)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "10150449-c95f-4b9c-bfbe-aca699f83156")
-		(property "Reference" "R201"
-			(at 25.4 67.056 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "40.2k"
-			(at 25.4 69.596 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD4022F?qs=sGAEpiMZZMvdGkrng054txknJuA7M8fa4wn7EqIHwNI%3D"
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "specs" "40.2k ohm, 250mW, 1%, 150V, 100ppm, -55C, +155C"
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "0.02"
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Mouser Part Number" ""
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Field10" ""
-			(at 25.4 72.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "ee5f361c-1e2c-4b1d-bb50-55bbaa6d7f77")
-		)
-		(pin "1"
-			(uuid "05ee2e4c-6445-44a5-a1dc-3a1188b1f185")
-		)
-		(instances
-			(project "CANE Junction"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
-					(reference "R401")
-					(unit 1)
-				)
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
-					(reference "R201")
 					(unit 1)
 				)
 			)
@@ -5828,10 +5843,10 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp yes)
 		(uuid "34e78953-6faf-449e-a59f-7cc5d8b5f274")
 		(property "Reference" "C207"
 			(at 146.05 116.8462 0)
@@ -6007,8 +6022,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 102.87 113.03 270)
+		(lib_id "Connector_Generic:Conn_01x04")
+		(at 29.21 21.59 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6016,29 +6031,32 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "3c5759d3-7f85-4dde-976c-9e3f2d8e8c21")
-		(property "Reference" "R204"
-			(at 102.87 107.696 90)
+		(fields_autoplaced yes)
+		(uuid "38d98f5d-7da8-4044-bfc9-2acc5fc35eb5")
+		(property "Reference" "J1"
+			(at 31.75 21.5899 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "40.2k"
-			(at 102.87 110.236 90)
+		(property "Value" "glv"
+			(at 31.75 24.1299 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 102.87 113.03 0)
+		(property "Footprint" "Connector_Molex:Molex_Micro-Fit_3.0_43650-0400_1x04_P3.00mm_Horizontal"
+			(at 29.21 21.59 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6049,7 +6067,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 102.87 113.03 0)
+			(at 29.21 21.59 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6059,74 +6077,8 @@
 				)
 			)
 		)
-		(property "Description" "Resistor, US symbol"
-			(at 102.87 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD4022F?qs=sGAEpiMZZMvdGkrng054txknJuA7M8fa4wn7EqIHwNI%3D"
-			(at 102.87 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "specs" "40.2k ohm, 250mW, 1%, 150V, 100ppm, -55C, +155C"
-			(at 102.87 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "0.02"
-			(at 102.87 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 102.87 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Mouser Part Number" ""
-			(at 102.87 113.03 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Field10" ""
-			(at 102.87 113.03 0)
+		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 29.21 21.59 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6137,332 +6089,25 @@
 			)
 		)
 		(pin "2"
-			(uuid "19a04e1a-2d76-478b-a5d3-353c6fbca719")
+			(uuid "c06f9f28-0633-4b2d-a7e2-90b80bdc66ef")
 		)
 		(pin "1"
-			(uuid "08d92951-3539-4aa9-b1c8-96660efa95ee")
-		)
-		(instances
-			(project "CANE Junction"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
-					(reference "R404")
-					(unit 1)
-				)
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
-					(reference "R204")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_02x03_Top_Bottom")
-		(at 31.75 27.94 0)
-		(mirror y)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "4c0948a8-5f19-4d61-80a3-c3cbc9143363")
-		(property "Reference" "J201"
-			(at 30.48 19.304 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "glv interface"
-			(at 30.48 21.59 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "zzLocalLibraries-Footprints:Molex_Micro-Fit_3.0_43045-0600_2x03_P3.00mm_Horizontal"
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Generic connector, double row, 02x03, top/bottom pin numbering scheme (row 1: 1...pins_per_row, row2: pins_per_row+1 ... num_pins), script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Molex/43045-0600?qs=mrPiglD9aYJ8CzJ%2FE2PNbw%3D%3D&srsltid=AfmBOop7-nikRF2atEfFslZtuPWfqFOihNLqcdVlYseRCGCFOiFBx6Nk"
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "1.19"
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x1" "1.46"
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "note" ""
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser " ""
-			(at 31.75 27.94 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "5"
-			(uuid "f0ad301e-d5fa-463b-a26f-5694455d15b1")
-		)
-		(pin "6"
-			(uuid "e69e0ea5-3a07-4e74-b91d-fa15de416574")
-		)
-		(pin "1"
-			(uuid "996b5d26-5d74-435d-b779-17ff1b8658a7")
-		)
-		(pin "2"
-			(uuid "65442410-731b-49ac-b961-d1f089f79228")
+			(uuid "7660613f-c933-4b74-a78b-5a8feb7384bf")
 		)
 		(pin "3"
-			(uuid "a3c0e8d2-b4e2-4cd0-81c1-a80727ab1d12")
+			(uuid "a1311e34-c0f9-4c0b-a2d0-8dad2468c0b7")
 		)
 		(pin "4"
-			(uuid "fbc52eac-8fd0-4919-9928-56b19370f586")
+			(uuid "32ced04e-e96c-4bbc-ada4-2ad8c6d40874")
 		)
 		(instances
 			(project "CANE Junction"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
-					(reference "J401")
+					(reference "J2")
 					(unit 1)
 				)
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
-					(reference "J201")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 43.18 76.2 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "609eb454-dcfa-4810-970f-2d3b670c7672")
-		(property "Reference" "R202"
-			(at 44.958 74.93 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "40.2k"
-			(at 44.958 77.47 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD4022F?qs=sGAEpiMZZMvdGkrng054txknJuA7M8fa4wn7EqIHwNI%3D"
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "specs" "40.2k ohm, 250mW, 1%, 150V, 100ppm, -55C, +155C"
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "0.02"
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Mouser Part Number" ""
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Field10" ""
-			(at 43.18 76.2 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "8fe44f90-a345-47da-9d32-f9018f09786a")
-		)
-		(pin "1"
-			(uuid "0a2c7f6f-f2a4-4e5d-9923-5179ff308661")
-		)
-		(instances
-			(project "CANE Junction"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
-					(reference "R402")
-					(unit 1)
-				)
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
-					(reference "R202")
+					(reference "J1")
 					(unit 1)
 				)
 			)
@@ -6474,10 +6119,10 @@
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
+		(in_bom no)
+		(on_board no)
+		(in_pos_files no)
+		(dnp yes)
 		(uuid "81bf33bd-d5c7-4115-ad19-ec241038feb8")
 		(property "Reference" "C206"
 			(at 142.24 57.1562 0)
@@ -6756,6 +6401,141 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R_Pack04_SIP_Split")
+		(at 25.4 72.39 90)
+		(unit 3)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "8ea849a4-dc84-4b78-8247-cc343548ccb5")
+		(property "Reference" "RN1"
+			(at 25.4 66.04 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "56K"
+			(at 25.4 68.58 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "zzLocalLibraries-Footprints:R_array_YCJ164_4"
+			(at 25.4 74.422 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.vishay.com/docs/31509/csc.pdf"
+			(at 25.4 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "4 resistor network, parallel topology, SIP package, split"
+			(at 25.4 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/YC164-JR-0756KL?qs=yNCrj0CQcyIPyhfZWK%252BbGg%3D%3D"
+			(at 25.4 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x1" "0.1"
+			(at 25.4 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x10" "0.042"
+			(at 25.4 72.39 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "25ff6cd3-ddda-40e3-a3c8-21a85b24c86e")
+		)
+		(pin "5"
+			(uuid "97392cfb-9c05-43fd-9361-a6081fa7de59")
+		)
+		(pin "4"
+			(uuid "42b3a7a2-5295-4dcf-81aa-3b2fbfc28a43")
+		)
+		(pin "7"
+			(uuid "1e3c6aa6-22be-40dc-b829-76a472314878")
+		)
+		(pin "1"
+			(uuid "95eeb1f2-94bc-443b-9220-586858fad7d7")
+		)
+		(pin "6"
+			(uuid "1dd463f3-6706-480f-8388-808f54955017")
+		)
+		(pin "2"
+			(uuid "e5f305e6-0750-4228-a682-7c24f5ab2a6f")
+		)
+		(pin "8"
+			(uuid "d8c4cb78-5e51-40d5-a7e9-0dcf4f0a0f41")
+		)
+		(instances
+			(project "CANE Junction"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
+					(reference "RN2")
+					(unit 3)
+				)
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
+					(reference "RN1")
+					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "zzLocalLibrary:ESD2CAN36DBZRQ1")
 		(at 93.98 66.04 180)
 		(unit 1)
@@ -6840,6 +6620,405 @@
 				)
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
 					(reference "CR201")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Pack04_SIP_Split")
+		(at 104.14 113.03 90)
+		(unit 4)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9cb4bee5-a8ea-41b1-884a-7ed63bb76a05")
+		(property "Reference" "RN1"
+			(at 104.14 106.68 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "56K"
+			(at 104.14 109.22 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "zzLocalLibraries-Footprints:R_array_YCJ164_4"
+			(at 104.14 115.062 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.vishay.com/docs/31509/csc.pdf"
+			(at 104.14 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "4 resistor network, parallel topology, SIP package, split"
+			(at 104.14 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/YC164-JR-0756KL?qs=yNCrj0CQcyIPyhfZWK%252BbGg%3D%3D"
+			(at 104.14 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x1" "0.1"
+			(at 104.14 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x10" "0.042"
+			(at 104.14 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "25ff6cd3-ddda-40e3-a3c8-21a85b24c86f")
+		)
+		(pin "5"
+			(uuid "97392cfb-9c05-43fd-9361-a6081fa7de5a")
+		)
+		(pin "4"
+			(uuid "42b3a7a2-5295-4dcf-81aa-3b2fbfc28a44")
+		)
+		(pin "7"
+			(uuid "1e3c6aa6-22be-40dc-b829-76a472314879")
+		)
+		(pin "1"
+			(uuid "95eeb1f2-94bc-443b-9220-586858fad7d8")
+		)
+		(pin "6"
+			(uuid "1dd463f3-6706-480f-8388-808f54955018")
+		)
+		(pin "2"
+			(uuid "e5f305e6-0750-4228-a682-7c24f5ab2a70")
+		)
+		(pin "8"
+			(uuid "d8c4cb78-5e51-40d5-a7e9-0dcf4f0a0f42")
+		)
+		(instances
+			(project "CANE Junction"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
+					(reference "RN2")
+					(unit 4)
+				)
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
+					(reference "RN1")
+					(unit 4)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 132.08 85.09 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a9dff375-d7f2-48ca-8439-1bfc89933b9a")
+		(property "Reference" "R406"
+			(at 132.08 80.264 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "750"
+			(at 132.08 82.804 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 132.08 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 132.08 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 132.08 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP0805FTD750R?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ959vlpOMTL6aa89yaL2EFqmA%3D%3D"
+			(at 132.08 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "specs" "750R, 250mW, 1%, anti-sulf, 100ppm,200V, -55C, +155C"
+			(at 132.08 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x1" "0.1"
+			(at 132.08 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x10" "0.012"
+			(at 132.08 85.09 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "9a66fac5-d1a5-4f6c-9096-5eac80f62b87")
+		)
+		(pin "1"
+			(uuid "1e5f6447-10a8-48ba-a118-a9bb2572b209")
+		)
+		(instances
+			(project "CANE Junction"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
+					(reference "R407")
+					(unit 1)
+				)
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
+					(reference "R406")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Pack04_SIP_Split")
+		(at 43.18 83.82 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "aa491e5d-1deb-4195-a1e7-578bc9e34cd7")
+		(property "Reference" "RN1"
+			(at 45.72 82.5499 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "56K"
+			(at 45.72 85.0899 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "zzLocalLibraries-Footprints:R_array_YCJ164_4"
+			(at 41.148 83.82 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "http://www.vishay.com/docs/31509/csc.pdf"
+			(at 43.18 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "4 resistor network, parallel topology, SIP package, split"
+			(at 43.18 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/YC164-JR-0756KL?qs=yNCrj0CQcyIPyhfZWK%252BbGg%3D%3D"
+			(at 43.18 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x1" "0.1"
+			(at 43.18 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x10" "0.042"
+			(at 43.18 83.82 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "25ff6cd3-ddda-40e3-a3c8-21a85b24c870")
+		)
+		(pin "5"
+			(uuid "97392cfb-9c05-43fd-9361-a6081fa7de5b")
+		)
+		(pin "4"
+			(uuid "42b3a7a2-5295-4dcf-81aa-3b2fbfc28a45")
+		)
+		(pin "7"
+			(uuid "1e3c6aa6-22be-40dc-b829-76a47231487a")
+		)
+		(pin "1"
+			(uuid "95eeb1f2-94bc-443b-9220-586858fad7d9")
+		)
+		(pin "6"
+			(uuid "1dd463f3-6706-480f-8388-808f54955019")
+		)
+		(pin "2"
+			(uuid "e5f305e6-0750-4228-a682-7c24f5ab2a71")
+		)
+		(pin "8"
+			(uuid "d8c4cb78-5e51-40d5-a7e9-0dcf4f0a0f43")
+		)
+		(instances
+			(project "CANE Junction"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
+					(reference "RN2")
+					(unit 1)
+				)
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
+					(reference "RN1")
 					(unit 1)
 				)
 			)
@@ -6977,7 +7156,7 @@
 	)
 	(symbol
 		(lib_id "Reference_Voltage:TL432DBZ")
-		(at 38.1 78.74 270)
+		(at 38.1 80.01 270)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -6988,7 +7167,7 @@
 		(dnp no)
 		(uuid "bd5b7c5b-525f-4120-bea1-66cc4094a361")
 		(property "Reference" "U201"
-			(at 35.56 80.0101 90)
+			(at 35.56 81.2801 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6999,7 +7178,7 @@
 			)
 		)
 		(property "Value" "TL432DBZ"
-			(at 35.56 77.4701 90)
+			(at 35.56 78.7401 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7009,8 +7188,8 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 33.782 78.74 0)
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-3"
+			(at 33.782 80.01 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7022,7 +7201,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/tl431.pdf"
-			(at 32.004 77.978 0)
+			(at 32.004 79.248 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7034,7 +7213,18 @@
 			)
 		)
 		(property "Description" "Shunt Regulator, SOT-23"
-			(at 30.226 78.74 0)
+			(at 30.226 80.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Texas-Instruments/TL432QDBZR?qs=odmYgEirbwzuzPrwru65gg%3D%3D"
+			(at 38.1 80.01 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7740,40 +7930,41 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 43.18 81.28 180)
-		(unit 1)
+		(lib_id "Device:R_Pack04_SIP_Split")
+		(at 43.18 76.2 0)
+		(unit 2)
 		(body_style 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "ef5982a7-91d5-4f59-afd8-12bbae550386")
-		(property "Reference" "R203"
-			(at 44.958 80.01 0)
+		(fields_autoplaced yes)
+		(uuid "ffa6571f-ebee-4f8d-bc74-abf014c44885")
+		(property "Reference" "RN1"
+			(at 45.72 74.9299 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
-		(property "Value" "40.2k"
-			(at 44.958 82.55 0)
+		(property "Value" "56K"
+			(at 45.72 77.4699 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 43.18 81.28 0)
+		(property "Footprint" "zzLocalLibraries-Footprints:R_array_YCJ164_4"
+			(at 41.148 76.2 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7783,8 +7974,8 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
-			(at 43.18 81.28 0)
+		(property "Datasheet" "http://www.vishay.com/docs/31509/csc.pdf"
+			(at 43.18 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7794,8 +7985,8 @@
 				)
 			)
 		)
-		(property "Description" "Resistor, US symbol"
-			(at 43.18 81.28 0)
+		(property "Description" "4 resistor network, parallel topology, SIP package, split"
+			(at 43.18 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7805,30 +7996,8 @@
 				)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/KOA-Speer/RK73H2ATTD4022F?qs=sGAEpiMZZMvdGkrng054txknJuA7M8fa4wn7EqIHwNI%3D"
-			(at 43.18 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "specs" "40.2k ohm, 250mW, 1%, 150V, 100ppm, -55C, +155C"
-			(at 43.18 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "0.02"
-			(at 43.18 81.28 0)
+		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/YC164-JR-0756KL?qs=yNCrj0CQcyIPyhfZWK%252BbGg%3D%3D"
+			(at 43.18 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7839,7 +8008,7 @@
 			)
 		)
 		(property "unit x1" "0.1"
-			(at 43.18 81.28 0)
+			(at 43.18 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7849,8 +8018,8 @@
 				)
 			)
 		)
-		(property "Mouser Part Number" ""
-			(at 43.18 81.28 0)
+		(property "unit x10" "0.042"
+			(at 43.18 76.2 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7860,32 +8029,39 @@
 				)
 			)
 		)
-		(property "Field10" ""
-			(at 43.18 81.28 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
+		(pin "3"
+			(uuid "25ff6cd3-ddda-40e3-a3c8-21a85b24c871")
 		)
-		(pin "2"
-			(uuid "21b92c8f-07c2-4f85-bd83-b059fa3e6d9a")
+		(pin "5"
+			(uuid "97392cfb-9c05-43fd-9361-a6081fa7de5c")
+		)
+		(pin "4"
+			(uuid "42b3a7a2-5295-4dcf-81aa-3b2fbfc28a46")
+		)
+		(pin "7"
+			(uuid "1e3c6aa6-22be-40dc-b829-76a47231487b")
 		)
 		(pin "1"
-			(uuid "13183998-1edb-44c1-aa34-515ede06362c")
+			(uuid "95eeb1f2-94bc-443b-9220-586858fad7da")
+		)
+		(pin "6"
+			(uuid "1dd463f3-6706-480f-8388-808f5495501a")
+		)
+		(pin "2"
+			(uuid "e5f305e6-0750-4228-a682-7c24f5ab2a72")
+		)
+		(pin "8"
+			(uuid "d8c4cb78-5e51-40d5-a7e9-0dcf4f0a0f44")
 		)
 		(instances
 			(project "CANE Junction"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
-					(reference "R403")
-					(unit 1)
+					(reference "RN2")
+					(unit 2)
 				)
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/fd34582a-e9d3-424b-bd19-a29801800238"
-					(reference "R203")
-					(unit 1)
+					(reference "RN1")
+					(unit 2)
 				)
 			)
 		)

@@ -3248,227 +3248,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Transistor_BJT:MMBT5550L"
-			(pin_names
-				(offset 0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "Q"
-				(at 5.08 1.905 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "MMBT5550L"
-				(at 5.08 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-				(at 5.08 -1.905 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-					(justify left)
-				)
-			)
-			(property "Datasheet" "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Description" "0.6A Ic, 140V Vce, NPN Transistor, SOT-23"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "NPN Transistor"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SOT?23*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "MMBT5550L_0_1"
-				(polyline
-					(pts
-						(xy -2.54 0) (xy 0.635 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.635 1.905) (xy 0.635 -1.905)
-					)
-					(stroke
-						(width 0.508)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "MMBT5550L_1_1"
-				(polyline
-					(pts
-						(xy 0.635 0.635) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.635 -0.635) (xy 2.54 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 -1.778) (xy 1.778 -1.27) (xy 2.286 -2.286) (xy 1.27 -1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(pin input line
-					(at -5.08 0 0)
-					(length 2.54)
-					(name "B"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name "E"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 	)
 	(text "PMODE has\ninternal PU"
 		(exclude_from_sim no)
@@ -3484,25 +3263,25 @@
 	)
 	(text "base low: carrier sense detected"
 		(exclude_from_sim no)
-		(at 232.664 116.586 0)
+		(at 124.46 118.11 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 				(color 194 0 194 1)
 			)
-			(justify right top)
+			(justify left bottom)
 		)
 		(uuid "8a384be4-891b-4de1-b6df-219847dc820d")
 	)
 	(text "base low: link established"
 		(exclude_from_sim no)
-		(at 232.664 110.744 0)
+		(at 124.46 112.776 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 				(color 194 0 194 1)
 			)
-			(justify right top)
+			(justify left bottom)
 		)
 		(uuid "d9384d3b-844c-4a8d-beaa-9ed2bd4663c3")
 	)
@@ -3527,7 +3306,7 @@
 		)
 		(uuid "38a059c4-d1c7-44f0-bbcf-dc69cc23162e")
 	)
-	(text_box "damping for emi reduction. eyeballed values"
+	(text_box "damping for emi reduction. ~14R seems ok"
 		(exclude_from_sim no)
 		(at 132.08 62.23 0)
 		(size 13.97 34.29)
@@ -3547,27 +3326,6 @@
 			(justify left top)
 		)
 		(uuid "b6ee60a9-18de-43ab-a0f4-0db5db241c1c")
-	)
-	(text_box "more so to be used as jumpers"
-		(exclude_from_sim no)
-		(at 148.59 105.41 0)
-		(size 19.05 25.4)
-		(margins 0.9525 0.9525 0.9525 0.9525)
-		(stroke
-			(width 0)
-			(type solid)
-			(color 255 0 255 1)
-		)
-		(fill
-			(type none)
-		)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "e7261385-508a-43eb-9117-1ee357e1bbc3")
 	)
 	(text_box "layout notes\n- all VDD and VDD need 100nF decoupling\n- offical wiznet docs & examples consistently show split power planes, ocassionally show split grounds.\n	- joining A/D grounds should be done under the device that uses both\n	- considering just seperating A/D components, instead of split ground\n	- \"what do u call a engineer who splits a ground plane?\" \"a customer\"\n	- split ground trades a noise issue for a emi issue, emi is more acceptable for us though\n	- we split in fear of the enviroment, not of other stuff on our boards\n- TRX lines are differential. use differential routing\n- no planes under magnetic stuff. including internal transformers of RJ45\n- pin 18 (VBG) should measure as 1.2V at 25C\n- pin 20 (TOCAP) cap must be especially close\n- consider running ground strip on top plane along entire edge of board\n	- >0.5mm sep from power plane.\n	- via stich to ground plane below. ~ 1/10th dk wave len\n		- fr4 Dk ~= 4, 300MHz ~> 0.5m , 800MHz ~> 0.1875m ; eyeballed via pitch <10mm\n- note: probably irreverent for our use case, but dosent hurt\n- note: more yapping about grounding : youtu.be/vALt6Sd9vlY?t=3009\n- use \"replicate layout\" plug in to clone layout of hierarchial sheet"
 		(exclude_from_sim no)
@@ -3603,7 +3361,7 @@
 		(uuid "0d98013a-54e0-4699-ba88-92e8e946bb97")
 	)
 	(junction
-		(at 73.66 27.94)
+		(at 54.61 27.94)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "0e05a084-e770-468e-a5fc-1d9457c18313")
@@ -3615,7 +3373,13 @@
 		(uuid "0fa25779-8423-4526-9e92-3fadd0043504")
 	)
 	(junction
-		(at 73.66 33.02)
+		(at 101.6 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "11d10d16-d26d-4d67-99c4-19c2c0b156cd")
+	)
+	(junction
+		(at 54.61 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "14d6719f-075d-4e5f-96c9-7dd7fe463312")
@@ -3633,18 +3397,6 @@
 		(uuid "278d89b7-ea3c-45e6-8380-5708b578d104")
 	)
 	(junction
-		(at 101.6 63.5)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "27dbe827-246a-4415-bd7f-e11b1fa83bf9")
-	)
-	(junction
-		(at 44.45 27.94)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "321a569a-26f4-4a46-ad8d-6ac95e620266")
-	)
-	(junction
 		(at 154.94 80.01)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3657,13 +3409,13 @@
 		(uuid "40e47124-0cb1-41f2-ac9d-0f36e234bbff")
 	)
 	(junction
-		(at 83.82 27.94)
+		(at 64.77 27.94)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "417a18bc-5d25-444e-ac71-528011aa1022")
 	)
 	(junction
-		(at 104.14 33.02)
+		(at 85.09 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4200bb5f-9c2b-4c70-ad19-92c7ed0035b9")
@@ -3687,12 +3439,6 @@
 		(uuid "7a9dd93a-61ce-45f4-b88e-b58acc7a61c3")
 	)
 	(junction
-		(at 142.24 128.27)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "811102eb-59e1-49dc-901a-7f9fef8d947a")
-	)
-	(junction
 		(at 73.66 133.35)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3711,7 +3457,7 @@
 		(uuid "954d0902-b65f-4203-a383-ae5f4e161dcf")
 	)
 	(junction
-		(at 93.98 33.02)
+		(at 74.93 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "969d9655-1b82-4d4b-bb73-b55df5e621a6")
@@ -3723,7 +3469,7 @@
 		(uuid "9c217b4d-b280-4e92-a5d5-642c6aaf1fb4")
 	)
 	(junction
-		(at 83.82 33.02)
+		(at 64.77 33.02)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "a0d24edf-c961-4ffc-8481-3c22fba43e6e")
@@ -3753,12 +3499,6 @@
 		(uuid "ad542fb6-106a-4441-a3fd-a1bc7d542579")
 	)
 	(junction
-		(at 242.57 127)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "b5518826-790c-420c-90e0-e151e3675eae")
-	)
-	(junction
 		(at 58.42 133.35)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3771,10 +3511,10 @@
 		(uuid "ccd7dc23-02fe-46c0-9781-756bc67497ef")
 	)
 	(junction
-		(at 44.45 33.02)
+		(at 138.43 139.7)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "d3f48cd4-9575-45f2-ae2e-03664a41281e")
+		(uuid "ceb40c45-0d44-4240-bfe5-b1974a1ac691")
 	)
 	(junction
 		(at 187.96 97.79)
@@ -3783,13 +3523,13 @@
 		(uuid "e58c3df0-28b6-4e70-8c8a-acb27c2e7257")
 	)
 	(junction
-		(at 93.98 27.94)
+		(at 74.93 27.94)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e726d342-eeb5-4f46-af9f-169298c0f207")
 	)
 	(junction
-		(at 104.14 27.94)
+		(at 85.09 27.94)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "ecf6b90f-12e4-40c1-97db-b37182ac2f11")
@@ -3805,18 +3545,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f8a51931-ce0e-45aa-9796-55b2d96290ba")
-	)
-	(no_connect
-		(at 92.71 115.57)
-		(uuid "041e5dd9-f18c-41a0-a778-102cb0f10857")
-	)
-	(no_connect
-		(at 92.71 123.19)
-		(uuid "3841949c-5d20-421f-aafd-b05195ae88da")
-	)
-	(no_connect
-		(at 92.71 120.65)
-		(uuid "3f6bc020-44fa-4fd6-8c7d-892ce3ba98e6")
 	)
 	(no_connect
 		(at 92.71 100.33)
@@ -3839,16 +3567,8 @@
 		(uuid "793863c2-9aa2-46c5-b49f-0e7cf223fa3c")
 	)
 	(no_connect
-		(at 92.71 125.73)
-		(uuid "b5de02ad-ee94-4888-814e-da844d6a2729")
-	)
-	(no_connect
 		(at 92.71 97.79)
 		(uuid "c8bb191a-954d-4f12-9eed-9d1604f6bdb5")
-	)
-	(no_connect
-		(at 92.71 118.11)
-		(uuid "dfa3bbeb-76c5-41e1-8300-417ec051fb70")
 	)
 	(no_connect
 		(at 123.19 115.57)
@@ -3873,26 +3593,6 @@
 			(type default)
 		)
 		(uuid "016da850-6625-42d4-a52d-1fa19aa0ff7b")
-	)
-	(wire
-		(pts
-			(xy 59.69 27.94) (xy 73.66 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "039cf2b4-1c7a-4967-898d-bf3e5f9ba37b")
-	)
-	(wire
-		(pts
-			(xy 234.95 110.49) (xy 233.68 110.49)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "050a42cc-df6c-4c8b-a5e5-f3725310dae6")
 	)
 	(wire
 		(pts
@@ -3956,6 +3656,16 @@
 	)
 	(wire
 		(pts
+			(xy 242.57 102.87) (xy 242.57 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0a134d4b-8ccc-407c-b23d-c6ae5ffa1535")
+	)
+	(wire
+		(pts
 			(xy 66.04 114.3) (xy 66.04 124.46)
 		)
 		(stroke
@@ -3963,16 +3673,6 @@
 			(type default)
 		)
 		(uuid "0b2c0eb7-5d86-4a7a-93fb-4f05d778c13a")
-	)
-	(wire
-		(pts
-			(xy 44.45 27.94) (xy 52.07 27.94)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0dc94f3b-13fa-4186-8e41-2680a13cecdb")
 	)
 	(wire
 		(pts
@@ -4006,7 +3706,7 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 27.94) (xy 114.3 27.94)
+			(xy 85.09 27.94) (xy 95.25 27.94)
 		)
 		(stroke
 			(width 0)
@@ -4036,6 +3736,16 @@
 	)
 	(wire
 		(pts
+			(xy 138.43 139.7) (xy 142.24 139.7)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1cfc425d-fb48-4e34-93bf-c27e7572ec62")
+	)
+	(wire
+		(pts
 			(xy 127 80.01) (xy 154.94 80.01)
 		)
 		(stroke
@@ -4043,16 +3753,6 @@
 			(type default)
 		)
 		(uuid "1d7ccc6e-8de0-4279-a311-49691461e8a2")
-	)
-	(wire
-		(pts
-			(xy 242.57 115.57) (xy 242.57 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "22199f02-2c30-46c5-b8cb-606dfef98097")
 	)
 	(wire
 		(pts
@@ -4076,7 +3776,17 @@
 	)
 	(wire
 		(pts
-			(xy 93.98 27.94) (xy 104.14 27.94)
+			(xy 251.46 102.87) (xy 251.46 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "255f07fc-a801-4db3-af06-aa21d74a35e4")
+	)
+	(wire
+		(pts
+			(xy 74.93 27.94) (xy 85.09 27.94)
 		)
 		(stroke
 			(width 0)
@@ -4136,7 +3846,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 128.27) (xy 133.35 128.27)
+			(xy 123.19 128.27) (xy 138.43 128.27)
 		)
 		(stroke
 			(width 0)
@@ -4146,7 +3856,7 @@
 	)
 	(wire
 		(pts
-			(xy 95.25 71.12) (xy 101.6 71.12)
+			(xy 92.71 71.12) (xy 101.6 71.12)
 		)
 		(stroke
 			(width 0)
@@ -4156,7 +3866,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 113.03) (xy 233.68 113.03)
+			(xy 123.19 113.03) (xy 242.57 113.03)
 		)
 		(stroke
 			(width 0)
@@ -4216,16 +3926,6 @@
 	)
 	(wire
 		(pts
-			(xy 138.43 128.27) (xy 142.24 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3d770ad3-0b8b-445f-b922-5adbf476da0b")
-	)
-	(wire
-		(pts
 			(xy 208.28 105.41) (xy 220.98 105.41)
 		)
 		(stroke
@@ -4233,26 +3933,6 @@
 			(type default)
 		)
 		(uuid "3f57566d-19e8-41e7-a7e5-00f03e139812")
-	)
-	(wire
-		(pts
-			(xy 251.46 127) (xy 251.46 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "431977f7-13d2-4f24-9ced-8f330b90fc92")
-	)
-	(wire
-		(pts
-			(xy 242.57 102.87) (xy 242.57 105.41)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "46de6673-531e-4fdd-a0c4-8f7ff5c33129")
 	)
 	(wire
 		(pts
@@ -4306,7 +3986,7 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 128.27) (xy 142.24 139.7)
+			(xy 142.24 123.19) (xy 142.24 139.7)
 		)
 		(stroke
 			(width 0)
@@ -4336,16 +4016,6 @@
 	)
 	(wire
 		(pts
-			(xy 240.03 127) (xy 242.57 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5c72a52f-c921-4b1f-acac-a13067a2bccb")
-	)
-	(wire
-		(pts
 			(xy 236.22 78.74) (xy 236.22 88.9)
 		)
 		(stroke
@@ -4353,16 +4023,6 @@
 			(type default)
 		)
 		(uuid "5d5deea4-f44a-464c-9802-7fd23abcf17d")
-	)
-	(wire
-		(pts
-			(xy 242.57 127) (xy 251.46 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5dd883af-9853-4ae7-8d38-ec4d739e158b")
 	)
 	(wire
 		(pts
@@ -4396,7 +4056,7 @@
 	)
 	(wire
 		(pts
-			(xy 73.66 27.94) (xy 83.82 27.94)
+			(xy 54.61 27.94) (xy 64.77 27.94)
 		)
 		(stroke
 			(width 0)
@@ -4406,7 +4066,7 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 27.94) (xy 93.98 27.94)
+			(xy 64.77 27.94) (xy 74.93 27.94)
 		)
 		(stroke
 			(width 0)
@@ -4506,7 +4166,7 @@
 	)
 	(wire
 		(pts
-			(xy 128.27 139.7) (xy 142.24 139.7)
+			(xy 128.27 139.7) (xy 138.43 139.7)
 		)
 		(stroke
 			(width 0)
@@ -4586,33 +4246,13 @@
 	)
 	(wire
 		(pts
-			(xy 83.82 33.02) (xy 93.98 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8c5ab85c-9ddf-4b32-a499-96b08017d09d")
-	)
-	(wire
-		(pts
-			(xy 132.08 123.19) (xy 142.24 123.19)
+			(xy 134.62 123.19) (xy 142.24 123.19)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "8ca6f470-de4e-4a60-9510-bc17bddfa368")
-	)
-	(wire
-		(pts
-			(xy 251.46 113.03) (xy 251.46 102.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8e24a2e5-bfdf-41e7-9fec-45d6d4a0e59a")
 	)
 	(wire
 		(pts
@@ -4756,7 +4396,7 @@
 	)
 	(wire
 		(pts
-			(xy 26.67 33.02) (xy 44.45 33.02)
+			(xy 26.67 33.02) (xy 74.93 33.02)
 		)
 		(stroke
 			(width 0)
@@ -4766,7 +4406,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 123.19) (xy 127 123.19)
+			(xy 123.19 123.19) (xy 129.54 123.19)
 		)
 		(stroke
 			(width 0)
@@ -4826,7 +4466,7 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 118.11) (xy 243.84 118.11)
+			(xy 123.19 118.11) (xy 251.46 118.11)
 		)
 		(stroke
 			(width 0)
@@ -4926,26 +4566,6 @@
 	)
 	(wire
 		(pts
-			(xy 142.24 123.19) (xy 142.24 128.27)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d0b79f1e-2eea-4d61-84d8-5cd8db4cbf9c")
-	)
-	(wire
-		(pts
-			(xy 233.68 113.03) (xy 233.68 110.49)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d293aa48-6fd0-4f3c-b123-41442fb29b7f")
-	)
-	(wire
-		(pts
 			(xy 66.04 124.46) (xy 66.04 125.73)
 		)
 		(stroke
@@ -4976,7 +4596,7 @@
 	)
 	(wire
 		(pts
-			(xy 104.14 33.02) (xy 114.3 33.02)
+			(xy 85.09 33.02) (xy 95.25 33.02)
 		)
 		(stroke
 			(width 0)
@@ -4996,7 +4616,7 @@
 	)
 	(wire
 		(pts
-			(xy 93.98 33.02) (xy 104.14 33.02)
+			(xy 74.93 33.02) (xy 85.09 33.02)
 		)
 		(stroke
 			(width 0)
@@ -5026,23 +4646,13 @@
 	)
 	(wire
 		(pts
-			(xy 95.25 63.5) (xy 101.6 63.5)
+			(xy 92.71 63.5) (xy 101.6 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "e1dc728f-bf85-4b6c-8818-3fbc18a098b7")
-	)
-	(wire
-		(pts
-			(xy 73.66 33.02) (xy 83.82 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e437e8ea-0f14-4549-893b-62d87caf8fb5")
 	)
 	(wire
 		(pts
@@ -5076,6 +4686,26 @@
 	)
 	(wire
 		(pts
+			(xy 138.43 132.08) (xy 138.43 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ee18404a-aaec-4916-aba5-2b9ece94c88f")
+	)
+	(wire
+		(pts
+			(xy 138.43 139.7) (xy 138.43 137.16)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f0713849-c8ca-4865-8d95-e310fdfefdf9")
+	)
+	(wire
+		(pts
 			(xy 128.27 132.08) (xy 128.27 130.81)
 		)
 		(stroke
@@ -5096,6 +4726,16 @@
 	)
 	(wire
 		(pts
+			(xy 40.64 27.94) (xy 54.61 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f66d2931-129d-437b-a245-e2d6cf8d0c39")
+	)
+	(wire
+		(pts
 			(xy 91.44 139.7) (xy 105.41 139.7)
 		)
 		(stroke
@@ -5106,7 +4746,7 @@
 	)
 	(wire
 		(pts
-			(xy 26.67 27.94) (xy 44.45 27.94)
+			(xy 26.67 27.94) (xy 33.02 27.94)
 		)
 		(stroke
 			(width 0)
@@ -5143,16 +4783,6 @@
 			(type default)
 		)
 		(uuid "f9a146d7-4080-4e1b-83f9-4b049777726f")
-	)
-	(wire
-		(pts
-			(xy 44.45 33.02) (xy 73.66 33.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f9a8cc9a-8098-4698-9c74-67d7322cfdcb")
 	)
 	(wire
 		(pts
@@ -5205,7 +4835,7 @@
 		(uuid "1612e96c-d4b6-4b4e-806e-5663965cc8d1")
 	)
 	(label "AGND"
-		(at 59.69 33.02 0)
+		(at 40.64 33.02 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5215,7 +4845,7 @@
 		(uuid "1682a948-58b4-4801-a842-97a33b1a0904")
 	)
 	(label "+3.3VA"
-		(at 59.69 27.94 0)
+		(at 40.64 27.94 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5245,7 +4875,7 @@
 		(uuid "32b9cc36-0573-4f29-a7f0-9a26fa716831")
 	)
 	(label "GND"
-		(at 95.25 71.12 180)
+		(at 92.71 71.12 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5325,14 +4955,14 @@
 		(uuid "7f569f5b-97d5-4b62-b0fe-e7f6767373e6")
 	)
 	(label "GND"
-		(at 240.03 127 180)
+		(at 92.71 120.65 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "8180fa02-cd75-48b7-8688-220f6ece017b")
+		(uuid "86322570-103f-4b15-b5af-c55d20b46839")
 	)
 	(label "RX-"
 		(at 127 90.17 0)
@@ -5343,6 +4973,16 @@
 			(justify left bottom)
 		)
 		(uuid "8cf73409-c4d1-44e8-8a28-1896f91e4e96")
+	)
+	(label "GND"
+		(at 92.71 118.11 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "ac926a86-09ed-4dbc-9d13-711c701dd72a")
 	)
 	(label "TD-"
 		(at 190.5 83.82 180)
@@ -5365,6 +5005,16 @@
 		(uuid "bda65a9e-3800-4de6-890a-ef8d4eb5b007")
 	)
 	(label "GND"
+		(at 92.71 115.57 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "c855d363-64cd-4c1c-b8f3-1c590ff61a18")
+	)
+	(label "GND"
 		(at 55.88 133.35 180)
 		(effects
 			(font
@@ -5373,6 +5023,26 @@
 			(justify right bottom)
 		)
 		(uuid "c9764d00-e171-4db5-9f8d-a9ece1d61c3c")
+	)
+	(label "GND"
+		(at 92.71 123.19 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e3821a08-07b0-4524-8b53-d3a143c98e58")
+	)
+	(label "GND"
+		(at 92.71 125.73 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e6b0bd0c-120a-4f94-aefd-fd18c3b48274")
 	)
 	(label "GND"
 		(at 87.63 139.7 180)
@@ -5397,7 +5067,7 @@
 	)
 	(hierarchical_label "+3.3V"
 		(shape input)
-		(at 95.25 63.5 180)
+		(at 92.71 63.5 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5428,17 +5098,6 @@
 		)
 		(uuid "27a030c4-05bd-479a-bb23-db1a849ae33b")
 	)
-	(hierarchical_label "LED Vdd"
-		(shape input)
-		(at 257.81 78.74 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "53abbf77-2eb6-4656-b566-424d731c3851")
-	)
 	(hierarchical_label "GND"
 		(shape input)
 		(at 26.67 33.02 180)
@@ -5449,6 +5108,17 @@
 			(justify right)
 		)
 		(uuid "9a3c1ab6-5ab8-4da9-8055-046fe65b3392")
+	)
+	(hierarchical_label "+3.3V"
+		(shape input)
+		(at 257.81 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "9b3a8abf-ff14-43f6-b2b4-949848c971ad")
 	)
 	(hierarchical_label "MOSI"
 		(shape input)
@@ -5507,7 +5177,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 104.14 30.48 0)
+		(at 85.09 30.48 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -5518,7 +5188,7 @@
 		(dnp no)
 		(uuid "0147b00c-f8b4-4306-a415-c4f306c8636e")
 		(property "Reference" "C305"
-			(at 101.6 29.2162 0)
+			(at 82.55 29.2162 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5529,7 +5199,7 @@
 			)
 		)
 		(property "Value" "220n"
-			(at 101.6 31.7562 0)
+			(at 82.55 31.7562 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5540,7 +5210,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5551,7 +5221,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5562,7 +5232,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5573,7 +5243,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5584,7 +5254,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5595,7 +5265,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21B224KCFSFNE?qs=664zcAxDQ0l4Y1eUk6Zc1g%3D%3D"
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5606,7 +5276,7 @@
 			)
 		)
 		(property "specs" "100VDC, X7R, 10%, -55C, +125C, 220nF"
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5617,7 +5287,7 @@
 			)
 		)
 		(property "unit x10" "0.054"
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5628,7 +5298,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5639,7 +5309,7 @@
 			)
 		)
 		(property "note" ""
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5650,7 +5320,7 @@
 			)
 		)
 		(property "unit x1" "0.054"
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5661,7 +5331,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 104.14 30.48 0)
+			(at 85.09 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6134,7 +5804,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 73.66 30.48 0)
+		(at 54.61 30.48 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -6145,7 +5815,7 @@
 		(dnp no)
 		(uuid "293bc9e0-36c1-42aa-b06c-bfa15b58b92f")
 		(property "Reference" "C302"
-			(at 71.12 29.2162 0)
+			(at 52.07 29.2162 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6156,7 +5826,7 @@
 			)
 		)
 		(property "Value" "22u"
-			(at 71.12 31.7562 0)
+			(at 52.07 31.7562 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6167,7 +5837,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 73.66 30.48 0)
+			(at 54.61 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6178,7 +5848,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 73.66 30.48 0)
+			(at 54.61 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6189,7 +5859,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 73.66 30.48 0)
+			(at 54.61 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6200,7 +5870,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21A226MAYNNNE?qs=sGAEpiMZZMsh%252B1woXyUXj9e2R%2FOkAO5o4FNiyGuFzx8%3D"
-			(at 73.66 30.48 0)
+			(at 54.61 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6211,7 +5881,7 @@
 			)
 		)
 		(property "specs" "22uF, 25V, 20%, X5R, -55C, +85C"
-			(at 73.66 30.48 0)
+			(at 54.61 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6222,7 +5892,7 @@
 			)
 		)
 		(property "unit x10" "0.043"
-			(at 73.66 30.48 0)
+			(at 54.61 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6233,7 +5903,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 73.66 30.48 0)
+			(at 54.61 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6260,7 +5930,7 @@
 	)
 	(symbol
 		(lib_id "Device:FerriteBead")
-		(at 55.88 27.94 90)
+		(at 36.83 27.94 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6270,7 +5940,7 @@
 		(dnp no)
 		(uuid "3536c640-bf16-4758-922c-465308fca5fe")
 		(property "Reference" "FB301"
-			(at 55.9308 21.844 90)
+			(at 36.8808 21.844 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6280,7 +5950,7 @@
 			)
 		)
 		(property "Value" "MH1608-151Y"
-			(at 55.88 23.876 90)
+			(at 36.83 23.876 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6290,7 +5960,7 @@
 			)
 		)
 		(property "Footprint" "Inductor_SMD:L_0603_1608Metric_Pad1.05x0.95mm_HandSolder"
-			(at 55.88 29.718 90)
+			(at 36.83 29.718 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6301,7 +5971,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 55.88 27.94 0)
+			(at 36.83 27.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6312,7 +5982,7 @@
 			)
 		)
 		(property "Description" "Ferrite bead"
-			(at 55.88 27.94 0)
+			(at 36.83 27.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6323,7 +5993,7 @@
 			)
 		)
 		(property "specs" "150R@100Mhz +-25%, 0.1@DC, 2A max, -55C, +125C"
-			(at 55.88 27.94 90)
+			(at 36.83 27.94 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6334,7 +6004,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Bourns/MH1608-151Y?qs=aqFbwuCjQomGpgiGtpDD0g%3D%3D"
-			(at 55.88 27.94 90)
+			(at 36.83 27.94 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6345,7 +6015,7 @@
 			)
 		)
 		(property "unit x1" "0.10"
-			(at 55.88 27.94 90)
+			(at 36.83 27.94 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6356,7 +6026,7 @@
 			)
 		)
 		(property "unit x10" "0.07"
-			(at 55.88 27.94 90)
+			(at 36.83 27.94 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6367,7 +6037,7 @@
 			)
 		)
 		(property "unit x25" "0.055"
-			(at 55.88 27.94 90)
+			(at 36.83 27.94 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6378,7 +6048,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 55.88 27.94 90)
+			(at 36.83 27.94 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6778,166 +6448,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Transistor_BJT:MMBT5550L")
-		(at 248.92 118.11 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "45c4b79d-d869-4ebe-b0ef-ffb4fbf3d4c8")
-		(property "Reference" "Q302"
-			(at 254 116.8399 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MMBT5550L"
-			(at 254 119.3799 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 254 120.015 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-			)
-		)
-		(property "Datasheet" "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF"
-			(at 248.92 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Description" "0.6A Ic, 140V Vce, NPN Transistor, SOT-23"
-			(at 248.92 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/onsemi/MMBT5550LT1G?qs=R2UZ7gjkEjKW3fmkaqXxTw%3D%3D"
-			(at 248.92 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "0.087"
-			(at 248.92 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x1" "0.14"
-			(at 248.92 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 248.92 118.11 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "note" ""
-			(at 248.92 118.11 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser " ""
-			(at 248.92 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "890a3f03-585a-4218-887f-602e7005dfff")
-		)
-		(pin "3"
-			(uuid "4797799d-f0ec-4d43-85df-26f36943f8b5")
-		)
-		(pin "2"
-			(uuid "e8bcd100-5fdc-465b-b9a4-3ef1f40f327d")
-		)
-		(instances
-			(project "CANE Junction"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "Q302")
-					(unit 1)
-				)
-			)
-			(project "W5500 testing"
-				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "Q?")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:Crystal_GND24")
 		(at 73.66 124.46 0)
 		(unit 1)
@@ -7085,9 +6595,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Small")
-		(at 101.6 67.31 0)
-		(mirror y)
+		(lib_id "Device:R_Small_US")
+		(at 251.46 100.33 180)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7095,31 +6604,29 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "481d6a34-f3be-4881-9dd6-0c59064a5979")
-		(property "Reference" "C309"
-			(at 99.06 66.0462 0)
+		(uuid "506c4fbf-0396-4f05-bafd-fd6da2ef8684")
+		(property "Reference" "R317"
+			(at 247.65 99.314 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "22u"
-			(at 99.06 68.5862 0)
+		(property "Value" "750"
+			(at 247.65 101.854 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 101.6 67.31 0)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 251.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7130,7 +6637,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 101.6 67.31 0)
+			(at 251.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7140,8 +6647,8 @@
 				)
 			)
 		)
-		(property "Description" ""
-			(at 101.6 67.31 0)
+		(property "Description" "Resistor, US symbol"
+			(at 251.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7151,8 +6658,8 @@
 				)
 			)
 		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21A226MAYNNNE?qs=sGAEpiMZZMsh%252B1woXyUXj9e2R%2FOkAO5o4FNiyGuFzx8%3D"
-			(at 101.6 67.31 0)
+		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP0805FTD750R?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ959vlpOMTL6aa89yaL2EFqmA%3D%3D"
+			(at 251.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7162,8 +6669,8 @@
 				)
 			)
 		)
-		(property "specs" "22uF, 25V, 20%, X5R, -55C, +85C"
-			(at 101.6 67.31 0)
+		(property "specs" "750R, 250mW, 1%, anti-sulf, 100ppm,200V, -55C, +155C"
+			(at 251.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7173,8 +6680,8 @@
 				)
 			)
 		)
-		(property "unit x10" "0.043"
-			(at 101.6 67.31 0)
+		(property "unit x1" "0.1"
+			(at 251.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7184,8 +6691,8 @@
 				)
 			)
 		)
-		(property "mouser " ""
-			(at 101.6 67.31 0)
+		(property "unit x10" "0.012"
+			(at 251.46 100.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7196,15 +6703,15 @@
 			)
 		)
 		(pin "2"
-			(uuid "e305f420-7df1-4625-bc24-3e3e4ebbe922")
+			(uuid "2c78942e-f534-4ba8-8828-ee5b0d13cca0")
 		)
 		(pin "1"
-			(uuid "30d42597-41e6-4d77-9e90-93b40e52c748")
+			(uuid "de0f07e9-aee1-418b-88ba-cd5d90135213")
 		)
 		(instances
 			(project "CANE Junction"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "C309")
+					(reference "R317")
 					(unit 1)
 				)
 			)
@@ -7399,7 +6906,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 129.54 123.19 90)
+		(at 132.08 123.19 90)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -7410,7 +6917,7 @@
 		(dnp no)
 		(uuid "6d63be18-790d-4889-aaf6-5c18a727e818")
 		(property "Reference" "R303"
-			(at 127.762 119.38 90)
+			(at 130.302 119.38 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7421,7 +6928,7 @@
 			)
 		)
 		(property "Value" "12.4k"
-			(at 132.588 121.158 90)
+			(at 135.128 121.158 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7432,7 +6939,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7443,7 +6950,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7454,7 +6961,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7465,7 +6972,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7476,7 +6983,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7487,7 +6994,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Susumu/RR1220P-1242-D-M?qs=sGAEpiMZZMvdGkrng054t0uOsFOTJMhbkKY3D7%2FGR%2FA%3D"
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7498,7 +7005,7 @@
 			)
 		)
 		(property "specs" "12.4k ohm, 0.5%, 100mW, 100V, 25ppm, -55C, +125C"
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7509,7 +7016,7 @@
 			)
 		)
 		(property "unit x10" "0.028"
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7520,7 +7027,7 @@
 			)
 		)
 		(property "unit x1" "0.1"
-			(at 129.54 123.19 0)
+			(at 132.08 123.19 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7531,7 +7038,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 129.54 123.19 90)
+			(at 132.08 123.19 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7542,7 +7049,7 @@
 			)
 		)
 		(property "note" ""
-			(at 129.54 123.19 90)
+			(at 132.08 123.19 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7553,7 +7060,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 129.54 123.19 90)
+			(at 132.08 123.19 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7960,7 +7467,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 83.82 30.48 0)
+		(at 64.77 30.48 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -7971,7 +7478,7 @@
 		(dnp no)
 		(uuid "8507855f-fa13-4e38-90ba-8a117de0d399")
 		(property "Reference" "C301"
-			(at 81.28 29.2162 0)
+			(at 62.23 29.2162 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7982,7 +7489,7 @@
 			)
 		)
 		(property "Value" "220n"
-			(at 81.28 31.7562 0)
+			(at 62.23 31.7562 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7993,7 +7500,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8004,7 +7511,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8015,7 +7522,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8026,7 +7533,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8037,7 +7544,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8048,7 +7555,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21B224KCFSFNE?qs=664zcAxDQ0l4Y1eUk6Zc1g%3D%3D"
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8059,7 +7566,7 @@
 			)
 		)
 		(property "specs" "100VDC, X7R, 10%, -55C, +125C, 220nF"
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8070,7 +7577,7 @@
 			)
 		)
 		(property "unit x10" "0.054"
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8081,7 +7588,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8092,7 +7599,7 @@
 			)
 		)
 		(property "note" ""
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8103,7 +7610,7 @@
 			)
 		)
 		(property "unit x1" "0.054"
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8114,7 +7621,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 83.82 30.48 0)
+			(at 64.77 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8134,186 +7641,6 @@
 			(project "CANE Junction"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
 					(reference "C301")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 251.46 100.33 180)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8536cc9a-e04f-4871-84fa-69f50055a463")
-		(property "Reference" "R317"
-			(at 253.746 99.568 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "750"
-			(at 253.746 101.346 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RC1206JR-13750RL?qs=sGAEpiMZZMvdGkrng054t8AJgcdMkx7xRBGyMWDk%2FFM%3D"
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "specs" "750mOhm, 250mW, 5%, 100PPM, 200C, -55C, +155C"
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "0.022"
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "note" ""
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser " ""
-			(at 251.46 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "d6b11356-6247-48ea-914c-7bcb05117867")
-		)
-		(pin "1"
-			(uuid "631e4f13-de22-4d8d-b0b0-2ba3ae9558fc")
-		)
-		(instances
-			(project "CANE Junction"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R317")
 					(unit 1)
 				)
 			)
@@ -8508,7 +7835,8 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 44.45 30.48 0)
+		(at 101.6 67.31 0)
+		(mirror y)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -8518,7 +7846,7 @@
 		(dnp no)
 		(uuid "91d6f620-bec4-4967-8a9d-21f58baf6dc8")
 		(property "Reference" "C313"
-			(at 46.99 29.2162 0)
+			(at 99.06 66.0462 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8529,7 +7857,7 @@
 			)
 		)
 		(property "Value" "220n"
-			(at 46.99 31.7562 0)
+			(at 99.06 68.5862 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -8540,7 +7868,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8551,7 +7879,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8562,7 +7890,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8573,7 +7901,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8584,7 +7912,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8595,7 +7923,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21B224KCFSFNE?qs=664zcAxDQ0l4Y1eUk6Zc1g%3D%3D"
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8606,7 +7934,7 @@
 			)
 		)
 		(property "specs" "100VDC, X7R, 10%, -55C, +125C, 220nF"
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8617,7 +7945,7 @@
 			)
 		)
 		(property "unit x10" "0.054"
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8628,7 +7956,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8639,7 +7967,7 @@
 			)
 		)
 		(property "note" ""
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8650,7 +7978,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8661,7 +7989,7 @@
 			)
 		)
 		(property "unit x1" "0.054"
-			(at 44.45 30.48 0)
+			(at 101.6 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -9251,187 +8579,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Small_US")
-		(at 242.57 100.33 0)
-		(mirror x)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b18c6a54-144e-4bb3-9b55-7031a4c9ff0e")
-		(property "Reference" "R316"
-			(at 240.284 99.568 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "750"
-			(at 240.284 101.346 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder"
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.mouser.com/ProductDetail/Panasonic/ERJ-P08F6800V?qs=iIVTEDlrHA3SVAPfz%2FMedg%3D%3D"
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor, US symbol"
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Device" ""
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Type" ""
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/YAGEO/RC1206JR-13750RL?qs=sGAEpiMZZMvdGkrng054t8AJgcdMkx7xRBGyMWDk%2FFM%3D"
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "specs" "750mOhm, 250mW, 5%, 100PPM, 200C, -55C, +155C"
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "0.022"
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x1" "0.1"
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "note" ""
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser " ""
-			(at 242.57 100.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "0b0e1eea-12ae-4eb9-9370-ba0f96f48628")
-		)
-		(pin "1"
-			(uuid "964a346d-600b-4684-bc17-d3633e0a7487")
-		)
-		(instances
-			(project "CANE Junction"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "R316")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 187.96 101.6 0)
 		(unit 1)
@@ -9612,6 +8759,129 @@
 			(project "W5500 testing"
 				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
 					(reference "C?")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 242.57 100.33 180)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "b9dfff5e-2681-475d-8d3b-c3f6b10fdb0d")
+		(property "Reference" "R316"
+			(at 238.76 99.314 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "750"
+			(at 238.76 101.854 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
+			(at 242.57 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 242.57 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Resistor, US symbol"
+			(at 242.57 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP0805FTD750R?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ959vlpOMTL6aa89yaL2EFqmA%3D%3D"
+			(at 242.57 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "specs" "750R, 250mW, 1%, anti-sulf, 100ppm,200V, -55C, +155C"
+			(at 242.57 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x1" "0.1"
+			(at 242.57 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "unit x10" "0.012"
+			(at 242.57 100.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "58581628-c64e-4896-9bbc-af5d2161b6e3")
+		)
+		(pin "1"
+			(uuid "133cc92a-f2c8-4d9d-b9d2-70838b015481")
+		)
+		(instances
+			(project "CANE Junction"
+				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
+					(reference "R316")
 					(unit 1)
 				)
 			)
@@ -9992,7 +9262,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 114.3 30.48 0)
+		(at 95.25 30.48 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -10003,7 +9273,7 @@
 		(dnp no)
 		(uuid "c2d1ca55-a429-4305-ae25-b2af1b5cd30b")
 		(property "Reference" "C311"
-			(at 111.76 29.2162 0)
+			(at 92.71 29.2162 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10014,7 +9284,7 @@
 			)
 		)
 		(property "Value" "220n"
-			(at 111.76 31.7562 0)
+			(at 92.71 31.7562 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10025,7 +9295,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10036,7 +9306,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10047,7 +9317,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10058,7 +9328,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10069,7 +9339,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10080,7 +9350,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21B224KCFSFNE?qs=664zcAxDQ0l4Y1eUk6Zc1g%3D%3D"
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10091,7 +9361,7 @@
 			)
 		)
 		(property "specs" "100VDC, X7R, 10%, -55C, +125C, 220nF"
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10102,7 +9372,7 @@
 			)
 		)
 		(property "unit x10" "0.054"
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10113,7 +9383,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10124,7 +9394,7 @@
 			)
 		)
 		(property "note" ""
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10135,7 +9405,7 @@
 			)
 		)
 		(property "unit x1" "0.054"
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10146,7 +9416,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 114.3 30.48 0)
+			(at 95.25 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10358,7 +9628,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 135.89 128.27 270)
+		(at 138.43 134.62 0)
 		(mirror x)
 		(unit 1)
 		(body_style 1)
@@ -10369,7 +9639,7 @@
 		(dnp no)
 		(uuid "dcd7f14c-595d-43de-b283-12a9c6332cf5")
 		(property "Reference" "C314"
-			(at 137.668 131.318 90)
+			(at 136.144 133.604 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10380,7 +9650,7 @@
 			)
 		)
 		(property "Value" "4.7u"
-			(at 137.668 133.35 90)
+			(at 136.144 135.636 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10391,7 +9661,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10402,7 +9672,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10413,7 +9683,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10424,7 +9694,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10435,7 +9705,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10446,7 +9716,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/KEMET/C0805C475J4RACAUTO?qs=HXFqYaX1Q2zgZ196jUXcdQ%3D%3D"
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10457,7 +9727,7 @@
 			)
 		)
 		(property "specs" "4.7uF, 16V, 5%, -55C, +125C"
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10468,7 +9738,7 @@
 			)
 		)
 		(property "unit x10" "0.218"
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10479,7 +9749,7 @@
 			)
 		)
 		(property "unit x1" "0.47"
-			(at 135.89 128.27 0)
+			(at 138.43 134.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10490,7 +9760,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 135.89 128.27 90)
+			(at 138.43 134.62 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10501,7 +9771,7 @@
 			)
 		)
 		(property "note" ""
-			(at 135.89 128.27 90)
+			(at 138.43 134.62 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10512,7 +9782,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 135.89 128.27 90)
+			(at 138.43 134.62 90)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10732,7 +10002,7 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 93.98 30.48 0)
+		(at 74.93 30.48 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -10743,7 +10013,7 @@
 		(dnp no)
 		(uuid "e9751ae5-945b-4b68-a408-f6a928096e4e")
 		(property "Reference" "C304"
-			(at 91.44 29.2162 0)
+			(at 72.39 29.2162 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10754,7 +10024,7 @@
 			)
 		)
 		(property "Value" "220n"
-			(at 91.44 31.7562 0)
+			(at 72.39 31.7562 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -10765,7 +10035,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder"
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10776,7 +10046,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL31B224KBFNNNF?qs=sGAEpiMZZMsh%252B1woXyUXj7iNKXiFkBmw7C%252BUlKpuDJ8%3D"
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10787,7 +10057,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10798,7 +10068,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10809,7 +10079,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10820,7 +10090,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/Samsung-Electro-Mechanics/CL21B224KCFSFNE?qs=664zcAxDQ0l4Y1eUk6Zc1g%3D%3D"
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10831,7 +10101,7 @@
 			)
 		)
 		(property "specs" "100VDC, X7R, 10%, -55C, +125C, 220nF"
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10842,7 +10112,7 @@
 			)
 		)
 		(property "unit x10" "0.054"
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10853,7 +10123,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10864,7 +10134,7 @@
 			)
 		)
 		(property "note" ""
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10875,7 +10145,7 @@
 			)
 		)
 		(property "unit x1" "0.054"
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10886,7 +10156,7 @@
 			)
 		)
 		(property "mouser " ""
-			(at 93.98 30.48 0)
+			(at 74.93 30.48 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -10906,166 +10176,6 @@
 			(project "CANE Junction"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
 					(reference "C304")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Transistor_BJT:MMBT5550L")
-		(at 240.03 110.49 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "eada7884-d155-4010-a705-bb96263a6852")
-		(property "Reference" "Q301"
-			(at 245.11 109.2199 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "MMBT5550L"
-			(at 245.11 111.7599 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
-			(at 245.11 112.395 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-				(justify left)
-			)
-		)
-		(property "Datasheet" "www.onsemi.com/pub/Collateral/MMBT5550LT1-D.PDF"
-			(at 240.03 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Description" "0.6A Ic, 140V Vce, NPN Transistor, SOT-23"
-			(at 240.03 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser" "https://www.mouser.com/ProductDetail/onsemi/MMBT5550LT1G?qs=R2UZ7gjkEjKW3fmkaqXxTw%3D%3D"
-			(at 240.03 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x10" "0.087"
-			(at 240.03 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "unit x1" "0.14"
-			(at 240.03 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Sim.Pins" ""
-			(at 240.03 110.49 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "note" ""
-			(at 240.03 110.49 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "mouser " ""
-			(at 240.03 110.49 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3c0708af-73ef-4b7e-a665-c0497a57ed3a")
-		)
-		(pin "3"
-			(uuid "26396c93-12ed-4041-900f-abc3f0599837")
-		)
-		(pin "2"
-			(uuid "3d225387-869d-4e09-bcfa-9a0e4b2dc445")
-		)
-		(instances
-			(project "CANE Junction"
-				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/ecddfaa5-574e-47c9-961e-691ad3df8c33"
-					(reference "Q301")
-					(unit 1)
-				)
-			)
-			(project "W5500 testing"
-				(path "/3cda9d14-c948-44fe-9af9-6daef6da768c/575b4cdf-c54c-463c-83fa-7ec0ac8843d7"
-					(reference "Q?")
 					(unit 1)
 				)
 			)

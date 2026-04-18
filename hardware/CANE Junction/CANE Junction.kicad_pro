@@ -3,6 +3,8 @@
     "3dviewports": [],
     "design_settings": {
       "defaults": {
+        "apply_defaults_to_fp_barcodes": false,
+        "apply_defaults_to_fp_dimensions": false,
         "apply_defaults_to_fp_fields": false,
         "apply_defaults_to_fp_shapes": false,
         "apply_defaults_to_fp_text": false,
@@ -58,40 +60,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        [
-          "clearance|139274998|116950000|f9db1338-4a35-41fc-8163-7065c9fd1a16|bf7cfd40-d2e1-4e65-8cd7-1c5ce0a0c4cf",
-          ""
-        ],
-        [
-          "clearance|139425002|119750000|dfe3d21f-e198-473a-b729-1070855e25e1|ee7ce011-3664-497f-8a40-01efbb952201",
-          ""
-        ],
-        [
-          "clearance|139774997|116950000|bf7cfd40-d2e1-4e65-8cd7-1c5ce0a0c4cf|bfe874aa-7dba-41c3-93c7-a0038ca9a56b",
-          ""
-        ],
-        [
-          "clearance|139925001|119750000|74c1d4dc-7dba-4104-9a6e-a1515f9c6bee|dfe3d21f-e198-473a-b729-1070855e25e1",
-          ""
-        ],
-        [
-          "clearance|140274999|116950000|bfe874aa-7dba-41c3-93c7-a0038ca9a56b|79b67da2-7755-4953-b5d3-ef808069152a",
-          ""
-        ],
-        [
-          "clearance|140425003|119750000|c0be42d4-0d05-4aa4-a5ee-2eb15ea59ff8|74c1d4dc-7dba-4104-9a6e-a1515f9c6bee",
-          ""
-        ],
-        [
-          "clearance|140774998|116950000|79b67da2-7755-4953-b5d3-ef808069152a|922139ca-1a99-4b46-9a3b-fcebac408c61",
-          ""
-        ],
-        [
-          "clearance|140925002|119750000|9af50487-ea8b-470a-9127-b1f86f736179|c0be42d4-0d05-4aa4-a5ee-2eb15ea59ff8",
-          ""
-        ]
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -110,6 +79,7 @@
         "extra_footprint": "warning",
         "footprint": "error",
         "footprint_filters_mismatch": "warning",
+        "footprint_symbol_field_mismatch": "warning",
         "footprint_symbol_mismatch": "warning",
         "footprint_type_mismatch": "warning",
         "hole_clearance": "error",
@@ -127,6 +97,7 @@
         "mirrored_text_on_front_layer": "warning",
         "missing_courtyard": "warning",
         "missing_footprint": "warning",
+        "missing_tuning_profile": "warning",
         "net_conflict": "warning",
         "nonmirrored_text_on_back_layer": "warning",
         "npth_inside_courtyard": "warning",
@@ -146,9 +117,12 @@
         "too_many_vias": "error",
         "track_angle": "error",
         "track_dangling": "warning",
+        "track_not_centered_on_via": "ignore",
+        "track_on_post_machined_layer": "error",
         "track_segment_length": "error",
         "track_width": "error",
         "tracks_crossing": "error",
+        "tuning_profile_track_geometries": "ignore",
         "unconnected_items": "error",
         "unresolved_variable": "error",
         "via_dangling": "warning",
@@ -273,7 +247,7 @@
       "internal_id": "",
       "mfg": "",
       "mpn": "",
-      "sch_revision": "1.2"
+      "sch_revision": "1"
     },
     "layer_pairs": [],
     "layer_presets": [],
