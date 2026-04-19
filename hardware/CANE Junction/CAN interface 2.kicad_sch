@@ -1459,309 +1459,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Interface_CAN_LIN:ISO1044BD"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at -6.35 6.35 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "ISO1044BD"
-				(at 2.54 6.35 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
-				(at 0 -10.16 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/iso1044.pdf"
-				(at 0 -12.7 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Isolated CAN FD Transceiver, SOIC-8"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "CAN-FD Isolated"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "ISO1044BD_0_1"
-				(rectangle
-					(start -7.62 5.08)
-					(end 7.62 -7.62)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 5.08) (xy 0 3.81)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 2.54) (xy 0 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -2.54) (xy 0 -3.81)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -5.08) (xy 0 -6.35)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "ISO1044BD_1_1"
-				(pin power_in line
-					(at -10.16 2.54 0)
-					(length 2.54)
-					(name "VCC1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -10.16 -2.54 0)
-					(length 2.54)
-					(name "TXD"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin output line
-					(at -10.16 0 0)
-					(length 2.54)
-					(name "RXD"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -10.16 -5.08 0)
-					(length 2.54)
-					(name "GND1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 -2.54 180)
-					(length 2.54)
-					(name "CANL"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "5"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin bidirectional line
-					(at 10.16 0 180)
-					(length 2.54)
-					(name "CANH"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "6"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 10.16 -5.08 180)
-					(length 2.54)
-					(name "GND2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "7"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 10.16 2.54 180)
-					(length 2.54)
-					(name "VCC2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "8"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Reference_Voltage:TL432DBZ"
 			(pin_numbers
 				(hide yes)
@@ -2346,6 +2043,249 @@
 						)
 					)
 					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "zzLocalLibrary:ISO1042"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "ISO1042"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "Package_SO:SOIC-8_7.5x5.85mm_P1.27mm"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.ti.com/lit/ds/symlink/iso1042-q1.pdf"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "isolated can transcevier, 1500Vdc, 5M, CAN-FD"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "mouser" "https://www.mouser.com/ProductDetail/Texas-Instruments/ISO1042BQDWVRQ1?qs=byeeYqUIh0NmbePKADUcRQ%3D%3D"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "ISO1042_0_1"
+				(rectangle
+					(start -7.62 -1.27)
+					(end 7.62 -12.7)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -2.54) (xy 0 -11.43) (xy 0 -7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "ISO1042_1_1"
+				(pin power_in line
+					(at -10.16 -3.81 0)
+					(length 2.54)
+					(name "VCC1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -10.16 -6.35 0)
+					(length 2.54)
+					(name "TXD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at -10.16 -8.89 0)
+					(length 2.54)
+					(name "RXD"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -10.16 -11.43 0)
+					(length 2.54)
+					(name "GND1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 10.16 -11.43 180)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 10.16 -8.89 180)
+					(length 2.54)
+					(name "CANL"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 10.16 -6.35 180)
+					(length 2.54)
+					(name "CANH"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 10.16 -3.81 180)
+					(length 2.54)
+					(name "VCC2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "8"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -4026,16 +3966,6 @@
 	)
 	(wire
 		(pts
-			(xy 109.22 85.09) (xy 111.76 85.09)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "59b98a9c-4077-4cbe-805b-815743ef0e4d")
-	)
-	(wire
-		(pts
 			(xy 20.32 72.39) (xy 21.59 72.39)
 		)
 		(stroke
@@ -4167,7 +4097,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 85.09) (xy 104.14 85.09)
+			(xy 101.6 85.09) (xy 111.76 85.09)
 		)
 		(stroke
 			(width 0)
@@ -4337,6 +4267,16 @@
 	)
 	(wire
 		(pts
+			(xy 109.22 90.17) (xy 111.76 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a8fc2934-dd87-46a8-b3d0-22166d1b1915")
+	)
+	(wire
+		(pts
 			(xy 109.22 120.65) (xy 109.22 123.19)
 		)
 		(stroke
@@ -4397,7 +4337,7 @@
 	)
 	(wire
 		(pts
-			(xy 101.6 90.17) (xy 111.76 90.17)
+			(xy 101.6 90.17) (xy 104.14 90.17)
 		)
 		(stroke
 			(width 0)
@@ -4808,7 +4748,7 @@
 	)
 	(hierarchical_label "RX"
 		(shape output)
-		(at 129.54 57.15 0)
+		(at 129.54 59.69 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -4841,7 +4781,7 @@
 	)
 	(hierarchical_label "TX"
 		(shape input)
-		(at 129.54 59.69 0)
+		(at 129.54 57.15 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5490,7 +5430,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 106.68 85.09 90)
+		(at 106.68 90.17 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5500,7 +5440,7 @@
 		(dnp no)
 		(uuid "30faa913-6421-4e80-b1ad-9a61bc1d725e")
 		(property "Reference" "R405"
-			(at 106.68 80.264 90)
+			(at 106.68 85.344 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5510,7 +5450,7 @@
 			)
 		)
 		(property "Value" "121"
-			(at 106.68 82.804 90)
+			(at 106.68 87.884 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5520,7 +5460,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder"
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5531,7 +5471,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5542,7 +5482,7 @@
 			)
 		)
 		(property "Description" "Resistor, US symbol"
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5553,7 +5493,7 @@
 			)
 		)
 		(property "Sim.Device" ""
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5564,7 +5504,7 @@
 			)
 		)
 		(property "Sim.Type" ""
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5575,7 +5515,7 @@
 			)
 		)
 		(property "mouser" "https://www.mouser.com/ProductDetail/SEI-Stackpole/RNCP0805FTD121R?qs=sGAEpiMZZMvdGkrng054tyMPH50YnZ95dJmxWK8e%2FBgSyeAIVnAHjA%3D%3D"
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5586,7 +5526,7 @@
 			)
 		)
 		(property "specs" "121Ohm, 200V, 250mW, 1%, 100ppm, -55C, +155C"
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5597,7 +5537,7 @@
 			)
 		)
 		(property "unit x1" "0.10"
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5608,7 +5548,7 @@
 			)
 		)
 		(property "unit x10" "0.012"
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5619,7 +5559,7 @@
 			)
 		)
 		(property "Sim.Pins" ""
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5630,7 +5570,7 @@
 			)
 		)
 		(property "note" ""
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5641,7 +5581,7 @@
 			)
 		)
 		(property "Mouser Part Number" ""
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5652,7 +5592,7 @@
 			)
 		)
 		(property "Field10" ""
-			(at 106.68 85.09 0)
+			(at 106.68 90.17 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6058,6 +5998,17 @@
 				)
 			)
 		)
+		(property "mouser" "https://www.mouser.com/ProductDetail/Molex/43045-0421?qs=UeCeOHRHQebihHCqX%252BVk8Q%3D%3D"
+			(at 29.21 21.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
 		(pin "2"
 			(uuid "c06f9f28-0633-4b2d-a7e2-90b80bdc66ef")
 		)
@@ -6405,8 +6356,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Interface_CAN_LIN:ISO1044BD")
-		(at 119.38 57.15 0)
+		(lib_id "zzLocalLibrary:ISO1042")
+		(at 119.38 50.8 0)
 		(mirror y)
 		(unit 1)
 		(body_style 1)
@@ -6415,9 +6366,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "834697c5-9a3c-4433-8dd7-517cf04fc2a7")
-		(property "Reference" "U403"
-			(at 119.38 69.85 0)
+		(uuid "85492335-7c31-49aa-b45b-271d20c5099a")
+		(property "Reference" "U4"
+			(at 119.38 46.99 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6426,8 +6377,8 @@
 				)
 			)
 		)
-		(property "Value" "ISO1044BD"
-			(at 119.38 67.31 0)
+		(property "Value" "ISO1042"
+			(at 119.38 49.53 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6436,20 +6387,8 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm"
-			(at 119.38 67.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-					(italic yes)
-				)
-			)
-		)
-		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/iso1044.pdf"
-			(at 119.38 69.85 0)
+		(property "Footprint" "Package_SO:SOIC-8_7.5x5.85mm_P1.27mm"
+			(at 119.38 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6459,8 +6398,8 @@
 				)
 			)
 		)
-		(property "Description" "Isolated CAN FD Transceiver, SOIC-8"
-			(at 119.38 57.15 0)
+		(property "Datasheet" "https://www.ti.com/lit/ds/symlink/iso1042-q1.pdf"
+			(at 119.38 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6470,34 +6409,56 @@
 				)
 			)
 		)
-		(pin "3"
-			(uuid "982f18cb-bed5-4e3f-8ab2-a24209e7f71a")
+		(property "Description" "isolated can transcevier, 1500Vdc, 5M, CAN-FD"
+			(at 119.38 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
 		)
-		(pin "4"
-			(uuid "2b143c4a-0119-4a79-968b-4f825a38616b")
-		)
-		(pin "1"
-			(uuid "d1facd52-dba0-4654-a265-7d47e178be55")
-		)
-		(pin "8"
-			(uuid "dc07b08f-ca3b-46e2-ac89-0fbf00857919")
+		(property "mouser" "https://www.mouser.com/ProductDetail/Texas-Instruments/ISO1042BQDWVRQ1?qs=byeeYqUIh0NmbePKADUcRQ%3D%3D"
+			(at 119.38 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
 		)
 		(pin "6"
-			(uuid "1863574e-9e04-4ab5-9f45-9d594663c2b8")
+			(uuid "bb9bf23b-6585-4e76-8872-af7671a68deb")
 		)
-		(pin "7"
-			(uuid "7f9d104d-cbb1-4d0e-86ba-487be485b0d9")
-		)
-		(pin "2"
-			(uuid "b73f4d40-7a29-47ae-84d4-051fcd70eeb5")
+		(pin "4"
+			(uuid "44555cee-da4d-4fae-a329-70efa17b914d")
 		)
 		(pin "5"
-			(uuid "cd40b6f2-58ce-4cf1-beef-89a9b3001477")
+			(uuid "8c1d0073-e06e-44d0-b8e8-c0b3a2e1c026")
+		)
+		(pin "8"
+			(uuid "d5a93ee5-be3f-48d9-8ef7-94b01622316b")
+		)
+		(pin "2"
+			(uuid "0232974a-7365-44f8-a264-d416e5785652")
+		)
+		(pin "3"
+			(uuid "fb91ca25-7e35-4822-9ad9-3947c29d0f2e")
+		)
+		(pin "7"
+			(uuid "05262aa5-21e8-481f-b71c-4d0179e49a3f")
+		)
+		(pin "1"
+			(uuid "a0f3a9e1-9b8d-4243-bd42-03190de49cde")
 		)
 		(instances
 			(project "CANE Junction"
 				(path "/20ac6af0-79b5-4ba6-aad3-75081d02c913/77ba9f55-a932-4615-96e7-79448df1d300"
-					(reference "U403")
+					(reference "U4")
 					(unit 1)
 				)
 			)
