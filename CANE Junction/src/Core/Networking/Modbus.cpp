@@ -1,0 +1,221 @@
+/*
+ * Modbus.cpp
+ *
+ *  Created on: Dec 2, 2025
+ *      Author: turtl
+ */
+
+#include <Core/Networking/ModbusRegisters.hpp>
+#include "Modbus.hpp"
+#include "Core/system.hpp"
+#include "Core/std alternatives/string.hpp"
+
+
+bool Networking::Modbus::ProcessRequest(MBAPHeader const * rxheader, buffersize_t rxlen, MBAPHeader * txheader, buffersize_t txlen) {
+    auto & uart = System::UART::uart_ui;
+    auto & rxadu = rxheader->adu[0];
+    auto & txadu = txheader->adu[0];
+
+
+    /*** general validation ***********************************/
+
+    // is user bonkers
+    if(!rxheader || !txheader)
+        return false;
+
+    // is user stupid
+    if(rxlen < sizeof(MBAPHeader) + ntoh16(rxheader->len)) {
+        uart.nputs(ARRANDN("buffer too small" NEWLINE));
+        return false;
+    }
+
+
+    /*** packet specific response *****************************/
+
+    switch (rxadu.func) {
+//            uart.nputs(ARRANDN("R_COILS unhandled" NEWLINE));
+//            return false;
+//            break;
+
+        case Function::R_COILS:
+        case Function::R_DISRETE_INPUTS: {
+//                uart.nputs(ARRANDN("R_DISRETE_INPUTS unhandled" NEWLINE));
+
+                auto query  = reinterpret_cast<F_Range_REQ const *>(rxadu.data);
+                auto resp   = reinterpret_cast<F_Range_RES *>(txadu.data);
+
+                /*** validation ***********/
+
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ)) {
+                    uart.nputs(ARRANDN("R_DISRETE_INPUTS or R_COILS too big _50" NEWLINE));
+                    return false;
+                }
+
+
+                /*** response *************/
+
+                *txheader   = *rxheader;
+                txadu       = rxadu;
+                resp->byteCount = 1;
+
+                uint8_t b = 0;
+
+                for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
+                    uint16_t res;
+
+                    if(i == 0)
+                        resp->val8[b] = 0;
+
+                    if(i % 8 == 0 && i != 0) {
+                        b++;
+
+                        if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + b) { // constrain to tx buffer size
+                            uart.nputs(ARRANDN("R_DISRETE_INPUTS or R_COILS too wompy _72" NEWLINE));
+                            return false;
+                        }
+
+                        resp->val8[b] = 0;
+                        resp->byteCount++;
+                    }
+
+//                    uart.nputs(ARRANDN("\tregister: "));
+//                    uart.putu32d(ntoh16(query->start) + i);
+//                    uart.nputs(ARRANDN(NEWLINE));
+
+                    if(!Networking::Modbus::MasterRegisters::getReg(ntoh16(query->start) + i, &res)) {
+                        uart.nputs(ARRANDN("R_DISRETE_INPUTS or R_COILS too wompy _86" NEWLINE));
+                        return false;
+                    }
+
+                    if(res)
+                        resp->val8[b] |= BV(i%8);
+                }
+
+                txheader->len = hton16(resp->byteCount + sizeof(F_Range_RES) + sizeof(ADUPacket));
+
+                return true;
+            } break;
+
+        case Function::R_INPUT_REGS:
+        case Function::R_HOLDING_REGS: {
+                auto query  = reinterpret_cast<F_Range_REQ const *>(rxadu.data);
+                auto resp   = reinterpret_cast<F_Range_RES *>(txadu.data);
+
+                /*** validation ***********/
+
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ)) {
+                    uart.nputs(ARRANDN("R_INPUT_REGS or R_HOLDING_REGS too big _107" NEWLINE));
+                    return false;
+                }
+
+
+                /*** response *************/
+
+                *txheader   = *rxheader;
+                txadu       = rxadu;
+                resp->byteCount = 0;
+
+//                uart.nputs(ARRANDN("- ntoh16(query->len):"));
+//                uart.put32d(ntoh16(query->len));
+//                uart.nputs(ARRANDN(NEWLINE));
+                for(uint16_t i = 0; i < ntoh16(query->len); i++){ // for each requested address
+                    uint16_t res;
+
+                    if(txlen < sizeof(MBAPHeader) + sizeof(ADUPacket) + sizeof(res) + sizeof(res) * i) { // constrain to tx buffer size
+                        uart.nputs(ARRANDN("R_INPUT_REGS or R_HOLDING_REGS too big _125" NEWLINE));
+                        return false;
+                    }
+
+                    if(!Networking::Modbus::MasterRegisters::getReg(ntoh16(query->start) + i, &res)) {
+                        uart.nputs(ARRANDN("R_INPUT_REGS or R_HOLDING_REGS too big _130" NEWLINE));
+                        uart.put32d(ntoh16(query->start) + i);
+                        uart.nputs(ARRANDN(NEWLINE));
+                        return false;
+                    }
+
+
+                    resp->val16[i] = hton16(res);
+                    resp->byteCount += sizeof(res);
+                }
+
+                txheader->len = hton16((uint16_t)resp->byteCount + sizeof(F_Range_RES) + sizeof(ADUPacket));
+//                txheader->len = hton16(7);
+//                uart.nputs(ARRANDN("mbapheader len: "));
+//                uart.put32d(ntoh16(txheader->len));
+//                uart.nputs(ARRANDN(" \t, resp->bytecount:"));
+//                uart.put32d(resp->byteCount);
+//                uart.nputs(ARRANDN(" \t, sizeof(F_Range_RES):"));
+//                uart.put32d(sizeof(F_Range_RES));
+//                uart.nputs(ARRANDN(" \t, sizeof(ADUPacket):"));
+//                uart.put32d(sizeof(ADUPacket));
+//                uart.nputs(ARRANDN(NEWLINE));
+
+                return true;
+            } break;
+
+        case Function::W_REG:
+        case Function::W_COIL: {
+//                uart.nputs(ARRANDN("W_COIL" NEWLINE));
+                auto query  = reinterpret_cast<F_W_COIL const *>(rxadu.data);
+                auto resp   = reinterpret_cast<F_W_COIL *>(txadu.data);
+
+                /*** validation ***********/
+
+                if(ntoh16(rxheader->len) < sizeof(ADUPacket) + sizeof(F_Range_REQ)) {
+                    uart.nputs(ARRANDN("W_REG or W_COIL too big _163" NEWLINE));
+                    return false;
+                }
+
+                if(txlen < rxlen) { // must echo back identical packet on success
+                    uart.nputs(ARRANDN("W_REG or W_COIL too big _168" NEWLINE));
+                    return false;
+                }
+
+                /*** response *************/
+
+//                uart.nputs(ARRANDN("\tregister: "));
+//                uart.putu32d(ntoh16(query->addr));
+//                uart.nputs(ARRANDN(NEWLINE));
+//                uart.nputs(ARRANDN("\tvalue: "));
+//                uart.putu32d(ntoh16(query->val));
+//                uart.nputs(ARRANDN(NEWLINE));
+
+                // assume is normal register operation?
+                if(!Networking::Modbus::MasterRegisters::setReg(ntoh16(query->addr), ntoh16(query->val))) {
+                    // not register operation, try as 'command'
+                    if(!Networking::Modbus::MasterCommands::command(ntoh16(query->addr), ntoh16(query->val)))
+                    {
+                        uart.nputs(ARRANDN("\tmodbes w_coil/reg failed D:" NEWLINE));uart.nputs(ARRANDN("\tregister: "));
+                        uart.putu32d(ntoh16(query->addr));
+                        uart.nputs(ARRANDN(NEWLINE));
+                        uart.nputs(ARRANDN("\tvalue: "));
+                        uart.putu32d(ntoh16(query->val));
+                        uart.nputs(ARRANDN(NEWLINE));
+                    }
+                }
+
+                // echo back identical packet
+                ALT::memcpy(rxheader, txheader, ntoh16(rxheader->len) + sizeof(MBAPHeader)); // brute force
+
+                return true;
+            } break;
+
+        case Function::W_COILS:
+            uart.nputs(ARRANDN("W_COILS unhandled" NEWLINE));
+            return false;
+            break;
+
+        case Function::W_REGS:
+            uart.nputs(ARRANDN("W_REGS unhandled" NEWLINE));
+            return false;
+            break;
+
+        default:
+            uart.nputs(ARRANDN("Modbus: received unknown function : "));
+            uart.put32d(rxadu.func);
+            uart.nputs(ARRANDN(NEWLINE));
+            return false;
+            break;
+    }
+
+}
