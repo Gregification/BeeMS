@@ -50,7 +50,7 @@
         "silk_text_thickness": 0.1,
         "silk_text_upright": false,
         "zones": {
-          "min_clearance": 0.2
+          "min_clearance": 0.0
         }
       },
       "diff_pair_dimensions": [
@@ -60,7 +60,88 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "lib_footprint_issues|143029425|57105728|e9b57c0c-00c3-4586-b1cc-1c1d0aa6d271|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|111192500|71900000|4c19a99b-b7aa-4273-a282-302e379565ab|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|115667500|91300000|80f43294-fb99-41c8-9e2d-8b70aa20b58f|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|116682500|55550000|cb99ba8f-0b92-48bd-9566-62d18948fbe9|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|125800000|94700000|96b029a0-2926-4af4-9292-0ac70f80f5b1|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|139850000|62650000|eaa817d7-8fb5-408c-905e-510a6b5d7b54|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "missing_courtyard|141786437|57017485|e9b57c0c-00c3-4586-b1cc-1c1d0aa6d271|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "silk_edge_clearance|100000000|60915000|1ad52a18-d545-4282-a926-f88c24cb8ce3|f22b9dce-b641-4ea1-82bd-6d0e16c24e04",
+          ""
+        ],
+        [
+          "silk_edge_clearance|100000000|71285000|1ad52a18-d545-4282-a926-f88c24cb8ce3|c8b9aa8c-5cd4-4624-9689-4cd405e364c5",
+          ""
+        ],
+        [
+          "silk_edge_clearance|100000000|89515000|1ad52a18-d545-4282-a926-f88c24cb8ce3|4fde0c07-8051-4b16-a2d1-52e149bd7788",
+          ""
+        ],
+        [
+          "silk_edge_clearance|100000000|99885000|1ad52a18-d545-4282-a926-f88c24cb8ce3|f70eb95b-41c7-48aa-a1c6-f060348f5651",
+          ""
+        ],
+        [
+          "silk_edge_clearance|121800000|50000000|1ad52a18-d545-4282-a926-f88c24cb8ce3|cab4e3fa-1e0a-4589-898a-388f3faf8a0c",
+          ""
+        ],
+        [
+          "silk_edge_clearance|124101000|110000000|1ad52a18-d545-4282-a926-f88c24cb8ce3|966708b1-3a22-400f-bbb1-da67cd0f1bea",
+          ""
+        ],
+        [
+          "silk_edge_clearance|127397159|50031178|1ad52a18-d545-4282-a926-f88c24cb8ce3|a38521d7-cb10-4c63-843d-00e7c9c2131b",
+          ""
+        ],
+        [
+          "silk_edge_clearance|160000000|72063375|1ad52a18-d545-4282-a926-f88c24cb8ce3|b90592ae-ac4c-42b6-9cdf-798f395c7a2c",
+          ""
+        ],
+        [
+          "silk_edge_clearance|160000000|88013375|1ad52a18-d545-4282-a926-f88c24cb8ce3|e9f419c0-9dd7-40c9-81cf-f68db3a1ff9d",
+          ""
+        ],
+        [
+          "silk_edge_clearance|99955000|60915000|1ad52a18-d545-4282-a926-f88c24cb8ce3|2090ab70-9fdc-4d73-9e09-ea76949b6105",
+          ""
+        ],
+        [
+          "silk_edge_clearance|99955000|71285000|1ad52a18-d545-4282-a926-f88c24cb8ce3|6594b3ff-4bc1-4a36-a76e-88849b59e6b7",
+          ""
+        ],
+        [
+          "silk_edge_clearance|99970000|89515000|1ad52a18-d545-4282-a926-f88c24cb8ce3|ebebf16e-0084-4502-84cf-9e80b571be07",
+          ""
+        ],
+        [
+          "silk_edge_clearance|99970000|99885000|1ad52a18-d545-4282-a926-f88c24cb8ce3|a20cf41a-723a-4c74-8d2d-22569e1c221c",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -234,8 +315,8 @@
           "drill": 0.0
         },
         {
-          "diameter": 0.6,
-          "drill": 0.3
+          "diameter": 0.635,
+          "drill": 0.3048
         }
       ],
       "zones_allow_external_fillets": false
@@ -749,6 +830,48 @@
           "group_by": false,
           "label": "mouser 1",
           "name": "mouser 1",
+          "show": true
+        },
+        {
+          "group_by": false,
+          "label": "Arrow Price/Stock",
+          "name": "Arrow Price/Stock",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Mouser Price/Stock",
+          "name": "Mouser Price/Stock",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer_Part_Number",
+          "name": "Manufacturer_Part_Number",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Height",
+          "name": "Height",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Manufacturer_Name",
+          "name": "Manufacturer_Name",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Arrow Part Number",
+          "name": "Arrow Part Number",
+          "show": false
+        },
+        {
+          "group_by": false,
+          "label": "Field10",
+          "name": "Field10",
           "show": false
         }
       ],
