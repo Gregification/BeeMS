@@ -11,6 +11,7 @@
  *
  * dev notes
  *  - for the love of god do not use IRQ's unless your willing to catch every edge case when swapping VT's and what not.
+ *  - BLS and BC memory edits have been disabled in this CCS project
  *
  * references
  *  - Technical Data Sheet (TDS) : www.ti.com/lit/ug/slau846d/slau846d.pdf
@@ -40,14 +41,20 @@
 
 /***********************************************************************************/
 
+#define BV(X) (1 << (X))
+
 
 /*** USR DEFINED ***************/
 
 #define APP_START_ADDR 0x1000   // address of app vector table. must be >=BL_SIZE (see linker cmd)
 
+
 /*******************************/
 
 extern uint32_t BL_SIZE;
+
+#define LED_PORT    GPIOA
+#define LED_PIN     BV(0)
 
 void startApp();
 
@@ -56,54 +63,83 @@ void BL_init();
 /** resets all peripherals modified by BL */
 void BL_deinit();
 
+void delaymS(uint32_t ms);
+void blinkError();
+
 int main(){
+    BL_init();
 
     if((uint32_t)&BL_SIZE > APP_START_ADDR) {
-        // TODO: perform BL static failure blink code
-        while(1);
+        blinkError();
     }
 
     startApp();
 }
 
 void BL_init() {
+    DL_GPIO_disablePower(GPIOA);
+    DL_GPIO_reset(GPIOA);
+    DL_GPIO_enablePower(GPIOA);
+    delay_cycles(16);
 
+    DL_GPIO_initDigitalOutput(IOMUX_PINCM1);
+    DL_GPIO_enableOutput(LED_PORT, LED_PIN);
 }
 
 void BL_deinit() {
+    DL_GPIO_disableOutput(LED_PORT, LED_PIN);
 
+    DL_GPIO_disablePower(GPIOA);
+    DL_GPIO_reset(GPIOA);
 }
 
 void startApp() {
-    __disable_irq();
-
-    // vector table info at [TDN.3.3.2/460]
-    typedef  void (*VTHandler_f)(void);
-
-    uint32_t * avt = (uint32_t *)APP_START_ADDR; // app vector table
+    volatile uint32_t * avt = (uint32_t *)APP_START_ADDR; // app vector table
 
     /*** validate app ***********/
 
     // is SP in valid ram
     if (avt[0] < 0x20200000 || avt[0] > 0x20220000) {
-        // TODO: perform BL VT-RAM failure blink code
-        while(1);
+        blinkError();
     }
 
     // is reset handle is valid flash
     if (avt[1] == 0xFFFFFFFF) {
-        // TODO: perform BL VT-reset failure blink code
-        while(1);
+        blinkError();
     }
 
 
     /*** launch app *************/
+    __disable_irq();
+    BL_deinit();
 
     __set_MSP(avt[0]); // set SP
     SCB->VTOR = APP_START_ADDR; // set VT mem offset
 
-    volatile VTHandler_f app_reset = (VTHandler_f )avt[1];
+    // vector table info at [TDN.3.3.2/460]
+    typedef  void (*VTHandler_f)(void);
+
+    void (*app_reset)(void) = (void (*)(void))avt[1];
     app_reset();
 
-    while(1); // should never run
+    blinkError(); // should never run
+}
+
+void delaymS(uint32_t ms) {
+    delay_cycles(ms * 32e3); // default power on clock is 32e6
+}
+
+void blinkError() {
+    // i am not decoding a led live. if this is ever seen just know its a BL error.
+
+    while(1) {
+        for(int i = 0; i < 10; i++) {
+            DL_GPIO_togglePins(LED_PORT, LED_PIN);
+            delaymS(30);
+        }
+        for(int i = 0; i < 7; i++) {
+            DL_GPIO_togglePins(LED_PORT, LED_PIN);
+            delaymS(100);
+        }
+    }
 }

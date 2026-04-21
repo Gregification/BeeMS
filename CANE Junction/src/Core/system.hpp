@@ -56,19 +56,24 @@
 
 /*--- meta ---------------------------------------------*/
 
-#define PROJECT_NAME            "Master Board"
+#define PROJECT_NAME            "Can Ethernet (CANE) junction"
 #define PROJECT_DESCRIPTION     "github.com/Gregification/BeeMS"
-#define PROJECT_VERSION         "3.1" // [project version].[hardware version].[software version]
-#define PROJECT_VERSION_N       310
+#define PROJECT_VERSION         "0.1" // [project version].[hardware version].[software version]
+#define PROJECT_VERSION_N       001
 
 /*--- IC footprint -------------------------------------*/
 // when changing footprints update this manually then match the library using the project settings.
+// see UG.6.1/9
 
-//#define MSPM0G3507_LQFP64   // UG.6.1/6
-#define MSPM0G3507_LQFP48   // UG.6.1/7
-//#define MSPM0G3507_VQFN48   // UG.6.1/8
-//#define MSPM0G3507_VQFN32   // UG.6.1/9
-//#define MSPM0G3507_VSSOP28  // UG.6.1/9
+#define MSPM0G3519_PZ
+//#define MSPM0G3519_PN
+//#define MSPM0G3519_PM
+//#define MSPM0G3519_PT
+//#define MSPM0G3519_RGZ
+//#define MSPM0G3519_RHB
+//#define MSPM0G3519_ZAW // no Q1 available.
+//#define MSPM0G3519_YCJ // no Q1 available. gets released ~july 2026
+
 
 /*--- shorthand ----------------------------------------*/
 
@@ -103,8 +108,8 @@
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
 
-//#define PROJECT_ENABLE_UART0        // LP
-#define PROJECT_ENABLE_UART2        // MB_A 1.0
+#define PROJECT_ENABLE_UART0        // LP
+//#define PROJECT_ENABLE_UART2
 
 #define PROJECT_ENABLE_SPI0
 #define PROJECT_ENABLE_SPI1
@@ -127,28 +132,8 @@ namespace System {
     #ifdef PROJECT_ENABLE_I2C1
     #error "should not be used"
     #endif
-    #ifdef PROJECT_ENABLE_UART0
-    #error "should not be used"
-    #endif
     #ifdef PROJECT_ENABLE_UART1
     #error "should not be used"
-    #endif
-
-    #ifdef PROJECT_ENABLE_UART2
-    OCCUPY(PA21)    // tx
-    OCCUPY(PA22)    // rx
-    #endif
-
-    #ifdef PROJECT_ENABLE_SPI0
-    OCCUPY(PA12)    // sclk
-    OCCUPY(PA13)    // miso/poci
-    OCCUPY(PA14)    // mosi/pico
-    #endif
-
-    #ifdef PROJECT_ENABLE_SPI1
-    OCCUPY(PA17)    // sclk
-    OCCUPY(PA16)    // miso/poci
-    OCCUPY(PA18)    // mosi/pico
     #endif
 }
 
@@ -231,44 +216,48 @@ namespace System {
 
             void set() const { DL_GPIO_setPins(port, pin); }
             void clear() const { DL_GPIO_clearPins(port, pin); }
+            void toggle() const {DL_GPIO_togglePins(port, pin); }
 
             bool get() const { return DL_GPIO_readPins(port, pin); }
             bool getOutput() const { return port->DOUT31_0 & pin; }
         };
 
-        // Port A (PA) pins
-        #ifdef  MSPM0G3507_LQFP64
-            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
-                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
-                 PA16, PA17, PA18, PA21, PA22, PA23,        // PA19 and PA20 reserved for SWD
-                 PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31;
-        #elif defined MSPM0G3507_VQFN32
-            // double check
-            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
-                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
-                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
-                 PA24, PA25, PA26, PA27;
-        #elif defined MSPM0G3507_LQFP48
-            extern const GPIO PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
-                 PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
-                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23,
-                 PA24, PA25, PA26, PA27, PA28, PA31;
-        #else
-            #error "forgot to setup the available pins for this footprint"
-        #endif
-
-        // Port B (PB) pins
-        #ifdef  MSPM0G3507_LQFP64
-            extern const GPIO PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7,
-                 PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
-                 PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23,
-                 PB24, PB25, PB26, PB27;
-        #elif defined MSPM0G3507_VQFN32
-            // no port B
-        #elif defined MSPM0G3507_LQFP48
-            extern const GPIO PB2, PB3, PB6, PB7, PB8, PB9,
-                 PB14, PB15, PB16, PB17, PB18, PB19, PB20,
-                 PB21, PB22, PB23, PB24;
+        // pins. PA19 and PA20 reserved for SWD. too much hassle for mixed use
+        #ifdef MSPM0G3519_PZ
+            extern const GPIO
+                PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31,
+                PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
+                PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23, PB24, PB25, PB26, PB27, PB28, PB29, PB30, PB31,
+                PC0, PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10, PC11, PC12, PC13, PC14, PC15,
+                PC16, PC17, PC18, PC19, PC20, PC21, PC22, PC23, PC24, PC25, PC26, PC27, PC28, PC29;
+        #elif MSPM0G3519_PN
+            extern const GPIO
+                PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31,
+                PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
+                PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23, PB24, PB25, PB26, PB27, PB28, PB29, PB30, PB31,
+                PC0, PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9;
+        #elif MSPM0G3519_PM
+            extern const GPIO
+                PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31,
+                PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
+                PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23, PB24, PB25, PB26, PB27;
+        #elif MSPM0G3519_PT
+            extern const GPIO
+                PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA31,
+                PB2, PB3, PB6, PB7, PB8, PB9, PB14, PB15, PB16, PB17, PB18, PB19, PB20, PB24;
+        #elif MSPM0G3519_RGZ
+            extern const GPIO
+                PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA31,
+                PB2, PB3, PB6, PB7, PB8, PB9, PB14, PB15, PB16, PB17, PB18, PB19, PB20, PB24;
+        #elif MSPM0G3519_RHB
+            extern const GPIO
+                PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
+                PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27;
         #else
             #error "forgot to setup the available pins for this footprint"
         #endif

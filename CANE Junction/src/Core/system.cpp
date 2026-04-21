@@ -10,9 +10,6 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
-#include "Core/BMS/BMSComms.hpp"
-#include "Core/Networking/bridge_CAN_Modbus.hpp"
-#include "Core/MasterBoard.hpp"
 
 /*--- variables ------------------------------------------------------------------------*/
 
@@ -110,7 +107,30 @@ void System::init() {
     #ifdef PROJECT_ENABLE_UART0
     {
         using namespace UART;
-        uart0.partialInit();
+        DL_UART_disable(uart0.reg);
+        DL_UART_disablePower(uart0.reg);
+        DL_UART_reset(uart0.reg);
+        DL_UART_enablePower(uart0.reg);
+
+        constexpr DL_UART_ClockConfig config_uart_clk = {
+                .clockSel   = DL_UART_CLOCK::DL_UART_CLOCK_MFCLK,
+                .divideRatio= DL_UART_CLOCK_DIVIDE_RATIO::DL_UART_CLOCK_DIVIDE_RATIO_1,
+            };
+        constexpr DL_UART_Config config_uart = {
+                .mode        = DL_UART_MODE::DL_UART_MAIN_MODE_NORMAL,
+                .direction   = DL_UART_DIRECTION::DL_UART_MAIN_DIRECTION_TX_RX,
+                .flowControl = DL_UART_FLOW_CONTROL::DL_UART_MAIN_FLOW_CONTROL_NONE,
+                .parity      = DL_UART_PARITY::DL_UART_MAIN_PARITY_NONE,
+                .wordLength  = DL_UART_WORD_LENGTH::DL_UART_MAIN_WORD_LENGTH_8_BITS,
+                .stopBits    = DL_UART_STOP_BITS::DL_UART_MAIN_STOP_BITS_ONE
+            };
+        DL_UART_setClockConfig(uart0.reg, &config_uart_clk);
+        DL_UART_init(uart0.reg, &config_uart);
+
+        DL_UART_setOversampling(uart0.reg, DL_UART_OVERSAMPLING_RATE::DL_UART_OVERSAMPLING_RATE_16X);
+
+        DL_UART_enableFIFOs(uart0.reg);
+
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
         DL_UART_enable(uart0.reg);
@@ -119,11 +139,7 @@ void System::init() {
 
     #ifdef PROJECT_ENABLE_UART2
     {
-        using namespace UART;
-        uart2.partialInit();
-        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM46, IOMUX_PINCM46_PF_UART2_TX); // PA21
-        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM47, IOMUX_PINCM47_PF_UART2_RX); // PA22
-        DL_UART_enable(uart2.reg);
+        #error "undefined pinning"
     }
     #endif
 
@@ -468,33 +484,33 @@ void System::init() {
 
             DL_MCAN_msgRAMConfig(CANFD0, &ramConfig);
 
-            { /* modbus packets routed to modbus rx fifo , if device ID matches*/
-                const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
-                    .efid1  = (((uint32_t)BMSComms::J1939_PF_e::MOD) << 16) | ((uint32_t)BMSComms::getID() << 8),
-                    .efec   = CANFD::MODBUS_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
-                    .efid2  = 0xFFFF << 8,
-                    .eft    = 0b10
-                };
-                DL_MCAN_addExtMsgIDFilter(CANFD0, 0, &modbusFilter);
-            }
-            { /* broadcast packets routed to operational rx fifo */
-                const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
-                    .efid1  = ((uint32_t)BMSComms::J1939_PF_e::B) << 16,
-                    .efec   = CANFD::OP_RXFIFO == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
-                    .efid2  = 0xFF << 16,
-                    .eft    = 0b10
-                };
-                DL_MCAN_addExtMsgIDFilter(CANFD0, 1, &modbusFilter);
-            }
-            { /* SM packets routed to operational rx fifo , if device ID matches */
-                const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
-                    .efid1  = (((uint32_t)BMSComms::J1939_PF_e::SM) << 16) | ((uint32_t)BMSComms::getID() << 8),
-                    .efec   = CANFD::OP_RXFIFO == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
-                    .efid2  = 0xFFFF << 8,
-                    .eft    = 0b10
-                };
-                DL_MCAN_addExtMsgIDFilter(CANFD0, 2, &modbusFilter);
-            }
+//            { /* modbus packets routed to modbus rx fifo , if device ID matches*/
+//                const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
+//                    .efid1  = (((uint32_t)BMSComms::J1939_PF_e::MOD) << 16) | ((uint32_t)BMSComms::getID() << 8),
+//                    .efec   = CANFD::MODBUS_RXFIFO  == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
+//                    .efid2  = 0xFFFF << 8,
+//                    .eft    = 0b10
+//                };
+//                DL_MCAN_addExtMsgIDFilter(CANFD0, 0, &modbusFilter);
+//            }
+//            { /* broadcast packets routed to operational rx fifo */
+//                const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
+//                    .efid1  = ((uint32_t)BMSComms::J1939_PF_e::B) << 16,
+//                    .efec   = CANFD::OP_RXFIFO == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
+//                    .efid2  = 0xFF << 16,
+//                    .eft    = 0b10
+//                };
+//                DL_MCAN_addExtMsgIDFilter(CANFD0, 1, &modbusFilter);
+//            }
+//            { /* SM packets routed to operational rx fifo , if device ID matches */
+//                const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
+//                    .efid1  = (((uint32_t)BMSComms::J1939_PF_e::SM) << 16) | ((uint32_t)BMSComms::getID() << 8),
+//                    .efec   = CANFD::OP_RXFIFO == DL_MCAN_RX_FIFO_NUM_0 ? 0b001 : 0b010,
+//                    .efid2  = 0xFFFF << 8,
+//                    .eft    = 0b10
+//                };
+//                DL_MCAN_addExtMsgIDFilter(CANFD0, 2, &modbusFilter);
+//            }
             { /* unused filter element */
                 const DL_MCAN_ExtMsgIDFilterElement modbusFilter = {
                     .efec   = 0, // disable
@@ -605,10 +621,6 @@ void System::FailHard(const char *str) {
 
     static uint32_t count = 0;
 
-    MstrB::Indi::LED::fault.set();
-    MstrB::opVars.GLV_IL_RELAY_engage = false;
-    MstrB::IL::getStatus(); // update relay
-
     while(1) {
         System::UART::uart_ui.nputs(ARRANDN(NEWLINE CLIERROR "fatal error "));
         System::UART::uart_ui.putu32d(count);
@@ -616,7 +628,7 @@ void System::FailHard(const char *str) {
         System::UART::uart_ui.nputs(str, MAX_STR_ERROR_LEN);
 
         for(int i = 0; i < 6; i++){
-            DL_GPIO_togglePins(GPIOPINPUX(MstrB::Indi::LED::fault));
+
             delay_cycles(System::CLK::CPUCLK / 2);
         }
 
@@ -1085,41 +1097,47 @@ static_assert(pdFALSE == false,
         definition. code probably wont work. maybe FreeRTOS files were edited. consider reinstall."
     );
 
-#ifdef MSPM0G3507_LQFP64
-    #define MSPM0G3507_FOOTPRINT_C0 1
+#ifdef MSPM0G3519_PZ
+    #define MSPM0G3519_PZ_C 1
 #else
-    #define MSPM0G3507_FOOTPRINT_C0 0
+    #define MSPM0G3519_PZ_C 0
 #endif
-#ifdef MSPM0G3507_LQFP48
-    #define MSPM0G3507_FOOTPRINT_C1 1
+#ifdef MSPM0G3519_PN
+    #define MSPM0G3519_PN_C 1
 #else
-    #define MSPM0G3507_FOOTPRINT_C1 0
+    #define MSPM0G3519_PN_C 0
 #endif
-#ifdef MSPM0G3507_VQFN48
-    #define MSPM0G3507_FOOTPRINT_C2 1
+#ifdef MSPM0G3519_PM
+    #define MSPM0G3519_PM_C 1
 #else
-    #define MSPM0G3507_FOOTPRINT_C2 0
+    #define MSPM0G3519_PM_C 0
 #endif
-#ifdef MSPM0G3507_VQFN32
-    #define MSPM0G3507_FOOTPRINT_C3 1
+#ifdef MSPM0G3519_PT
+    #define MSPM0G3519_PT_C 1
 #else
-    #define MSPM0G3507_FOOTPRINT_C3 0
+    #define MSPM0G3519_PT_C 0
 #endif
-#ifdef MSPM0G3507_VSSOP28
-    #define MSPM0G3507_FOOTPRINT_C4 1
+#ifdef MSPM0G3519_RGZ
+    #define MSPM0G3519_RGZ_C 1
 #else
-    #define MSPM0G3507_FOOTPRINT_C4 0
+    #define MSPM0G3519_RGZ_C 0
 #endif
-// Total number of footprints selected
-#define MSPM0G3507_FOOTPRINT_TOTAL ( \
-    MSPM0G3507_FOOTPRINT_C0 + \
-    MSPM0G3507_FOOTPRINT_C1 + \
-    MSPM0G3507_FOOTPRINT_C2 + \
-    MSPM0G3507_FOOTPRINT_C3 + \
-    MSPM0G3507_FOOTPRINT_C4 )
-#if MSPM0G3507_FOOTPRINT_TOTAL == 0
-    #error "No MSPM0G3507 variant defined. Must define exactly one."
-#elif MSPM0G3507_FOOTPRINT_TOTAL > 1
-    #error "Multiple MSPM0G3507 variants defined. Can only define one."
-    // macros are at top of the header file
+#ifdef MSPM0G3519_RHB
+    #define MSPM0G3519_RHB_C 1
+#else
+    #define MSPM0G3519_RHB_C 0
+#endif
+
+#define FOOTPRINT_COUNT ( \
+    MSPM0G3519_PZ_C + \
+    MSPM0G3519_PN_C + \
+    MSPM0G3519_PM_C + \
+    MSPM0G3519_PT_C + \
+    MSPM0G3519_RGZ_C + \
+    MSPM0G3519_RHB_C )
+
+#if FOOTPRINT_COUNT == 0
+    #error "No MSPM0G3519 variant defined. Must define exactly one."
+#elif FOOTPRINT_COUNT > 1
+    #error "Multiple MSPM0G3519 variants defined. Must define exactly one."
 #endif

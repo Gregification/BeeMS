@@ -24,31 +24,35 @@
 
 #include <FreeRTOS.h>
 #include <task.h>
-#include <Tasks/task_sampler_packCurrent.hpp>
+#include <ti/driverlib/driverlib.h>
+
 #include "Core/system.hpp"
-#include "Core/MasterBoard.hpp"
-#include "Tasks/task_BMS.hpp"
-#include "Tasks/task_ethModbus.hpp"
-#include "Tasks/examples/example_blink_task.hpp"
-#include "Tasks/examples/example_MCAN_task.hpp"
-#include "Tasks/task_watchdog.hpp"
-#include "Core/wdt.hpp"
+#include "Core/Board.hpp"
+
+#include "Tasks/task_test.hpp"
+
+//#include "Tasks/task_ethModbus.hpp"
+//#include "Tasks/examples/example_MCAN_task.hpp"
+
+void delaymS(uint32_t ms) {
+    delay_cycles(ms * 32e3); // default power on clock is 32e6
+}
 
 int main(){
     System::init();
 
     System::UART::uart_ui.setBaudTarget(115200);
     System::UART::uart_ui.nputs(ARRANDN(CLICLEAR CLIRESET));
-    System::UART::uart_ui.nputs(ARRANDN(CLIGOOD " " PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE CLIRESET));
-    System::UART::uart_ui.nputs(ARRANDN("\t Device: "));
+    System::UART::uart_ui.nputs(ARRANDN(PROJECT_NAME "   " PROJECT_VERSION NEWLINE "\t - " PROJECT_DESCRIPTION NEWLINE "\t - compiled " __DATE__ " , " __TIME__ NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN("\t - MCU ID: "));
     System::UART::uart_ui.putu32h(System::mcuID);
-    System::UART::uart_ui.nputs(ARRANDN(NEWLINE));
+    System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE));
 
-    MstrB::init();
-    MstrB::IL::setEnable(false);
+
+    Board::init();
     {
         char errorMsg[MAX_STR_ERROR_LEN] = "";
-        uint32_t error = MstrB::POST(errorMsg, sizeof(errorMsg));
+        volatile uint32_t error = Board::POST(errorMsg, sizeof(errorMsg));
         if(error) {
             while(1) {
                 System::UART::uart_ui.nputs(ARRANDN(CLIRESET CLIERROR NEWLINE "POST ERROR #"));
@@ -56,7 +60,10 @@ int main(){
                 System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "\"\"\"" NEWLINE));
                 System::UART::uart_ui.nputs(errorMsg, sizeof(errorMsg));
                 System::UART::uart_ui.nputs(ARRANDN(CLIRESET NEWLINE "\"\"\"" NEWLINE));
-                DL_GPIO_togglePins(GPIOPINPUX(MstrB::Indi::LED::fault));
+
+                for(auto & v : Board::LED::indicators) {
+                    DL_GPIO_togglePins(GPIOPINPUX(v));
+                }
 
                 delay_cycles(System::CLK::CPUCLK);
             }
@@ -64,6 +71,7 @@ int main(){
             System::UART::uart_ui.nputs(ARRANDN(CLIRESET "POST: " CLIGOOD "OK" CLIRESET NEWLINE));
         }
     }
+
 
 //    WDT::init();
 //
@@ -74,19 +82,19 @@ int main(){
 //             tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //             NULL);
 
-    xTaskCreate(Task::blink_task,
-            "blink_task",
-            configMINIMAL_STACK_SIZE,
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    xTaskCreate(Task::blink_task,
+//            "blink_task",
+//            configMINIMAL_STACK_SIZE,
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
-    xTaskCreate(Task::BMS_task,
-            "BMS_task",
-            MAX(1024, configMINIMAL_STACK_SIZE),
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    xTaskCreate(Task::BMS_task,
+//            "BMS_task",
+//            MAX(1024, configMINIMAL_STACK_SIZE),
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
 //    xTaskCreate(Task::BQ769x2_PROTOCOL_Test_V_Task,
 //            "BQ769x2_PROTOCOL_Test_V_Task",
@@ -95,15 +103,22 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-    xTaskCreate(Task::ethModbus_task,
-            "ethModbus_task",
-            MAX(1024, configMINIMAL_STACK_SIZE),
-            NULL,
-            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-            NULL);
+//    xTaskCreate(Task::ethModbus_task,
+//            "ethModbus_task",
+//            MAX(1024, configMINIMAL_STACK_SIZE),
+//            NULL,
+//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+//            NULL);
 
-    xTaskCreate(Task::sampler_packCurrent,
-            "sampler_packCurrent",
+//    xTaskCreate(Task::sampler_packCurrent,
+//            "sampler_packCurrent",
+//            configMINIMAL_STACK_SIZE,
+//            NULL,
+//            MIN(configMAX_PRIORITIES, configMAX_PRIORITIES - 1),
+//            NULL);
+
+    xTaskCreate(Task::test,
+            "test",
             configMINIMAL_STACK_SIZE,
             NULL,
             MIN(configMAX_PRIORITIES, configMAX_PRIORITIES - 1),

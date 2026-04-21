@@ -21,8 +21,6 @@ namespace System {
     namespace GPIO {
         // this may look redundant but the IOMUX and PIN numbers don't necessarily match and
         //      I got tired of proding the data sheet everytime I want a new pin
-        //      I dont really understand whats going on with the IOMUX thing but this probably
-        //          destroys all functionality of that. eh, I dont use it anyways
 
         // Port A (PA) pins
         const GPIO PA0  = { .port = GPIOA, .pin = DL_GPIO_PIN_0,  .iomux = IOMUX_PINCM1  };
@@ -87,6 +85,42 @@ namespace System {
         const GPIO PB25 = { .port = GPIOB, .pin = DL_GPIO_PIN_25, .iomux = IOMUX_PINCM56 };
         const GPIO PB26 = { .port = GPIOB, .pin = DL_GPIO_PIN_26, .iomux = IOMUX_PINCM57 };
         const GPIO PB27 = { .port = GPIOB, .pin = DL_GPIO_PIN_27, .iomux = IOMUX_PINCM58 };
+        const GPIO PB28 = { .port = GPIOB, .pin = DL_GPIO_PIN_28, .iomux = IOMUX_PINCM65 };
+        const GPIO PB29 = { .port = GPIOB, .pin = DL_GPIO_PIN_29, .iomux = IOMUX_PINCM66 };
+        const GPIO PB30 = { .port = GPIOB, .pin = DL_GPIO_PIN_30, .iomux = IOMUX_PINCM67 };
+        const GPIO PB31 = { .port = GPIOB, .pin = DL_GPIO_PIN_31, .iomux = IOMUX_PINCM68 };
+
+        // Port C (PC) pins
+        const GPIO PC0  = { .port = GPIOC, .pin = DL_GPIO_PIN_0,  .iomux = IOMUX_PINCM74 };
+        const GPIO PC1  = { .port = GPIOC, .pin = DL_GPIO_PIN_1,  .iomux = IOMUX_PINCM75 };
+        const GPIO PC2  = { .port = GPIOC, .pin = DL_GPIO_PIN_2,  .iomux = IOMUX_PINCM76 };
+        const GPIO PC3  = { .port = GPIOC, .pin = DL_GPIO_PIN_3,  .iomux = IOMUX_PINCM77 };
+        const GPIO PC4  = { .port = GPIOC, .pin = DL_GPIO_PIN_4,  .iomux = IOMUX_PINCM78 };
+        const GPIO PC5  = { .port = GPIOC, .pin = DL_GPIO_PIN_5,  .iomux = IOMUX_PINCM79 };
+        const GPIO PC6  = { .port = GPIOC, .pin = DL_GPIO_PIN_6,  .iomux = IOMUX_PINCM84 };
+        const GPIO PC7  = { .port = GPIOC, .pin = DL_GPIO_PIN_7,  .iomux = IOMUX_PINCM85 };
+        const GPIO PC8  = { .port = GPIOC, .pin = DL_GPIO_PIN_8,  .iomux = IOMUX_PINCM86 };
+        const GPIO PC9  = { .port = GPIOC, .pin = DL_GPIO_PIN_9,  .iomux = IOMUX_PINCM87 };
+        const GPIO PC10 = { .port = GPIOC, .pin = DL_GPIO_PIN_10, .iomux = IOMUX_PINCM88 };
+        const GPIO PC11 = { .port = GPIOC, .pin = DL_GPIO_PIN_11, .iomux = IOMUX_PINCM89 };
+        const GPIO PC12 = { .port = GPIOC, .pin = DL_GPIO_PIN_12, .iomux = IOMUX_PINCM61 };
+        const GPIO PC13 = { .port = GPIOC, .pin = DL_GPIO_PIN_13, .iomux = IOMUX_PINCM62 };
+        const GPIO PC14 = { .port = GPIOC, .pin = DL_GPIO_PIN_14, .iomux = IOMUX_PINCM63 };
+        const GPIO PC15 = { .port = GPIOC, .pin = DL_GPIO_PIN_15, .iomux = IOMUX_PINCM64 };
+        const GPIO PC16 = { .port = GPIOC, .pin = DL_GPIO_PIN_16, .iomux = IOMUX_PINCM69 };
+        const GPIO PC17 = { .port = GPIOC, .pin = DL_GPIO_PIN_17, .iomux = IOMUX_PINCM70 };
+        const GPIO PC18 = { .port = GPIOC, .pin = DL_GPIO_PIN_18, .iomux = IOMUX_PINCM71 };
+        const GPIO PC19 = { .port = GPIOC, .pin = DL_GPIO_PIN_19, .iomux = IOMUX_PINCM72 };
+        const GPIO PC20 = { .port = GPIOC, .pin = DL_GPIO_PIN_20, .iomux = IOMUX_PINCM73 };
+        const GPIO PC21 = { .port = GPIOC, .pin = DL_GPIO_PIN_21, .iomux = IOMUX_PINCM80 };
+        const GPIO PC22 = { .port = GPIOC, .pin = DL_GPIO_PIN_22, .iomux = IOMUX_PINCM81 };
+        const GPIO PC23 = { .port = GPIOC, .pin = DL_GPIO_PIN_23, .iomux = IOMUX_PINCM82 };
+        const GPIO PC24 = { .port = GPIOC, .pin = DL_GPIO_PIN_24, .iomux = IOMUX_PINCM83 };
+        const GPIO PC25 = { .port = GPIOC, .pin = DL_GPIO_PIN_25, .iomux = IOMUX_PINCM90 };
+        const GPIO PC26 = { .port = GPIOC, .pin = DL_GPIO_PIN_26, .iomux = IOMUX_PINCM91 };
+        const GPIO PC27 = { .port = GPIOC, .pin = DL_GPIO_PIN_27, .iomux = IOMUX_PINCM92 };
+        const GPIO PC28 = { .port = GPIOC, .pin = DL_GPIO_PIN_28, .iomux = IOMUX_PINCM93 };
+        const GPIO PC29 = { .port = GPIOC, .pin = DL_GPIO_PIN_29, .iomux = IOMUX_PINCM94 };
     }
 }
 

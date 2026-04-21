@@ -34,18 +34,31 @@
 -uinterruptVectors
 --stack_size=512
 
+/*
+ * Note: SRAM on this device is continuous memory but partitioned in the 
+ * linker into two separate sections. This is to account for the upper 64kB
+ * of SRAM being wiped out upon the device entering any low-power mode 
+ * stronger than SLEEP. Thus, it is up to the end-user to enable SRAM_BANK1 for
+ * applications where the memory is considered lost outside of RUN and SLEEP Modes.
+ */
+
+#define BL_SZ 0x1000
+BL_SIZE	= BL_SZ;
+
 MEMORY
 {
-    FLASH           (RX)  : origin = 0x00000000, length = 0x00008000
-    SRAM            (RWX) : origin = 0x20200000, length = 0x00004000
-    BCR_CONFIG      (R)   : origin = 0x41C00000, length = 0x00000080
-    BSL_CONFIG      (R)   : origin = 0x41C00100, length = 0x00000080
+    FLASH           (RX)  : origin = BL_SZ, length = 0x0007F000
+    SRAM_BANK0      (RWX) : origin = 0x20200000, length = 0x00010000
+    SRAM_BANK1      (RWX) : origin = 0x20210000, length = 0x00010000
+    // BCR_CONFIG      (R)   : origin = 0x41C00000, length = 0x000000FF // may conflict with debugger
+    // BSL_CONFIG      (R)   : origin = 0x41C00100, length = 0x00000080
+    DATA            (R)   : origin = 0x41D00000, length = 0x00004000
 
 }
 
 SECTIONS
 {
-    .intvecs:   > 0x00000000
+    .intvecs:   > BL_SZ
     .text   : palign(8) {} > FLASH
     .const  : palign(8) {} > FLASH
     .cinit  : palign(8) {} > FLASH
@@ -54,15 +67,17 @@ SECTIONS
     .ARM.exidx    : palign(8) {} > FLASH
     .init_array   : palign(8) {} > FLASH
     .binit        : palign(8) {} > FLASH
-    .TI.ramfunc   : load = FLASH, palign(8), run=SRAM, table(BINIT)
+    .TI.ramfunc   : load = FLASH, palign(8), run=SRAM_BANK0, table(BINIT)
 
-    .vtable :   > SRAM
-    .args   :   > SRAM
-    .data   :   > SRAM
-    .bss    :   > SRAM
-    .sysmem :   > SRAM
-    .stack  :   > SRAM (HIGH)
+    .vtable :   > SRAM_BANK0
+    .args   :   > SRAM_BANK0
+    .data   :   > SRAM_BANK0
+    .bss    :   > SRAM_BANK0
+    .sysmem :   > SRAM_BANK0
+    .TrimTable :  > SRAM_BANK0
+    .stack  :   > SRAM_BANK0 (HIGH)
 
-    .BCRConfig  : {} > BCR_CONFIG
-    .BSLConfig  : {} > BSL_CONFIG
+    // .BCRConfig  : {} > BCR_CONFIG
+    // .BSLConfig  : {} > BSL_CONFIG
+    .DataBank   : {} > DATA
 }
