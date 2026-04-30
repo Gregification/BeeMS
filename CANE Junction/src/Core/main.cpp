@@ -31,12 +31,6 @@
 
 #include "Tasks/task_test.hpp"
 
-//#include "Tasks/task_ethModbus.hpp"
-//#include "Tasks/examples/example_MCAN_task.hpp"
-
-void delaymS(uint32_t ms) {
-    delay_cycles(ms * 32e3); // default power on clock is 32e6
-}
 
 int main(){
     System::init();
