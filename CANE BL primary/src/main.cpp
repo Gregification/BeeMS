@@ -55,6 +55,7 @@ extern uint32_t BL_SIZE;
 
 #define LED_PORT    GPIOA
 #define LED_PIN     BV(0)
+#define LED_PINCM   IOMUX_PINCM1
 
 void startApp();
 
@@ -77,20 +78,29 @@ int main(){
 }
 
 void BL_init() {
-    DL_GPIO_disablePower(GPIOA);
-    DL_GPIO_reset(GPIOA);
-    DL_GPIO_enablePower(GPIOA);
+    DL_GPIO_disablePower(LED_PORT);
+    DL_GPIO_reset(LED_PORT);
+    DL_GPIO_enablePower(LED_PORT);
     delay_cycles(16);
 
-    DL_GPIO_initDigitalOutput(IOMUX_PINCM1);
+    DL_GPIO_initDigitalOutput(LED_PINCM);
+    DL_GPIO_enableOutput(LED_PORT, LED_PIN);
+    DL_GPIO_initDigitalOutputFeatures(
+            LED_PINCM,
+            DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
+            DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
+            DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_HIGH,
+            DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
+        );
+    DL_GPIO_clearPins(LED_PORT, LED_PIN);
     DL_GPIO_enableOutput(LED_PORT, LED_PIN);
 }
 
 void BL_deinit() {
     DL_GPIO_disableOutput(LED_PORT, LED_PIN);
 
-    DL_GPIO_disablePower(GPIOA);
-    DL_GPIO_reset(GPIOA);
+    DL_GPIO_disablePower(LED_PORT);
+    DL_GPIO_reset(LED_PORT);
 }
 
 void startApp() {
@@ -107,7 +117,6 @@ void startApp() {
     if (avt[1] == 0xFFFFFFFF) {
         blinkError();
     }
-
 
     /*** launch app *************/
     __disable_irq();

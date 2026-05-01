@@ -5,7 +5,7 @@
  *      Author: turtl
  */
 
-#include "common.h"
+#include "common.hpp"
 
 bool arrCmp(void const * a, void const * b, buffersize_t len){
     if(a == 0 || b == 0)

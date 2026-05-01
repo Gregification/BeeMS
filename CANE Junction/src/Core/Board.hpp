@@ -26,13 +26,13 @@ namespace Board {
     }
 
     /** Ethernet interface */
-//    namespace Eth {
-//        extern SPI::SPI & spi;
-//        const GPIO::GPIO
-//            cs          = GPIO::PA15,
-//            reset       = GPIO::PB14, // MCU <- W5500
-//            irq         = GPIO::PB15; // W5500 -> MCU
-//    }
+    namespace Eth {
+        extern SPI::SPI & spi;
+        const GPIO::GPIO
+            cs          = GPIO::PA15,
+            reset       = GPIO::PB14, // MCU -> W5500
+            irq         = GPIO::PB15; // W5500 -> MCU
+    }
 
     /** is not a exhaustive test.
      * Returns 0 on successful post.

@@ -51,7 +51,7 @@
 
 #include <ti/driverlib/driverlib.h>
 
-#include "Core/common.h"
+#include "Core/common.hpp"
 
 
 /*--- meta ---------------------------------------------*/
@@ -65,9 +65,9 @@
 // when changing footprints update this manually then match the library using the project settings.
 // see UG.6.1/9
 
-#define MSPM0G3519_PZ
+//#define MSPM0G3519_PZ
 //#define MSPM0G3519_PN
-//#define MSPM0G3519_PM
+#define MSPM0G3519_PM
 //#define MSPM0G3519_PT
 //#define MSPM0G3519_RGZ
 //#define MSPM0G3519_RHB
@@ -108,7 +108,8 @@
 /*--- peripheral configuration -------------------------*/
 /* so many pin conflicts. TDS.6.2/10 */
 
-#define PROJECT_ENABLE_UART0        // LP
+//#define PROJECT_ENABLE_UART0        // LP
+#define PROJECT_ENABLE_UART1
 //#define PROJECT_ENABLE_UART2
 
 #define PROJECT_ENABLE_SPI0
@@ -130,9 +131,6 @@ namespace System {
     #error "should not be used"
     #endif
     #ifdef PROJECT_ENABLE_I2C1
-    #error "should not be used"
-    #endif
-    #ifdef PROJECT_ENABLE_UART1
     #error "should not be used"
     #endif
 }
@@ -231,30 +229,30 @@ namespace System {
                 PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23, PB24, PB25, PB26, PB27, PB28, PB29, PB30, PB31,
                 PC0, PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10, PC11, PC12, PC13, PC14, PC15,
                 PC16, PC17, PC18, PC19, PC20, PC21, PC22, PC23, PC24, PC25, PC26, PC27, PC28, PC29;
-        #elif MSPM0G3519_PN
+        #elif defined MSPM0G3519_PN
             extern const GPIO
                 PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31,
                 PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
                 PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23, PB24, PB25, PB26, PB27, PB28, PB29, PB30, PB31,
                 PC0, PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9;
-        #elif MSPM0G3519_PM
+        #elif defined MSPM0G3519_PM
             extern const GPIO
                 PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA29, PA30, PA31,
                 PB0, PB1, PB2, PB3, PB4, PB5, PB6, PB7, PB8, PB9, PB10, PB11, PB12, PB13, PB14, PB15,
                 PB16, PB17, PB18, PB19, PB20, PB21, PB22, PB23, PB24, PB25, PB26, PB27;
-        #elif MSPM0G3519_PT
+        #elif defined MSPM0G3519_PT
             extern const GPIO
                 PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA31,
                 PB2, PB3, PB6, PB7, PB8, PB9, PB14, PB15, PB16, PB17, PB18, PB19, PB20, PB24;
-        #elif MSPM0G3519_RGZ
+        #elif defined MSPM0G3519_RGZ
             extern const GPIO
                 PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27, PA28, PA31,
                 PB2, PB3, PB6, PB7, PB8, PB9, PB14, PB15, PB16, PB17, PB18, PB19, PB20, PB24;
-        #elif MSPM0G3519_RHB
+        #elif defined MSPM0G3519_RHB
             extern const GPIO
                 PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7, PA8, PA9, PA10, PA11, PA12, PA13, PA14, PA15,
                 PA16, PA17, PA18, PA19, PA20, PA21, PA22, PA23, PA24, PA25, PA26, PA27;
@@ -373,6 +371,10 @@ namespace System {
 
         #ifdef PROJECT_ENABLE_UART0
             extern UART uart0;
+        #endif
+
+        #ifdef PROJECT_ENABLE_UART1
+            extern UART uart1;
         #endif
 
         #ifdef PROJECT_ENABLE_UART2

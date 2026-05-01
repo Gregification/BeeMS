@@ -104,3 +104,10 @@ Use a TI XDS110 launchpad (<a href="https://www.ti.com/tool/LP-MSPM0G3507">examp
 ![meow](../zzLocalLibraries-Symbols/rj45%20header%20TH%20pin%20numbers.png)
 - Audo-MDIX is not supported by this device. Just use any standard ethernet wiring and let the other device figure it out.
 - 10/100Mbps capiable
+
+
+# itteration notes
+- mcu side 3v3 ldo is actually 1.8v ldo
+- swd silk screen labels wrong
+- PA0 (led) is 5vOD pin, OD ONLY
+- uart and jtag dropping intermittently. increase VCORE decoupling?

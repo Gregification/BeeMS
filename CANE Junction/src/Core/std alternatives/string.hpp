@@ -8,7 +8,7 @@
 #ifndef SRC_CORE_STD_ALTERNATIVES_STRING_HPP_
 #define SRC_CORE_STD_ALTERNATIVES_STRING_HPP_
 
-#include "Core/common.h"
+#include "Core/common.hpp"
 
 
 namespace ALT {

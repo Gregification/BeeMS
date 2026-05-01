@@ -25,18 +25,14 @@
  * TODO: look at later : https://www.tij.co.jp/jp/lit/ml/slyp847/slyp847.pdf
  */
 
-#include <Core/Networking/ModbusRegisters.hpp>
 #include <cstdint>
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
-#include <Tasks/task_ethModbus.hpp>
-
+#include <Tasks/task_ethBridge.hpp>
 #include "Core/system.hpp"
-#include "Core/MasterBoard.hpp"
+#include "Core/Board.hpp"
 #include "Core/std alternatives/string.hpp"
-#include "Core/Networking/Modbus.hpp"
-#include "Core/Networking/bridge_CAN_Modbus.hpp"
 #include "Middleware/W5500/socket.h"
 #include "Middleware/W5500/wizchip_conf.h"
 
@@ -48,9 +44,9 @@ System::UART::UART &            uart = System::UART::uart_ui;
 System::CANFD::CANFD &          can = System::CANFD::canFD0;
 
 /*** wizchip setup ****/
-System::SPI::SPI &              wiz_spi   = MstrB::Eth::spi;
-System::GPIO::GPIO const &      wiz_cs    = MstrB::Eth::cs;
-System::GPIO::GPIO const &      wiz_reset = MstrB::Eth::reset;
+System::SPI::SPI &              wiz_spi   = Board::Eth::spi;
+System::GPIO::GPIO const &      wiz_cs    = Board::Eth::cs;
+System::GPIO::GPIO const &      wiz_reset = Board::Eth::reset;
 //System::SPI::SPI &              wiz_spi   = System::SPI::spi1;
 //System::GPIO::GPIO const &      wiz_cs    = System::GPIO::PB3;
 //System::GPIO::GPIO const &      wiz_reset = System::GPIO::PB2;
@@ -78,9 +74,6 @@ wiz_NetInfo netConfig = {
 /*************************************************************/
 
 union _RXBuffer {
-    Networking::Modbus::MBAPHeader mbap;
-    DL_MCAN_RxBufElement canrx;
-
     uint8_t arr[Networking::Bridge::CANModbus::PKTBUFFSIZE]; // 260B MAX standard Modbus-TCP len (MBAP + PDU), we can get away with smaller for 99% of stuff
 };
 static_assert(sizeof(_RXBuffer) <= UINT16_MAX);

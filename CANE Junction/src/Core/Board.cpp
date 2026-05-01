@@ -12,11 +12,13 @@
 // absurd naming!!! yippie!
 
 namespace Board {
-
+    namespace Eth {
+        SPI::SPI & spi = System::SPI::spi1;
+    }
 }
 
 namespace System::UART {
-    UART & uart_ui = uart0;
+    UART & uart_ui = uart1;
 }
 
 void Board::init() {

@@ -53,6 +53,9 @@ typedef uint16_t buffersize_t;
 
 bool arrCmp(void const * a, void const * b, buffersize_t len);
 
+template <typename T, int N>
+constexpr int ArrLen(T (&)[N]) { return N; }
+
 //--- general macros ------------------------------------------
 
 #define SWAP_BYTES_16(X) ( (((X) & 0x00FF) << 8) | (((X) & 0xFF00) >> 8) )

@@ -20,6 +20,10 @@ namespace System {
         UART::UART UART::uart0 = {.reg = UART0};
     #endif
 
+    #ifdef PROJECT_ENABLE_UART1
+        UART::UART UART::uart1 = {.reg = UART1};
+    #endif
+
     #ifdef PROJECT_ENABLE_UART2
         UART::UART UART::uart2 = {.reg = UART2};
     #endif
@@ -134,6 +138,39 @@ void System::init() {
         DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM21, IOMUX_PINCM21_PF_UART0_TX); // PA10
         DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM22, IOMUX_PINCM22_PF_UART0_RX); // PA11
         DL_UART_enable(uart0.reg);
+    }
+    #endif
+
+    #ifdef PROJECT_ENABLE_UART1
+    {
+        using namespace UART;
+        DL_UART_disable(uart1.reg);
+        DL_UART_disablePower(uart1.reg);
+        DL_UART_reset(uart1.reg);
+        DL_UART_enablePower(uart1.reg);
+
+        constexpr DL_UART_ClockConfig config_uart_clk = {
+                .clockSel   = DL_UART_CLOCK::DL_UART_CLOCK_MFCLK,
+                .divideRatio= DL_UART_CLOCK_DIVIDE_RATIO::DL_UART_CLOCK_DIVIDE_RATIO_1,
+            };
+        constexpr DL_UART_Config config_uart = {
+                .mode        = DL_UART_MODE::DL_UART_MAIN_MODE_NORMAL,
+                .direction   = DL_UART_DIRECTION::DL_UART_MAIN_DIRECTION_TX_RX,
+                .flowControl = DL_UART_FLOW_CONTROL::DL_UART_MAIN_FLOW_CONTROL_NONE,
+                .parity      = DL_UART_PARITY::DL_UART_MAIN_PARITY_NONE,
+                .wordLength  = DL_UART_WORD_LENGTH::DL_UART_MAIN_WORD_LENGTH_8_BITS,
+                .stopBits    = DL_UART_STOP_BITS::DL_UART_MAIN_STOP_BITS_ONE
+            };
+        DL_UART_setClockConfig(uart1.reg, &config_uart_clk);
+        DL_UART_init(uart1.reg, &config_uart);
+
+        DL_UART_setOversampling(uart1.reg, DL_UART_OVERSAMPLING_RATE::DL_UART_OVERSAMPLING_RATE_16X);
+
+        DL_UART_enableFIFOs(uart1.reg);
+
+        DL_GPIO_initPeripheralOutputFunction(IOMUX_PINCM19, IOMUX_PINCM19_PF_UART1_TX); // PA8
+        DL_GPIO_initPeripheralInputFunction(IOMUX_PINCM20, IOMUX_PINCM20_PF_UART1_RX); // PA9
+        DL_UART_enable(uart1.reg);
     }
     #endif
 
@@ -561,6 +598,7 @@ void System::UART::UART::setBaudTarget(uint32_t target_baud, uint32_t clk) {
 
     switch(DL_UART_getOversampling(reg)){
         default:            break; // should never reach this, your cooked, maybe screwed up the initialization or something
+        while(1);
         case DL_UART_OVERSAMPLING_RATE::DL_UART_OVERSAMPLING_RATE_3X:
             deno *= 3;      break;
         case DL_UART_OVERSAMPLING_RATE::DL_UART_OVERSAMPLING_RATE_8X:

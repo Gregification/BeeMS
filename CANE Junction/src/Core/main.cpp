@@ -25,6 +25,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <ti/driverlib/driverlib.h>
+#include <Tasks/task_ethBridge.hpp>
 
 #include "Core/system.hpp"
 #include "Core/Board.hpp"
