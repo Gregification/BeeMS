@@ -13,7 +13,7 @@
 namespace Task {
 
     /** provides a Modbus-TCP <-> CAN interface */
-    void ethModbus_task(void *);
+    void ethBridge(void *);
 }
 
 #endif /* SRC_CORE_FIDDLE_HPP_ */

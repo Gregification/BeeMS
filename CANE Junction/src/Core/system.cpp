@@ -255,7 +255,6 @@ void System::init() {
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
-        spi0.MISO = &GPIO::PA13;
         DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO , PA13
                 IOMUX_PINCM35,
                 IOMUX_PINCM35_PF_SPI0_POCI,
@@ -319,35 +318,33 @@ void System::init() {
 
         /*--- GPIO config ----------------*/
 
-        DL_GPIO_initPeripheralOutputFunctionFeatures(//    SCLK , PA17
-                IOMUX_PINCM39,
-                IOMUX_PINCM39_PF_SPI1_SCLK,
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    SCLK , PB9
+                IOMUX_PINCM26,
+                IOMUX_PINCM26_PF_SPI1_SCLK,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
-        spi1.MISO = &GPIO::PA16;
-        DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO/POCI , PA16
-                IOMUX_PINCM38,
-                IOMUX_PINCM38_PF_SPI1_POCI,
+        DL_GPIO_initPeripheralInputFunctionFeatures(//      MISO/POCI , PB7
+                IOMUX_PINCM24,
+                IOMUX_PINCM24_PF_SPI1_POCI,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_NONE,
                 DL_GPIO_HYSTERESIS::DL_GPIO_HYSTERESIS_DISABLE,
                 DL_GPIO_WAKEUP::DL_GPIO_WAKEUP_DISABLE
             );
-        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI/PICO, PA18
-                IOMUX_PINCM40,
-                IOMUX_PINCM40_PF_SPI1_PICO,
+        DL_GPIO_initPeripheralOutputFunctionFeatures(//    MOSI/PICO, PB8
+                IOMUX_PINCM25,
+                IOMUX_PINCM25_PF_SPI1_PICO,
                 DL_GPIO_INVERSION::DL_GPIO_INVERSION_DISABLE,
                 DL_GPIO_RESISTOR::DL_GPIO_RESISTOR_PULL_UP,
                 DL_GPIO_DRIVE_STRENGTH::DL_GPIO_DRIVE_STRENGTH_LOW,
                 DL_GPIO_HIZ::DL_GPIO_HIZ_DISABLE
             );
-        DL_GPIO_enableHiZ(IOMUX_PINCM38);// MISO
-//        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA16));
-        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA17));
-        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PA18));
+        DL_GPIO_enableHiZ(GPIO::PB7.iomux);// MISO
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PB8)); // MOSI
+        DL_GPIO_enableOutput(GPIOPINPUX(GPIO::PB9)); // SCLK
 
         /*--- SPI config -----------------*/
 

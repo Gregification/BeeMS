@@ -98,12 +98,12 @@ int main(){
 //            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
 //            NULL);
 
-//    xTaskCreate(Task::ethModbus_task,
-//            "ethModbus_task",
-//            MAX(1024, configMINIMAL_STACK_SIZE),
-//            NULL,
-//            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
-//            NULL);
+    xTaskCreate(Task::ethBridge,
+            "ethModbus_task",
+            MAX(1024, configMINIMAL_STACK_SIZE),
+            NULL,
+            tskIDLE_PRIORITY, //configMAX_PRIORITIES,
+            NULL);
 
 //    xTaskCreate(Task::sampler_packCurrent,
 //            "sampler_packCurrent",

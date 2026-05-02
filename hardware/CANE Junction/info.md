@@ -107,7 +107,7 @@ Use a TI XDS110 launchpad (<a href="https://www.ti.com/tool/LP-MSPM0G3507">examp
 
 
 # itteration notes
-- mcu side 3v3 ldo is actually 1.8v ldo
-- swd silk screen labels wrong
-- PA0 (led) is 5vOD pin, OD ONLY
-- uart and jtag dropping intermittently. increase VCORE decoupling?
+- ok. mcu side 3v3 ldo is actually 1.8v ldo
+- ok. swd silk screen labels wrong
+- ok. PA0 (led) is 5vOD pin, OD ONLY
+- ok. uart and jtag dropping intermittently. increase VCORE decoupling?
